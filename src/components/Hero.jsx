@@ -8,7 +8,7 @@ from "lucide-react";
 // Logos de réseaux sociaux depuis react-icons/fa6 (FontAwesome 6)
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
 
-import photo from "../assets/images/profile/MM.jpg";
+import photo from "../assets/images/profile/MM.png";
 
 
 

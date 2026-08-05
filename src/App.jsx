@@ -8,7 +8,7 @@ import MainLayout from "./layouts/MainLayout";
 
 import Home from "./pages/Home";
 import Projects from "./pages/Projects";
-import ProjectDetails from "./pages/ProjectsDetails";
+import ProjectsDetails from "./pages/ProjectsDetails";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 
@@ -29,7 +29,7 @@ export default function App() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/projects" element={<Projects />} />
-          <Route path="/projects/:id" element={<ProjectDetails />} />
+          <Route path="/projects/:id" element={<ProjectsDetails />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/blog" element={<Blog />} />
         </Route>
