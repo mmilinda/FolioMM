@@ -1,12 +1,55 @@
-import React from 'react';
-import Portfolio from './Portfolio';
+import {
+  BrowserRouter,
+  Routes,
+  Route
+} from "react-router-dom";
 
-function App() {
+import MainLayout from "./layouts/MainLayout";
+
+import Home from "./pages/Home";
+import Projects from "./pages/Projects";
+import ProjectDetails from "./pages/ProjectsDetails";
+import Contact from "./pages/Contact";
+import Blog from "./pages/Blog";
+
+// Admin
+import AdminLogin from "./admin/AdminLogin";
+import AdminLayout from "./admin/AdminLayout";
+import Dashboard from "./admin/Dashboard";
+import ProjectsManager from "./admin/ProjectsManager";
+
+// Protection de route
+import ProtectedRoute from "./components/ProtectedRoute";
+
+export default function App() {
   return (
-    <div className="app-wrapper">
-      <Portfolio />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        {/* Layout Public */}
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:id" element={<ProjectDetails />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/blog" element={<Blog />} />
+        </Route>
+
+        {/* Connexion Admin (Public) */}
+        <Route path="/admin/login" element={<AdminLogin />} />
+
+        {/* Espace Admin Protégé */}
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute>
+              <AdminLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="projects" element={<ProjectsManager />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;

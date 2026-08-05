@@ -1,4 +1,19 @@
-# Logs
+# 1. Variables d'environnement (SÉCURITÉ STRICTE)
+.env
+.env.*
+!.env.example
+
+# 2. Dépendances Frontend & Backend
+node_modules/
+vendor/
+
+# 3. Fichiers de Build / Production
+dist/
+dist-ssr/
+public/build/
+public/storage
+
+# 4. Logs
 logs
 *.log
 npm-debug.log*
@@ -7,18 +22,21 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
+# 5. Fichiers système & IDE (VS Code, Mac, Windows)
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
+Thumbs.db
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+
+# 6. Cache et fichiers temporaires Laravel
+/bootstrap/cache/*
+!/bootstrap/cache/.gitkeep
+/storage/*.key
+.phpunit.result.cache
+.php_cs.cache
