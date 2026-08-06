@@ -45,8 +45,13 @@ export default function Navbar() {
     >
       <div className="container-custom flex items-center justify-between py-4">
         {/* Logo */}
-        <NavLink to="/" className="text-xl font-bold tracking-wider no-underline text-inherit">
-          <span className="gradient-text">MILINDA</span>_MENDY
+        <NavLink to="/" className="flex items-center gap-3 text-xl font-bold tracking-wider no-underline text-inherit group">
+          <div className="w-9 h-9 rounded-full overflow-hidden border border-cyan-400/40 p-0.5 bg-cyan-400/10 group-hover:scale-105 transition-transform flex-shrink-0">
+            <img src="/logoMM.jpg" alt="MM Logo" className="w-full h-full object-cover rounded-full" />
+          </div>
+          <span>
+            <span className="gradient-text">MILINDA</span>_MENDY
+          </span>
         </NavLink>
 
         {/* Desktop Navigation */}

@@ -39,24 +39,14 @@ gap-10
 <div>
 
 
-<h2 className="
-text-2xl
-font-bold
-"
-
->
-
-<span className="
-gradient-text
-">
-
-MILINDA
-
-</span>
-
-_MENDY
-
-</h2>
+<div className="flex items-center gap-3">
+  <div className="w-10 h-10 rounded-full overflow-hidden border border-cyan-400/40 p-0.5 bg-cyan-400/10 flex-shrink-0">
+    <img src="/logoMM.jpg" alt="MM Logo" className="w-full h-full object-cover rounded-full" />
+  </div>
+  <h2 className="text-2xl font-bold">
+    <span className="gradient-text">MILINDA</span>_MENDY
+  </h2>
+</div>
 
 
 

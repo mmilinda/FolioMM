@@ -1,28 +1,19 @@
 {
-"name":"Milinda Mendy Portfolio",
-
-"short_name":"Milinda",
-
-"start_url":"/",
-
-"display":"standalone",
-
-"background_color":"#020617",
-
-"theme_color":"#38bdf8",
-
-"icons":[
-
-{
-
-"src":"/favicon.png",
-
-"sizes":"512x512",
-
-"type":"image/png"
-
-}
-
-]
-
+  "name": "Milinda Mendy - Portfolio Full Stack & DevOps",
+  "short_name": "Milinda MM",
+  "description": "Portfolio professionnel de Milinda Mendy, développeuse Full Stack & DevOps au Sénégal.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#020617",
+  "theme_color": "#38bdf8",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/logoMM.jpg",
+      "sizes": "192x192 512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ]
 }
