@@ -1543,163 +1543,254 @@ body {
    MOBILE COMPACT RESPONSIVENESS (< 768px)
    ========================================= */
 @media (max-width: 768px) {
-  /* Reduce general section vertical margins */
+  /* General section vertical paddings */
   section {
-    padding-top: 2rem !important;
-    padding-bottom: 2rem !important;
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
   }
 
   .section-header {
-    margin-bottom: 1.5rem !important;
+    margin-bottom: 1.25rem !important;
   }
 
-  /* Compact Project Cards on Mobile */
-  .project-card-img {
-    height: 150px !important;
-  }
-
-  .project-card > div[style*="height: 200px"] {
-    height: 150px !important;
-  }
-
-  .project-card > div[style*="padding: 1.5rem"] {
-    padding: 1rem !important;
-  }
-
-  .project-card h3 {
-    font-size: 1rem !important;
-    margin-bottom: 0.35rem !important;
-  }
-
-  .project-card p {
-    font-size: 0.8rem !important;
-    line-height: 1.4 !important;
+  .section-eyebrow {
+    font-size: 0.68rem !important;
+    padding: 3px 10px !important;
     margin-bottom: 0.75rem !important;
   }
 
-  /* Compact About Section */
-  .about-section {
-    padding: 2rem 0 !important;
+  .section-title {
+    font-size: clamp(1.35rem, 5vw, 1.95rem) !important;
+    margin-bottom: 0.5rem !important;
   }
 
-  .about-grid {
-    gap: 1.5rem !important;
-  }
-
-  .about-highlights {
-    gap: 8px !important;
-    margin-top: 1rem !important;
-  }
-
-  .about-highlight-item {
-    font-size: 0.8rem !important;
-    padding: 6px 10px !important;
-  }
-
-  .about-code-card {
-    padding: 1rem !important;
-  }
-
-  .about-code-body {
-    font-size: 0.72rem !important;
+  .section-subtitle {
+    font-size: 0.82rem !important;
     line-height: 1.4 !important;
   }
 
-  /* Compact Services Section */
-  .services-grid {
-    gap: 1rem !important;
+  /* 1. Stats Counter Bar: ALL 4 CARDS ON 1 SINGLE HORIZONTAL LINE! */
+  .stats-section {
+    padding: 1rem 0 !important;
   }
 
-  .service-card {
-    padding: 1.25rem !important;
-  }
-
-  .service-card h3 {
-    font-size: 1.05rem !important;
-  }
-
-  .service-card p {
-    font-size: 0.82rem !important;
-    line-height: 1.5 !important;
-  }
-
-  /* Compact Stats Counter Bar */
   .stats-grid {
-    gap: 10px !important;
-    grid-template-columns: repeat(2, 1fr) !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 4px !important;
   }
 
   .stat-card {
-    padding: 0.75rem 0.5rem !important;
+    padding: 0.5rem 0.25rem !important;
+    border-radius: 10px !important;
+    text-align: center !important;
   }
 
-  .stat-number {
-    font-size: 1.4rem !important;
+  .stat-value {
+    font-size: 1.05rem !important;
+    font-weight: 800 !important;
   }
 
   .stat-label {
-    font-size: 0.68rem !important;
+    font-size: 0.58rem !important;
+    line-height: 1.1 !important;
+    margin-top: 2px !important;
   }
 
-  /* Compact Featured Projects Home Banner */
-  .featured-banner {
-    padding: 1.25rem !important;
-    margin-bottom: 2rem !important;
-    border-radius: 16px !important;
+  .stat-bar {
+    height: 2px !important;
+    margin-top: 4px !important;
   }
 
-  .featured-grid {
-    gap: 1rem !important;
+  /* 2. Section À Propos (About) Compact */
+  .about-section {
+    padding: 1.5rem 0 !important;
   }
 
-  .featured-item-img {
-    height: 140px !important;
-  }
-
-  /* Compact Blog Grid on Mobile */
-  .blog-grid {
-    gap: 1rem !important;
-    grid-template-columns: 1fr !important;
-  }
-
-  .blog-card {
-    padding: 1.25rem !important;
-    border-radius: 16px !important;
-  }
-
-  .blog-featured-card {
-    grid-template-columns: 1fr !important;
-  }
-
-  .blog-featured-content {
-    padding: 1.25rem !important;
-  }
-
-  .blog-featured-title {
-    font-size: 1.2rem !important;
-  }
-
-  /* Compact Timeline */
-  .timeline-container {
+  .about-grid {
     gap: 1.25rem !important;
   }
 
+  .about-text {
+    font-size: 0.82rem !important;
+    line-height: 1.45 !important;
+  }
+
+  .about-highlights {
+    gap: 6px !important;
+    margin-top: 0.75rem !important;
+  }
+
+  .about-highlight-item {
+    font-size: 0.75rem !important;
+    padding: 4px 8px !important;
+  }
+
+  .about-code-card {
+    padding: 0.75rem !important;
+    border-radius: 14px !important;
+  }
+
+  .about-code-header {
+    margin-bottom: 0.5rem !important;
+  }
+
+  .about-code-body {
+    font-size: 0.68rem !important;
+    line-height: 1.35 !important;
+  }
+
+  /* 3. Section Services Cards Compact */
+  .services-grid {
+    gap: 0.75rem !important;
+  }
+
+  .service-card {
+    padding: 1rem !important;
+    border-radius: 14px !important;
+  }
+
+  .service-card h3 {
+    font-size: 0.95rem !important;
+    margin-bottom: 0.35rem !important;
+  }
+
+  .service-card p {
+    font-size: 0.78rem !important;
+    line-height: 1.4 !important;
+  }
+
+  .service-icon-wrapper {
+    width: 36px !important;
+    height: 36px !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  /* 4. Length/Height of Project Cards (ProjectCard & HomeProjects) */
+  .project-card-img {
+    height: 125px !important;
+  }
+
+  .project-card > div[style*="height: 200px"] {
+    height: 125px !important;
+  }
+
+  .project-card > div[style*="padding: 1.5rem"] {
+    padding: 0.85rem !important;
+  }
+
+  .project-card h3 {
+    font-size: 0.92rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .project-card p {
+    font-size: 0.78rem !important;
+    line-height: 1.35 !important;
+    margin-bottom: 0.5rem !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  .featured-banner {
+    padding: 1rem !important;
+    margin-bottom: 1.5rem !important;
+    border-radius: 14px !important;
+  }
+
+  .featured-grid {
+    gap: 0.75rem !important;
+  }
+
+  .featured-item-img {
+    height: 120px !important;
+  }
+
+  /* 5. Section Parcours (Timeline) Shrunk */
+  .timeline-section {
+    padding: 1.5rem 0 !important;
+  }
+
+  .timeline-container {
+    gap: 1rem !important;
+  }
+
   .timeline-card {
-    padding: 1.25rem !important;
+    padding: 1rem !important;
+    border-radius: 14px !important;
+  }
+
+  .timeline-title {
+    font-size: 0.9rem !important;
+  }
+
+  .timeline-company {
+    font-size: 0.78rem !important;
+  }
+
+  .timeline-desc {
+    font-size: 0.75rem !important;
+    line-height: 1.4 !important;
+  }
+
+  /* 6. Section Contact & Booking Compact */
+  .contact-section {
+    padding: 1.5rem 0 !important;
+  }
+
+  .contact-info-card {
+    padding: 0.75rem 1rem !important;
+    border-radius: 14px !important;
+  }
+
+  .contact-form-card {
+    padding: 1.15rem 1rem !important;
     border-radius: 16px !important;
   }
 
-  /* Compact Booking CTA */
+  .contact-form-card input,
+  .contact-form-card textarea {
+    padding: 0.55rem 0.75rem !important;
+    font-size: 0.8rem !important;
+  }
+
   .booking-card {
-    padding: 1.5rem 1.25rem !important;
-    border-radius: 18px !important;
+    padding: 1.25rem 1rem !important;
+    border-radius: 16px !important;
   }
 
   .booking-title {
-    font-size: 1.35rem !important;
+    font-size: 1.2rem !important;
   }
 
   .booking-desc {
-    font-size: 0.85rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* 7. Footer Elements Compact */
+  .footer-section {
+    padding: 1.75rem 0 1.25rem !important;
+  }
+
+  .footer-grid {
+    gap: 1.25rem !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .footer-brand {
+    grid-column: span 2 !important;
+  }
+
+  .footer-brand p {
+    font-size: 0.78rem !important;
+    margin-top: 0.4rem !important;
+  }
+
+  .footer-bottom {
+    margin-top: 1.25rem !important;
+    padding-top: 0.85rem !important;
+    font-size: 0.7rem !important;
   }
 }
