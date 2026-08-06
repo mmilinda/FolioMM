@@ -237,10 +237,95 @@ body {
 }
 
 @media (max-width: 900px) {
+  .hero-section {
+    padding: 2rem 0 1.5rem;
+    min-height: auto;
+  }
   .hero-container {
     grid-template-columns: 1fr;
     text-align: center;
-    gap: 3rem;
+    gap: 1.75rem;
+    width: 94%;
+  }
+  .hero-visual {
+    order: -1; /* La photo apparaît au-dessus du texte sur mobile */
+    gap: 1.25rem;
+  }
+  .hero-profile-img {
+    width: 170px !important;
+    height: 170px !important;
+  }
+  .hero-glow-ring {
+    inset: -6px !important;
+  }
+  .hero-glow-ring-2 {
+    inset: -12px !important;
+  }
+  .hero-floating-card-top {
+    top: -5px;
+    right: -10px;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+  }
+  .hero-floating-card-bottom {
+    bottom: -5px;
+    left: -10px;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+  }
+  .hero-badge {
+    margin-bottom: 0.75rem;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+  }
+  .hero-title {
+    font-size: clamp(1.5rem, 5.5vw, 2.25rem);
+    margin-bottom: 0.75rem;
+    gap: 0.15rem;
+  }
+  .hero-desc {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-tech-badges {
+    margin-bottom: 1.25rem;
+    gap: 6px;
+    justify-content: center;
+  }
+  .hero-tech-badge {
+    font-size: 0.7rem;
+    padding: 3px 10px;
+  }
+  .hero-ctas {
+    margin-bottom: 1.25rem;
+    gap: 8px;
+    width: 100%;
+    justify-content: center;
+  }
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    padding: 0.65rem 1.25rem;
+    font-size: 0.88rem;
+    width: 100%;
+    justify-content: center;
+  }
+  .hero-socials {
+    justify-content: center;
+  }
+  .hero-stats {
+    gap: 8px;
+  }
+  .hero-stat-card {
+    padding: 0.6rem 0.5rem;
+  }
+  .hero-stat-value {
+    font-size: 1.15rem;
+  }
+  .hero-stat-label {
+    font-size: 0.68rem;
   }
 }
 
