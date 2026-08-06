@@ -14,7 +14,7 @@ export default function About() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="about-section py-6 md:py-16">
+    <section ref={ref} className="about-section py-8 md:py-20">
       <div className="about-grid">
         {/* Left — Text */}
         <motion.div
@@ -24,36 +24,36 @@ export default function About() {
           className="text-left"
         >
           <span className="section-eyebrow">À propos</span>
-          <h2 className="section-title text-base sm:text-3xl lg:text-4xl font-extrabold mb-2 md:mb-4 text-left">
+          <h2 className="section-title text-xl sm:text-3xl lg:text-4xl font-extrabold mb-3 md:mb-5 text-left">
             Développeuse junior qui{" "}
             <span className="gradient-text">pense systèmes</span>,
             <br className="hidden sm:inline" /> pas juste fonctionnalités.
           </h2>
 
-          <p className="about-text text-[11px] sm:text-base lg:text-lg text-slate-300 leading-relaxed md:leading-loose text-left">
+          <p className="about-text text-sm sm:text-base md:text-lg text-slate-300 leading-relaxed md:leading-loose text-left">
             Avec plus de 3 ans d'expérience, je conçois des produits digitaux robustes
             de l'architecture à la mise en production. Ma force réside dans ma capacité
             à marier performance technique, expérience utilisateur et vision produit.
           </p>
 
-          <p className="about-text text-[11px] sm:text-base lg:text-lg text-slate-300 leading-relaxed md:leading-loose mt-2 md:mt-4 text-left">
+          <p className="about-text text-sm sm:text-base md:text-lg text-slate-300 leading-relaxed md:leading-loose mt-3 md:mt-5 text-left">
             Spécialisée en <strong className="text-cyan-400">DevOps</strong>,{" "}
             <strong className="text-cyan-400">React</strong>,{" "}
             <strong className="text-cyan-400">Laravel</strong> et architectures cloud,
             je transforme des exigences complexes en solutions élégantes et maintenables.
           </p>
 
-          <div className="about-highlights grid grid-cols-2 gap-2 md:gap-4 mt-4 text-left">
+          <div className="about-highlights grid grid-cols-2 md:grid-cols-1 gap-2.5 md:gap-3.5 mt-5 md:mt-6 text-left">
             {highlights.map(({ icon: Icon, text }, i) => (
               <motion.div
                 key={text}
-                className="about-highlight-item p-1.5 md:p-3 text-[11px] sm:text-sm lg:text-base flex items-center gap-2 rounded-xl bg-white/5 border border-white/10"
+                className="about-highlight-item p-2 md:p-3.5 text-xs sm:text-sm md:text-base flex items-center gap-2.5 rounded-xl bg-white/5 border border-white/10"
                 initial={{ opacity: 0, x: -20 }}
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
               >
-                <Icon size={18} className="text-cyan-400 shrink-0" />
-                <span className="truncate">{text}</span>
+                <Icon size={20} className="text-cyan-400 shrink-0" />
+                <span>{text}</span>
               </motion.div>
             ))}
           </div>
@@ -62,14 +62,14 @@ export default function About() {
             initial={{ opacity: 0, y: 15 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.7 }}
-            className="mt-4 md:mt-6 flex justify-center sm:justify-start w-full"
+            className="mt-5 md:mt-8 flex justify-center sm:justify-start w-full"
           >
             <a
               href="/CV-Milinda-Mendy.pdf"
               download
-              className="hero-btn-secondary px-2.5 py-1 text-[10px] sm:px-5 sm:py-2.5 sm:text-base font-semibold inline-flex items-center justify-center gap-2 rounded-xl w-auto max-w-fit mx-auto sm:mx-0 shrink-0"
+              className="hero-btn-secondary px-4 py-2 sm:px-6 sm:py-3 text-xs sm:text-base font-bold inline-flex items-center justify-center gap-2 rounded-xl w-auto shrink-0"
             >
-              <Download size={16} className="shrink-0" />
+              <Download size={18} className="shrink-0" />
               Télécharger mon CV
             </a>
           </motion.div>
@@ -89,7 +89,7 @@ export default function About() {
               <span className="code-dot code-dot-green" />
               <span className="code-filename">milinda.config.ts</span>
             </div>
-            <pre className="about-code-body text-xs md:text-sm">
+            <pre className="about-code-body text-xs md:text-sm lg:text-base">
 {`const milinda = {
   role: "Junior DevOps & Full Stack",
   location: "Sénégal 🇸🇳",

@@ -45,15 +45,15 @@ export default function Timeline() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section ref={ref} className="timeline-section py-6 md:py-16">
+    <section ref={ref} className="timeline-section py-8 md:py-20">
       <motion.div
-        className="section-header mb-4 sm:mb-10 text-center"
+        className="section-header mb-6 md:mb-12 text-center"
         initial={{ opacity: 0, y: 30 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.7 }}
       >
         <span className="section-eyebrow">Parcours</span>
-        <h2 className="section-title text-base sm:text-3xl lg:text-4xl font-extrabold mb-2">
+        <h2 className="section-title text-xl sm:text-3xl lg:text-4xl font-extrabold mb-3">
           Mon expérience <span className="gradient-text">en détail</span>
         </h2>
         <p className="section-subtitle text-xs sm:text-base lg:text-lg text-slate-400 max-w-xl mx-auto">
@@ -61,45 +61,45 @@ export default function Timeline() {
         </p>
       </motion.div>
 
-      <div className="timeline-wrapper relative max-w-3xl mx-auto px-2">
-        <div className="timeline-items space-y-3 sm:space-y-6">
+      <div className="timeline-wrapper relative max-w-3xl mx-auto px-4">
+        <div className="timeline-items space-y-4 sm:space-y-8">
           {experiences.map((exp, i) => (
             <motion.div
               key={`${exp.year}-${i}`}
-              className="timeline-item flex gap-2 sm:gap-4 items-start"
+              className="timeline-item flex gap-3 sm:gap-6 items-start"
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.1 + i * 0.08, duration: 0.5 }}
             >
               <div
-                className="timeline-card w-full p-2.5 sm:p-5 md:p-6 rounded-xl md:rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/30"
-                style={{ borderLeft: `4px solid ${exp.color}` }}
+                className="timeline-card w-full p-3.5 sm:p-6 lg:p-7 rounded-2xl md:rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md transition-all duration-300 hover:border-cyan-500/30 shadow-xl"
+                style={{ borderLeft: `5px solid ${exp.color}` }}
               >
-                <div className="flex items-center justify-between gap-2 mb-1.5 sm:mb-2">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs sm:text-base lg:text-lg font-bold" style={{ color: exp.color }}>
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-sm sm:text-lg lg:text-xl font-bold" style={{ color: exp.color }}>
                       {exp.year}
                     </span>
-                    <span className="text-slate-500 text-xs sm:text-sm">•</span>
-                    <span className="text-xs sm:text-sm lg:text-base font-semibold text-slate-300">
+                    <span className="text-slate-500 text-sm">•</span>
+                    <span className="text-xs sm:text-base lg:text-lg font-semibold text-slate-200">
                       {exp.company}
                     </span>
                   </div>
-                  <span className="text-[9px] sm:text-xs px-2 py-0.5 rounded-full bg-white/10 text-slate-300 font-semibold">
+                  <span className="text-[10px] sm:text-xs px-2.5 py-1 rounded-full bg-white/10 text-slate-200 font-semibold">
                     {exp.type}
                   </span>
                 </div>
 
-                <h3 className="text-xs sm:text-lg lg:text-xl font-bold text-white mb-1">{exp.role}</h3>
-                <p className="text-[11px] sm:text-sm lg:text-base text-slate-300 leading-tight sm:leading-relaxed mb-3">
+                <h3 className="text-sm sm:text-xl lg:text-2xl font-bold text-white mb-2">{exp.role}</h3>
+                <p className="text-xs sm:text-base lg:text-lg text-slate-300 leading-normal sm:leading-relaxed mb-4">
                   {exp.desc}
                 </p>
 
-                <div className="flex flex-wrap gap-1 sm:gap-1.5">
+                <div className="flex flex-wrap gap-1.5 sm:gap-2">
                   {exp.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="text-[9px] sm:text-xs px-2 py-0.5 rounded-full border bg-white/5 font-medium"
+                      className="text-[10px] sm:text-xs md:text-sm px-2.5 py-1 rounded-full border bg-white/5 font-medium"
                       style={{ borderColor: exp.color + "44", color: exp.color }}
                     >
                       {tag}

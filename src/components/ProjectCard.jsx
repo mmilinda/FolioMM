@@ -8,10 +8,10 @@ export default function ProjectCard({ project }) {
     <motion.article
       whileHover={{ y: -6 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="group project-card relative overflow-hidden rounded-xl sm:rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md flex flex-col transition-all duration-300 w-full max-w-[270px] sm:max-w-none mx-auto"
+      className="group project-card relative overflow-hidden rounded-2xl md:rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md flex flex-col transition-all duration-300 w-full max-w-[270px] sm:max-w-none mx-auto"
     >
       {/* ── Image ───────────────────────────────── */}
-      <div className="relative h-28 sm:h-48 md:h-56 lg:h-60 overflow-hidden shrink-0">
+      <div className="relative h-28 sm:h-48 md:h-60 lg:h-64 overflow-hidden shrink-0">
         <img
           src={project.image}
           onError={(e) => {
@@ -27,14 +27,14 @@ export default function ProjectCard({ project }) {
 
         {/* Category badge */}
         {project.category && (
-          <span className="absolute top-2 left-2 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-slate-950/80 backdrop-blur-sm border border-white/15 text-slate-300">
+          <span className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-slate-950/80 backdrop-blur-sm border border-white/15 text-slate-300">
             {project.category}
           </span>
         )}
 
         {/* Featured badge */}
         {project.featured && (
-          <span className="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-gradient-to-r from-cyan-400 to-indigo-400 text-slate-950">
+          <span className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 flex items-center gap-1 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-gradient-to-r from-cyan-400 to-indigo-400 text-slate-950">
             <Sparkles size={11} />
             Featured
           </span>
@@ -42,7 +42,7 @@ export default function ProjectCard({ project }) {
       </div>
 
       {/* ── Content ─────────────────────────────── */}
-      <div className="p-2.5 sm:p-5 md:p-6 flex flex-col gap-2 sm:gap-3 flex-1">
+      <div className="p-3 sm:p-5 md:p-6 lg:p-7 flex flex-col gap-2 sm:gap-3.5 flex-1">
 
         {/* Title + link arrow */}
         <div className="flex items-start justify-between gap-2">
@@ -50,42 +50,42 @@ export default function ProjectCard({ project }) {
             to={`/projects/${project.slug || project.id}`}
             className="no-underline text-inherit flex-1"
           >
-            <h3 className="text-xs sm:text-lg lg:text-xl font-bold tracking-tight text-white transition-colors project-card-title line-clamp-1 sm:line-clamp-none">
+            <h3 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold tracking-tight text-white transition-colors project-card-title line-clamp-1 sm:line-clamp-none">
               {project.title}
             </h3>
           </Link>
           <Link to={`/projects/${project.slug || project.id}`} className="text-slate-400 shrink-0 mt-0.5">
-            <ArrowUpRight size={14} className="sm:hidden" />
-            <ArrowUpRight size={20} className="hidden sm:block project-card-arrow" />
+            <ArrowUpRight size={16} className="sm:hidden" />
+            <ArrowUpRight size={22} className="hidden sm:block project-card-arrow" />
           </Link>
         </div>
 
-        {/* Description — 1 line on mobile, 2-3 lines on desktop */}
-        <p className="text-[10px] sm:text-sm lg:text-base text-slate-400 leading-tight sm:leading-relaxed line-clamp-1 sm:line-clamp-3 m-0">
+        {/* Description — 1 line on mobile, 3 lines on desktop */}
+        <p className="text-[10px] sm:text-sm md:text-base lg:text-lg text-slate-300 leading-normal sm:leading-relaxed line-clamp-1 sm:line-clamp-3 m-0">
           {project.description}
         </p>
 
         {/* Impact */}
         {project.impact && (
-          <div className="flex items-center gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[#34d399] text-[9px] sm:text-xs lg:text-sm">
-            <TrendingUp size={13} className="shrink-0 text-emerald-400" />
+          <div className="flex items-center gap-2 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-[#34d399] text-[9px] sm:text-xs md:text-sm">
+            <TrendingUp size={14} className="shrink-0 text-emerald-400" />
             <span className="truncate font-medium">{project.impact}</span>
           </div>
         )}
 
         {/* Technologies */}
         {project.technologies?.length > 0 && (
-          <div className="flex flex-wrap gap-1 sm:gap-1.5">
+          <div className="flex flex-wrap gap-1 sm:gap-2">
             {project.technologies.slice(0, 4).map((tech) => (
               <span
                 key={tech}
-                className="text-[9px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-white/5 border border-white/10 text-slate-400 font-medium"
+                className="text-[9px] sm:text-xs md:text-sm px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/5 border border-white/10 text-slate-400 font-medium"
               >
                 {tech}
               </span>
             ))}
             {project.technologies.length > 4 && (
-              <span className="text-[9px] sm:text-xs px-1.5 py-0.5 text-slate-500">
+              <span className="text-[9px] sm:text-xs px-2 py-0.5 text-slate-500">
                 +{project.technologies.length - 4}
               </span>
             )}
@@ -93,21 +93,21 @@ export default function ProjectCard({ project }) {
         )}
 
         {/* Action buttons */}
-        <div className="flex gap-2 mt-auto pt-2 border-t border-white/10">
+        <div className="flex gap-2.5 mt-auto pt-3 border-t border-white/10">
           {project.demo && project.demo !== "#" ? (
             <a
               href={project.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-1.5 py-1 sm:py-2 px-3 rounded-xl bg-gradient-to-r from-cyan-400 to-indigo-400 text-slate-950 text-[10px] sm:text-sm font-bold no-underline transition-opacity hover:opacity-90"
+              className="flex-1 inline-flex items-center justify-center gap-2 py-1.5 sm:py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-400 to-indigo-400 text-slate-950 text-xs sm:text-sm font-bold no-underline transition-opacity hover:opacity-90 shadow-md"
             >
-              <ExternalLink size={13} />
+              <ExternalLink size={14} />
               Démo
             </a>
           ) : (
             <Link
               to={`/projects/${project.slug || project.id}`}
-              className="flex-1 inline-flex items-center justify-center gap-1.5 py-1 sm:py-2 px-3 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-[10px] sm:text-sm font-bold no-underline"
+              className="flex-1 inline-flex items-center justify-center gap-2 py-1.5 sm:py-2.5 px-4 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-bold no-underline"
             >
               Voir le projet
             </Link>
@@ -118,9 +118,9 @@ export default function ProjectCard({ project }) {
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1.5 py-1 sm:py-2 px-3 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-[10px] sm:text-sm font-semibold no-underline shrink-0 hover:bg-white/10"
+              className="inline-flex items-center justify-center gap-2 py-1.5 sm:py-2.5 px-4 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-xs sm:text-sm font-semibold no-underline shrink-0 hover:bg-white/10"
             >
-              <FaGithub size={13} />
+              <FaGithub size={15} />
               Code
             </a>
           )}

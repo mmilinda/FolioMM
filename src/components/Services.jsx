@@ -64,15 +64,15 @@ export default function Services() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section ref={ref} className="services-section py-6 md:py-16">
+    <section ref={ref} className="services-section py-8 md:py-20">
       <motion.div
-        className="section-header mb-4 sm:mb-10 text-center"
+        className="section-header mb-6 md:mb-12 text-center"
         initial={{ opacity: 0, y: 30 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.7 }}
       >
         <span className="section-eyebrow">Services</span>
-        <h2 className="section-title text-lg sm:text-3xl lg:text-4xl font-extrabold mb-2">
+        <h2 className="section-title text-xl sm:text-3xl lg:text-4xl font-extrabold mb-3">
           Ce que je fais <span className="gradient-text">mieux que tout</span>
         </h2>
         <p className="section-subtitle text-xs sm:text-base lg:text-lg text-slate-400 max-w-xl mx-auto">
@@ -80,32 +80,32 @@ export default function Services() {
         </p>
       </motion.div>
 
-      <div className="services-grid grid grid-cols-2 md:grid-cols-3 gap-2 sm:gap-6">
+      <div className="services-grid grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
         {services.map((svc, i) => {
           const Icon = svc.icon;
           return (
             <motion.div
               key={svc.title}
-              className={`service-card p-2.5 sm:p-6 rounded-xl md:rounded-2xl border ${svc.border} bg-white/5 flex flex-col justify-between`}
+              className={`service-card p-3.5 md:p-7 lg:p-8 rounded-2xl md:rounded-3xl border ${svc.border} bg-white/5 flex flex-col justify-between`}
               initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: i * 0.08, duration: 0.5, ease: "easeOut" }}
               whileHover={{ y: -6, scale: 1.02 }}
             >
               <div>
-                <div className={`w-7 h-7 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mb-1.5 sm:mb-4 bg-gradient-to-br ${svc.gradient}`}>
-                  <Icon size={16} className="sm:hidden" style={{ color: svc.glow }} />
-                  <Icon size={24} className="hidden sm:block" style={{ color: svc.glow }} />
+                <div className={`w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center mb-2 sm:mb-4 bg-gradient-to-br ${svc.gradient}`}>
+                  <Icon size={18} className="sm:hidden" style={{ color: svc.glow }} />
+                  <Icon size={26} className="hidden sm:block" style={{ color: svc.glow }} />
                 </div>
-                <h3 className="text-xs sm:text-lg lg:text-xl font-bold text-white mb-1 md:mb-2 line-clamp-1 sm:line-clamp-none">{svc.title}</h3>
-                <p className="text-[11px] sm:text-sm lg:text-base text-slate-400 leading-tight sm:leading-relaxed line-clamp-2 sm:line-clamp-none">{svc.desc}</p>
+                <h3 className="text-xs sm:text-lg lg:text-2xl font-bold text-white mb-1.5 md:mb-3">{svc.title}</h3>
+                <p className="text-[11px] sm:text-sm lg:text-base text-slate-300 leading-snug md:leading-relaxed">{svc.desc}</p>
               </div>
 
-              <div className="flex flex-wrap gap-1 md:gap-1.5 mt-2 md:mt-4">
+              <div className="flex flex-wrap gap-1 md:gap-2 mt-3 md:mt-5">
                 {svc.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="text-[9px] sm:text-xs font-semibold px-1.5 py-0.5 sm:px-2.5 sm:py-1 rounded-md sm:rounded-full border bg-white/5"
+                    className="text-[9px] sm:text-xs md:text-sm font-semibold px-2 py-0.5 sm:px-3 sm:py-1 rounded-full border bg-white/5"
                     style={{ borderColor: svc.glow + "44", color: svc.glow }}
                   >
                     {tag}
