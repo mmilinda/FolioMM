@@ -6,12 +6,23 @@ import { FaGithub } from "react-icons/fa";
 export default function ProjectCard({ project }) {
   return (
     <motion.article
-      whileHover={{ y: -6 }}
+      whileHover={{ y: -8 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="group project-card relative overflow-hidden rounded-2xl md:rounded-3xl border border-white/10 bg-white/5 backdrop-blur-md flex flex-col transition-all duration-300 w-full max-w-[270px] sm:max-w-none mx-auto"
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: "20px",
+        border: "1px solid var(--border)",
+        background: "rgba(255,255,255,0.03)",
+        backdropFilter: "blur(16px)",
+        display: "flex",
+        flexDirection: "column",
+        transition: "border-color 0.3s, box-shadow 0.3s",
+      }}
+      className="group project-card"
     >
       {/* ── Image ───────────────────────────────── */}
-      <div className="relative h-28 sm:h-48 md:h-60 lg:h-64 overflow-hidden shrink-0">
+      <div style={{ position: "relative", height: "200px", overflow: "hidden", flexShrink: 0 }}>
         <img
           src={project.image}
           onError={(e) => {
@@ -19,95 +30,228 @@ export default function ProjectCard({ project }) {
           }}
           alt={project.title}
           loading="lazy"
-          className="w-full h-full object-cover transition-transform duration-500 project-card-img"
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            transition: "transform 0.6s ease",
+          }}
+          className="project-card-img"
         />
 
         {/* Gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(to top, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.2) 50%, transparent 100%)",
+        }} />
 
         {/* Category badge */}
         {project.category && (
-          <span className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-slate-950/80 backdrop-blur-sm border border-white/15 text-slate-300">
+          <span style={{
+            position: "absolute", top: "12px", left: "12px",
+            padding: "3px 10px",
+            borderRadius: "999px",
+            fontSize: "0.7rem",
+            fontWeight: 600,
+            background: "rgba(2,6,23,0.7)",
+            backdropFilter: "blur(8px)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            color: "var(--text-secondary)",
+            letterSpacing: "0.04em",
+          }}>
             {project.category}
           </span>
         )}
 
         {/* Featured badge */}
         {project.featured && (
-          <span className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 flex items-center gap-1 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-gradient-to-r from-cyan-400 to-indigo-400 text-slate-950">
+          <span style={{
+            position: "absolute", top: "12px", right: "12px",
+            display: "flex", alignItems: "center", gap: "4px",
+            padding: "3px 10px",
+            borderRadius: "999px",
+            fontSize: "0.7rem",
+            fontWeight: 700,
+            background: "linear-gradient(135deg, #38bdf8, #818cf8)",
+            color: "#020617",
+          }}>
             <Sparkles size={11} />
             Featured
           </span>
         )}
+
+        {/* Year + status at bottom of image */}
+        <div style={{
+          position: "absolute", bottom: "10px", left: "12px",
+          display: "flex", alignItems: "center", gap: "8px",
+        }}>
+          {project.year && (
+            <span style={{
+              display: "flex", alignItems: "center", gap: "4px",
+              fontSize: "0.7rem", color: "rgba(255,255,255,0.6)",
+            }}>
+              <Calendar size={11} />
+              {project.year}
+            </span>
+          )}
+          {project.status && (
+            <span style={{
+              fontSize: "0.68rem",
+              padding: "2px 8px",
+              borderRadius: "999px",
+              background: "rgba(56,189,248,0.15)",
+              border: "1px solid rgba(56,189,248,0.3)",
+              color: "var(--primary)",
+              fontWeight: 600,
+            }}>
+              {project.status}
+            </span>
+          )}
+        </div>
       </div>
 
       {/* ── Content ─────────────────────────────── */}
-      <div className="p-3 sm:p-5 md:p-6 lg:p-7 flex flex-col gap-2 sm:gap-3.5 flex-1">
+      <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem", flex: 1 }}>
 
         {/* Title + link arrow */}
-        <div className="flex items-start justify-between gap-2">
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px" }}>
           <Link
             to={`/projects/${project.slug || project.id}`}
-            className="no-underline text-inherit flex-1"
+            style={{ textDecoration: "none", color: "inherit", flex: 1 }}
           >
-            <h3 className="text-sm sm:text-lg md:text-xl lg:text-2xl font-bold tracking-tight text-white transition-colors project-card-title line-clamp-1 sm:line-clamp-none">
+            <h3 style={{
+              fontSize: "1.05rem",
+              fontWeight: 700,
+              lineHeight: 1.3,
+              letterSpacing: "-0.01em",
+              transition: "color 0.2s",
+            }} className="project-card-title">
               {project.title}
             </h3>
           </Link>
-          <Link to={`/projects/${project.slug || project.id}`} className="text-slate-400 shrink-0 mt-0.5">
-            <ArrowUpRight size={16} className="sm:hidden" />
-            <ArrowUpRight size={22} className="hidden sm:block project-card-arrow" />
+          <Link to={`/projects/${project.slug || project.id}`} style={{ color: "var(--text-muted)", flexShrink: 0, marginTop: "2px" }}>
+            <ArrowUpRight size={18} className="project-card-arrow" style={{ transition: "color 0.2s, opacity 0.2s" }} />
           </Link>
         </div>
 
-        {/* Description — 1 line on mobile, 3 lines on desktop */}
-        <p className="text-[10px] sm:text-sm md:text-base lg:text-lg text-slate-300 leading-normal sm:leading-relaxed line-clamp-1 sm:line-clamp-3 m-0">
+        {/* Description — 2 lines max */}
+        <p style={{
+          fontSize: "0.85rem",
+          color: "var(--text-secondary)",
+          lineHeight: 1.65,
+          display: "-webkit-box",
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+          margin: 0,
+        }}>
           {project.description}
         </p>
 
-        {/* Impact */}
+        {/* Impact — the "so what" line */}
         {project.impact && (
-          <div className="flex items-center gap-2 px-2.5 py-1.5 sm:px-3.5 sm:py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-[#34d399] text-[9px] sm:text-xs md:text-sm">
-            <TrendingUp size={14} className="shrink-0 text-emerald-400" />
-            <span className="truncate font-medium">{project.impact}</span>
+          <div style={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: "7px",
+            padding: "8px 12px",
+            borderRadius: "10px",
+            background: "rgba(52,211,153,0.07)",
+            border: "1px solid rgba(52,211,153,0.2)",
+          }}>
+            <TrendingUp size={13} style={{ color: "#34d399", marginTop: "2px", flexShrink: 0 }} />
+            <span style={{
+              fontSize: "0.78rem",
+              color: "#34d399",
+              lineHeight: 1.5,
+              fontWeight: 500,
+            }}>
+              {project.impact}
+            </span>
           </div>
         )}
 
         {/* Technologies */}
         {project.technologies?.length > 0 && (
-          <div className="flex flex-wrap gap-1 sm:gap-2">
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
             {project.technologies.slice(0, 4).map((tech) => (
               <span
                 key={tech}
-                className="text-[9px] sm:text-xs md:text-sm px-2 py-0.5 sm:px-3 sm:py-1 rounded-full bg-white/5 border border-white/10 text-slate-400 font-medium"
+                style={{
+                  fontSize: "0.7rem",
+                  padding: "3px 10px",
+                  borderRadius: "999px",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid var(--border)",
+                  color: "var(--text-muted)",
+                  fontWeight: 500,
+                }}
               >
                 {tech}
               </span>
             ))}
             {project.technologies.length > 4 && (
-              <span className="text-[9px] sm:text-xs px-2 py-0.5 text-slate-500">
+              <span style={{
+                fontSize: "0.7rem",
+                padding: "3px 10px",
+                borderRadius: "999px",
+                color: "var(--text-muted)",
+              }}>
                 +{project.technologies.length - 4}
               </span>
             )}
           </div>
         )}
 
+        {/* Divider */}
+        <div style={{ height: "1px", background: "var(--border)", margin: "0.25rem 0" }} />
+
         {/* Action buttons */}
-        <div className="flex gap-2.5 mt-auto pt-3 border-t border-white/10">
+        <div style={{ display: "flex", gap: "8px" }}>
           {project.demo && project.demo !== "#" ? (
             <a
               href={project.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-2 py-1.5 sm:py-2.5 px-4 rounded-xl bg-gradient-to-r from-cyan-400 to-indigo-400 text-slate-950 text-xs sm:text-sm font-bold no-underline transition-opacity hover:opacity-90 shadow-md"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                flex: 1,
+                justifyContent: "center",
+                padding: "8px 12px",
+                borderRadius: "10px",
+                background: "linear-gradient(135deg, #38bdf8, #818cf8)",
+                color: "#020617",
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                textDecoration: "none",
+                transition: "opacity 0.2s, transform 0.2s",
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = "0.9"}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
             >
-              <ExternalLink size={14} />
+              <ExternalLink size={13} />
               Démo
             </a>
           ) : (
             <Link
               to={`/projects/${project.slug || project.id}`}
-              className="flex-1 inline-flex items-center justify-center gap-2 py-1.5 sm:py-2.5 px-4 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-xs sm:text-sm font-bold no-underline"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                flex: 1,
+                justifyContent: "center",
+                padding: "8px 12px",
+                borderRadius: "10px",
+                background: "rgba(56,189,248,0.1)",
+                border: "1px solid rgba(56,189,248,0.25)",
+                color: "var(--primary)",
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                textDecoration: "none",
+              }}
             >
               Voir le projet
             </Link>
@@ -118,14 +262,49 @@ export default function ProjectCard({ project }) {
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 py-1.5 sm:py-2.5 px-4 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-xs sm:text-sm font-semibold no-underline shrink-0 hover:bg-white/10"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+                padding: "8px 14px",
+                borderRadius: "10px",
+                border: "1px solid var(--border)",
+                background: "rgba(255,255,255,0.04)",
+                color: "var(--text-secondary)",
+                fontSize: "0.8rem",
+                fontWeight: 600,
+                textDecoration: "none",
+                transition: "border-color 0.2s, color 0.2s",
+                flexShrink: 0,
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)"; e.currentTarget.style.color = "white"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-secondary)"; }}
             >
-              <FaGithub size={15} />
+              <FaGithub size={14} />
               Code
             </a>
           )}
         </div>
       </div>
+
+      {/* Hover glow effect */}
+      <style>{`
+        .project-card:hover {
+          border-color: rgba(56,189,248,0.3) !important;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px -15px rgba(56,189,248,0.25);
+        }
+        .project-card:hover .project-card-img {
+          transform: scale(1.06);
+        }
+        .project-card:hover .project-card-title {
+          color: var(--primary);
+        }
+        .project-card:hover .project-card-arrow {
+          color: var(--primary);
+          opacity: 1;
+        }
+      `}</style>
     </motion.article>
   );
 }

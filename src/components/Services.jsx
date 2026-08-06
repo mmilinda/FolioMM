@@ -25,7 +25,7 @@ const services = [
     icon: GitBranch,
     title: "CI/CD & DevOps",
     desc: "Pipelines automatisés GitHub Actions / GitLab CI, tests, déploiements continus et monitoring de production.",
-    tags: ["CI/CD", "GitHub Actions", "Monitoring"],
+    tags: ["GitHub Actions", "CI/CD", "Monitoring"],
     gradient: "from-emerald-500/20 to-teal-500/20",
     border: "border-emerald-500/30",
     glow: "#34d399",
@@ -64,50 +64,44 @@ export default function Services() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section ref={ref} className="services-section py-8 md:py-20">
+    <section ref={ref} className="services-section">
       <motion.div
-        className="section-header mb-6 md:mb-12 text-center"
+        className="section-header"
         initial={{ opacity: 0, y: 30 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.7 }}
       >
         <span className="section-eyebrow">Services</span>
-        <h2 className="section-title text-xl sm:text-3xl lg:text-4xl font-extrabold mb-3">
-          Ce que je fais <span className="gradient-text">mieux que tout</span>
+        <h2 className="section-title">
+          Ce que je fais
+          <span className="gradient-text"> mieux que tout</span>
         </h2>
-        <p className="section-subtitle text-xs sm:text-base lg:text-lg text-slate-400 max-w-xl mx-auto">
+        <p className="section-subtitle">
           Des solutions complètes pensées pour durer, scalables et maintenues dans le temps.
         </p>
       </motion.div>
 
-      <div className="services-grid grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
+      <div className="services-grid">
         {services.map((svc, i) => {
           const Icon = svc.icon;
           return (
             <motion.div
               key={svc.title}
-              className={`service-card p-3.5 md:p-7 lg:p-8 rounded-2xl md:rounded-3xl border ${svc.border} bg-white/5 flex flex-col justify-between`}
+              className={`service-card ${svc.border}`}
               initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.08, duration: 0.5, ease: "easeOut" }}
-              whileHover={{ y: -6, scale: 1.02 }}
+              transition={{ delay: i * 0.1, duration: 0.6, ease: "easeOut" }}
+              whileHover={{ y: -8, scale: 1.02 }}
+              style={{ "--card-glow": svc.glow }}
             >
-              <div>
-                <div className={`w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center mb-2 sm:mb-4 bg-gradient-to-br ${svc.gradient}`}>
-                  <Icon size={18} className="sm:hidden" style={{ color: svc.glow }} />
-                  <Icon size={26} className="hidden sm:block" style={{ color: svc.glow }} />
-                </div>
-                <h3 className="text-xs sm:text-lg lg:text-2xl font-bold text-white mb-1.5 md:mb-3">{svc.title}</h3>
-                <p className="text-[11px] sm:text-sm lg:text-base text-slate-300 leading-snug md:leading-relaxed">{svc.desc}</p>
+              <div className={`service-icon-wrapper bg-gradient-to-br ${svc.gradient}`}>
+                <Icon size={24} style={{ color: svc.glow }} />
               </div>
-
-              <div className="flex flex-wrap gap-1 md:gap-2 mt-3 md:mt-5">
+              <h3 className="service-title">{svc.title}</h3>
+              <p className="service-desc">{svc.desc}</p>
+              <div className="service-tags">
                 {svc.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="text-[9px] sm:text-xs md:text-sm font-semibold px-2 py-0.5 sm:px-3 sm:py-1 rounded-full border bg-white/5"
-                    style={{ borderColor: svc.glow + "44", color: svc.glow }}
-                  >
+                  <span key={tag} className="service-tag" style={{ borderColor: svc.glow + "55", color: svc.glow }}>
                     {tag}
                   </span>
                 ))}
