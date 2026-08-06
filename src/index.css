@@ -1545,33 +1545,58 @@ body {
 @media (max-width: 768px) {
   /* General section vertical paddings */
   section {
-    padding-top: 1.5rem !important;
-    padding-bottom: 1.5rem !important;
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
   }
 
   .section-header {
-    margin-bottom: 1.25rem !important;
+    margin-bottom: 1rem !important;
   }
 
   .section-eyebrow {
-    font-size: 0.68rem !important;
-    padding: 3px 10px !important;
-    margin-bottom: 0.75rem !important;
-  }
-
-  .section-title {
-    font-size: clamp(1.35rem, 5vw, 1.95rem) !important;
+    font-size: 0.65rem !important;
+    padding: 2px 8px !important;
     margin-bottom: 0.5rem !important;
   }
 
-  .section-subtitle {
-    font-size: 0.82rem !important;
-    line-height: 1.4 !important;
+  .section-title {
+    font-size: clamp(1.2rem, 4.5vw, 1.75rem) !important;
+    margin-bottom: 0.35rem !important;
   }
 
-  /* 1. Stats Counter Bar: ALL 4 CARDS ON 1 SINGLE HORIZONTAL LINE! */
+  .section-subtitle {
+    font-size: 0.75rem !important;
+    line-height: 1.35 !important;
+  }
+
+  /* 1. HERO: Buttons side by side on 1 single line & hide scroll hint */
+  .hero-ctas {
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 6px !important;
+    width: 100% !important;
+    justify-content: center !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .hero-btn-primary,
+  .hero-btn-secondary {
+    flex: 1 1 50% !important;
+    width: auto !important;
+    padding: 0.5rem 0.6rem !important;
+    font-size: 0.75rem !important;
+    border-radius: 10px !important;
+    white-space: nowrap !important;
+    justify-content: center !important;
+  }
+
+  .hero-scroll-hint {
+    display: none !important; /* Enlève le flottant scroll */
+  }
+
+  /* 2. STATS COUNTER BAR: ALL 4 CARDS ON 1 SINGLE HORIZONTAL LINE! */
   .stats-section {
-    padding: 1rem 0 !important;
+    padding: 0.75rem 0 !important;
   }
 
   .stats-grid {
@@ -1581,105 +1606,117 @@ body {
   }
 
   .stat-card {
-    padding: 0.5rem 0.25rem !important;
-    border-radius: 10px !important;
+    padding: 0.4rem 0.2rem !important;
+    border-radius: 8px !important;
     text-align: center !important;
   }
 
   .stat-value {
-    font-size: 1.05rem !important;
+    font-size: 1rem !important;
     font-weight: 800 !important;
   }
 
   .stat-label {
-    font-size: 0.58rem !important;
+    font-size: 0.55rem !important;
     line-height: 1.1 !important;
     margin-top: 2px !important;
   }
 
   .stat-bar {
     height: 2px !important;
-    margin-top: 4px !important;
+    margin-top: 3px !important;
   }
 
-  /* 2. Section À Propos (About) Compact */
+  /* 3. SECTION À PROPOS (About) COMPACT */
   .about-section {
-    padding: 1.25rem 0 !important;
+    padding: 1rem 0 !important;
   }
 
   .about-grid {
-    gap: 1rem !important;
+    gap: 0.75rem !important;
   }
 
   .about-code-wrapper {
-    display: none !important; /* Masque le bloc de code décoratif sur mobile pour économiser 250px de hauteur */
+    display: none !important;
   }
 
   .about-text {
-    font-size: 0.78rem !important;
-    line-height: 1.4 !important;
+    font-size: 0.72rem !important;
+    line-height: 1.35 !important;
   }
 
   .about-highlights {
     display: grid !important;
     grid-template-columns: repeat(2, 1fr) !important;
-    gap: 6px !important;
-    margin-top: 0.6rem !important;
+    gap: 5px !important;
+    margin-top: 0.5rem !important;
   }
 
   .about-highlight-item {
-    font-size: 0.7rem !important;
-    padding: 4px 6px !important;
+    font-size: 0.68rem !important;
+    padding: 3px 6px !important;
   }
 
-  /* 3. Section Services Cards Compact */
+  .about-section a[download] {
+    margin-top: 0.5rem !important;
+    padding: 0.4rem 0.75rem !important;
+    font-size: 0.72rem !important;
+  }
+
+  /* 4. SECTION SERVICES CARDS: 2 CARDS PER LINE! */
   .services-grid {
-    gap: 0.75rem !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
   }
 
   .service-card {
-    padding: 1rem !important;
-    border-radius: 14px !important;
+    padding: 0.75rem 0.6rem !important;
+    border-radius: 12px !important;
   }
 
   .service-card h3 {
-    font-size: 0.95rem !important;
-    margin-bottom: 0.35rem !important;
-  }
-
-  .service-card p {
-    font-size: 0.78rem !important;
-    line-height: 1.4 !important;
-  }
-
-  .service-icon-wrapper {
-    width: 36px !important;
-    height: 36px !important;
-    margin-bottom: 0.75rem !important;
-  }
-
-  /* 4. Length/Height of Project Cards (ProjectCard & HomeProjects) */
-  .project-card-img {
-    height: 125px !important;
-  }
-
-  .project-card > div[style*="height: 200px"] {
-    height: 125px !important;
-  }
-
-  .project-card > div[style*="padding: 1.5rem"] {
-    padding: 0.85rem !important;
-  }
-
-  .project-card h3 {
-    font-size: 0.92rem !important;
+    font-size: 0.85rem !important;
     margin-bottom: 0.25rem !important;
   }
 
-  .project-card p {
-    font-size: 0.78rem !important;
-    line-height: 1.35 !important;
+  .service-card p {
+    font-size: 0.7rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .service-icon-wrapper {
+    width: 28px !important;
+    height: 28px !important;
     margin-bottom: 0.5rem !important;
+  }
+
+  /* 5. SECTION RÉALISATIONS (ProjectCard & HomeProjects) */
+  .projects-grid {
+    gap: 8px !important;
+  }
+
+  .project-card-img {
+    height: 100px !important;
+  }
+
+  .project-card > div[style*="height: 200px"] {
+    height: 100px !important;
+  }
+
+  .project-card > div[style*="padding: 1.5rem"] {
+    padding: 0.65rem !important;
+  }
+
+  .project-card h3 {
+    font-size: 0.85rem !important;
+    margin-bottom: 0.2rem !important;
+  }
+
+  .project-card p {
+    font-size: 0.72rem !important;
+    line-height: 1.25 !important;
+    margin-bottom: 0.35rem !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
     -webkit-box-orient: vertical !important;
@@ -1687,102 +1724,132 @@ body {
   }
 
   .featured-banner {
-    padding: 1rem !important;
-    margin-bottom: 1.5rem !important;
-    border-radius: 14px !important;
+    padding: 0.75rem !important;
+    margin-bottom: 1rem !important;
+    border-radius: 12px !important;
   }
 
   .featured-grid {
-    gap: 0.75rem !important;
+    gap: 0.5rem !important;
   }
 
   .featured-item-img {
-    height: 120px !important;
+    height: 100px !important;
   }
 
-  /* 5. Section Parcours (Timeline) Shrunk */
+  /* 6. SECTION PARCOURS (Timeline) SHRUNK */
   .timeline-section {
-    padding: 1.5rem 0 !important;
+    padding: 1rem 0 !important;
   }
 
   .timeline-container {
-    gap: 1rem !important;
+    gap: 0.5rem !important;
   }
 
   .timeline-card {
-    padding: 1rem !important;
-    border-radius: 14px !important;
+    padding: 0.6rem 0.75rem !important;
+    border-radius: 10px !important;
   }
 
   .timeline-title {
-    font-size: 0.9rem !important;
+    font-size: 0.82rem !important;
   }
 
   .timeline-company {
-    font-size: 0.78rem !important;
+    font-size: 0.72rem !important;
   }
 
   .timeline-desc {
-    font-size: 0.75rem !important;
-    line-height: 1.4 !important;
+    font-size: 0.68rem !important;
+    line-height: 1.3 !important;
   }
 
-  /* 6. Section Contact & Booking Compact */
+  /* 7. SECTION CONTACT & BOOKING COMPACT */
   .contact-section {
-    padding: 1.5rem 0 !important;
+    padding: 1rem 0 !important;
   }
 
   .contact-info-card {
-    padding: 0.75rem 1rem !important;
-    border-radius: 14px !important;
+    padding: 0.5rem 0.75rem !important;
+    border-radius: 10px !important;
+  }
+
+  .contact-info-card h4 {
+    font-size: 0.78rem !important;
+  }
+
+  .contact-info-card p {
+    font-size: 0.7rem !important;
   }
 
   .contact-form-card {
-    padding: 1.15rem 1rem !important;
-    border-radius: 16px !important;
+    padding: 0.85rem 0.75rem !important;
+    border-radius: 12px !important;
   }
 
   .contact-form-card input,
   .contact-form-card textarea {
-    padding: 0.55rem 0.75rem !important;
-    font-size: 0.8rem !important;
+    padding: 0.45rem 0.65rem !important;
+    font-size: 0.75rem !important;
+    border-radius: 8px !important;
+  }
+
+  .contact-form-card button {
+    padding: 0.55rem 1rem !important;
+    font-size: 0.78rem !important;
   }
 
   .booking-card {
-    padding: 1.25rem 1rem !important;
-    border-radius: 16px !important;
+    padding: 1rem 0.85rem !important;
+    border-radius: 14px !important;
   }
 
   .booking-title {
-    font-size: 1.2rem !important;
+    font-size: 1.1rem !important;
   }
 
   .booking-desc {
-    font-size: 0.8rem !important;
+    font-size: 0.75rem !important;
   }
 
-  /* 7. Footer Elements Compact */
+  /* 8. FOOTER FULLY VISIBLE WITHOUT EXTRA SCROLL */
   .footer-section {
-    padding: 1.75rem 0 1.25rem !important;
+    padding: 1rem 0 0.75rem !important;
   }
 
   .footer-grid {
-    gap: 1.25rem !important;
+    gap: 0.75rem !important;
     grid-template-columns: repeat(2, 1fr) !important;
   }
 
   .footer-brand {
     grid-column: span 2 !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .footer-brand h2 {
+    font-size: 1.1rem !important;
   }
 
   .footer-brand p {
+    font-size: 0.72rem !important;
+    margin-top: 0.25rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .footer-grid h3 {
     font-size: 0.78rem !important;
-    margin-top: 0.4rem !important;
+    margin-bottom: 0.35rem !important;
+  }
+
+  .footer-grid ul {
+    gap: 0.25rem !important;
+    font-size: 0.7rem !important;
   }
 
   .footer-bottom {
-    margin-top: 1.25rem !important;
-    padding-top: 0.85rem !important;
-    font-size: 0.7rem !important;
+    margin-top: 0.75rem !important;
+    padding-top: 0.5rem !important;
+    font-size: 0.65rem !important;
   }
 }
