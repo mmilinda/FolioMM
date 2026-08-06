@@ -1,30 +1,38 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { HelmetProvider } from "react-helmet-async";
-import App from "./App"; // Assure-toi que le chemin vers App est correct
-import "./index.css"; // 👈 Indispensable !
-// Système multilangues
+import App from "./App";
+import "./index.css";
 import "./i18n";
-// Google analytics
-import {
-Analytics
-}
-from "./analytics";
+import { Analytics } from "./analytics";
+import { AuthProvider } from "./context/AuthContext";
 
+// Patch pour empêcher les extensions (Google Traduction, Grammarly, etc.) de faire crasher React avec removeChild/insertBefore
+if (typeof window !== "undefined") {
+  const originalRemoveChild = Node.prototype.removeChild;
+  Node.prototype.removeChild = function (child) {
+    if (child.parentNode !== this) {
+      return child;
+    }
+    return originalRemoveChild.apply(this, arguments);
+  };
+
+  const originalInsertBefore = Node.prototype.insertBefore;
+  Node.prototype.insertBefore = function (newNode, referenceNode) {
+    if (referenceNode && referenceNode.parentNode !== this) {
+      return newNode;
+    }
+    return originalInsertBefore.apply(this, arguments);
+  };
+}
 
 Analytics();
-// Auth
-import {
-AuthProvider
-}
-from "./context/AuthContext";
-
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <HelmetProvider>
       <AuthProvider>
-          <App />
+        <App />
       </AuthProvider>
     </HelmetProvider>
   </React.StrictMode>
