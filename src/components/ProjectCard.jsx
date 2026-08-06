@@ -1,367 +1,310 @@
 import { motion } from "framer-motion";
-import { ExternalLink, ArrowUpRight } from "lucide-react";
+import { ExternalLink, Calendar, Sparkles, TrendingUp, ArrowUpRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { FaGithub } from "react-icons/fa";
 
 export default function ProjectCard({ project }) {
-
-
   return (
-
     <motion.article
-
-      initial={{
-        opacity:0,
-        y:40
+      whileHover={{ y: -8 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+      style={{
+        position: "relative",
+        overflow: "hidden",
+        borderRadius: "20px",
+        border: "1px solid var(--border)",
+        background: "rgba(255,255,255,0.03)",
+        backdropFilter: "blur(16px)",
+        display: "flex",
+        flexDirection: "column",
+        transition: "border-color 0.3s, box-shadow 0.3s",
       }}
-
-      whileInView={{
-        opacity:1,
-        y:0
-      }}
-
-      viewport={{
-        once:true,
-        amount:0.2
-      }}
-
-      whileHover={{
-        y:-8
-      }}
-
-      transition={{
-        duration:0.4
-      }}
-
-      className="
-      group
-      relative
-      overflow-hidden
-      rounded-3xl
-      border
-      border-white/10
-      bg-white/5
-      backdrop-blur-xl
-      shadow-xl
-      "
+      className="group project-card"
     >
-
-
-      {/* Image */}
-
-      <div
-        className="
-        relative
-        overflow-hidden
-        h-64
-        "
-      >
-
+      {/* ── Image ───────────────────────────────── */}
+      <div style={{ position: "relative", height: "200px", overflow: "hidden", flexShrink: 0 }}>
         <img
-
           src={project.image}
-
+          onError={(e) => {
+            e.currentTarget.src = project.fallbackImage || "/images/projects/preview.png";
+          }}
           alt={project.title}
-
           loading="lazy"
-
-          className="
-          w-full
-          h-full
-          object-cover
-          transition
-          duration-700
-          group-hover:scale-110
-          "
-
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            transition: "transform 0.6s ease",
+          }}
+          className="project-card-img"
         />
 
-
-        <div
-          className="
-          absolute
-          inset-0
-          bg-gradient-to-t
-          from-black/80
-          via-transparent
-          opacity-80
-          "
-        />
-
-
-        {/* Category */}
-
-        <span
-
-          className="
-          absolute
-          top-5
-          left-5
-          px-4
-          py-2
-          rounded-full
-          text-xs
-          bg-black/50
-          backdrop-blur
-          border
-          border-white/20
-          "
-        >
-
-          {project.category}
-
-        </span>
-
-
-      </div>
-
-
-
-
-      {/* Content */}
-
-      <div
-        className="
-        p-6
-        "
-      >
-
-
-        <div
-          className="
-          flex
-          items-start
-          justify-between
-          gap-4
-          "
-        >
-
-
-          <h3
-            className="
-            text-2xl
-            font-bold
-            "
-          >
-
-            {project.title}
-
-          </h3>
-
-
-          <ArrowUpRight
-
-            size={22}
-
-            className="
-            opacity-50
-            group-hover:opacity-100
-            transition
-            "
-
-          />
-
-
-        </div>
-
-
-
-        <p
-
-          className="
-          mt-4
-          text-gray-400
-          leading-relaxed
-          line-clamp-3
-          "
-
-        >
-
-          {project.description}
-
-        </p>
-
-
-
-
-        {/* Technologies */}
-
-        <div
-
-          className="
-          flex
-          flex-wrap
-          gap-2
-          mt-6
-          "
-
-        >
-
-          {project.technologies?.map((tech,index)=>(
-
-            <span
-
-              key={index}
-
-              className="
-              px-3
-              py-1
-              rounded-full
-              text-xs
-              bg-white/10
-              border
-              border-white/10
-              "
-
-            >
-
-              {tech}
-
-            </span>
-
-          ))}
-
-
-        </div>
-
-
-
-
-        {/* Impact */}
-
-        {project.impact && (
-
-          <div
-
-            className="
-            mt-6
-            p-4
-            rounded-2xl
-            bg-black/20
-            border
-            border-white/10
-            "
-
-          >
-
-            <p
-              className="
-              text-sm
-              text-gray-300
-              "
-            >
-
-              <strong>
-                Impact :
-              </strong>
-
-              {" "}
-
-              {project.impact}
-
-            </p>
-
-
-          </div>
-
+        {/* Gradient overlay */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(to top, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.2) 50%, transparent 100%)",
+        }} />
+
+        {/* Category badge */}
+        {project.category && (
+          <span style={{
+            position: "absolute", top: "12px", left: "12px",
+            padding: "3px 10px",
+            borderRadius: "999px",
+            fontSize: "0.7rem",
+            fontWeight: 600,
+            background: "rgba(2,6,23,0.7)",
+            backdropFilter: "blur(8px)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            color: "var(--text-secondary)",
+            letterSpacing: "0.04em",
+          }}>
+            {project.category}
+          </span>
         )}
 
+        {/* Featured badge */}
+        {project.featured && (
+          <span style={{
+            position: "absolute", top: "12px", right: "12px",
+            display: "flex", alignItems: "center", gap: "4px",
+            padding: "3px 10px",
+            borderRadius: "999px",
+            fontSize: "0.7rem",
+            fontWeight: 700,
+            background: "linear-gradient(135deg, #38bdf8, #818cf8)",
+            color: "#020617",
+          }}>
+            <Sparkles size={11} />
+            Featured
+          </span>
+        )}
 
-
-        {/* Buttons */}
-
-
-        <div
-
-          className="
-          flex
-          gap-3
-          mt-6
-          "
-
-        >
-
-
-          {project.demo && (
-
-            <a
-
-              href={project.demo}
-
-              target="_blank"
-
-              rel="noopener noreferrer"
-
-              className="
-              flex
-              items-center
-              gap-2
-              px-5
-              py-3
-              rounded-xl
-              bg-white
-              text-black
-              font-medium
-              hover:scale-105
-              transition
-              "
-
-            >
-
-              Demo
-
-              <ExternalLink size={16}/>
-
-            </a>
-
+        {/* Year + status at bottom of image */}
+        <div style={{
+          position: "absolute", bottom: "10px", left: "12px",
+          display: "flex", alignItems: "center", gap: "8px",
+        }}>
+          {project.year && (
+            <span style={{
+              display: "flex", alignItems: "center", gap: "4px",
+              fontSize: "0.7rem", color: "rgba(255,255,255,0.6)",
+            }}>
+              <Calendar size={11} />
+              {project.year}
+            </span>
           )}
-
-
-
-          {project.github && (
-
-            <a
-
-              href={project.github}
-
-              target="_blank"
-
-              rel="noopener noreferrer"
-
-              className="
-              flex
-              items-center
-              gap-2
-              px-5
-              py-3
-              rounded-xl
-              border
-              border-white/20
-              hover:bg-white/10
-              transition
-              "
-
-            >
-
-              GitHub
-
-              <FaGithub size={16}/>
-
-            </a>
-
+          {project.status && (
+            <span style={{
+              fontSize: "0.68rem",
+              padding: "2px 8px",
+              borderRadius: "999px",
+              background: "rgba(56,189,248,0.15)",
+              border: "1px solid rgba(56,189,248,0.3)",
+              color: "var(--primary)",
+              fontWeight: 600,
+            }}>
+              {project.status}
+            </span>
           )}
-
-
         </div>
-
-
-
       </div>
 
+      {/* ── Content ─────────────────────────────── */}
+      <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem", flex: 1 }}>
 
+        {/* Title + link arrow */}
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px" }}>
+          <Link
+            to={`/projects/${project.slug || project.id}`}
+            style={{ textDecoration: "none", color: "inherit", flex: 1 }}
+          >
+            <h3 style={{
+              fontSize: "1.05rem",
+              fontWeight: 700,
+              lineHeight: 1.3,
+              letterSpacing: "-0.01em",
+              transition: "color 0.2s",
+            }} className="project-card-title">
+              {project.title}
+            </h3>
+          </Link>
+          <Link to={`/projects/${project.slug || project.id}`} style={{ color: "var(--text-muted)", flexShrink: 0, marginTop: "2px" }}>
+            <ArrowUpRight size={18} className="project-card-arrow" style={{ transition: "color 0.2s, opacity 0.2s" }} />
+          </Link>
+        </div>
 
+        {/* Description — 2 lines max */}
+        <p style={{
+          fontSize: "0.85rem",
+          color: "var(--text-secondary)",
+          lineHeight: 1.65,
+          display: "-webkit-box",
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+          margin: 0,
+        }}>
+          {project.description}
+        </p>
+
+        {/* Impact — the "so what" line */}
+        {project.impact && (
+          <div style={{
+            display: "flex",
+            alignItems: "flex-start",
+            gap: "7px",
+            padding: "8px 12px",
+            borderRadius: "10px",
+            background: "rgba(52,211,153,0.07)",
+            border: "1px solid rgba(52,211,153,0.2)",
+          }}>
+            <TrendingUp size={13} style={{ color: "#34d399", marginTop: "2px", flexShrink: 0 }} />
+            <span style={{
+              fontSize: "0.78rem",
+              color: "#34d399",
+              lineHeight: 1.5,
+              fontWeight: 500,
+            }}>
+              {project.impact}
+            </span>
+          </div>
+        )}
+
+        {/* Technologies */}
+        {project.technologies?.length > 0 && (
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+            {project.technologies.slice(0, 4).map((tech) => (
+              <span
+                key={tech}
+                style={{
+                  fontSize: "0.7rem",
+                  padding: "3px 10px",
+                  borderRadius: "999px",
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid var(--border)",
+                  color: "var(--text-muted)",
+                  fontWeight: 500,
+                }}
+              >
+                {tech}
+              </span>
+            ))}
+            {project.technologies.length > 4 && (
+              <span style={{
+                fontSize: "0.7rem",
+                padding: "3px 10px",
+                borderRadius: "999px",
+                color: "var(--text-muted)",
+              }}>
+                +{project.technologies.length - 4}
+              </span>
+            )}
+          </div>
+        )}
+
+        {/* Divider */}
+        <div style={{ height: "1px", background: "var(--border)", margin: "0.25rem 0" }} />
+
+        {/* Action buttons */}
+        <div style={{ display: "flex", gap: "8px" }}>
+          {project.demo && project.demo !== "#" ? (
+            <a
+              href={project.demo}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                flex: 1,
+                justifyContent: "center",
+                padding: "8px 12px",
+                borderRadius: "10px",
+                background: "linear-gradient(135deg, #38bdf8, #818cf8)",
+                color: "#020617",
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                textDecoration: "none",
+                transition: "opacity 0.2s, transform 0.2s",
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.opacity = "0.9"}
+              onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
+            >
+              <ExternalLink size={13} />
+              Démo
+            </a>
+          ) : (
+            <Link
+              to={`/projects/${project.slug || project.id}`}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                flex: 1,
+                justifyContent: "center",
+                padding: "8px 12px",
+                borderRadius: "10px",
+                background: "rgba(56,189,248,0.1)",
+                border: "1px solid rgba(56,189,248,0.25)",
+                color: "var(--primary)",
+                fontSize: "0.8rem",
+                fontWeight: 700,
+                textDecoration: "none",
+              }}
+            >
+              Voir le projet
+            </Link>
+          )}
+
+          {project.github && (
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+                padding: "8px 14px",
+                borderRadius: "10px",
+                border: "1px solid var(--border)",
+                background: "rgba(255,255,255,0.04)",
+                color: "var(--text-secondary)",
+                fontSize: "0.8rem",
+                fontWeight: 600,
+                textDecoration: "none",
+                transition: "border-color 0.2s, color 0.2s",
+                flexShrink: 0,
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.25)"; e.currentTarget.style.color = "white"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-secondary)"; }}
+            >
+              <FaGithub size={14} />
+              Code
+            </a>
+          )}
+        </div>
+      </div>
+
+      {/* Hover glow effect */}
+      <style>{`
+        .project-card:hover {
+          border-color: rgba(56,189,248,0.3) !important;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 40px -15px rgba(56,189,248,0.25);
+        }
+        .project-card:hover .project-card-img {
+          transform: scale(1.06);
+        }
+        .project-card:hover .project-card-title {
+          color: var(--primary);
+        }
+        .project-card:hover .project-card-arrow {
+          color: var(--primary);
+          opacity: 1;
+        }
+      `}</style>
     </motion.article>
-
-
   );
-
 }

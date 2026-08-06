@@ -1,312 +1,147 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
-import { Menu, X, Globe } from "lucide-react";
+import { Menu, X, Globe, Sun, Moon } from "lucide-react";
 import { motion } from "framer-motion";
-import {
-useTranslation
-}
-from "react-i18next";
-
-export default function Navbar(){
-
-const {
-i18n
-}=useTranslation();
-
-
-<button
-
-onClick={()=>{
-
-i18n.changeLanguage(
-
-i18n.language==="fr"
-?
-"en"
-:
-"fr"
-
-)
-
-}}
-
-className="
-border
-border-cyan-400
-px-4
-rounded-full
-"
-
->
-
-🌍
-
-{
-
-i18n.language==="fr"
-
-?
-
-"EN"
-
-:
-
-"FR"
-
-}
-
-</button>    
-
-const [open,setOpen]=useState(false);
-
-const links=[
-
-{
-name:"Accueil",
-path:"/"
-},
-
-{
-name:"Projets",
-path:"/projects"
-},
-
-{
-name:"Blog",
-path:"/blog"
-},
-
-{
-name:"Contact",
-path:"/contact"
-}
-
-];
-
-
-return (
-
-<motion.nav
-
-initial={{y:-100}}
-
-animate={{y:0}}
-
-className="
-fixed
-top-0
-left-0
-w-full
-z-50
-glass
-"
-
->
-
-
-<div className="
-container-custom
-flex
-items-center
-justify-between
-py-5
-">
-
-
-{/* Logo */}
-
-<NavLink
-
-to="/"
-
-className="
-text-xl
-font-bold
-tracking-wider
-"
->
-
-
-<span className="gradient-text">
-
-MILINDA
-
-</span>
-
-_MENDY
-
-
-</NavLink>
-
-
-
-{/* Desktop */}
-
-<div className="
-hidden
-md:flex
-items-center
-gap-8
-">
-
-
-{
-links.map(link=>(
-
-<NavLink
-
-key={link.path}
-
-to={link.path}
-
-className={({isActive})=>
-
-`
-
-transition
-
-${isActive
-?
-"text-cyan-400"
-:
-"text-gray-300"}
-
-hover:text-cyan-400
-
-`
-
-}
-
->
-
-{link.name}
-
-</NavLink>
-
-))
-}
-
-
-
-<button
-
-className="
-flex
-items-center
-gap-2
-border
-border-cyan-400
-px-4
-py-2
-rounded-full
-text-cyan-400
-"
-
->
-
-<Globe size={16}/>
-
-FR
-
-</button>
-
-
-</div>
-
-
-
-{/* Mobile button */}
-
-<button
-
-onClick={()=>setOpen(!open)}
-
-className="
-md:hidden
-"
-
->
-
-{
-
-open
-
-?
-
-<X/>
-
-:
-
-<Menu/>
-
-}
-
-
-</button>
-
-
-</div>
-
-
-
-{/* Mobile menu */}
-
-{
-
-open &&
-
-<motion.div
-
-initial={{opacity:0}}
-
-animate={{opacity:1}}
-
-className="
-md:hidden
-px-6
-pb-6
-flex
-flex-col
-gap-5
-"
-
->
-
-
-{
-links.map(link=>(
-
-<NavLink
-
-onClick={()=>setOpen(false)}
-
-key={link.path}
-
-to={link.path}
-
-className="
-text-gray-300
-hover:text-cyan-400
-"
-
->
-
-{link.name}
-
-</NavLink>
-
-))
-}
-
-
-</motion.div>
-
-}
-
-
-</motion.nav>
-
-
-)
-
+import { useTranslation } from "react-i18next";
+
+export default function Navbar() {
+  const { i18n } = useTranslation();
+  const [open, setOpen] = useState(false);
+
+  // ── Dark Mode State ──────────────────────────────────────────────────────────
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("theme") || "dark";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
+  };
+
+  const toggleLanguage = () => {
+    const nextLang = i18n.language === "fr" ? "en" : "fr";
+    i18n.changeLanguage(nextLang);
+  };
+
+  const currentLang = i18n.language || "fr";
+
+  const links = [
+    { name: currentLang === "fr" ? "Accueil" : "Home", path: "/" },
+    { name: currentLang === "fr" ? "Projets" : "Projects", path: "/projects" },
+    { name: currentLang === "fr" ? "Blog" : "Blog", path: "/blog" },
+    { name: currentLang === "fr" ? "Contact" : "Contact", path: "/contact" },
+  ];
+
+  return (
+    <motion.nav
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
+      className="fixed top-0 left-0 w-full z-50 glass"
+    >
+      <div className="container-custom flex items-center justify-between py-4">
+        {/* Logo */}
+        <NavLink to="/" className="text-xl font-bold tracking-wider no-underline text-inherit">
+          <span className="gradient-text">MILINDA</span>_MENDY
+        </NavLink>
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-6">
+          {links.map((link) => (
+            <NavLink
+              key={link.path}
+              to={link.path}
+              className={({ isActive }) =>
+                `text-sm font-medium transition-colors no-underline ${
+                  isActive ? "text-cyan-400 font-semibold" : "text-gray-300 hover:text-cyan-400"
+                }`
+              }
+            >
+              {link.name}
+            </NavLink>
+          ))}
+
+          {/* Language Switcher Button */}
+          <button
+            onClick={toggleLanguage}
+            title={currentLang === "fr" ? "Switch to English" : "Passer en Français"}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 text-cyan-400 hover:bg-cyan-400/20 text-xs font-semibold transition cursor-pointer"
+          >
+            <Globe size={14} className="transition-transform duration-300 hover:rotate-45" />
+            <span>{currentLang === "fr" ? "FR 🇫🇷" : "EN 🇬🇧"}</span>
+          </button>
+
+          {/* Dark / Light Mode Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            title={theme === "dark" ? "Passer au mode clair" : "Passer au mode sombre"}
+            className="p-2 rounded-full border border-white/10 bg-white/5 text-gray-200 hover:text-cyan-400 hover:border-cyan-400/40 transition cursor-pointer flex items-center justify-center"
+          >
+            {theme === "dark" ? (
+              <Sun size={16} className="text-amber-400 transition-transform duration-300 hover:rotate-90" />
+            ) : (
+              <Moon size={16} className="text-purple-400 transition-transform duration-300 hover:-rotate-12" />
+            )}
+          </button>
+        </div>
+
+        {/* Mobile controls */}
+        <div className="flex md:hidden items-center gap-3">
+          {/* Language button mobile */}
+          <button
+            onClick={toggleLanguage}
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-cyan-400/30 text-cyan-400 text-xs font-medium"
+          >
+            <Globe size={13} />
+            <span>{currentLang === "fr" ? "FR" : "EN"}</span>
+          </button>
+
+          {/* Theme button mobile */}
+          <button
+            onClick={toggleTheme}
+            className="p-1.5 rounded-full border border-white/10 text-gray-200"
+          >
+            {theme === "dark" ? <Sun size={15} className="text-amber-400" /> : <Moon size={15} className="text-purple-400" />}
+          </button>
+
+          {/* Hamburger toggle */}
+          <button
+            onClick={() => setOpen(!open)}
+            className="p-1 text-gray-300 hover:text-white"
+            aria-label="Toggle menu"
+          >
+            {open ? <X size={22} /> : <Menu size={22} />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu Dropdown */}
+      {open && (
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          className="md:hidden px-6 pb-6 pt-2 flex flex-col gap-4 border-t border-white/10 bg-slate-950/90 backdrop-blur-xl"
+        >
+          {links.map((link) => (
+            <NavLink
+              onClick={() => setOpen(false)}
+              key={link.path}
+              to={link.path}
+              className={({ isActive }) =>
+                `text-base font-medium transition ${
+                  isActive ? "text-cyan-400 font-semibold" : "text-gray-300 hover:text-cyan-400"
+                }`
+              }
+            >
+              {link.name}
+            </NavLink>
+          ))}
+        </motion.div>
+      )}
+    </motion.nav>
+  );
 }

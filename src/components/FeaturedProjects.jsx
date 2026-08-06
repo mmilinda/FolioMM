@@ -4,14 +4,14 @@ const translations = {
   fr: {
     title: 'Maîtriser le {span} du Pixel à la Production.',
     span: 'Full Stack',
-    desc: "Je suis Milinda Mendy, Développeuse Senior faisant le pont entre le design front-end créatif et l'infrastructure de systèmes évolutifs.",
+    desc: "Je suis Milinda Mendy, Développeuse Junior faisant le pont entre le design front-end créatif et l'infrastructure de systèmes évolutifs.",
     btnProjects: 'Voir les Projets',
     btnTalk: 'Parlons-en',
   },
   en: {
     title: 'Mastering the {span} from Pixel to Production.',
     span: 'Full Stack',
-    desc: "I am Milinda Mendy, a Senior Developer bridging the gap between creative front-end design and scalable systems infrastructure.",
+    desc: "I am Milinda Mendy, a Junior Developer bridging the gap between creative front-end design and scalable systems infrastructure.",
     btnProjects: 'View Projects',
     btnTalk: "Let's Talk",
   },

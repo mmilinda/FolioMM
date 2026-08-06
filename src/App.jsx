@@ -1,7 +1,7 @@
 import {
   BrowserRouter,
   Routes,
-  Route
+  Route,
 } from "react-router-dom";
 
 import MainLayout from "./layouts/MainLayout";
@@ -17,6 +17,7 @@ import AdminLogin from "./admin/AdminLogin";
 import AdminLayout from "./admin/AdminLayout";
 import Dashboard from "./admin/Dashboard";
 import ProjectsManager from "./admin/ProjectsManager";
+import CreateProject from "./admin/CreateProject";
 
 // Protection de route
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -48,6 +49,7 @@ export default function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="projects" element={<ProjectsManager />} />
+          <Route path="projects/create" element={<CreateProject />} />
         </Route>
       </Routes>
     </BrowserRouter>

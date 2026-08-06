@@ -1,66 +1,97 @@
-export default function About(){
+import { motion, useInView } from "framer-motion";
+import { useRef } from "react";
+import { CheckCircle, Code2, Server, Zap } from "lucide-react";
 
+const highlights = [
+  { icon: Code2, text: "Architecture Full Stack moderne" },
+  { icon: Server, text: "Infrastructure DevOps & Cloud" },
+  { icon: Zap, text: "Pipelines CI/CD automatisés" },
+  { icon: CheckCircle, text: "Delivery rapide & code de qualité" },
+];
 
-return (
+export default function About() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-100px" });
 
-<section
+  return (
+    <section ref={ref} className="about-section">
+      <div className="about-grid">
+        {/* Left — Text */}
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+        >
+          <span className="section-eyebrow">À propos</span>
+          <h2 className="section-title">
+            Développeuse junior qui
+            <span className="gradient-text"> pense systèmes</span>,
+            <br />pas juste fonctionnalités.
+          </h2>
 
-className="
-container-custom
-py-24
-"
+          <p className="about-text">
+            Avec plus de 3 ans d'expérience, je conçois des produits digitaux robustes
+            de l'architecture à la mise en production. Ma force réside dans ma capacité
+            à marier performance technique, expérience utilisateur et vision produit.
+          </p>
 
->
+          <p className="about-text" style={{ marginTop: "1rem" }}>
+            Spécialisée en <strong className="text-cyan-400">DevOps</strong>,{" "}
+            <strong className="text-cyan-400">React</strong>,{" "}
+            <strong className="text-cyan-400">Laravel</strong> et architectures cloud,
+            je transforme des exigences complexes en solutions élégantes et maintenables.
+          </p>
 
+          <div className="about-highlights">
+            {highlights.map(({ icon: Icon, text }, i) => (
+              <motion.div
+                key={text}
+                className="about-highlight-item"
+                initial={{ opacity: 0, x: -20 }}
+                animate={inView ? { opacity: 1, x: 0 } : {}}
+                transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
+              >
+                <Icon size={16} className="text-cyan-400 shrink-0" />
+                <span>{text}</span>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
-<div className="
-max-w-4xl
-"
+        {/* Right — Visual code block */}
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          animate={inView ? { opacity: 1, x: 0 } : {}}
+          transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+          className="about-code-wrapper"
+        >
+          <div className="about-code-card">
+            <div className="about-code-header">
+              <span className="code-dot code-dot-red" />
+              <span className="code-dot code-dot-yellow" />
+              <span className="code-dot code-dot-green" />
+              <span className="code-filename">milinda.config.ts</span>
+            </div>
+            <pre className="about-code-body">
+{`const milinda = {
+  role: "Junior DevOps & Full Stack",
+  location: "Sénégal 🇸🇳",
+  
+  stack: {
+    frontend: ["React", "TypeScript", "Tailwind"],
+    backend:  ["Laravel", "Node.js", "PHP"],
+    devops:   ["Docker", "K8s", "CI/CD", "AWS"],
+    database: ["MySQL", "Firebase", "Redis"],
+  },
 
->
-
-
-<h2
-
-className="
-text-4xl
-font-bold
-"
-
->
-
-À propos
-
-</h2>
-
-
-
-<p
-
-className="
-mt-8
-text-gray-400
-text-lg
-leading-relaxed
-"
-
->
-
-Passionnée par l'innovation numérique,
-je développe des solutions qui combinent
-performance, design et expérience utilisateur.
-
-Mon objectif est de transformer des idées
-en produits digitaux utiles et évolutifs.
-
-</p>
-
-
-</div>
-
-
-</section>
-
-)
-
+  philosophy: "Ship fast. Break nothing.",
+  
+  openToWork: true, // ← always looking for challenges
+};`}
+            </pre>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
 }

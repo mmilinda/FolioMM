@@ -16,11 +16,7 @@ export default function MainLayout(){
 
 return (
 
-<div className="
-min-h-screen
-bg-[#020617]
-text-white
-">
+<div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)] transition-colors duration-300">
 
 
 <Navbar/>

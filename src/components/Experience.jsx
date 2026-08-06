@@ -6,16 +6,16 @@ const translations = {
     subtitle: 'Mon Parcours Professionnel',
     experiences: [
       {
-        role: 'Développeuse Full Stack Senior',
+        role: 'Développeuse Full Stack Junior',
         company: 'Freelance / Indépendante',
-        period: '2022 – Présent',
+        period: '2023 – Présent',
         desc: "Conception et développement d'applications web complètes pour divers clients. Spécialisation dans les solutions React, Node.js et les intégrations d'API.",
         techs: ['React', 'Node.js', 'Firebase', 'Laravel'],
       },
       {
         role: 'Développeuse Web',
         company: 'Formation & Projets Personnels',
-        period: '2021 – 2022',
+        period: '2022 – 2023',
         desc: "Développement de projets académiques et personnels. Acquisition de compétences en développement Full Stack, bases de données et déploiement.",
         techs: ['HTML', 'CSS', 'JavaScript', 'PHP'],
       },
@@ -26,7 +26,7 @@ const translations = {
     subtitle: 'My Professional Journey',
     experiences: [
       {
-        role: 'Senior Full Stack Developer',
+        role: 'Junior Full Stack Developer',
         company: 'Freelance / Independent',
         period: '2022 – Present',
         desc: "Design and development of complete web applications for various clients. Specialization in React, Node.js solutions and API integrations.",
