@@ -26,9 +26,8 @@ export default function HomeProjects() {
           <h2 className="section-title mt-2 md:mt-4 text-xl sm:text-3xl md:text-4xl font-extrabold">
             Projets <span className="gradient-text">en vedette</span>
           </h2>
-          <p className="text-slate-400 text-xs sm:text-base md:text-lg max-w-2xl mx-auto mt-3 md:mt-4 leading-relaxed">
-            Un aperçu de mes récents travaux alliant architecture logicielle,
-            expérience utilisateur soignée et déploiement cloud.
+          <p className="text-slate-400 text-xs sm:text-base md:text-lg max-w-none mx-auto mt-3 md:mt-4 whitespace-nowrap overflow-hidden text-ellipsis">
+            Un aperçu de mes récents travaux alliant architecture logicielle, expérience utilisateur soignée et déploiement cloud.
           </p>
         </motion.div>
 
