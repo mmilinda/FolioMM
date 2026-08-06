@@ -120,7 +120,7 @@ body {
 }
 
 .section-title {
-  font-size: clamp(1.5rem, 3.8vw, 2.35rem);
+  font-size: clamp(1.6rem, 4vw, 3.2rem);
   font-weight: 800;
   line-height: 1.2;
   letter-spacing: -0.02em;
@@ -129,8 +129,8 @@ body {
 
 .section-subtitle {
   color: var(--text-secondary);
-  font-size: clamp(0.88rem, 2vw, 1.02rem);
-  max-width: 520px;
+  font-size: clamp(0.95rem, 2vw, 1.25rem);
+  max-width: 620px;
   margin: 0 auto;
 }
 
@@ -363,7 +363,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
-  font-size: clamp(1.75rem, 4.5vw, 3.25rem);
+  font-size: clamp(2.2rem, 5vw, 4.25rem);
   font-weight: 900;
   line-height: 1.1;
   letter-spacing: -0.03em;
@@ -399,10 +399,10 @@ body {
 /* Description */
 .hero-desc {
   color: var(--text-secondary);
-  font-size: clamp(0.88rem, 2.2vw, 1rem);
-  line-height: 1.6;
-  max-width: 500px;
-  margin-bottom: 1.5rem;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.7;
+  max-width: 540px;
+  margin-bottom: 1.75rem;
 }
 
 /* Tech badges */
