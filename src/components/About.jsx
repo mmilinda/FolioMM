@@ -62,14 +62,14 @@ export default function About() {
             initial={{ opacity: 0, y: 15 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.7 }}
-            className="mt-4 flex justify-center sm:justify-start w-full"
+            className="mt-3 flex justify-center sm:justify-start w-full"
           >
             <a
               href="/CV-Milinda-Mendy.pdf"
               download
-              className="hero-btn-secondary px-3 py-1.5 text-[11px] sm:px-4 sm:py-2 sm:text-sm flex items-center justify-center gap-1.5 rounded-lg mx-auto sm:mx-0"
+              className="hero-btn-secondary px-2.5 py-1 text-[10px] sm:px-4 sm:py-2 sm:text-sm inline-flex items-center justify-center gap-1.5 rounded-md w-auto max-w-fit mx-auto sm:mx-0 shrink-0 shadow-none"
             >
-              <Download size={13} className="shrink-0" />
+              <Download size={12} className="shrink-0" />
               Télécharger mon CV
             </a>
           </motion.div>

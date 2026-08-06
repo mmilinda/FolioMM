@@ -8,7 +8,7 @@ export default function ProjectCard({ project }) {
     <motion.article
       whileHover={{ y: -6 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-      className="group project-card relative overflow-hidden rounded-xl sm:rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md flex flex-col transition-all duration-300"
+      className="group project-card relative overflow-hidden rounded-xl sm:rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md flex flex-col transition-all duration-300 w-full max-w-[270px] sm:max-w-none mx-auto"
     >
       {/* ── Image ───────────────────────────────── */}
       <div className="relative h-16 sm:h-44 md:h-48 overflow-hidden shrink-0">

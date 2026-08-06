@@ -1708,6 +1708,13 @@ body {
     gap: 6px !important;
   }
 
+  .project-card {
+    max-width: 270px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 100% !important;
+  }
+
   .project-card-img {
     height: 85px !important;
   }
