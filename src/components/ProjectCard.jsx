@@ -1,158 +1,367 @@
-import {motion} from "framer-motion";
-import {ExternalLink} from "lucide-react";
+import { motion } from "framer-motion";
+import { ExternalLink, ArrowUpRight } from "lucide-react";
+import { FaGithub } from "react-icons/fa";
+
+export default function ProjectCard({ project }) {
+
+
+  return (
+
+    <motion.article
+
+      initial={{
+        opacity:0,
+        y:40
+      }}
 
+      whileInView={{
+        opacity:1,
+        y:0
+      }}
 
-export default function ProjectCard({project}){
+      viewport={{
+        once:true,
+        amount:0.2
+      }}
 
+      whileHover={{
+        y:-8
+      }}
 
-return (
+      transition={{
+        duration:0.4
+      }}
 
-<motion.article
+      className="
+      group
+      relative
+      overflow-hidden
+      rounded-3xl
+      border
+      border-white/10
+      bg-white/5
+      backdrop-blur-xl
+      shadow-xl
+      "
+    >
 
-whileHover={{
-y:-10
-}}
 
-className="
-glass
-rounded-3xl
-overflow-hidden
-"
+      {/* Image */}
 
->
+      <div
+        className="
+        relative
+        overflow-hidden
+        h-64
+        "
+      >
 
+        <img
 
-<img
+          src={project.image}
 
-src={project.image}
+          alt={project.title}
 
-alt={project.title}
+          loading="lazy"
 
-className="
-h-56
-w-full
-object-cover
-"
+          className="
+          w-full
+          h-full
+          object-cover
+          transition
+          duration-700
+          group-hover:scale-110
+          "
 
-/>
+        />
 
 
+        <div
+          className="
+          absolute
+          inset-0
+          bg-gradient-to-t
+          from-black/80
+          via-transparent
+          opacity-80
+          "
+        />
 
-<div className="
-p-6
-"
 
+        {/* Category */}
 
->
+        <span
 
+          className="
+          absolute
+          top-5
+          left-5
+          px-4
+          py-2
+          rounded-full
+          text-xs
+          bg-black/50
+          backdrop-blur
+          border
+          border-white/20
+          "
+        >
 
-<span className="
-text-cyan-400
-text-sm
-"
+          {project.category}
 
->
+        </span>
 
-{project.category}
 
-</span>
+      </div>
 
 
-<h3 className="
-text-2xl
-font-bold
-mt-3
-"
 
->
 
-{project.title}
+      {/* Content */}
 
-</h3>
+      <div
+        className="
+        p-6
+        "
+      >
 
 
+        <div
+          className="
+          flex
+          items-start
+          justify-between
+          gap-4
+          "
+        >
 
-<p className="
-text-gray-400
-mt-3
-"
 
->
+          <h3
+            className="
+            text-2xl
+            font-bold
+            "
+          >
 
-{project.description}
+            {project.title}
 
-</p>
+          </h3>
 
 
+          <ArrowUpRight
 
-<div className="
-flex
-flex-wrap
-gap-2
-mt-5
-"
+            size={22}
 
->
+            className="
+            opacity-50
+            group-hover:opacity-100
+            transition
+            "
 
+          />
 
-{
-project.technologies.map(tech=>(
 
-<span
+        </div>
 
-key={tech}
 
-className="
-bg-cyan-400/10
-text-cyan-400
-px-3
-py-1
-rounded-full
-text-xs
-"
 
->
+        <p
 
-{tech}
+          className="
+          mt-4
+          text-gray-400
+          leading-relaxed
+          line-clamp-3
+          "
 
-</span>
+        >
 
-))
-}
+          {project.description}
 
+        </p>
 
-</div>
 
 
 
-<a
+        {/* Technologies */}
 
-href={project.url}
+        <div
 
-target="_blank"
+          className="
+          flex
+          flex-wrap
+          gap-2
+          mt-6
+          "
 
-className="
-mt-6
-inline-flex
-items-center
-gap-2
-text-cyan-400
-"
+        >
 
->
+          {project.technologies?.map((tech,index)=>(
 
-Voir le projet
+            <span
 
-<ExternalLink size={16}/>
+              key={index}
 
-</a>
+              className="
+              px-3
+              py-1
+              rounded-full
+              text-xs
+              bg-white/10
+              border
+              border-white/10
+              "
 
+            >
 
-</div>
+              {tech}
 
+            </span>
 
-</motion.article>
+          ))}
 
-)
+
+        </div>
+
+
+
+
+        {/* Impact */}
+
+        {project.impact && (
+
+          <div
+
+            className="
+            mt-6
+            p-4
+            rounded-2xl
+            bg-black/20
+            border
+            border-white/10
+            "
+
+          >
+
+            <p
+              className="
+              text-sm
+              text-gray-300
+              "
+            >
+
+              <strong>
+                Impact :
+              </strong>
+
+              {" "}
+
+              {project.impact}
+
+            </p>
+
+
+          </div>
+
+        )}
+
+
+
+        {/* Buttons */}
+
+
+        <div
+
+          className="
+          flex
+          gap-3
+          mt-6
+          "
+
+        >
+
+
+          {project.demo && (
+
+            <a
+
+              href={project.demo}
+
+              target="_blank"
+
+              rel="noopener noreferrer"
+
+              className="
+              flex
+              items-center
+              gap-2
+              px-5
+              py-3
+              rounded-xl
+              bg-white
+              text-black
+              font-medium
+              hover:scale-105
+              transition
+              "
+
+            >
+
+              Demo
+
+              <ExternalLink size={16}/>
+
+            </a>
+
+          )}
+
+
+
+          {project.github && (
+
+            <a
+
+              href={project.github}
+
+              target="_blank"
+
+              rel="noopener noreferrer"
+
+              className="
+              flex
+              items-center
+              gap-2
+              px-5
+              py-3
+              rounded-xl
+              border
+              border-white/20
+              hover:bg-white/10
+              transition
+              "
+
+            >
+
+              GitHub
+
+              <FaGithub size={16}/>
+
+            </a>
+
+          )}
+
+
+        </div>
+
+
+
+      </div>
+
+
+
+    </motion.article>
+
+
+  );
 
 }

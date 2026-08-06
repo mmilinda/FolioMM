@@ -1,526 +1,302 @@
-import GarageB from "../assets/images/projects/GarageB.png";
-import AgriChain from "../assets/images/projects/AgriChain.PNG";
-import SunuChampion from "../assets/images/projects/sunuchampion.PNG";
-import Noregis from "../assets/images/projects/noregiss.PNG";
-import AfriAccess from "../assets/images/projects/afriaccess.PNG";
-import Security from "../assets/images/projects/Security.PNG";
-import Zawiya from "../assets/images/projects/zawiya.PNG";
-import Berma from "../assets/images/projects/Berma.PNG";
-import Appartement from "../assets/images/projects/LAppartement.PNG";
-import JQuery from "../assets/images/projects/JqueryProject.PNG";
-import Bootstrap from "../assets/images/projects/BoostrapSite.PNG";
+const projects = [
 
+  {
+    id: 1,
 
-export const projects = [
+    title: "AgriChain AI",
 
-{
-id:"garabi-assistance",
+    category: "AI • Agriculture • Blockchain",
 
-title:"Garabi Assistance",
+    image: "/images/projects/AgriChain.PNG",
 
-category:"Application Mobile/Web",
+    description:
+      "Plateforme intelligente dédiée au secteur agricole combinant intelligence artificielle, données agricoles et technologies blockchain afin d'améliorer la prise de décision des producteurs.",
 
-image:GarageB,
+    problem:
+      "Les producteurs rencontrent des difficultés pour accéder rapidement aux informations agricoles fiables.",
 
-description:
-"Plateforme d'assistance automobile permettant aux conducteurs de trouver rapidement des garages proches de leur position et demander une intervention.",
+    solution:
+      "Une solution digitale permettant l'analyse des données, l'accompagnement des agriculteurs et la valorisation des chaînes agricoles.",
 
+    technologies: [
+      "React",
+      "AI",
+      "Blockchain",
+      "API",
+      "Vercel"
+    ],
 
-features:[
+    impact:
+      "Prototype innovant orienté transformation digitale agricole en Afrique.",
 
-"Recherche de garages géolocalisés",
+    demo:
+      "https://agri-tech-puce.vercel.app/",
 
-"Assistance automobile",
+    github:
+      "https://github.com/mmilinda"
 
-"Gestion des demandes",
+  },
 
-"Interface responsive"
 
-],
+  {
+    id:2,
 
+    title:"SecurityApp",
 
-technologies:[
+    category:"SaaS • Security • Management",
 
-"React",
+    image:"/images/projects/Security.PNG",
 
-"Node.js",
+    description:
+      "Plateforme SaaS de gestion des interventions de sécurité permettant aux clients, agents et administrateurs de collaborer efficacement.",
 
-"API",
 
-"GPS"
+    problem:
+      "Les sociétés de sécurité manquent souvent d'outils numériques centralisés pour gérer leurs opérations.",
 
-],
 
-url:"https://garage-b.vercel.app/"
+    solution:
+      "Application complète avec tableaux de bord, gestion des missions, rendez-vous, localisation et suivi des agents.",
 
-},
 
+    technologies:[
+      "React",
+      "Laravel",
+      "Tailwind CSS",
+      "Leaflet",
+      "API"
+    ],
 
 
-{
-id:"agrichain-ai",
+    impact:
+      "Digitalisation des processus opérationnels des entreprises de sécurité.",
 
-title:"AgriChain AI",
 
-category:"AgriTech",
+    demo:
+      "https://security-app-mauve.vercel.app/",
 
-image:AgriChain,
 
+    github:
+      "https://github.com/mmilinda"
 
-description:
+  },
 
-"Plateforme agricole intelligente combinant IA et Blockchain pour faciliter les échanges, la gestion agricole et la modernisation du secteur.",
 
+  {
+    id:3,
 
-features:[
+    title:"Garabi Assistance",
 
-"Marketplace agricole",
+    category:"Automobile • Service Digital",
 
-"Intelligence artificielle",
+    image:"/images/projects/GarageB.PNG",
 
-"Blockchain",
 
-"Gestion des acteurs agricoles"
+    description:
+      "Application web facilitant la mise en relation entre automobilistes et services de garage.",
 
-],
 
+    problem:
+      "Trouver rapidement une assistance automobile fiable reste difficile pour de nombreux utilisateurs.",
 
-technologies:[
 
-"React",
+    solution:
+      "Plateforme digitale permettant la présentation des services, demandes d'intervention et gestion de contacts.",
 
-"Firebase",
 
-"IA",
+    technologies:[
+      "React",
+      "Vite",
+      "Tailwind CSS"
+    ],
 
-"Blockchain"
 
-],
+    impact:
+      "Amélioration de l'expérience client dans les services automobiles.",
 
 
-url:"https://agri-tech-puce.vercel.app/"
+    demo:
+      "https://garage-b.vercel.app/",
 
-},
 
+    github:
+      "https://github.com/mmilinda"
 
+  },
 
-{
-id:"sunu-champion",
 
-title:"Sunu Champion",
+  {
+    id:4,
 
-category:"Plateforme gouvernementale",
 
-image:SunuChampion,
+    title:"BerMas Assurance",
 
+    category:"Assurance • Business",
 
-description:
+    image:"/images/projects/Berma.PNG",
 
-"Plateforme permettant aux citoyens sénégalais de déposer et suivre des projets avec un système de financement.",
 
+    description:
+      "Site web professionnel pour une structure d'assurance présentant ses services et solutions clients.",
 
-features:[
 
-"Dépôt de projets",
+    problem:
+      "Les petites structures ont besoin d'une présence digitale professionnelle.",
 
-"Suivi financement",
 
-"Interface administrative"
+    solution:
+      "Création d'une vitrine moderne adaptée aux besoins de communication et conversion.",
 
-],
 
+    technologies:[
+      "PHP",
+      "Tailwind CSS",
+      "Laravel"
+    ],
 
-technologies:[
 
-"React",
+    impact:
+      "Renforcement de la visibilité digitale de l'entreprise.",
 
-"Firebase"
 
-],
+    demo:
+      "https://bermasss.com/",
 
 
-url:
+    github:
+      "https://github.com/mmilinda"
 
-"https://sunuchampion.vercel.app/"
+  },
 
-},
 
+  {
+    id:5,
 
 
+    title:"Sunu Champion",
 
-{
-id:"noregis",
+    category:"Web Platform",
 
-title:"Noregis SaaS",
+    image:"/images/projects/sunuchampion.PNG",
 
-category:"SaaS",
 
-image:Noregis,
+    description:
+      "Plateforme digitale développée pour proposer une expérience utilisateur moderne.",
 
 
-description:
+    technologies:[
+      "React",
+      "JavaScript",
+      "CSS"
+    ],
 
-"Solution SaaS entreprise permettant l'analyse et la gestion documentaire avec traitement intelligent.",
 
+    demo:
+      "https://sunuchampion.vercel.app/",
 
-features:[
 
-"Gestion documentaire",
+    github:
+      "https://github.com/mmilinda"
 
-"Analyse automatique",
+  },
 
-"Dashboard"
 
-],
+  {
+    id:6,
 
 
-technologies:[
+    title:"AfriAccess",
 
-"React",
+    category:"Identity • Digital Solution",
 
-"Node.js",
+    image:"/images/projects/afriaccess.PNG",
 
-"Firebase"
 
-],
+    description:
+      "Solution numérique améliorant les processus de contrôle et gestion d'identité.",
 
 
-url:
+    technologies:[
+      "React",
+      "API",
+      "Frontend"
+    ],
 
-"https://noregis.vercel.app/"
 
-},
+    demo:
+      "https://afriaccess.vercel.app/",
 
 
+    github:
+      "https://github.com/mmilinda"
 
+  },
 
-{
-id:"afriaccess",
 
-title:"AfriAccess",
+  {
+    id:7,
 
-category:"Identity Tech",
 
-image:AfriAccess,
+    title:"Plateforme SaaS Noregis",
 
+    category:"SaaS",
 
-description:
+    image:"/images/projects/noregis.PNG",
 
-"Solution améliorée de scan d'identité permettant l'identification et la gestion sécurisée des utilisateurs.",
 
+    description:
+      "Application SaaS destinée à simplifier la gestion digitale des entreprises.",
 
-features:[
 
-"Scan identité",
+    technologies:[
+      "React",
+      "Vite",
+      "Tailwind"
+    ],
 
-"Reconnaissance",
 
-"Gestion utilisateurs"
+    demo:
+      "https://noregis.vercel.app/",
 
-],
 
+    github:
+      "https://github.com/mmilinda"
 
-technologies:[
+  },
 
-"React",
 
-"Node.js",
+  {
+    id:8,
 
-"API"
 
-],
+    title:"Site Zawiya",
 
+    category:"Web Design",
 
-url:
+    image:"/images/projects/zawiya.PNG",
 
-"https://afriaccess.vercel.app/"
 
-},
+    description:
+      "Site vitrine moderne présentant une organisation et ses activités.",
 
 
+    technologies:[
+      "React",
+      "Bootstrap",
+      "SEO"
+    ],
 
 
-{
-id:"security-app",
+    demo:
+      "https://www.zawiya.defarsci.fr/",
 
-title:"SecurityApp",
 
-category:"Security",
+    github:
+      "https://github.com/mmilinda"
 
-image:Security,
-
-
-description:
-
-"Plateforme complète de gestion des agents de sécurité avec administration, missions, localisation et suivi terrain.",
-
-
-features:[
-
-"Dashboard Admin",
-
-"Gestion agents",
-
-"Localisation GPS",
-
-"Planning missions"
-
-],
-
-
-technologies:[
-
-"React",
-
-"Laravel",
-
-"Firebase",
-
-"Leaflet"
-
-],
-
-
-url:
-
-"https://security-app-mauve.vercel.app/"
-
-},
-
-
-
-
-{
-id:"zawiya",
-
-title:"Site Zawiya",
-
-category:"Web",
-
-image:Zawiya,
-
-
-description:
-
-"Site web professionnel pour une communauté religieuse basée en France.",
-
-
-features:[
-
-"Présentation",
-
-"Actualités",
-
-"Gestion contenu"
-
-],
-
-
-technologies:[
-
-"WordPress",
-
-"CMS"
-
-],
-
-
-url:
-
-"https://www.zawiya.defarsci.fr/"
-
-},
-
-
-
-
-
-{
-id:"bermas",
-
-title:"BerMas Assurance",
-
-category:"Entreprise",
-
-image:Berma,
-
-
-description:
-
-"Site vitrine professionnel pour une entreprise d'assurance.",
-
-
-features:[
-
-"Présentation services",
-
-"Contact client",
-
-"Information assurance"
-
-],
-
-
-technologies:[
-
-"PHP",
-
-"HTML",
-
-"CSS"
-
-],
-
-
-url:
-
-"https://bermasss.com/"
-
-},
-
-
-
-
-{
-id:"cv-video",
-
-title:"CV Vidéo",
-
-category:"Innovation",
-
-image:
-"https://images.unsplash.com/photo-1556742044-3c52d6e88c62",
-
-
-description:
-
-"Système permettant de créer des CV vidéos professionnels.",
-
-
-features:[
-
-"Création vidéo",
-
-"Présentation professionnelle"
-
-],
-
-
-technologies:[
-
-"React",
-
-"Laravel"
-
-],
-
-url:"#"
-
-},
-
-
-
-
-{
-id:"appartement",
-
-title:"Location Appartement",
-
-category:"Web",
-
-image:Appartement,
-
-
-description:
-
-"Plateforme de location immobilière réalisée comme projet de formation.",
-
-
-technologies:[
-
-"Laravel",
-
-"HTML",
-
-"CSS",
-
-"JavaScript"
-
-],
-
-url:"#"
-
-},
-
-
-
-
-
-{
-id:"guide-itineraire",
-
-title:"Guide Itinéraire",
-
-category:"Transport",
-
-image:JQuery,
-
-
-description:
-
-"Application permettant de guider les voyageurs avec les itinéraires des bus.",
-
-
-technologies:[
-
-"jQuery",
-
-"JavaScript"
-
-],
-
-
-url:
-
-"https://jquerry-bus.vercel.app/"
-
-},
-
-
-
-
-{
-id:"site-vitrine",
-
-title:"Site Vitrine",
-
-category:"Web",
-
-image:Bootstrap,
-
-
-description:
-
-"Projet de formation Bootstrap permettant de créer un site vitrine responsive.",
-
-
-technologies:[
-
-"Bootstrap",
-
-"HTML",
-
-"CSS"
-
-],
-
-
-url:
-
-"https://site-bootstrap-six.vercel.app/"
-
-}
-
-
+  }
 
 ];
+
+
+export default projects;

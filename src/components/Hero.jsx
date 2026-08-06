@@ -1,282 +1,371 @@
-import {motion} from "framer-motion";
+import { motion } from "framer-motion";
+import { ArrowRight, Download, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
+
+// import profile from "../assets/images/profile/MM.png";
+
+
+const stats = [
+  {
+    value: "10+",
+    label: "Projets réalisés"
+  },
+  {
+    value: "5+",
+    label: "Années d'expérience"
+  },
+  {
+    value: "15+",
+    label: "Technologies"
+  }
+];
+
+
+export default function Hero() {
+
+  return (
+
+    <section
+      className="
+      relative
+      min-h-screen
+      flex
+      items-center
+      overflow-hidden
+      pt-24
+      "
+    >
+
+      {/* Background glow */}
+
+      <div
+        className="
+        absolute
+        inset-0
+        -z-10
+        bg-gradient-to-br
+        from-primary/20
+        via-transparent
+        to-purple-500/20
+        "
+      />
+
+
+      <div
+        className="
+        max-w-7xl
+        mx-auto
+        px-6
+        grid
+        md:grid-cols-2
+        gap-12
+        items-center
+        "
+      >
 
-import {
-ArrowRight,
-}
-from "lucide-react";
+
+        {/* Text */}
+
+        <motion.div
+
+          initial={{
+            opacity:0,
+            x:-50
+          }}
+
+          animate={{
+            opacity:1,
+            x:0
+          }}
+
+          transition={{
+            duration:0.8
+          }}
+
+        >
+
+
+          <div
+            className="
+            inline-flex
+            items-center
+            gap-2
+            px-4
+            py-2
+            rounded-full
+            border
+            border-white/10
+            bg-white/5
+            backdrop-blur
+            text-sm
+            mb-6
+            "
+          >
 
-// Logos de réseaux sociaux depuis react-icons/fa6 (FontAwesome 6)
-import { FaGithub, FaLinkedin } from "react-icons/fa6";
+            <Sparkles size={16}/>
 
-import photo from "../assets/images/profile/MM.png";
+            Full Stack Developer • AI • Digital Solutions
 
+          </div>
 
 
-export default function Hero(){
 
+          <h1
+            className="
+            text-5xl
+            md:text-7xl
+            font-bold
+            leading-tight
+            "
+          >
 
-return (
+            Je transforme
 
-<section
+            <span
+              className="
+              block
+              bg-gradient-to-r
+              from-blue-500
+              to-purple-500
+              bg-clip-text
+              text-transparent
+              "
+            >
 
-className="
-container-custom
-min-h-screen
-flex
-items-center
-"
+              des idées complexes
 
->
+            </span>
 
 
-<div
+            en expériences digitales performantes.
 
-className="
-grid
-md:grid-cols-2
-gap-10
-items-center
-w-full
-"
+          </h1>
 
->
 
 
+          <p
+            className="
+            mt-6
+            text-lg
+            text-gray-400
+            max-w-xl
+            "
+          >
 
-{/* Texte */}
+            Développeuse Full Stack spécialisée dans la création
+            d'applications web modernes, plateformes SaaS,
+            solutions IA et expériences digitales innovantes.
 
-<motion.div
+          </p>
 
-initial={{
-opacity:0,
-x:-50
-}}
 
-animate={{
-opacity:1,
-x:0
-}}
 
-transition={{
-duration:.8
-}}
+          <div
+            className="
+            flex
+            flex-wrap
+            gap-4
+            mt-8
+            "
+          >
 
->
+            <Link
+              to="/projects"
+              className="
+              flex
+              items-center
+              gap-2
+              px-6
+              py-3
+              rounded-xl
+              bg-black
+              text-white
+              hover:scale-105
+              transition
+              "
+            >
 
+              Voir mes projets
 
-<p className="
-text-cyan-400
-mb-5
-font-semibold
-"
+              <ArrowRight size={18}/>
 
->
+            </Link>
 
-Développeuse Full Stack
-</p>
 
 
+            <a
 
-<h1
+              href="/CV-Milinda-Mendy.pdf"
 
-className="
-text-5xl
-md:text-7xl
-font-bold
-leading-tight
-"
+              download
 
->
+              className="
+              flex
+              items-center
+              gap-2
+              px-6
+              py-3
+              rounded-xl
+              border
+              border-white/20
+              hover:bg-white/10
+              transition
+              "
 
+            >
 
-Créer des produits
+              Télécharger CV
 
-<span className="
-gradient-text
-">
+              <Download size={18}/>
 
-digitaux
+            </a>
 
-</span>
 
-performants.
+          </div>
 
 
-</h1>
 
+          <div
+            className="
+            grid
+            grid-cols-3
+            gap-6
+            mt-12
+            "
+          >
 
+            {stats.map((item,index)=>(
 
-<p
+              <motion.div
 
-className="
-text-gray-400
-mt-8
-text-lg
-leading-relaxed
-"
+                key={index}
 
->
+                whileHover={{
+                  y:-5
+                }}
 
-Je suis Milinda Mendy,
-Développeuse Senior spécialisée
-dans la création d'applications web,
-plateformes SaaS et solutions digitales
-modernes.
+                className="
+                p-4
+                rounded-2xl
+                bg-white/5
+                border
+                border-white/10
+                "
 
+              >
 
-</p>
+                <h3
+                  className="
+                  text-3xl
+                  font-bold
+                  "
+                >
 
+                  {item.value}
 
+                </h3>
 
-<div className="
-flex
-gap-5
-mt-10
-flex-wrap
-">
 
+                <p
+                  className="
+                  text-sm
+                  text-gray-400
+                  "
+                >
 
-<a
+                  {item.label}
 
-href="/projects"
+                </p>
 
-className="
-bg-cyan-400
-text-black
-px-7
-py-3
-rounded-full
-font-bold
-flex
-items-center
-gap-2
-"
 
->
+              </motion.div>
 
-Voir mes projets
+            ))}
 
-<ArrowRight size={18}/>
 
-</a>
+          </div>
 
 
+        </motion.div>
 
-<a
 
-href="/CV-Milinda.pdf"
 
-className="
-border
-border-white/20
-px-7
-py-3
-rounded-full
-"
+        {/* Image */}
 
->
+        <motion.div
 
-Télécharger CV
+          initial={{
+            opacity:0,
+            scale:0.8
+          }}
 
-</a>
+          animate={{
+            opacity:1,
+            scale:1
+          }}
 
+          transition={{
+            duration:0.8
+          }}
 
-</div>
+          className="
+          flex
+          justify-center
+          "
 
+        >
 
 
+          <div
+            className="
+            relative
+            "
+          >
 
-<div className="
-flex
-gap-5
-mt-8
-"
+            <div
+              className="
+              absolute
+              inset-0
+              rounded-full
+              bg-blue-500/30
+              blur-3xl
+              "
+            />
 
->
 
-<FaGithub size={24}/>
+            <img
 
-<FaLinkedin size={24}/>
+              src="/images/profile/MM.png"
 
+              alt="Milinda Mendy"
+              loading="lazy"
 
-</div>
+              className="
+              relative
+              w-72
+              h-72
+              md:w-96
+              md:h-96
+              object-cover
+              rounded-full
+              border-4
+              border-white/10
+              "
 
+            />
 
 
-</motion.div>
+          </div>
 
 
+        </motion.div>
 
 
-{/* Image */}
+      </div>
 
-<motion.div
 
-initial={{
-opacity:0,
-scale:.8
-}}
+    </section>
 
-animate={{
-opacity:1,
-scale:1
-}}
-
-transition={{
-duration:1
-}}
-
-className="
-flex
-justify-center
-"
-
->
-
-
-<div
-
-className="
-w-72
-h-72
-rounded-full
-overflow-hidden
-border-4
-border-cyan-400
-shadow-xl
-shadow-cyan-400/30
-"
-
->
-
-
-<img
-
-src={photo}
-
-alt="Milinda Mendy"
-
-className="
-w-full
-h-full
-object-cover
-"
-
-/>
-
-
-</div>
-
-
-</motion.div>
-
-
-</div>
-
-
-</section>
-
-
-)
+  );
 
 }
