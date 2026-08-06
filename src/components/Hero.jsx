@@ -11,7 +11,19 @@ const ROLES = [
   "Solutions Builder",
 ];
 
-const TECH_BADGES = ["Docker", "Kubernetes", "React", "Laravel", "CI/CD", "AWS", "Linux", "Git"];
+const TECH_BADGES = [
+  "React",
+  "Laravel",
+  "Tailwind CSS",
+  "JavaScript",
+  "PHP",
+  "Vite",
+  "Docker",
+  "REST API",
+  "Vercel",
+  "Leaflet",
+  "Bootstrap"
+];
 
 function TypewriterText({ words }) {
   const [index, setIndex] = useState(0);

@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Clock, ArrowRight, BookOpen, Tag } from "lucide-react";
+import useArticles from "../hooks/useArticles";
+import SEO from "../components/SEO";
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 const articles = [
@@ -329,18 +331,25 @@ function ArticleCard({ article, index }) {
 
 // ── Blog Page ─────────────────────────────────────────────────────────────────
 export default function Blog() {
+  const { articles } = useArticles();
   const [activeCategory, setActiveCategory] = useState("Tous");
 
-  const featured = articles.find((a) => a.id === 1);
+  const featured = articles.find((a) => a.id === 1) || articles[0];
   const showFeatured = activeCategory === "Tous";
 
   const gridArticles =
     activeCategory === "Tous"
-      ? articles.filter((a) => a.id !== 1)
+      ? articles.filter((a) => a.id !== featured?.id)
       : articles.filter((a) => a.category === activeCategory);
 
   return (
-    <div style={{ position: "relative", minHeight: "100vh", overflow: "hidden", padding: "5rem 0 7rem" }}>
+    <>
+      <SEO
+        title="Blog & Articles | Milinda Mendy - DevOps & Full Stack"
+        description="Retours d'expérience, articles techniques et bonnes pratiques sur le DevOps, Docker, Kubernetes, React, Laravel et l'IA par Milinda Mendy."
+      />
+
+      <div style={{ position: "relative", minHeight: "100vh", overflow: "hidden", padding: "5rem 0 7rem" }}>
       {/* Background orbs */}
       <div style={{ position: "absolute", inset: 0, pointerEvents: "none", overflow: "hidden" }}>
         <div style={{
@@ -466,5 +475,6 @@ export default function Blog() {
         </motion.p>
       </div>
     </div>
+    </>
   );
 }

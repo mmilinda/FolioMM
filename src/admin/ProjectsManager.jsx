@@ -2,17 +2,24 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
 
+import staticProjects from "../data/projects";
+
 export default function ProjectsManager() {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Charger la liste des projets depuis Laravel
+  // Charger la liste des projets depuis Laravel ou fallback
   async function load() {
     try {
-      const res = await api.get("/projects");
-      setProjects(res.data);
+      const res = await api.get("/projects", { timeout: 3000 });
+      if (res.data && Array.isArray(res.data) && res.data.length > 0) {
+        setProjects(res.data);
+      } else {
+        setProjects(staticProjects);
+      }
     } catch (err) {
-      console.error("Erreur lors du chargement des projets :", err);
+      console.warn("API offline - Affichage des projets locaux.");
+      setProjects(staticProjects);
     } finally {
       setLoading(false);
     }

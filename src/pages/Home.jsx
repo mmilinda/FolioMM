@@ -11,7 +11,10 @@ import Booking from "../components/Booking";
 export default function Home() {
   return (
     <>
-      <SEO />
+      <SEO
+        title="Accueil | Milinda Mendy - Développeuse Full Stack & DevOps"
+        description="Découvrez le portfolio professionnel de Milinda Mendy: projets SaaS, architecture DevOps, React, Laravel et solutions cloud."
+      />
       <Hero />
       <Stats />
       <About />

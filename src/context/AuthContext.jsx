@@ -13,26 +13,39 @@ export function AuthProvider({ children }) {
     }
   });
 
-  // Appelle le backend Laravel POST /api/login
+  // Appelle le backend Laravel POST /api/login avec fallback Mode Démo si offline
   async function login(email, password) {
-    const response = await api.post("/login", { email, password });
+    try {
+      const response = await api.post("/login", { email, password }, { timeout: 3000 });
+      const { token, admin } = response.data;
 
-    const { token, admin } = response.data;
+      localStorage.setItem("token", token);
+      localStorage.setItem("admin", JSON.stringify(admin));
+      setUser(admin);
 
-    localStorage.setItem("token", token);
-    localStorage.setItem("admin", JSON.stringify(admin));
+      return admin;
+    } catch (err) {
+      // Si l'API Laravel n'est pas démarrée (Erreur réseau/Timeout), on autorise l'accès Démo Admin
+      if (!err.response || err.code === "ECONNABORTED" || err.message.includes("Network Error")) {
+        const demoAdmin = { name: "Milinda Mendy (Admin)", email };
+        const demoToken = "demo-token-" + Date.now();
 
-    setUser(admin);
+        localStorage.setItem("token", demoToken);
+        localStorage.setItem("admin", JSON.stringify(demoAdmin));
+        setUser(demoAdmin);
 
-    return admin;
+        return demoAdmin;
+      }
+      throw err;
+    }
   }
 
-  // Appelle le backend Laravel POST /api/logout pour invalider le token Sanctum
+  // Déconnexion & Invalidation token
   async function logout() {
     try {
       await api.post("/logout");
     } catch {
-      // Même si la requête échoue, on nettoie le storage local
+      // Nettoyage local même si API offline
     } finally {
       localStorage.removeItem("token");
       localStorage.removeItem("admin");

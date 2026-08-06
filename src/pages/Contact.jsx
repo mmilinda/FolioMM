@@ -2,12 +2,13 @@ import { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { motion, useInView } from "framer-motion";
 import { Mail, MapPin, Clock, Send, CheckCircle, AlertCircle } from "lucide-react";
+import SEO from "../components/SEO";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 
-/* ─── EmailJS credentials (configure with your EmailJS keys) ───────────────── */
-const SERVICE_ID = "SERVICE_ID";
-const TEMPLATE_ID = "TEMPLATE_ID";
-const PUBLIC_KEY = "PUBLIC_KEY";
+/* ─── EmailJS credentials (configured via .env or fallback) ───────────────── */
+const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "SERVICE_ID";
+const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "TEMPLATE_ID";
+const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "PUBLIC_KEY";
 
 /* ─── Animation variants ─────────────────────────────────────────────────── */
 const fadeUp = {
@@ -79,8 +80,14 @@ export default function Contact() {
   }
 
   return (
-    <section
-      ref={sectionRef}
+    <>
+      <SEO
+        title="Contact | Milinda Mendy - Développeuse Full Stack & DevOps"
+        description="Une idée de projet, une opportunité ou une question ? Contactez Milinda Mendy directement via le formulaire ou par email."
+      />
+
+      <section
+        ref={sectionRef}
       style={{
         position: "relative",
         paddingTop: "4rem",
@@ -557,5 +564,6 @@ export default function Contact() {
         @keyframes spin { to { transform: rotate(360deg); } }
       `}</style>
     </section>
+    </>
   );
 }

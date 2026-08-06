@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { CheckCircle, Code2, Server, Zap } from "lucide-react";
+import { CheckCircle, Code2, Server, Zap, Download } from "lucide-react";
 
 const highlights = [
   { icon: Code2, text: "Architecture Full Stack moderne" },
@@ -56,6 +56,18 @@ export default function About() {
               </motion.div>
             ))}
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.7 }}
+            style={{ marginTop: "2rem" }}
+          >
+            <a href="/CV-Milinda-Mendy.pdf" download className="hero-btn-secondary" style={{ display: "inline-flex" }}>
+              <Download size={16} />
+              Télécharger mon CV
+            </a>
+          </motion.div>
         </motion.div>
 
         {/* Right — Visual code block */}
