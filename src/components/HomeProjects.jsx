@@ -9,7 +9,7 @@ export default function HomeProjects() {
   const homeProjects = projects.filter((p) => p.featured).slice(0, 3);
 
   return (
-    <section className="py-10 relative overflow-hidden">
+    <section className="py-8 md:py-20 relative overflow-hidden">
       <div className="container-custom relative z-10">
         {/* Header */}
         <motion.div
@@ -17,29 +17,23 @@ export default function HomeProjects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-14"
+          className="text-center mb-8 md:mb-14"
         >
           <span className="section-eyebrow">
-            <FolderKanban size={14} className="inline-block mr-1 -mt-0.5" />
+            <FolderKanban size={14} className="inline-block mr-1 -mt-0.5 text-cyan-400" />
             Réalisations
           </span>
-          <h2 className="section-title mt-3">
+          <h2 className="section-title mt-2 md:mt-4 text-xl sm:text-3xl md:text-4xl font-extrabold">
             Projets <span className="gradient-text">en vedette</span>
           </h2>
-          <p className="text-gray-400 text-lg max-w-4xl mx-auto mt-3 whitespace-normal md:whitespace-nowrap overflow-hidden text-ellipsis">
+          <p className="text-slate-400 text-xs sm:text-base md:text-lg max-w-2xl mx-auto mt-3 md:mt-4 leading-relaxed">
             Un aperçu de mes récents travaux alliant architecture logicielle,
             expérience utilisateur soignée et déploiement cloud.
           </p>
         </motion.div>
 
         {/* Projects Grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
-            gap: "1.5rem",
-          }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 mt-6 md:mt-10">
           {homeProjects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
@@ -51,32 +45,11 @@ export default function HomeProjects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          style={{ textAlign: "center", marginTop: "3.5rem" }}
+          className="text-center mt-8 md:mt-14"
         >
           <Link
             to="/projects"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "10px",
-              padding: "14px 32px",
-              borderRadius: "14px",
-              background: "linear-gradient(135deg, #38bdf8, #818cf8)",
-              color: "#020617",
-              fontSize: "0.95rem",
-              fontWeight: 700,
-              textDecoration: "none",
-              boxShadow: "0 10px 30px -10px rgba(56, 189, 248, 0.4)",
-              transition: "transform 0.2s, box-shadow 0.2s",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-3px)";
-              e.currentTarget.style.boxShadow = "0 15px 35px -5px rgba(56, 189, 248, 0.5)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 10px 30px -10px rgba(56, 189, 248, 0.4)";
-            }}
+            className="inline-flex items-center gap-2.5 px-6 py-3 md:px-8 md:py-4 rounded-xl bg-gradient-to-r from-cyan-400 to-indigo-500 text-slate-950 text-sm md:text-base font-bold no-underline shadow-lg hover:-translate-y-1 transition-all"
           >
             Voir tous les projets
             <ArrowRight size={18} />
