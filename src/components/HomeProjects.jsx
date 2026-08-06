@@ -17,7 +17,7 @@ export default function HomeProjects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-8 md:mb-14"
+          className="text-center mb-10 md:mb-16"
         >
           <span className="section-eyebrow">
             <FolderKanban size={14} className="inline-block mr-1 -mt-0.5 text-cyan-400" />
@@ -26,13 +26,13 @@ export default function HomeProjects() {
           <h2 className="section-title mt-2 md:mt-4 text-xl sm:text-3xl md:text-4xl font-extrabold">
             Projets <span className="gradient-text">en vedette</span>
           </h2>
-          <p className="text-slate-400 text-xs sm:text-base md:text-lg max-w-none mx-auto mt-3 md:mt-4 whitespace-nowrap overflow-hidden text-ellipsis">
+          <p className="text-slate-400 text-xs sm:text-base md:text-lg max-w-none mx-auto mt-4 md:mt-6 mb-8 md:mb-14 whitespace-nowrap overflow-hidden text-ellipsis px-4">
             Un aperçu de mes récents travaux alliant architecture logicielle, expérience utilisateur soignée et déploiement cloud.
           </p>
         </motion.div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-8 mt-6 md:mt-10">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mt-10 md:mt-16">
           {homeProjects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
