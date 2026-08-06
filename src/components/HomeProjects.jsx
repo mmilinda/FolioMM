@@ -9,7 +9,7 @@ export default function HomeProjects() {
   const homeProjects = projects.filter((p) => p.featured).slice(0, 3);
 
   return (
-    <section className="py-8 md:py-20 relative overflow-hidden">
+    <section className="py-10 md:py-24 relative overflow-hidden">
       <div className="container-custom relative z-10">
         {/* Header */}
         <motion.div
@@ -17,22 +17,23 @@ export default function HomeProjects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-10 md:mb-16"
+          className="text-center mb-12 md:mb-20"
         >
           <span className="section-eyebrow">
             <FolderKanban size={14} className="inline-block mr-1 -mt-0.5 text-cyan-400" />
             Réalisations
           </span>
-          <h2 className="section-title mt-2 md:mt-4 text-xl sm:text-3xl md:text-4xl font-extrabold">
+          <h2 className="section-title mt-2 md:mt-4 text-2xl sm:text-3xl md:text-4xl font-extrabold">
             Projets <span className="gradient-text">en vedette</span>
           </h2>
-          <p className="text-slate-400 text-xs sm:text-base md:text-lg max-w-none mx-auto mt-4 md:mt-6 mb-8 md:mb-14 whitespace-nowrap overflow-hidden text-ellipsis px-4">
-            Un aperçu de mes récents travaux alliant architecture logicielle, expérience utilisateur soignée et déploiement cloud.
+          <p className="text-slate-400 text-xs sm:text-base md:text-lg max-w-3xl mx-auto mt-3 md:mt-5 leading-relaxed px-4">
+            Un aperçu de mes récents travaux alliant architecture logicielle,
+            expérience utilisateur soignée et déploiement cloud.
           </p>
         </motion.div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mt-10 md:mt-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mt-8 md:mt-16">
           {homeProjects.map((project) => (
             <ProjectCard key={project.id} project={project} />
           ))}
@@ -44,7 +45,7 @@ export default function HomeProjects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="text-center mt-8 md:mt-14"
+          className="text-center mt-12 md:mt-20"
         >
           <Link
             to="/projects"
