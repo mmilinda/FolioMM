@@ -22,7 +22,7 @@ export default function ProjectCard({ project }) {
       className="group project-card"
     >
       {/* ── Image ───────────────────────────────── */}
-      <div style={{ position: "relative", height: "200px", overflow: "hidden", flexShrink: 0 }}>
+      <div className="relative h-24 sm:h-44 md:h-48 overflow-hidden shrink-0">
         <img
           src={project.image}
           onError={(e) => {
@@ -30,88 +30,30 @@ export default function ProjectCard({ project }) {
           }}
           alt={project.title}
           loading="lazy"
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            transition: "transform 0.6s ease",
-          }}
-          className="project-card-img"
+          className="w-full h-full object-cover transition-transform duration-500 project-card-img"
         />
 
         {/* Gradient overlay */}
-        <div style={{
-          position: "absolute", inset: 0,
-          background: "linear-gradient(to top, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.2) 50%, transparent 100%)",
-        }} />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
 
         {/* Category badge */}
         {project.category && (
-          <span style={{
-            position: "absolute", top: "12px", left: "12px",
-            padding: "3px 10px",
-            borderRadius: "999px",
-            fontSize: "0.7rem",
-            fontWeight: 600,
-            background: "rgba(2,6,23,0.7)",
-            backdropFilter: "blur(8px)",
-            border: "1px solid rgba(255,255,255,0.15)",
-            color: "var(--text-secondary)",
-            letterSpacing: "0.04em",
-          }}>
+          <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-semibold bg-slate-950/70 backdrop-blur-sm border border-white/15 text-slate-300">
             {project.category}
           </span>
         )}
 
         {/* Featured badge */}
         {project.featured && (
-          <span style={{
-            position: "absolute", top: "12px", right: "12px",
-            display: "flex", alignItems: "center", gap: "4px",
-            padding: "3px 10px",
-            borderRadius: "999px",
-            fontSize: "0.7rem",
-            fontWeight: 700,
-            background: "linear-gradient(135deg, #38bdf8, #818cf8)",
-            color: "#020617",
-          }}>
-            <Sparkles size={11} />
+          <span className="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] sm:text-xs font-bold bg-gradient-to-r from-cyan-400 to-indigo-400 text-slate-950">
+            <Sparkles size={10} />
             Featured
           </span>
         )}
-
-        {/* Year + status at bottom of image */}
-        <div style={{
-          position: "absolute", bottom: "10px", left: "12px",
-          display: "flex", alignItems: "center", gap: "8px",
-        }}>
-          {project.year && (
-            <span style={{
-              display: "flex", alignItems: "center", gap: "4px",
-              fontSize: "0.7rem", color: "rgba(255,255,255,0.6)",
-            }}>
-              <Calendar size={11} />
-              {project.year}
-            </span>
-          )}
-          {project.status && (
-            <span style={{
-              fontSize: "0.68rem",
-              padding: "2px 8px",
-              borderRadius: "999px",
-              background: "rgba(56,189,248,0.15)",
-              border: "1px solid rgba(56,189,248,0.3)",
-              color: "var(--primary)",
-              fontWeight: 600,
-            }}>
-              {project.status}
-            </span>
-          )}
-        </div>
       </div>
 
       {/* ── Content ─────────────────────────────── */}
-      <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem", flex: 1 }}>
+      <div className="p-2.5 sm:p-4 flex flex-col gap-1.5 sm:gap-3 flex-1">
 
         {/* Title + link arrow */}
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px" }}>
