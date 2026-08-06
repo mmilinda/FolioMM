@@ -11,7 +11,7 @@ export default function ProjectCard({ project }) {
       className="group project-card relative overflow-hidden rounded-xl sm:rounded-2xl border border-white/10 bg-white/5 backdrop-blur-md flex flex-col transition-all duration-300 w-full max-w-[270px] sm:max-w-none mx-auto"
     >
       {/* ── Image ───────────────────────────────── */}
-      <div className="relative h-28 sm:h-44 md:h-48 overflow-hidden shrink-0">
+      <div className="relative h-28 sm:h-48 md:h-56 lg:h-60 overflow-hidden shrink-0">
         <img
           src={project.image}
           onError={(e) => {
@@ -27,89 +27,89 @@ export default function ProjectCard({ project }) {
 
         {/* Category badge */}
         {project.category && (
-          <span className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 px-1.5 py-0.5 rounded-full text-[9px] sm:text-xs font-semibold bg-slate-950/80 backdrop-blur-sm border border-white/15 text-slate-300">
+          <span className="absolute top-2 left-2 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-semibold bg-slate-950/80 backdrop-blur-sm border border-white/15 text-slate-300">
             {project.category}
           </span>
         )}
 
         {/* Featured badge */}
         {project.featured && (
-          <span className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] sm:text-xs font-bold bg-gradient-to-r from-cyan-400 to-indigo-400 text-slate-950">
-            <Sparkles size={9} />
+          <span className="absolute top-2 right-2 flex items-center gap-1 px-2 py-0.5 sm:px-3 sm:py-1 rounded-full text-[10px] sm:text-xs font-bold bg-gradient-to-r from-cyan-400 to-indigo-400 text-slate-950">
+            <Sparkles size={11} />
             Featured
           </span>
         )}
       </div>
 
       {/* ── Content ─────────────────────────────── */}
-      <div className="p-2 sm:p-4 flex flex-col gap-1 sm:gap-2.5 flex-1">
+      <div className="p-2.5 sm:p-5 md:p-6 flex flex-col gap-2 sm:gap-3 flex-1">
 
         {/* Title + link arrow */}
-        <div className="flex items-start justify-between gap-1 sm:gap-2">
+        <div className="flex items-start justify-between gap-2">
           <Link
             to={`/projects/${project.slug || project.id}`}
             className="no-underline text-inherit flex-1"
           >
-            <h3 className="text-xs sm:text-base font-bold tracking-tight text-white transition-colors project-card-title line-clamp-1">
+            <h3 className="text-xs sm:text-lg lg:text-xl font-bold tracking-tight text-white transition-colors project-card-title line-clamp-1 sm:line-clamp-none">
               {project.title}
             </h3>
           </Link>
           <Link to={`/projects/${project.slug || project.id}`} className="text-slate-400 shrink-0 mt-0.5">
             <ArrowUpRight size={14} className="sm:hidden" />
-            <ArrowUpRight size={18} className="hidden sm:block project-card-arrow" />
+            <ArrowUpRight size={20} className="hidden sm:block project-card-arrow" />
           </Link>
         </div>
 
-        {/* Description — 1 line on mobile, 2 lines on desktop */}
-        <p className="text-[10px] sm:text-sm text-slate-400 leading-tight line-clamp-1 sm:line-clamp-2 m-0">
+        {/* Description — 1 line on mobile, 2-3 lines on desktop */}
+        <p className="text-[10px] sm:text-sm lg:text-base text-slate-400 leading-tight sm:leading-relaxed line-clamp-1 sm:line-clamp-3 m-0">
           {project.description}
         </p>
 
         {/* Impact */}
         {project.impact && (
-          <div className="flex items-center gap-1 px-1.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-[#34d399] text-[9px] sm:text-xs">
-            <TrendingUp size={11} className="shrink-0 text-emerald-400" />
+          <div className="flex items-center gap-1.5 px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[#34d399] text-[9px] sm:text-xs lg:text-sm">
+            <TrendingUp size={13} className="shrink-0 text-emerald-400" />
             <span className="truncate font-medium">{project.impact}</span>
           </div>
         )}
 
         {/* Technologies */}
         {project.technologies?.length > 0 && (
-          <div className="flex flex-wrap gap-1">
-            {project.technologies.slice(0, 3).map((tech) => (
+          <div className="flex flex-wrap gap-1 sm:gap-1.5">
+            {project.technologies.slice(0, 4).map((tech) => (
               <span
                 key={tech}
-                className="text-[9px] sm:text-xs px-1.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-slate-400 font-medium"
+                className="text-[9px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-white/5 border border-white/10 text-slate-400 font-medium"
               >
                 {tech}
               </span>
             ))}
-            {project.technologies.length > 3 && (
-              <span className="text-[9px] sm:text-xs px-1 py-0.5 text-slate-500">
-                +{project.technologies.length - 3}
+            {project.technologies.length > 4 && (
+              <span className="text-[9px] sm:text-xs px-1.5 py-0.5 text-slate-500">
+                +{project.technologies.length - 4}
               </span>
             )}
           </div>
         )}
 
         {/* Action buttons */}
-        <div className="flex gap-1.5 mt-auto pt-1 border-t border-white/10">
+        <div className="flex gap-2 mt-auto pt-2 border-t border-white/10">
           {project.demo && project.demo !== "#" ? (
             <a
               href={project.demo}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 inline-flex items-center justify-center gap-1 py-1 sm:py-1.5 px-2 rounded-lg bg-gradient-to-r from-cyan-400 to-indigo-400 text-slate-950 text-[10px] sm:text-xs font-bold no-underline transition-opacity"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 py-1 sm:py-2 px-3 rounded-xl bg-gradient-to-r from-cyan-400 to-indigo-400 text-slate-950 text-[10px] sm:text-sm font-bold no-underline transition-opacity hover:opacity-90"
             >
-              <ExternalLink size={11} />
+              <ExternalLink size={13} />
               Démo
             </a>
           ) : (
             <Link
               to={`/projects/${project.slug || project.id}`}
-              className="flex-1 inline-flex items-center justify-center gap-1 py-1 sm:py-1.5 px-2 rounded-lg bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-[10px] sm:text-xs font-bold no-underline"
+              className="flex-1 inline-flex items-center justify-center gap-1.5 py-1 sm:py-2 px-3 rounded-xl bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 text-[10px] sm:text-sm font-bold no-underline"
             >
-              Voir
+              Voir le projet
             </Link>
           )}
 
@@ -118,9 +118,9 @@ export default function ProjectCard({ project }) {
               href={project.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-1 py-1 sm:py-1.5 px-2 rounded-lg border border-white/10 bg-white/5 text-slate-300 text-[10px] sm:text-xs font-semibold no-underline shrink-0"
+              className="inline-flex items-center justify-center gap-1.5 py-1 sm:py-2 px-3 rounded-xl border border-white/10 bg-white/5 text-slate-300 text-[10px] sm:text-sm font-semibold no-underline shrink-0 hover:bg-white/10"
             >
-              <FaGithub size={11} />
+              <FaGithub size={13} />
               Code
             </a>
           )}
