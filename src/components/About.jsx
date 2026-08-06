@@ -21,22 +21,22 @@ export default function About() {
           initial={{ opacity: 0, x: -40 }}
           animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center sm:text-left"
+          className="text-left"
         >
           <span className="section-eyebrow">À propos</span>
-          <h2 className="section-title text-xl sm:text-3xl font-extrabold mb-2">
+          <h2 className="section-title text-base sm:text-3xl font-extrabold mb-1.5 text-left">
             Développeuse junior qui{" "}
             <span className="gradient-text">pense systèmes</span>,
             <br className="hidden sm:inline" /> pas juste fonctionnalités.
           </h2>
 
-          <p className="about-text text-xs sm:text-base text-slate-300 leading-relaxed">
+          <p className="about-text text-[11px] sm:text-base text-slate-300 leading-snug text-left">
             Avec plus de 3 ans d'expérience, je conçois des produits digitaux robustes
             de l'architecture à la mise en production. Ma force réside dans ma capacité
             à marier performance technique, expérience utilisateur et vision produit.
           </p>
 
-          <p className="about-text text-xs sm:text-base text-slate-300 leading-relaxed mt-2">
+          <p className="about-text text-[11px] sm:text-base text-slate-300 leading-snug mt-1.5 text-left">
             Spécialisée en <strong className="text-cyan-400">DevOps</strong>,{" "}
             <strong className="text-cyan-400">React</strong>,{" "}
             <strong className="text-cyan-400">Laravel</strong> et architectures cloud,
