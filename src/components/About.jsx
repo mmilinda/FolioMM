@@ -67,9 +67,9 @@ export default function About() {
             <a
               href="/CV-Milinda-Mendy.pdf"
               download
-              className="hero-btn-secondary px-4 py-2 text-xs sm:text-sm flex items-center justify-center gap-2 rounded-xl mx-auto sm:mx-0"
+              className="hero-btn-secondary px-3 py-1.5 text-[11px] sm:px-4 sm:py-2 sm:text-sm flex items-center justify-center gap-1.5 rounded-lg mx-auto sm:mx-0"
             >
-              <Download size={15} />
+              <Download size={13} className="shrink-0" />
               Télécharger mon CV
             </a>
           </motion.div>
