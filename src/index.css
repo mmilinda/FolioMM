@@ -1604,40 +1604,32 @@ body {
 
   /* 2. Section À Propos (About) Compact */
   .about-section {
-    padding: 1.5rem 0 !important;
+    padding: 1.25rem 0 !important;
   }
 
   .about-grid {
-    gap: 1.25rem !important;
+    gap: 1rem !important;
+  }
+
+  .about-code-wrapper {
+    display: none !important; /* Masque le bloc de code décoratif sur mobile pour économiser 250px de hauteur */
   }
 
   .about-text {
-    font-size: 0.82rem !important;
-    line-height: 1.45 !important;
+    font-size: 0.78rem !important;
+    line-height: 1.4 !important;
   }
 
   .about-highlights {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
     gap: 6px !important;
-    margin-top: 0.75rem !important;
+    margin-top: 0.6rem !important;
   }
 
   .about-highlight-item {
-    font-size: 0.75rem !important;
-    padding: 4px 8px !important;
-  }
-
-  .about-code-card {
-    padding: 0.75rem !important;
-    border-radius: 14px !important;
-  }
-
-  .about-code-header {
-    margin-bottom: 0.5rem !important;
-  }
-
-  .about-code-body {
-    font-size: 0.68rem !important;
-    line-height: 1.35 !important;
+    font-size: 0.7rem !important;
+    padding: 4px 6px !important;
   }
 
   /* 3. Section Services Cards Compact */
