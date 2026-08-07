@@ -108,10 +108,10 @@ export default function ImpactSection() {
               </div>
 
               {/* Paragraphs */}
-              <div className="space-y-2.5 text-xs sm:text-sm leading-relaxed text-slate-300">
+              <div className="space-y-3 text-sm sm:text-base md:text-lg leading-relaxed sm:leading-loose text-slate-200 font-medium">
                 <p className="m-0">
                   À travers mes projets, je m'intéresse particulièrement à des secteurs où la technologie peut avoir un impact tangible : 
-                  <strong className="text-cyan-400 font-semibold"> agriculture, sécurité, services, identité numérique et inclusion</strong>.
+                  <strong className="text-cyan-400 font-bold"> agriculture, sécurité, services, identité numérique et inclusion</strong>.
                 </p>
 
                 <p className="m-0">
