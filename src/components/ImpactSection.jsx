@@ -65,25 +65,25 @@ export default function ImpactSection() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section ref={ref} className="py-12 md:py-24 relative overflow-hidden">
+    <section ref={ref} className="py-16 md:py-32 relative overflow-hidden">
       {/* Background Ambient Glow Orbs */}
-      <div className="absolute top-1/4 left-10 w-96 h-96 bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/4 left-10 w-96 h-96 bg-cyan-500/10 blur-[140px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-indigo-500/10 blur-[140px] rounded-full pointer-events-none" />
 
-      <div className="container-custom relative z-10 space-y-16 md:space-y-24">
+      <div className="container-custom relative z-10 space-y-16 md:space-y-28">
 
         {/* ─── Part 1: Vision & Philosophie (Pourquoi je construis) ───────────── */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7 }}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-stretch"
         >
-          {/* Left Column — Text (Vision & Philosophie) */}
+          {/* Left Column — Airy Vision & Philosophie Text */}
           <div className="lg:col-span-7 flex flex-col justify-between space-y-6 text-left">
-            <div className="space-y-5">
+            <div className="space-y-6">
               <span className="section-eyebrow">
-                <Target size={14} className="inline-block mr-1.5 -mt-0.5 text-cyan-400" />
+                <Target size={16} className="inline-block mr-2 -mt-0.5 text-cyan-400" />
                 Vision & Philosophie
               </span>
 
@@ -91,94 +91,94 @@ export default function ImpactSection() {
                 Pourquoi je <span className="gradient-text">construis</span>
               </h2>
 
-              {/* Glass Card Box */}
-              <div className="p-6 sm:p-7 rounded-2xl bg-slate-900/80 border border-cyan-400/30 backdrop-blur-xl space-y-3.5 shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-cyan-400 via-indigo-400 to-purple-500" />
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center shrink-0">
-                    <Lightbulb size={20} className="text-cyan-400" />
+              {/* Glass Card Box with generous padding & line height */}
+              <div className="p-6 sm:p-8 rounded-2xl md:rounded-3xl bg-slate-900/90 border-2 border-cyan-400/35 backdrop-blur-xl space-y-4 shadow-2xl relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-cyan-400 via-indigo-400 to-purple-500" />
+                <div className="flex items-center gap-3.5">
+                  <div className="w-11 h-11 rounded-2xl bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center shrink-0">
+                    <Lightbulb size={22} className="text-cyan-400" />
                   </div>
                   <h3 className="text-lg sm:text-2xl font-bold text-white m-0">
                     Technologie avec un objectif
                   </h3>
                 </div>
-                <p className="text-slate-200 text-sm sm:text-base md:text-lg leading-relaxed m-0 font-medium pl-1">
+                <p className="text-slate-100 text-base sm:text-lg md:text-xl leading-relaxed m-0 font-medium pl-1">
                   Je conçois des solutions numériques pour répondre à des problèmes concrets dans mon environnement.
                 </p>
               </div>
 
-              {/* Airy Text Content */}
-              <div className="space-y-4 pt-1">
-                <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed sm:leading-loose m-0">
+              {/* Airy, well-spaced paragraphs */}
+              <div className="space-y-6 pt-2">
+                <p className="text-slate-200 text-base sm:text-lg md:text-xl leading-relaxed md:leading-loose m-0">
                   À travers mes projets, je m'intéresse particulièrement à des secteurs où la technologie peut avoir un impact tangible : 
-                  <strong className="text-cyan-400 font-semibold"> agriculture, sécurité, services, identité numérique et inclusion</strong>.
+                  <strong className="text-cyan-400 font-bold"> agriculture, sécurité, services, identité numérique et inclusion</strong>.
                 </p>
 
-                <p className="text-slate-300 text-sm sm:text-base md:text-lg leading-relaxed sm:leading-loose m-0">
+                <p className="text-slate-200 text-base sm:text-lg md:text-xl leading-relaxed md:leading-loose m-0">
                   Mon ambition est de transformer mes compétences techniques en projets capables de créer des opportunités, améliorer l'accès à l'information et contribuer au développement numérique en Afrique.
                 </p>
               </div>
             </div>
 
             {/* Quote Block */}
-            <div className="p-5 sm:p-6 rounded-2xl bg-cyan-950/60 border border-cyan-400/30 text-sm sm:text-base md:text-lg text-cyan-100 font-medium leading-relaxed italic shadow-xl">
+            <div className="p-6 sm:p-7 rounded-2xl bg-cyan-950/60 border border-cyan-400/40 text-base sm:text-lg md:text-xl text-cyan-100 font-medium leading-relaxed italic shadow-2xl mt-4">
               "Je ne me limite pas à construire des applications. Je me consacre à édifier des solutions utiles, accessibles et capables de grandir durablement."
             </div>
           </div>
 
-          {/* Right Column — Initiatives (1 Single Full-Width Column filling allocated space) */}
+          {/* Right Column — Initiatives & Leadership Redesign */}
           <div className="lg:col-span-5 flex">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={inView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="p-5 sm:p-6 rounded-2xl md:rounded-3xl bg-slate-900/90 border border-white/15 backdrop-blur-xl shadow-2xl flex flex-col justify-between space-y-5 text-left w-full h-full"
+              className="p-6 sm:p-8 rounded-2xl md:rounded-3xl bg-slate-900/95 border-2 border-indigo-500/30 backdrop-blur-2xl shadow-2xl flex flex-col justify-between space-y-6 text-left w-full h-full relative overflow-hidden"
             >
-              <div className="space-y-4 flex-grow flex flex-col justify-between">
+              <div className="space-y-5 flex-grow flex flex-col justify-between">
                 
                 {/* Top Illustrative Banner */}
-                <div className="w-full h-24 sm:h-28 rounded-xl overflow-hidden border border-white/15 relative shadow-md shrink-0">
+                <div className="w-full h-32 sm:h-36 rounded-2xl overflow-hidden border border-white/15 relative shadow-lg shrink-0">
                   <img src="/initiatives_banner.jpg" alt="Leadership Tech" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-                  <div className="absolute bottom-2.5 left-3 flex items-center gap-2">
-                    <span className="px-2.5 py-0.5 rounded-lg bg-cyan-400 text-slate-950 text-[11px] font-black uppercase tracking-wider shadow-md flex items-center gap-1">
-                      <Sparkles size={12} /> Leadership Tech
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
+                  <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                    <span className="px-3 py-1 rounded-xl bg-cyan-400 text-slate-950 text-xs font-black uppercase tracking-wider shadow-md flex items-center gap-1.5">
+                      <Sparkles size={13} /> Leadership Tech
                     </span>
                   </div>
                 </div>
 
                 {/* Card Title Header */}
-                <div className="flex items-center gap-3 border-b border-white/10 pb-2.5 shrink-0">
-                  <div className="w-8 h-8 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
-                    <Rocket size={17} className="text-indigo-400" />
+                <div className="flex items-center gap-3.5 border-b border-white/10 pb-3 shrink-0">
+                  <div className="w-10 h-10 rounded-2xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center shrink-0">
+                    <Rocket size={20} className="text-indigo-400" />
                   </div>
                   <div>
-                    <h3 className="text-base sm:text-lg font-bold text-white m-0 leading-none">Ce que j'initie</h3>
-                    <span className="text-xs text-slate-400">Initiatives & Engagement</span>
+                    <h3 className="text-lg sm:text-xl font-extrabold text-white m-0 leading-none">Ce que j'initie</h3>
+                    <span className="text-xs sm:text-sm text-slate-400 mt-1 inline-block">Initiatives & Leadership</span>
                   </div>
                 </div>
 
-                {/* Single Column Vertical Checklist Stack (Filling full allocated space evenly) */}
-                <div className="flex flex-col justify-between space-y-2 sm:space-y-2.5 w-full flex-grow my-auto">
+                {/* Increased Height & Prominent Single-Column Initiative Rows */}
+                <div className="flex flex-col justify-between space-y-3 w-full flex-grow my-auto">
                   {initiatives.map((item) => (
                     <motion.div
                       key={item.text}
-                      whileHover={{ x: 3 }}
-                      className="flex items-center gap-3 px-3.5 py-2.5 sm:py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 text-xs sm:text-sm font-semibold w-full hover:bg-white/10 hover:border-cyan-400/40 transition-all shadow-sm"
+                      whileHover={{ x: 4, scale: 1.01 }}
+                      className="flex items-center gap-3.5 px-4 py-3.5 sm:py-4 rounded-2xl bg-white/5 border border-white/12 text-slate-100 text-sm sm:text-base font-extrabold w-full hover:bg-white/10 hover:border-cyan-400/40 transition-all shadow-md min-h-[52px] sm:min-h-[58px]"
                     >
-                      <span className="text-base shrink-0">{item.icon}</span>
-                      <span className="w-full font-semibold">{item.text}</span>
+                      <span className="text-lg sm:text-xl shrink-0">{item.icon}</span>
+                      <span className="w-full truncate">{item.text}</span>
                     </motion.div>
                   ))}
                 </div>
               </div>
 
-              {/* Bottom Ambition Box */}
-              <div className="pt-4 border-t border-white/10 space-y-1.5 shrink-0">
-                <span className="text-xs uppercase tracking-wider font-extrabold text-cyan-400 flex items-center gap-1.5">
-                  <Compass size={15} /> Mon Objectif Ultime
+              {/* Redesigned Bottom Ambition Highlight Box */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-cyan-950/80 via-slate-900/90 to-indigo-950/80 border border-cyan-400/40 shadow-xl space-y-2 shrink-0">
+                <span className="text-xs sm:text-sm uppercase tracking-widest font-black text-cyan-400 flex items-center gap-2">
+                  <Compass size={17} className="text-cyan-400 shrink-0" /> Mon Objectif Ultime
                 </span>
-                <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-semibold m-0">
+                <p className="text-xs sm:text-sm md:text-base text-slate-100 leading-relaxed font-bold m-0">
                   Passer de la création de produits numériques à la création d'écosystèmes technologiques ayant un impact durable.
                 </p>
               </div>
