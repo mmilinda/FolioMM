@@ -80,8 +80,8 @@ export default function ImpactSection() {
           className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-stretch"
         >
           {/* Left Column — Text */}
-          <div className="lg:col-span-7 flex flex-col justify-between space-y-5 text-left">
-            <div className="space-y-4">
+          <div className="lg:col-span-7 flex flex-col justify-between space-y-3.5 text-left">
+            <div className="space-y-3">
               <span className="section-eyebrow">
                 <Target size={14} className="inline-block mr-1.5 -mt-0.5 text-cyan-400" />
                 Vision & Philosophie
@@ -92,7 +92,7 @@ export default function ImpactSection() {
               </h2>
 
               {/* Glass Card Box */}
-              <div className="p-5 sm:p-6 rounded-2xl bg-slate-900/90 border border-cyan-400/35 backdrop-blur-xl space-y-3 shadow-xl relative overflow-hidden">
+              <div className="p-4 sm:p-5 rounded-2xl bg-slate-900/90 border border-cyan-400/35 backdrop-blur-xl space-y-2.5 shadow-xl relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-cyan-400 via-indigo-400 to-purple-500" />
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-xl bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center shrink-0">
@@ -107,21 +107,21 @@ export default function ImpactSection() {
                 </p>
               </div>
 
-              {/* Text Content */}
-              <div className="space-y-3.5 pt-1">
-                <p className="text-slate-300 text-xs sm:text-base leading-relaxed m-0">
+              {/* Text Content filling vertical space */}
+              <div className="space-y-3 pt-1">
+                <p className="text-slate-300 text-xs sm:text-base leading-relaxed sm:leading-loose m-0">
                   À travers mes projets, je m'intéresse particulièrement à des secteurs où la technologie peut avoir un impact tangible : 
                   <strong className="text-cyan-400 font-semibold"> agriculture, sécurité, services, identité numérique et inclusion</strong>.
                 </p>
 
-                <p className="text-slate-300 text-xs sm:text-base leading-relaxed m-0">
+                <p className="text-slate-300 text-xs sm:text-base leading-relaxed sm:leading-loose m-0">
                   Mon ambition est de transformer mes compétences techniques en projets capables de créer des opportunités, améliorer l'accès à l'information et contribuer au développement numérique en Afrique.
                 </p>
               </div>
             </div>
 
-            {/* Quote Block */}
-            <div className="p-4 sm:p-5 rounded-xl bg-cyan-950/60 border border-cyan-400/30 text-xs sm:text-sm md:text-base text-cyan-100 font-medium leading-relaxed italic shadow-lg mt-2">
+            {/* Quote Block — Tight vertical gap taking full space cleanly */}
+            <div className="p-4 sm:p-5 rounded-xl bg-cyan-950/60 border border-cyan-400/30 text-xs sm:text-sm md:text-base text-cyan-100 font-medium leading-relaxed italic shadow-lg mt-1">
               "Je ne me limite pas à construire des applications. Je me consacre à édifier des solutions utiles, accessibles et capables de grandir durablement."
             </div>
           </div>
@@ -134,21 +134,21 @@ export default function ImpactSection() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="p-5 sm:p-6 rounded-2xl md:rounded-3xl bg-slate-900/95 border border-indigo-500/30 backdrop-blur-2xl shadow-xl flex flex-col justify-between space-y-4 text-left w-full h-full relative overflow-hidden"
             >
-              <div className="space-y-4 flex-grow flex flex-col justify-between">
+              <div className="space-y-3.5 flex-grow flex flex-col justify-between">
                 
-                {/* Top Illustrative Banner */}
-                <div className="w-full h-24 sm:h-28 rounded-xl overflow-hidden border border-white/15 relative shadow-md shrink-0">
+                {/* Taller Illustrative Banner Image (h-36 sm:h-44 md:h-48) */}
+                <div className="w-full h-36 sm:h-44 md:h-48 rounded-xl overflow-hidden border border-white/15 relative shadow-md shrink-0">
                   <img src="/initiatives_banner.jpg" alt="Leadership Tech" className="w-full h-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent" />
-                  <div className="absolute bottom-2 left-2.5 flex items-center gap-1.5">
-                    <span className="px-2.5 py-0.5 rounded-lg bg-cyan-400 text-slate-950 text-[11px] font-black uppercase tracking-wider shadow-md flex items-center gap-1">
-                      <Sparkles size={11} /> Leadership Tech
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                  <div className="absolute bottom-2.5 left-3 flex items-center gap-1.5">
+                    <span className="px-2.5 py-0.5 rounded-lg bg-cyan-400 text-slate-950 text-xs font-black uppercase tracking-wider shadow-md flex items-center gap-1">
+                      <Sparkles size={12} /> Leadership Tech
                     </span>
                   </div>
                 </div>
 
                 {/* Card Title Header */}
-                <div className="flex items-center gap-2.5 border-b border-white/10 pb-2.5 shrink-0">
+                <div className="flex items-center gap-2.5 border-b border-white/10 pb-2 shrink-0">
                   <div className="w-8 h-8 rounded-xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center shrink-0">
                     <Rocket size={17} className="text-indigo-400" />
                   </div>
@@ -164,7 +164,7 @@ export default function ImpactSection() {
                     <motion.div
                       key={item.text}
                       whileHover={{ x: 3 }}
-                      className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 text-xs sm:text-sm font-semibold w-full hover:bg-white/10 hover:border-cyan-400/40 transition-all shadow-sm min-h-[42px] sm:min-h-[46px]"
+                      className="flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 text-xs sm:text-sm font-semibold w-full hover:bg-white/10 hover:border-cyan-400/40 transition-all shadow-sm min-h-[40px] sm:min-h-[44px]"
                     >
                       <span className="text-base shrink-0">{item.icon}</span>
                       <span className="w-full truncate">{item.text}</span>
