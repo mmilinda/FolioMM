@@ -80,7 +80,7 @@ export default function ImpactSection() {
           className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-6 items-stretch"
         >
           {/* Left Column — Text */}
-          <div className="lg:col-span-7 flex flex-col justify-between space-y-3 text-left">
+          <div className="lg:col-span-8 flex flex-col justify-between space-y-3 text-left">
             <div className="space-y-2.5">
               <span className="section-eyebrow py-0.5 text-[11px] sm:text-xs">
                 <Target size={13} className="inline-block mr-1 -mt-0.5 text-cyan-400" />
@@ -126,8 +126,8 @@ export default function ImpactSection() {
             </div>
           </div>
 
-          {/* Right Column — Initiatives & Leadership (Viewport Compact Height) */}
-          <div className="lg:col-span-5 flex">
+          {/* Right Column — Initiatives & Leadership (Reduced Width lg:col-span-4) */}
+          <div className="lg:col-span-4 flex">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={inView ? { opacity: 1, scale: 1 } : {}}
