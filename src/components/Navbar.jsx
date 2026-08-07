@@ -28,12 +28,13 @@ export default function Navbar() {
   };
 
   const currentLang = i18n.language || "fr";
+  const isFr = currentLang.toLowerCase().startsWith("fr");
 
   const links = [
-    { name: currentLang === "fr" ? "Accueil" : "Home", path: "/" },
-    { name: currentLang === "fr" ? "Projets" : "Projects", path: "/projects" },
-    { name: currentLang === "fr" ? "Blog" : "Blog", path: "/blog" },
-    { name: currentLang === "fr" ? "Contact" : "Contact", path: "/contact" },
+    { name: isFr ? "Accueil" : "Home", path: "/" },
+    { name: isFr ? "Projets" : "Projects", path: "/projects" },
+    { name: isFr ? "Blog" : "Blog", path: "/blog" },
+    { name: isFr ? "Contact" : "Contact", path: "/contact" },
   ];
 
   return (
@@ -73,11 +74,13 @@ export default function Navbar() {
           {/* Language Switcher Button */}
           <button
             onClick={toggleLanguage}
-            title={currentLang === "fr" ? "Switch to English" : "Passer en Français"}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 text-cyan-400 hover:bg-cyan-400/20 text-xs font-semibold transition cursor-pointer"
+            title={isFr ? "Switch to English" : "Passer en Français"}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-cyan-400/30 bg-cyan-400/10 text-xs font-semibold transition cursor-pointer hover:bg-cyan-400/20"
           >
-            <Globe size={14} className="transition-transform duration-300 hover:rotate-45" />
-            <span>{currentLang === "fr" ? "FR 🇫🇷" : "EN 🇬🇧"}</span>
+            <Globe size={14} className="text-cyan-400 shrink-0" />
+            <span className={isFr ? "text-cyan-400 font-bold" : "text-slate-400"}>FR</span>
+            <span className="text-cyan-400/40 font-light">|</span>
+            <span className={!isFr ? "text-cyan-400 font-bold" : "text-slate-400"}>EN</span>
           </button>
 
           {/* Dark / Light Mode Toggle Button */}
@@ -99,10 +102,12 @@ export default function Navbar() {
           {/* Language button mobile */}
           <button
             onClick={toggleLanguage}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-cyan-400/30 text-cyan-400 text-xs font-medium"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-cyan-400/30 bg-cyan-400/10 text-xs font-semibold"
           >
-            <Globe size={13} />
-            <span>{currentLang === "fr" ? "FR" : "EN"}</span>
+            <Globe size={13} className="text-cyan-400" />
+            <span className={isFr ? "text-cyan-400 font-bold" : "text-slate-400"}>FR</span>
+            <span className="text-cyan-400/40 font-light">|</span>
+            <span className={!isFr ? "text-cyan-400 font-bold" : "text-slate-400"}>EN</span>
           </button>
 
           {/* Theme button mobile */}
