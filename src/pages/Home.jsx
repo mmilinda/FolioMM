@@ -3,6 +3,7 @@ import About from "../components/About";
 import Stats from "../components/Stats";
 import Services from "../components/Services";
 import HomeProjects from "../components/HomeProjects";
+import ImpactSection from "../components/ImpactSection";
 import SEO from "../components/SEO";
 import Timeline from "../components/Timeline";
 import AnimatedSection from "../components/AnimatedSection";
@@ -23,6 +24,9 @@ export default function Home() {
       </AnimatedSection>
       <AnimatedSection>
         <HomeProjects />
+      </AnimatedSection>
+      <AnimatedSection>
+        <ImpactSection />
       </AnimatedSection>
       <Timeline />
       <Booking />
