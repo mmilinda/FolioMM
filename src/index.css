@@ -1594,37 +1594,37 @@ body {
     display: none !important;
   }
 
-  /* 2. STATS COUNTER BAR: ALL 4 CARDS ON 1 SINGLE HORIZONTAL LINE! */
+  /* 2. STATS COUNTER BAR: 2 CARDS PER ROW ON MOBILE WITH LARGER TEXT */
   .stats-section {
-    padding: 0.5rem 0 !important;
+    padding: 0.75rem 0 !important;
   }
 
   .stats-grid {
     display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important;
-    gap: 3px !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
   }
 
   .stat-card {
-    padding: 0.35rem 0.15rem !important;
-    border-radius: 6px !important;
+    padding: 0.85rem 0.75rem !important;
+    border-radius: 12px !important;
     text-align: center !important;
   }
 
   .stat-value {
-    font-size: 0.95rem !important;
+    font-size: 1.5rem !important;
     font-weight: 800 !important;
   }
 
   .stat-label {
-    font-size: 0.52rem !important;
-    line-height: 1.05 !important;
-    margin-top: 1px !important;
+    font-size: 0.75rem !important;
+    line-height: 1.25 !important;
+    margin-top: 3px !important;
   }
 
   .stat-bar {
-    height: 2px !important;
-    margin-top: 2px !important;
+    height: 3px !important;
+    margin-top: 6px !important;
   }
 
   /* 3. SECTION À PROPOS (About): Centered CV button & smaller text */
