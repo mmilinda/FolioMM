@@ -1837,16 +1837,17 @@ body {
     font-size: 0.7rem !important;
   }
 
-  /* 8. FOOTER PERFECTLY ALIGNED 3 COLUMNS SIDE-BY-SIDE ON MOBILE */
+  /* 8. FOOTER PERFECTLY ALIGNED & EQUALLY SPACED 3 COLUMNS ON MOBILE */
   .footer-section {
     padding: 0.5rem 0 0.25rem !important;
     margin-top: 2rem !important;
   }
 
   .footer-grid {
-    gap: 0.5rem !important;
-    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 0.25rem !important;
+    grid-template-columns: 1.1fr 0.85fr 1.05fr !important;
     align-items: start !important;
+    justify-content: space-between !important;
     padding-top: 0.5rem !important;
     padding-bottom: 0.5rem !important;
   }

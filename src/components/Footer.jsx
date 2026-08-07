@@ -23,7 +23,7 @@ export default function Footer() {
         </div>
 
         {/* Column 2 — Navigation */}
-        <div className="footer-nav flex flex-col items-start justify-start w-full">
+        <div className="footer-nav flex flex-col items-start justify-start w-full pl-1 sm:pl-0">
           <div className="min-h-[24px] sm:min-h-[32px] flex items-center">
             <h3 className="font-bold text-xs sm:text-base text-white m-0 leading-none">
               Navigation
