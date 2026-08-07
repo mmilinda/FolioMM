@@ -5,7 +5,7 @@ const statsData = [
   { value: 10, suffix: "+", label: "Projets livrés", color: "#38bdf8" },
   { value: 3, suffix: "+", label: "Années d'expérience", color: "#818cf8" },
   { value: 15, suffix: "+", label: "Technologies maîtrisées", color: "#34d399" },
-  { value: 100, suffix: "%", label: "Clients satisfaits", color: "#f472b6" },
+  { value: 100, suffix: "%", label: "Engagement", color: "#f472b6" },
 ];
 
 function AnimatedCounter({ target, suffix, inView }) {
