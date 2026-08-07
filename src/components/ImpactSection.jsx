@@ -91,18 +91,17 @@ export default function ImpactSection() {
                 Pourquoi je <span className="gradient-text">construis</span>
               </h2>
 
-              {/* Glass Card Box */}
-              <div className="p-3.5 sm:p-4 rounded-xl bg-slate-900/90 border border-cyan-400/35 backdrop-blur-xl space-y-2 shadow-lg relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-cyan-400 via-indigo-400 to-purple-500" />
-                <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-lg bg-cyan-400/10 border border-cyan-400/30 flex items-center justify-center shrink-0">
-                    <Lightbulb size={16} className="text-cyan-400" />
+              {/* High Visibility Glass Card Box */}
+              <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-slate-900/95 to-cyan-950/40 border-2 border-cyan-400/50 backdrop-blur-xl space-y-2.5 shadow-2xl relative overflow-hidden">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-cyan-400/20 border border-cyan-400/50 flex items-center justify-center shrink-0 shadow-md">
+                    <Lightbulb size={20} className="text-cyan-300" />
                   </div>
-                  <h3 className="text-base sm:text-lg font-bold text-white m-0">
+                  <h3 className="text-base sm:text-xl font-extrabold text-white m-0 tracking-wide">
                     Technologie avec un objectif
                   </h3>
                 </div>
-                <p className="text-slate-100 text-xs sm:text-sm leading-relaxed m-0 font-medium pl-1">
+                <p className="text-slate-100 text-sm sm:text-base leading-relaxed m-0 font-semibold">
                   Je conçois des solutions numériques pour répondre à des problèmes concrets dans mon environnement.
                 </p>
               </div>
