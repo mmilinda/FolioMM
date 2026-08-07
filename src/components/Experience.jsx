@@ -6,7 +6,7 @@ const translations = {
     subtitle: 'Mon Parcours Professionnel',
     experiences: [
       {
-        role: 'Développeuse Full Stack Junior',
+        role: 'Développeuse Full Stack',
         company: 'Freelance / Indépendante',
         period: '2023 – Présent',
         desc: "Conception et développement d'applications web complètes pour divers clients. Spécialisation dans les solutions React, Node.js et les intégrations d'API.",
@@ -26,7 +26,7 @@ const translations = {
     subtitle: 'My Professional Journey',
     experiences: [
       {
-        role: 'Junior Full Stack Developer',
+        role: 'Full Stack Developer',
         company: 'Freelance / Independent',
         period: '2022 – Present',
         desc: "Design and development of complete web applications for various clients. Specialization in React, Node.js solutions and API integrations.",

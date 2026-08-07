@@ -4,7 +4,7 @@ import { useRef } from "react";
 const experiences = [
   {
     year: "2026",
-    role: "Junior Full Stack & DevOps Engineer",
+    role: "Full Stack & DevOps Engineer",
     company: "Freelance",
     type: "Actuel",
     color: "#38bdf8",

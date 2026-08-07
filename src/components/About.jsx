@@ -24,7 +24,7 @@ export default function About() {
         >
           <span className="section-eyebrow">À propos</span>
           <h2 className="section-title">
-            Développeuse junior qui
+            Développeuse qui
             <span className="gradient-text"> pense systèmes</span>,
             <br />pas juste fonctionnalités.
           </h2>
@@ -86,7 +86,7 @@ export default function About() {
             </div>
             <pre className="about-code-body">
 {`const milinda = {
-  role: "Junior DevOps & Full Stack",
+  role: "DevOps & Full Stack Engineer",
   location: "Sénégal 🇸🇳",
   
   stack: {
