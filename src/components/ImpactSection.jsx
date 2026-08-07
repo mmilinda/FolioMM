@@ -2,13 +2,19 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Target, Rocket, Lightbulb, Compass, Sprout, Shield, Fingerprint, Car, Building2, Layers, Sparkles, ArrowUpRight } from "lucide-react";
 
+import agriImg from "../assets/impact/agri.jpg";
+import secImg from "../assets/impact/sec.jpg";
+import identityImg from "../assets/impact/identity.jpg";
+import mobilityImg from "../assets/impact/mobility.jpg";
+import enterpriseImg from "../assets/impact/enterprise.jpg";
+
 const impactDomains = [
   {
     domain: "Agriculture",
     icon: Sprout,
     project: "AgriChain AI",
     problem: "Accès à l'information agricole & traçabilité.",
-    image: "/impact_agri.jpg",
+    image: agriImg,
     color: "#34d399",
     glow: "rgba(52, 211, 153, 0.2)",
     border: "border-emerald-500/40",
@@ -18,7 +24,7 @@ const impactDomains = [
     icon: Shield,
     project: "SecurityApp",
     problem: "Gestion opérationnelle & supervision temps réel.",
-    image: "/impact_sec.jpg",
+    image: secImg,
     color: "#818cf8",
     glow: "rgba(129, 140, 248, 0.2)",
     border: "border-indigo-500/40",
@@ -28,7 +34,7 @@ const impactDomains = [
     icon: Fingerprint,
     project: "AfriAccess",
     problem: "Identification numérique sécurisée & rapide.",
-    image: "/impact_identity.jpg",
+    image: identityImg,
     color: "#38bdf8",
     glow: "rgba(56, 189, 248, 0.2)",
     border: "border-cyan-500/40",
@@ -38,7 +44,7 @@ const impactDomains = [
     icon: Car,
     project: "Garabi",
     problem: "Assistance automobile de proximité digitalisée.",
-    image: "/impact_mobility.jpg",
+    image: mobilityImg,
     color: "#f472b6",
     glow: "rgba(244, 114, 182, 0.2)",
     border: "border-pink-500/40",
@@ -48,7 +54,7 @@ const impactDomains = [
     icon: Building2,
     project: "Noregis",
     problem: "Digitalisation des processus & automatisation.",
-    image: "/impact_enterprise.jpg",
+    image: enterpriseImg,
     color: "#fb923c",
     glow: "rgba(251, 146, 60, 0.2)",
     border: "border-orange-500/40",
@@ -191,7 +197,7 @@ export default function ImpactSection() {
         </motion.div>
 
 
-        {/* ─── Part 2: Impact Tangible (With Illustrative Images) ─────────────── */}
+        {/* ─── Part 2: Impact Tangible (With Direct Imported Images) ─────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -211,7 +217,7 @@ export default function ImpactSection() {
             </p>
           </div>
 
-          {/* 5 Ultra Pretty Modern Impact Cards with Illustrative Images */}
+          {/* 5 Ultra Pretty Modern Impact Cards with Direct Imported Images */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {impactDomains.map((item) => {
               const Icon = item.icon;
