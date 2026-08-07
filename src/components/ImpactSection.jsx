@@ -65,12 +65,12 @@ export default function ImpactSection() {
   const inView = useInView(ref, { once: true, margin: "-40px" });
 
   return (
-    <section ref={ref} className="py-5 md:py-10 relative overflow-hidden">
+    <section ref={ref} className="py-8 md:py-16 pt-10 md:pt-20 relative overflow-hidden">
       {/* Background Ambient Glow Orbs */}
       <div className="absolute top-1/4 left-10 w-80 h-80 bg-cyan-500/10 blur-[100px] rounded-full pointer-events-none" />
       <div className="absolute bottom-1/4 right-10 w-80 h-80 bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none" />
 
-      <div className="container-custom relative z-10 space-y-6 md:space-y-10">
+      <div className="container-custom relative z-10 space-y-10 md:space-y-16">
 
         {/* ─── Part 1: Vision & Philosophie (50/50 Screen Fit) ──────────── */}
         <motion.div
@@ -192,7 +192,7 @@ export default function ImpactSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="space-y-4"
+          className="space-y-6 sm:space-y-8 pt-8 md:pt-14 border-t border-white/10"
         >
           <div className="text-center space-y-1.5">
             <span className="section-eyebrow py-0.5 text-xs">
