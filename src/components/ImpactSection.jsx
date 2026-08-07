@@ -8,6 +8,7 @@ const impactDomains = [
     icon: Sprout,
     project: "AgriChain AI",
     problem: "Accès à l'information agricole & traçabilité.",
+    image: "/impact_agri.jpg",
     color: "#34d399",
     glow: "rgba(52, 211, 153, 0.2)",
     border: "border-emerald-500/40",
@@ -17,6 +18,7 @@ const impactDomains = [
     icon: Shield,
     project: "SecurityApp",
     problem: "Gestion opérationnelle & supervision temps réel.",
+    image: "/impact_sec.jpg",
     color: "#818cf8",
     glow: "rgba(129, 140, 248, 0.2)",
     border: "border-indigo-500/40",
@@ -26,6 +28,7 @@ const impactDomains = [
     icon: Fingerprint,
     project: "AfriAccess",
     problem: "Identification numérique sécurisée & rapide.",
+    image: "/impact_identity.jpg",
     color: "#38bdf8",
     glow: "rgba(56, 189, 248, 0.2)",
     border: "border-cyan-500/40",
@@ -35,6 +38,7 @@ const impactDomains = [
     icon: Car,
     project: "Garabi",
     problem: "Assistance automobile de proximité digitalisée.",
+    image: "/impact_mobility.jpg",
     color: "#f472b6",
     glow: "rgba(244, 114, 182, 0.2)",
     border: "border-pink-500/40",
@@ -44,6 +48,7 @@ const impactDomains = [
     icon: Building2,
     project: "Noregis",
     problem: "Digitalisation des processus & automatisation.",
+    image: "/impact_enterprise.jpg",
     color: "#fb923c",
     glow: "rgba(251, 146, 60, 0.2)",
     border: "border-orange-500/40",
@@ -186,7 +191,7 @@ export default function ImpactSection() {
         </motion.div>
 
 
-        {/* ─── Part 2: Impact Tangible (Ultra Pretty Glass Cards Grid) ────────── */}
+        {/* ─── Part 2: Impact Tangible (With Illustrative Images) ─────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -206,7 +211,7 @@ export default function ImpactSection() {
             </p>
           </div>
 
-          {/* 5 Ultra Pretty Modern Impact Cards */}
+          {/* 5 Ultra Pretty Modern Impact Cards with Illustrative Images */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {impactDomains.map((item) => {
               const Icon = item.icon;
@@ -215,35 +220,37 @@ export default function ImpactSection() {
                   key={item.domain}
                   whileHover={{ y: -6, scale: 1.02 }}
                   transition={{ duration: 0.25 }}
-                  className="p-4 sm:p-5 rounded-2xl bg-slate-900/90 border border-white/15 backdrop-blur-xl shadow-xl hover:shadow-2xl hover:border-cyan-400/50 transition-all duration-300 relative overflow-hidden flex flex-col justify-between space-y-3.5 text-left group min-h-[160px] sm:min-h-[185px] h-full"
+                  className="p-3.5 sm:p-4 rounded-2xl bg-slate-900/90 border border-white/15 backdrop-blur-xl shadow-xl hover:shadow-2xl hover:border-cyan-400/50 transition-all duration-300 relative overflow-hidden flex flex-col justify-between space-y-3 text-left group min-h-[220px] sm:min-h-[250px] h-full"
                   style={{ background: `linear-gradient(155deg, ${item.glow} 0%, rgba(15, 23, 42, 0.98) 100%)` }}
                 >
                   {/* Glowing Top Colored Bar */}
                   <div className="absolute top-0 left-0 right-0 h-1 w-full rounded-t-2xl" style={{ background: item.color }} />
 
-                  <div className="space-y-2.5 pt-1">
-                    {/* Domain Pill Badge */}
-                    <div className="flex items-center justify-between">
-                      <span
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase border shadow-md"
-                        style={{ borderColor: item.color + "55", color: item.color, background: item.glow }}
-                      >
-                        <Icon size={13} />
-                        {item.domain}
-                      </span>
-                    </div>
+                  {/* Top Image Thumbnail Header */}
+                  <div className="w-full h-24 sm:h-28 rounded-xl overflow-hidden border border-white/10 relative shadow-sm shrink-0 mt-1">
+                    <img src={item.image} alt={item.project} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
+                    <span
+                      className="absolute bottom-2 left-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider border shadow-md"
+                      style={{ borderColor: item.color + "55", color: item.color, background: "rgba(15, 23, 42, 0.85)" }}
+                    >
+                      <Icon size={11} />
+                      {item.domain}
+                    </span>
+                  </div>
 
+                  <div className="space-y-1 flex-grow flex flex-col justify-between">
                     {/* Project Title with Arrow */}
                     <h3 className="text-sm sm:text-base font-black text-white m-0 tracking-wide flex items-center justify-between group-hover:text-cyan-300 transition-colors">
                       <span>{item.project}</span>
-                      <ArrowUpRight size={15} className="text-slate-400 group-hover:text-cyan-400 transition-colors" />
+                      <ArrowUpRight size={14} className="text-slate-400 group-hover:text-cyan-400 transition-colors shrink-0" />
                     </h3>
-                  </div>
 
-                  {/* Problem Statement */}
-                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed m-0 font-medium pt-1">
-                    {item.problem}
-                  </p>
+                    {/* Problem Statement */}
+                    <p className="text-xs text-slate-200 leading-relaxed m-0 font-medium pt-1">
+                      {item.problem}
+                    </p>
+                  </div>
                 </motion.div>
               );
             })}
