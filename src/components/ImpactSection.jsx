@@ -226,7 +226,7 @@ export default function ImpactSection() {
                   key={item.domain}
                   whileHover={{ y: -6, scale: 1.02 }}
                   transition={{ duration: 0.25 }}
-                  className="p-3.5 sm:p-4 rounded-2xl bg-slate-900/90 border border-white/15 backdrop-blur-xl shadow-xl hover:shadow-2xl hover:border-cyan-400/50 transition-all duration-300 relative overflow-hidden flex flex-col justify-between space-y-3 text-left group min-h-[220px] sm:min-h-[250px] h-full"
+                  className="p-3.5 sm:p-4 rounded-2xl bg-slate-900/90 border border-white/15 backdrop-blur-xl shadow-xl hover:shadow-2xl hover:border-cyan-400/50 transition-all duration-300 relative overflow-hidden flex flex-col justify-start space-y-2.5 text-left group h-full"
                   style={{ background: `linear-gradient(155deg, ${item.glow} 0%, rgba(15, 23, 42, 0.98) 100%)` }}
                 >
                   {/* Glowing Top Colored Bar */}
@@ -245,15 +245,16 @@ export default function ImpactSection() {
                     </span>
                   </div>
 
-                  <div className="space-y-1 flex-grow flex flex-col justify-between">
+                  {/* Title and Description stacked tightly without empty gap */}
+                  <div className="space-y-1">
                     {/* Project Title with Arrow */}
                     <h3 className="text-sm sm:text-base font-black text-white m-0 tracking-wide flex items-center justify-between group-hover:text-cyan-300 transition-colors">
                       <span>{item.project}</span>
                       <ArrowUpRight size={14} className="text-slate-400 group-hover:text-cyan-400 transition-colors shrink-0" />
                     </h3>
 
-                    {/* Problem Statement */}
-                    <p className="text-xs text-slate-200 leading-relaxed m-0 font-medium pt-1">
+                    {/* Problem Statement directly under title */}
+                    <p className="text-xs text-slate-200 leading-snug m-0 font-medium">
                       {item.problem}
                     </p>
                   </div>
