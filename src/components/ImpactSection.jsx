@@ -1,6 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Target, Rocket, Lightbulb, Compass, Sprout, Shield, Fingerprint, Car, Building2, Layers, Sparkles } from "lucide-react";
+import { Target, Rocket, Lightbulb, Compass, Sprout, Shield, Fingerprint, Car, Building2, Layers, Sparkles, ArrowUpRight } from "lucide-react";
 
 const impactDomains = [
   {
@@ -9,7 +9,7 @@ const impactDomains = [
     project: "AgriChain AI",
     problem: "Accès à l'information agricole & traçabilité.",
     color: "#34d399",
-    glow: "rgba(52, 211, 153, 0.15)",
+    glow: "rgba(52, 211, 153, 0.2)",
     border: "border-emerald-500/40",
   },
   {
@@ -18,7 +18,7 @@ const impactDomains = [
     project: "SecurityApp",
     problem: "Gestion opérationnelle & supervision temps réel.",
     color: "#818cf8",
-    glow: "rgba(129, 140, 248, 0.15)",
+    glow: "rgba(129, 140, 248, 0.2)",
     border: "border-indigo-500/40",
   },
   {
@@ -27,7 +27,7 @@ const impactDomains = [
     project: "AfriAccess",
     problem: "Identification numérique sécurisée & rapide.",
     color: "#38bdf8",
-    glow: "rgba(56, 189, 248, 0.15)",
+    glow: "rgba(56, 189, 248, 0.2)",
     border: "border-cyan-500/40",
   },
   {
@@ -36,7 +36,7 @@ const impactDomains = [
     project: "Garabi",
     problem: "Assistance automobile de proximité digitalisée.",
     color: "#f472b6",
-    glow: "rgba(244, 114, 182, 0.15)",
+    glow: "rgba(244, 114, 182, 0.2)",
     border: "border-pink-500/40",
   },
   {
@@ -45,7 +45,7 @@ const impactDomains = [
     project: "Noregis",
     problem: "Digitalisation des processus & automatisation.",
     color: "#fb923c",
-    glow: "rgba(251, 146, 60, 0.15)",
+    glow: "rgba(251, 146, 60, 0.2)",
     border: "border-orange-500/40",
   },
 ];
@@ -65,14 +65,14 @@ export default function ImpactSection() {
   const inView = useInView(ref, { once: true, margin: "-40px" });
 
   return (
-    <section ref={ref} className="py-8 md:py-16 pt-10 md:pt-20 relative overflow-hidden">
+    <section ref={ref} className="py-10 md:py-20 relative overflow-hidden">
       {/* Background Ambient Glow Orbs */}
-      <div className="absolute top-1/4 left-10 w-80 h-80 bg-cyan-500/10 blur-[100px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-1/4 right-10 w-80 h-80 bg-indigo-500/10 blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/4 left-10 w-96 h-96 bg-cyan-500/10 blur-[140px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-1/4 right-10 w-96 h-96 bg-indigo-500/10 blur-[140px] rounded-full pointer-events-none" />
 
-      <div className="container-custom relative z-10 space-y-10 md:space-y-16">
+      <div className="container-custom relative z-10 space-y-12 md:space-y-18">
 
-        {/* ─── Part 1: Vision & Philosophie (50/50 Screen Fit) ──────────── */}
+        {/* ─── Part 1: Vision & Philosophie (50/50 Balanced Height) ──────────── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -83,7 +83,7 @@ export default function ImpactSection() {
           <div className="lg:col-span-6 flex flex-col justify-between space-y-3.5 text-left">
             <div className="space-y-3">
               <span className="section-eyebrow py-0.5 text-xs">
-                <Target size={13} className="inline-block mr-1 -mt-0.5 text-cyan-400" />
+                <Target size={14} className="inline-block mr-1.5 -mt-0.5 text-cyan-400" />
                 Vision & Philosophie
               </span>
 
@@ -120,7 +120,7 @@ export default function ImpactSection() {
             </div>
 
             {/* Quote Block */}
-            <div className="p-3.5 sm:p-4 rounded-xl bg-cyan-950/60 border border-cyan-400/30 text-xs sm:text-sm text-cyan-100 font-medium leading-relaxed italic shadow-md mt-1">
+            <div className="p-3.5 sm:p-4 rounded-xl bg-cyan-950/60 border border-cyan-400/30 text-xs sm:text-base text-cyan-100 font-medium leading-relaxed italic shadow-md mt-1">
               "Je ne me limite pas à construire des applications. Je me consacre à édifier des solutions utiles, accessibles et capables de grandir durablement."
             </div>
           </div>
@@ -131,7 +131,7 @@ export default function ImpactSection() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={inView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.6, delay: 0.15 }}
-              className="p-4 sm:p-5 rounded-2xl bg-slate-900/95 border border-indigo-500/30 backdrop-blur-2xl shadow-xl flex flex-col justify-between space-y-3.5 text-left w-full h-full relative overflow-hidden"
+              className="p-4 sm:p-5 rounded-2xl bg-slate-900/95 border border-indigo-500/30 backdrop-blur-2xl shadow-xl flex flex-col justify-between space-y-4 text-left w-full h-full relative overflow-hidden"
             >
               <div className="space-y-3 flex-grow flex flex-col justify-between">
                 
@@ -151,7 +151,7 @@ export default function ImpactSection() {
                   </span>
                 </div>
 
-                {/* 2. Taller Illustrative Banner Image below title (h-32 sm:h-36) */}
+                {/* 2. Taller Illustrative Banner Image below title */}
                 <div className="w-full h-32 sm:h-36 rounded-xl overflow-hidden border border-white/15 relative shadow-md shrink-0">
                   <img src="/initiatives_banner.jpg" alt="Leadership Tech" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
@@ -186,52 +186,62 @@ export default function ImpactSection() {
         </motion.div>
 
 
-        {/* ─── Part 2: Impact Tangible ────────────────────────────────────────── */}
+        {/* ─── Part 2: Impact Tangible (Ultra Pretty Glass Cards Grid) ────────── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2 }}
           className="space-y-6 sm:space-y-8 pt-8 md:pt-14 border-t border-white/10"
         >
-          <div className="text-center space-y-1.5">
+          <div className="text-center space-y-2">
             <span className="section-eyebrow py-0.5 text-xs">
-              <Layers size={13} className="inline-block mr-1 -mt-0.5 text-cyan-400" />
+              <Layers size={13} className="inline-block mr-1.5 -mt-0.5 text-cyan-400" />
               Impact Tangible
             </span>
-            <h2 className="section-title text-lg sm:text-2xl md:text-3xl font-extrabold m-0">
+            <h2 className="section-title text-xl sm:text-3xl md:text-4xl font-extrabold m-0">
               Des solutions pensées pour <span className="gradient-text">des problèmes réels</span>
             </h2>
+            <p className="text-slate-400 text-xs sm:text-base max-w-xl mx-auto m-0 leading-relaxed">
+              Chaque projet répond à un défi concret identifié sur le terrain.
+            </p>
           </div>
 
-          {/* 5 Balanced Impact Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+          {/* 5 Ultra Pretty Modern Impact Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {impactDomains.map((item) => {
               const Icon = item.icon;
               return (
                 <motion.div
                   key={item.domain}
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.2 }}
-                  className={`p-3 rounded-xl border ${item.border} bg-slate-900/90 backdrop-blur-md flex flex-col justify-between space-y-2 text-left shadow-md hover:shadow-lg transition-all min-h-[130px] h-full`}
-                  style={{ background: `linear-gradient(145deg, ${item.glow} 0%, rgba(15, 23, 42, 0.95) 100%)` }}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  transition={{ duration: 0.25 }}
+                  className="p-4 sm:p-5 rounded-2xl bg-slate-900/90 border border-white/15 backdrop-blur-xl shadow-xl hover:shadow-2xl hover:border-cyan-400/50 transition-all duration-300 relative overflow-hidden flex flex-col justify-between space-y-3.5 text-left group min-h-[160px] sm:min-h-[185px] h-full"
+                  style={{ background: `linear-gradient(155deg, ${item.glow} 0%, rgba(15, 23, 42, 0.98) 100%)` }}
                 >
-                  <div className="flex flex-col space-y-1">
-                    <div className="flex items-center justify-between gap-1">
+                  {/* Glowing Top Colored Bar */}
+                  <div className="absolute top-0 left-0 right-0 h-1 w-full rounded-t-2xl" style={{ background: item.color }} />
+
+                  <div className="space-y-2.5 pt-1">
+                    {/* Domain Pill Badge */}
+                    <div className="flex items-center justify-between">
                       <span
-                        className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold border"
-                        style={{ borderColor: item.color + "44", color: item.color, background: item.glow }}
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black tracking-wider uppercase border shadow-md"
+                        style={{ borderColor: item.color + "55", color: item.color, background: item.glow }}
                       >
-                        <Icon size={12} />
+                        <Icon size={13} />
                         {item.domain}
                       </span>
                     </div>
 
-                    <h3 className="text-xs sm:text-sm font-extrabold text-white m-0 tracking-wide pt-0.5">
-                      {item.project}
+                    {/* Project Title with Arrow */}
+                    <h3 className="text-sm sm:text-base font-black text-white m-0 tracking-wide flex items-center justify-between group-hover:text-cyan-300 transition-colors">
+                      <span>{item.project}</span>
+                      <ArrowUpRight size={15} className="text-slate-400 group-hover:text-cyan-400 transition-colors" />
                     </h3>
                   </div>
 
-                  <p className="text-[11px] text-slate-300 leading-tight m-0 font-medium">
+                  {/* Problem Statement */}
+                  <p className="text-xs sm:text-sm text-slate-200 leading-relaxed m-0 font-medium pt-1">
                     {item.problem}
                   </p>
                 </motion.div>
