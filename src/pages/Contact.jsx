@@ -45,8 +45,8 @@ const INFO_CARDS = [
 
 /* ─── Social links ───────────────────────────────────────────────────────── */
 const SOCIALS = [
-  { icon: FaGithub, label: "GitHub", href: "https://github.com/milindamendy" },
-  { icon: FaLinkedinIn, label: "LinkedIn", href: "https://linkedin.com/in/milindamendy" },
+  { icon: FaGithub, label: "GitHub", href: "https://github.com/mmilinda" },
+  { icon: FaLinkedinIn, label: "LinkedIn", href: "https://www.linkedin.com/in/milinda-mendy-5ba17928a/" },
 ];
 
 export default function Contact() {

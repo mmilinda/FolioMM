@@ -196,7 +196,7 @@ mt-5
 </a>
 
 
-<a href="https://linkedin.com/in/milinda-mendy-5ba17928a">
+<a href="https://www.linkedin.com/in/milinda-mendy-5ba17928a/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
 
 <FaLinkedin size={24} />
 

@@ -57,8 +57,8 @@ function TypewriterText({ words }) {
 }
 
 const socialLinks = [
-  { icon: FaGithub, href: "https://github.com/milindamendy", label: "GitHub" },
-  { icon: FaLinkedinIn, href: "https://linkedin.com/in/milindamendy", label: "LinkedIn" },
+  { icon: FaGithub, href: "https://github.com/mmilinda", label: "GitHub" },
+  { icon: FaLinkedinIn, href: "https://www.linkedin.com/in/milinda-mendy-5ba17928a/", label: "LinkedIn" },
   { icon: Mail, href: "mailto:mmilinda00@gmail.com", label: "Email" },
 ];
 
