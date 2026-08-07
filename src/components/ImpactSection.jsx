@@ -51,13 +51,13 @@ const impactDomains = [
 ];
 
 const initiatives = [
-  { text: "Projets Personnels", icon: "🚀" },
-  { text: "Hackathons & Contests", icon: "🏆" },
-  { text: "AgriChain AI", icon: "🌾" },
-  { text: "SecurityApp", icon: "🛡️" },
-  { text: "Solutions Locales", icon: "🌍" },
-  { text: "IA & Blockchain", icon: "⚡" },
-  { text: "Produits SaaS", icon: "💻" },
+  { text: "Projets technologiques personnels", icon: "🚀" },
+  { text: "Hackathons & compétitions tech", icon: "🏆" },
+  { text: "AgriChain AI — AgriTech & AI", icon: "🌾" },
+  { text: "SecurityApp — Ops & Sécurité", icon: "🛡️" },
+  { text: "Projets orientés problèmes locaux", icon: "🌍" },
+  { text: "Expérimentation IA & Blockchain", icon: "⚡" },
+  { text: "Création de solutions SaaS", icon: "💻" },
 ];
 
 export default function ImpactSection() {
@@ -126,55 +126,55 @@ export default function ImpactSection() {
             </div>
           </div>
 
-          {/* Right Column — Initiatives (Redesigned as stylish 2-column shiny badge grid) */}
+          {/* Right Column — Initiatives (1 Single Full-Width Column filling allocated space) */}
           <div className="lg:col-span-5 flex">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={inView ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="p-5 sm:p-7 rounded-2xl md:rounded-3xl bg-slate-900/90 border border-white/15 backdrop-blur-xl shadow-2xl flex flex-col justify-between space-y-5 text-left w-full h-full overflow-hidden"
+              className="p-5 sm:p-6 rounded-2xl md:rounded-3xl bg-slate-900/90 border border-white/15 backdrop-blur-xl shadow-2xl flex flex-col justify-between space-y-5 text-left w-full h-full"
             >
-              <div className="space-y-4">
+              <div className="space-y-4 flex-grow flex flex-col justify-between">
                 
                 {/* Top Illustrative Banner */}
-                <div className="w-full h-32 sm:h-40 rounded-2xl overflow-hidden border border-white/15 relative shadow-lg">
+                <div className="w-full h-24 sm:h-28 rounded-xl overflow-hidden border border-white/15 relative shadow-md shrink-0">
                   <img src="/initiatives_banner.jpg" alt="Leadership Tech" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-                  <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                    <span className="px-3 py-1 rounded-lg bg-cyan-400 text-slate-950 text-xs font-black uppercase tracking-wider shadow-md flex items-center gap-1.5">
-                      <Sparkles size={13} /> Leadership Tech
+                  <div className="absolute bottom-2.5 left-3 flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-lg bg-cyan-400 text-slate-950 text-[11px] font-black uppercase tracking-wider shadow-md flex items-center gap-1">
+                      <Sparkles size={12} /> Leadership Tech
                     </span>
                   </div>
                 </div>
 
                 {/* Card Title Header */}
-                <div className="flex items-center gap-3 border-b border-white/10 pb-3 pt-1">
-                  <div className="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
-                    <Rocket size={18} className="text-indigo-400" />
+                <div className="flex items-center gap-3 border-b border-white/10 pb-2.5 shrink-0">
+                  <div className="w-8 h-8 rounded-xl bg-indigo-500/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
+                    <Rocket size={17} className="text-indigo-400" />
                   </div>
                   <div>
-                    <h3 className="text-base sm:text-lg font-bold text-white m-0">Ce que j'initie</h3>
+                    <h3 className="text-base sm:text-lg font-bold text-white m-0 leading-none">Ce que j'initie</h3>
                     <span className="text-xs text-slate-400">Initiatives & Engagement</span>
                   </div>
                 </div>
 
-                {/* Modern 2-Column Grid of Shiny Badges */}
-                <div className="grid grid-cols-2 gap-2 pt-1">
+                {/* Single Column Vertical Checklist Stack (Filling full allocated space evenly) */}
+                <div className="flex flex-col justify-between space-y-2 sm:space-y-2.5 w-full flex-grow my-auto">
                   {initiatives.map((item) => (
                     <motion.div
                       key={item.text}
-                      whileHover={{ scale: 1.03 }}
-                      className="flex items-center gap-2 px-3 py-2.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 text-xs font-semibold hover:border-cyan-400/40 hover:bg-white/10 hover:text-cyan-300 transition-all shadow-sm"
+                      whileHover={{ x: 3 }}
+                      className="flex items-center gap-3 px-3.5 py-2.5 sm:py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 text-xs sm:text-sm font-semibold w-full hover:bg-white/10 hover:border-cyan-400/40 transition-all shadow-sm"
                     >
-                      <span className="text-sm shrink-0">{item.icon}</span>
-                      <span className="truncate">{item.text}</span>
+                      <span className="text-base shrink-0">{item.icon}</span>
+                      <span className="w-full font-semibold">{item.text}</span>
                     </motion.div>
                   ))}
                 </div>
               </div>
 
-              {/* Bottom Ambition Box — 100% spacious and never cut off */}
-              <div className="pt-4 border-t border-white/10 space-y-2">
+              {/* Bottom Ambition Box */}
+              <div className="pt-4 border-t border-white/10 space-y-1.5 shrink-0">
                 <span className="text-xs uppercase tracking-wider font-extrabold text-cyan-400 flex items-center gap-1.5">
                   <Compass size={15} /> Mon Objectif Ultime
                 </span>

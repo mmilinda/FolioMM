@@ -30,7 +30,7 @@ const experiences = [
     tags: ["Python", "Blockchain", "AI"],
   },
   {
-    year: "2024--2025",
+    year: "2024 - 2025",
     role: "Développeuse Web Freelance",
     company: "Clients variés",
     type: "Freelance",
