@@ -77,7 +77,7 @@ export default function ImpactSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-8 items-stretch"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-stretch"
         >
           {/* Left Column — Text (50% Width) */}
           <div className="lg:col-span-6 flex flex-col justify-between space-y-3.5 text-left">
