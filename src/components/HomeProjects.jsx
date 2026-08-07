@@ -32,7 +32,7 @@ export default function HomeProjects() {
             </p>
           </div>
         </motion.div>
-
+        <br />
         {/* Projects Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 mt-8 md:mt-16">
           {homeProjects.map((project) => (

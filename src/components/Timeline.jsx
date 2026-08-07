@@ -12,7 +12,7 @@ const experiences = [
     tags: ["DevOps", "React", "AWS", "Docker"],
   },
   {
-    year: "2025",
+    year: "2026",
     role: "Développeuse Full Stack",
     company: "SecurityApp",
     type: "Projet",
@@ -21,7 +21,7 @@ const experiences = [
     tags: ["Laravel", "Vue.js", "MySQL"],
   },
   {
-    year: "2025",
+    year: "2026",
     role: "Lead Developer",
     company: "AgriChain AI",
     type: "Projet",
@@ -30,7 +30,7 @@ const experiences = [
     tags: ["Python", "Blockchain", "AI"],
   },
   {
-    year: "2024",
+    year: "2024--2025",
     role: "Développeuse Web Freelance",
     company: "Clients variés",
     type: "Freelance",
