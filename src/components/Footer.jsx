@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="container-custom footer-grid py-4 md:py-12 grid grid-cols-3 items-start gap-3 sm:gap-6 md:gap-10">
         
         {/* Column 1 — Brand */}
-        <div className="footer-brand flex flex-col items-start justify-start">
+        <div className="footer-brand flex flex-col items-start justify-start w-full">
           <div className="flex items-center gap-1.5 sm:gap-2.5 min-h-[24px] sm:min-h-[32px]">
             <div className="w-5 h-5 sm:w-8 sm:h-8 rounded-full overflow-hidden border border-cyan-400/40 p-0.5 bg-cyan-400/10 shrink-0">
               <img src="/logoMM.jpg" alt="MM Logo" className="w-full h-full object-cover rounded-full" />
@@ -23,7 +23,7 @@ export default function Footer() {
         </div>
 
         {/* Column 2 — Navigation */}
-        <div className="footer-nav flex flex-col items-start justify-start">
+        <div className="footer-nav flex flex-col items-start justify-start w-full">
           <div className="min-h-[24px] sm:min-h-[32px] flex items-center">
             <h3 className="font-bold text-xs sm:text-base text-white m-0 leading-none">
               Navigation
@@ -46,7 +46,7 @@ export default function Footer() {
         </div>
 
         {/* Column 3 — Contact & Socials */}
-        <div className="footer-contact flex flex-col items-start justify-start">
+        <div className="footer-contact flex flex-col items-start justify-start w-full">
           <div className="min-h-[24px] sm:min-h-[32px] flex items-center">
             <h3 className="font-bold text-xs sm:text-base text-white m-0 leading-none">
               Contact
