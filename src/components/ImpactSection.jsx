@@ -16,8 +16,8 @@ const impactDomains = [
     problem: "Accès à l'information agricole & traçabilité.",
     image: agriImg,
     color: "#34d399",
-    glow: "rgba(52, 211, 153, 0.2)",
-    border: "border-emerald-500/40",
+    glow: "rgba(52, 211, 153, 0.25)",
+    border: "border-emerald-500/50",
   },
   {
     domain: "Sécurité",
@@ -26,8 +26,8 @@ const impactDomains = [
     problem: "Gestion opérationnelle & supervision temps réel.",
     image: secImg,
     color: "#818cf8",
-    glow: "rgba(129, 140, 248, 0.2)",
-    border: "border-indigo-500/40",
+    glow: "rgba(129, 140, 248, 0.25)",
+    border: "border-indigo-500/50",
   },
   {
     domain: "Identité",
@@ -36,8 +36,8 @@ const impactDomains = [
     problem: "Identification numérique sécurisée & rapide.",
     image: identityImg,
     color: "#38bdf8",
-    glow: "rgba(56, 189, 248, 0.2)",
-    border: "border-cyan-500/40",
+    glow: "rgba(56, 189, 248, 0.25)",
+    border: "border-cyan-500/50",
   },
   {
     domain: "Mobilité",
@@ -46,8 +46,8 @@ const impactDomains = [
     problem: "Assistance automobile de proximité digitalisée.",
     image: mobilityImg,
     color: "#f472b6",
-    glow: "rgba(244, 114, 182, 0.2)",
-    border: "border-pink-500/40",
+    glow: "rgba(244, 114, 182, 0.25)",
+    border: "border-pink-500/50",
   },
   {
     domain: "Entreprises",
@@ -56,8 +56,8 @@ const impactDomains = [
     problem: "Digitalisation des processus & automatisation.",
     image: enterpriseImg,
     color: "#fb923c",
-    glow: "rgba(251, 146, 60, 0.2)",
-    border: "border-orange-500/40",
+    glow: "rgba(251, 146, 60, 0.25)",
+    border: "border-orange-500/50",
   },
 ];
 
@@ -197,7 +197,7 @@ export default function ImpactSection() {
         </motion.div>
 
 
-        {/* ─── Part 2: Impact Tangible (With Direct Imported Images) ─────────────── */}
+        {/* ─── Part 2: Impact Tangible (High Visibility Premium Cards) ────────── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -217,7 +217,7 @@ export default function ImpactSection() {
             </p>
           </div>
 
-          {/* 5 Ultra Pretty Modern Impact Cards with Direct Imported Images */}
+          {/* 5 Premium Modern Impact Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {impactDomains.map((item) => {
               const Icon = item.icon;
@@ -226,35 +226,35 @@ export default function ImpactSection() {
                   key={item.domain}
                   whileHover={{ y: -6, scale: 1.02 }}
                   transition={{ duration: 0.25 }}
-                  className="p-3.5 sm:p-4 rounded-2xl bg-slate-900/90 border border-white/15 backdrop-blur-xl shadow-xl hover:shadow-2xl hover:border-cyan-400/50 transition-all duration-300 relative overflow-hidden flex flex-col justify-start space-y-2.5 text-left group h-full"
+                  className="p-4 rounded-2xl bg-slate-900/95 border-2 border-white/15 backdrop-blur-2xl shadow-xl hover:shadow-2xl hover:border-cyan-400/60 transition-all duration-300 relative overflow-hidden flex flex-col space-y-3 text-left group h-full"
                   style={{ background: `linear-gradient(155deg, ${item.glow} 0%, rgba(15, 23, 42, 0.98) 100%)` }}
                 >
                   {/* Glowing Top Colored Bar */}
-                  <div className="absolute top-0 left-0 right-0 h-1 w-full rounded-t-2xl" style={{ background: item.color }} />
+                  <div className="absolute top-0 left-0 right-0 h-1.5 w-full rounded-t-2xl" style={{ background: item.color }} />
 
                   {/* Top Image Thumbnail Header */}
-                  <div className="w-full h-24 sm:h-28 rounded-xl overflow-hidden border border-white/10 relative shadow-sm shrink-0 mt-1">
+                  <div className="w-full h-28 sm:h-32 rounded-xl overflow-hidden border border-white/15 relative shadow-md shrink-0 mt-0.5">
                     <img src={item.image} alt={item.project} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
                     <span
-                      className="absolute bottom-2 left-2 inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-wider border shadow-md"
-                      style={{ borderColor: item.color + "55", color: item.color, background: "rgba(15, 23, 42, 0.85)" }}
+                      className="absolute bottom-2 left-2 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-black uppercase tracking-wider border shadow-md backdrop-blur-md"
+                      style={{ borderColor: item.color + "66", color: item.color, background: "rgba(15, 23, 42, 0.9)" }}
                     >
-                      <Icon size={11} />
+                      <Icon size={12} />
                       {item.domain}
                     </span>
                   </div>
 
-                  {/* Title and Description stacked tightly without empty gap */}
-                  <div className="space-y-1">
+                  {/* Title and Description stacked tightly with high contrast */}
+                  <div className="space-y-1.5 pt-0.5">
                     {/* Project Title with Arrow */}
                     <h3 className="text-sm sm:text-base font-black text-white m-0 tracking-wide flex items-center justify-between group-hover:text-cyan-300 transition-colors">
                       <span>{item.project}</span>
-                      <ArrowUpRight size={14} className="text-slate-400 group-hover:text-cyan-400 transition-colors shrink-0" />
+                      <ArrowUpRight size={15} className="text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0" />
                     </h3>
 
                     {/* Problem Statement directly under title */}
-                    <p className="text-xs text-slate-200 leading-snug m-0 font-medium">
+                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed m-0 font-medium">
                       {item.problem}
                     </p>
                   </div>
