@@ -204,12 +204,12 @@ export default function ImpactSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="space-y-8 sm:space-y-10 pt-10 md:pt-16 border-t border-white/10"
         >
-          <div className="space-y-2">
-            <span className="section-eyebrow py-0.5 text-xs">
-              <Layers size={13} className="inline-block mr-1.5 -mt-0.5 text-cyan-400" />
+          <div className="text-center flex flex-col items-center justify-center space-y-2 mb-6">
+            <span className="section-eyebrow py-0.5 text-xs inline-flex items-center gap-1.5 mx-auto">
+              <Layers size={13} className="text-cyan-400 shrink-0" />
               Impact Tangible
             </span>
-            <h2 className="section-title text-xl sm:text-3xl md:text-4xl font-extrabold m-0">
+            <h2 className="section-title text-base sm:text-2xl md:text-3xl lg:text-4xl font-extrabold m-0 text-center whitespace-nowrap max-w-full">
               Des solutions pensées pour <span className="gradient-text">des problèmes réels</span>
             </h2>
             <p className="text-slate-400 text-xs sm:text-base text-center max-w-xl mx-auto m-0 leading-relaxed font-normal">
