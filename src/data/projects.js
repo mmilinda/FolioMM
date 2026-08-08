@@ -221,23 +221,6 @@ const projects = [
   },
   {
     id: 13,
-    slug: "site-statique-voyage-2",
-    title: "Voyage 2 — Site Statique",
-    featured: false,
-    year: "2021",
-    status: "Projet de Groupe",
-    category: "Web Design",
-    image: "/images/projects/voyage2.PNG",
-    fallbackImage: "/images/projects/preview.png",
-    description:
-      "Site web statique de présentation touristique et de voyage réalisé en projet de groupe en 2021.",
-    technologies: ["HTML5", "CSS3", "JavaScript"],
-    impact: "Projet collaboratif de conception et d'intégration web.",
-    demo: "https://voyage2-seven.vercel.app/",
-    github: "https://github.com/mmilinda"
-  },
-  {
-    id: 14,
     slug: "gm-business-prayer-blogger",
     title: "GM Business Prayer — Blog Blogger",
     featured: false,
@@ -251,6 +234,23 @@ const projects = [
     technologies: ["Blogger", "HTML/CSS", "CMS"],
     impact: "Initiation pratique à l'intégration web et à la structuration de contenu en entreprise.",
     demo: "https://gmbusinessprayer.blogspot.com/",
+    github: "https://github.com/mmilinda"
+  },
+  {
+    id: 14,
+    slug: "site-statique-voyage-2",
+    title: "Voyage 2 — Site Statique",
+    featured: false,
+    year: "2021",
+    status: "Projet de Groupe",
+    category: "Web Design",
+    image: "/images/projects/voyage2.PNG",
+    fallbackImage: "/images/projects/preview.png",
+    description:
+      "Site web statique de présentation touristique et de voyage réalisé en projet de groupe en 2021.",
+    technologies: ["HTML5", "CSS3", "JavaScript"],
+    impact: "Projet collaboratif de conception et d'intégration web.",
+    demo: "https://voyage2-seven.vercel.app/",
     github: "https://github.com/mmilinda"
   }
 ];
