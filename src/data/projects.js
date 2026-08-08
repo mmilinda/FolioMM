@@ -31,7 +31,7 @@ const projects = [
       "Les producteurs rencontrent des difficultés pour accéder rapidement aux informations agricoles fiables.",
     solution:
       "Une solution digitale utilisant l'IA pour analyser les données agricoles et accompagner les acteurs du secteur.",
-    technologies: ["React", "TypeScript", "Tailwind CSS", "AI / Python", "Blockchain"],
+    technologies: ["React", "TypeScript", "Tailwind CSS", "AI / Python"],
     impact: "Innovation digitale agricole orientée Afrique.",
     demo: "https://agri-tech-puce.vercel.app/",
     github: "https://github.com/mmilinda"
@@ -53,7 +53,7 @@ const projects = [
       "Les sociétés de sécurité utilisent souvent des outils dispersés pour suivre leurs opérations.",
     solution:
       "Une application centralisée avec dashboards, localisation et gestion opérationnelle.",
-    technologies: ["React", "Laravel", "Tailwind CSS", "Leaflet JS", "REST API"],
+    technologies: ["React", "Laravel API", "Tailwind CSS", "Leaflet JS"],
     impact: "Digitalisation des opérations des entreprises de sécurité.",
     demo: "https://security-app-mauve.vercel.app/",
     github: "https://github.com/mmilinda"
@@ -92,7 +92,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Application SaaS destinée à simplifier la gestion digitale des entreprises.",
-    technologies: ["React", "Vite", "Tailwind CSS", "Node.js"],
+    technologies: ["React", "Vite", "Tailwind CSS"],
     impact: "Automatisation des processus métiers.",
     demo: "https://noregis.vercel.app/",
     github: "https://github.com/mmilinda"
@@ -161,7 +161,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Projet développé à Défarsci lors de mon parcours de stagiaire pour permettre aux étudiants d'enregistrer des CV vidéo interactifs.",
-    technologies: ["HTML5", "CSS3", "JavaScript", "MediaRecorder API"],
+    technologies: ["HTML5", "CSS3", "JavaScript", "WebRTC / Media API"],
     impact: "Plateforme de création de CV vidéo pour faciliter l'insertion professionnelle des étudiants.",
     demo: "#",
     github: "https://github.com/mmilinda"
@@ -212,7 +212,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Site vitrine responsive développé lors de mon stage à Bakeli pour apprendre et maîtriser l'intégration web avec le framework Bootstrap.",
-    technologies: ["HTML5", "CSS3", "Bootstrap 5"],
+    technologies: ["Bootstrap 5", "Bootstrap Icons", "HTML5", "CSS3"],
     impact: "Apprentissage approfondi de l'intégration responsive avec Bootstrap.",
     demo: "https://site-bootstrap-six.vercel.app/",
     github: "https://github.com/mmilinda"
@@ -229,7 +229,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Application permettant de rechercher des itinéraires et informations de transport.",
-    technologies: ["JavaScript", "jQuery", "HTML5", "CSS3", "REST API"],
+    technologies: ["jQuery Mobile", "JavaScript", "HTML5", "CSS3", "Google Maps API"],
     impact: "Facilitation de l'accès aux informations de déplacement.",
     demo: "https://jquerry-bus.vercel.app/",
     github: "https://github.com/mmilinda"
@@ -263,7 +263,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Site web statique de présentation touristique et de voyage réalisé en projet de groupe en 2021.",
-    technologies: ["HTML5", "CSS3", "JavaScript"],
+    technologies: ["HTML5", "CSS3", "JavaScript", "FontAwesome"],
     impact: "Projet collaboratif de conception et d'intégration web.",
     demo: "https://voyage2-seven.vercel.app/",
     github: "https://github.com/mmilinda"
