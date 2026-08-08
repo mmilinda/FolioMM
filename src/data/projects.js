@@ -1,3 +1,18 @@
+import agriChainImg from "../assets/projects/AgriChain.PNG";
+import securityImg from "../assets/projects/Security.PNG";
+import garageBImg from "../assets/projects/GarageB.PNG";
+import noregisImg from "../assets/projects/noregis.PNG";
+import bermaImg from "../assets/projects/Berma.PNG";
+import sunuChampionImg from "../assets/projects/sunuchampion.PNG";
+import afriAccessImg from "../assets/projects/afriaccess.PNG";
+import appartementImg from "../assets/projects/LAppartement.PNG";
+import zawiyaImg from "../assets/projects/zawiya.PNG";
+import bootstrapSiteImg from "../assets/projects/BoostrapSite.PNG";
+import jqueryProjectImg from "../assets/projects/JqueryProject.PNG";
+import voyage2Img from "../assets/projects/voyage2.PNG";
+import blogImg from "../assets/projects/blog.PNG";
+import previewImg from "../assets/projects/preview.png";
+
 const projects = [
   {
     id: 1,
@@ -8,8 +23,8 @@ const projects = [
     status: "Prototype",
     client: "Projet personnel",
     category: "AI • Agriculture • Blockchain",
-    image: "/images/projects/AgriChain.PNG",
-    fallbackImage: "/images/projects/preview.png",
+    image: agriChainImg,
+    fallbackImage: previewImg,
     description:
       "Plateforme intelligente dédiée au secteur agricole combinant intelligence artificielle, données agricoles et technologies blockchain afin d'améliorer la prise de décision des producteurs.",
     problem:
@@ -30,8 +45,8 @@ const projects = [
     status: "Prototype",
     client: "Projet personnel",
     category: "SaaS • Security • Management",
-    image: "/images/projects/Security.PNG",
-    fallbackImage: "/images/projects/preview.png",
+    image: securityImg,
+    fallbackImage: previewImg,
     description:
       "Plateforme SaaS permettant aux entreprises de sécurité de gérer leurs agents, missions, rendez-vous et interventions.",
     problem:
@@ -52,8 +67,8 @@ const projects = [
     status: "Production",
     client: "Projet professionnel",
     category: "Automobile • Service Digital",
-    image: "/images/projects/GarageB.PNG",
-    fallbackImage: "/images/projects/preview.png",
+    image: garageBImg,
+    fallbackImage: previewImg,
     description:
       "Plateforme digitale facilitant la mise en relation entre automobilistes et services automobiles.",
     problem:
@@ -73,8 +88,8 @@ const projects = [
     year: "2026",
     status: "Prototype",
     category: "SaaS",
-    image: "/images/projects/noregis.PNG",
-    fallbackImage: "/images/projects/preview.png",
+    image: noregisImg,
+    fallbackImage: previewImg,
     description:
       "Application SaaS destinée à simplifier la gestion digitale des entreprises.",
     technologies: ["React", "Vite", "Tailwind"],
@@ -91,8 +106,8 @@ const projects = [
     status: "Production",
     client: "BerMas",
     category: "Assurance • Business",
-    image: "/images/projects/Berma.PNG",
-    fallbackImage: "/images/projects/preview.png",
+    image: bermaImg,
+    fallbackImage: previewImg,
     description:
       "Site professionnel présentant les services d'une structure d'assurance.",
     technologies: ["PHP", "Laravel", "Tailwind CSS"],
@@ -108,8 +123,8 @@ const projects = [
     year: "2026",
     status: "Production",
     category: "Web Platform",
-    image: "/images/projects/sunuchampion.PNG",
-    fallbackImage: "/images/projects/preview.png",
+    image: sunuChampionImg,
+    fallbackImage: previewImg,
     description:
       "Plateforme web moderne proposant une expérience utilisateur optimisée.",
     technologies: ["React", "JavaScript", "CSS"],
@@ -125,8 +140,8 @@ const projects = [
     year: "2026",
     status: "Prototype",
     category: "Identity • Digital Solution",
-    image: "/images/projects/afriaccess.PNG",
-    fallbackImage: "/images/projects/preview.png",
+    image: afriAccessImg,
+    fallbackImage: previewImg,
     description:
       "Solution numérique destinée à améliorer les processus de gestion d'identité.",
     technologies: ["React", "API", "Frontend"],
@@ -142,8 +157,8 @@ const projects = [
     year: "2024",
     status: "Projet personnel",
     category: "Personal Branding",
-    image: "/images/projects/CV.png",
-    fallbackImage: "/images/projects/preview.png",
+    image: previewImg,
+    fallbackImage: previewImg,
     description:
       "CV vidéo interactif présentant mon parcours, mes compétences et mes réalisations.",
     technologies: ["Video", "Design", "Communication"],
@@ -159,8 +174,8 @@ const projects = [
     year: "2023",
     status: "Prototype",
     category: "Real Estate",
-    image: "/images/projects/LAppartement.PNG",
-    fallbackImage: "/images/projects/preview.png",
+    image: appartementImg,
+    fallbackImage: previewImg,
     description:
       "Application web présentant des annonces immobilières.",
     technologies: ["React", "JavaScript", "CSS"],
@@ -176,8 +191,8 @@ const projects = [
     year: "2023",
     status: "Production",
     category: "Web Design",
-    image: "/images/projects/zawiya.PNG",
-    fallbackImage: "/images/projects/preview.png",
+    image: zawiyaImg,
+    fallbackImage: previewImg,
     description:
       "Site vitrine moderne présentant une organisation et ses activités.",
     technologies: ["React", "Bootstrap", "SEO"],
@@ -193,8 +208,8 @@ const projects = [
     year: "2022",
     status: "Production",
     category: "Web Design",
-    image: "/images/projects/BoostrapSite.PNG",
-    fallbackImage: "/images/projects/preview.png",
+    image: bootstrapSiteImg,
+    fallbackImage: previewImg,
     description:
       "Site vitrine responsive développé pour présenter une activité professionnelle.",
     technologies: ["HTML", "CSS", "Bootstrap"],
@@ -210,8 +225,8 @@ const projects = [
     year: "2022",
     status: "Prototype",
     category: "Transport • Web App",
-    image: "/images/projects/JqueryProject.PNG",
-    fallbackImage: "/images/projects/preview.png",
+    image: jqueryProjectImg,
+    fallbackImage: previewImg,
     description:
       "Application permettant de rechercher des itinéraires et informations de transport.",
     technologies: ["JavaScript", "jQuery", "API"],
@@ -227,8 +242,8 @@ const projects = [
     year: "2022",
     status: "Stage Webgram",
     category: "Blogging • Web Design",
-    image: "/images/projects/blog.PNG",
-    fallbackImage: "/images/projects/preview.png",
+    image: blogImg,
+    fallbackImage: previewImg,
     description:
       "Blog personnalisé sur la plateforme Blogger réalisé lors de mon stage chez Webgram pour apprendre l'intégration web et la gestion de contenu.",
     technologies: ["Blogger", "HTML/CSS", "CMS"],
@@ -244,8 +259,8 @@ const projects = [
     year: "2021",
     status: "Projet de Groupe",
     category: "Web Design",
-    image: "/images/projects/voyage2.PNG",
-    fallbackImage: "/images/projects/preview.png",
+    image: voyage2Img,
+    fallbackImage: previewImg,
     description:
       "Site web statique de présentation touristique et de voyage réalisé en projet de groupe en 2021.",
     technologies: ["HTML5", "CSS3", "JavaScript"],
