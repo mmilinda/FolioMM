@@ -204,19 +204,19 @@ export default function ImpactSection() {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="space-y-8 sm:space-y-10 pt-10 md:pt-16 border-t border-white/10"
         >
-          <div className="text-center space-y-2">
-            <span className="section-eyebrow py-0.5 text-xs">
-              <Layers size={13} className="inline-block mr-1.5 -mt-0.5 text-cyan-400" />
+          <div className="section-header text-center flex flex-col items-center justify-center text-center max-w-2xl mx-auto space-y-2.5 mb-8">
+            <span className="section-eyebrow py-0.5 text-xs inline-flex items-center gap-1.5 mx-auto mb-1">
+              <Layers size={13} className="text-cyan-400 shrink-0" />
               Impact Tangible
             </span>
-            <h2 className="section-title text-xl sm:text-3xl md:text-4xl font-extrabold m-0">
+            <h2 className="section-title text-xl sm:text-3xl md:text-4xl font-extrabold m-0 text-center">
               Des solutions pensées pour <span className="gradient-text">des problèmes réels</span>
             </h2>
-            <p className="text-slate-400 text-xs sm:text-base max-w-xl mx-auto m-0 leading-relaxed font-normal">
+            <p className="text-slate-400 text-xs sm:text-base text-center w-full max-w-xl mx-auto m-0 leading-relaxed font-normal">
               Chaque projet répond à un défi concret identifié sur le terrain.
             </p>
           </div>
-
+                  <br />
           {/* 5 Premium Modern Impact Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 sm:gap-10">
             {impactDomains.map((item) => {

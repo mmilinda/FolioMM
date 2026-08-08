@@ -30,6 +30,7 @@ export default function HomeProjects() {
             <p className="text-slate-400 text-xs sm:text-base md:text-lg inline-block whitespace-nowrap leading-normal px-4">
               Un aperçu de mes récents travaux alliant architecture logicielle, expérience utilisateur soignée et déploiement cloud.
             </p>
+            <br /><br />
           </div>
         </motion.div>
 
@@ -39,7 +40,7 @@ export default function HomeProjects() {
             <ProjectCard key={project.id} project={project} />
           ))}
         </div>
-
+          <br />
         {/* See More / Voir plus CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -57,6 +58,8 @@ export default function HomeProjects() {
           </Link>
         </motion.div>
       </div>
+      <br />
     </section>
+
   );
 }
