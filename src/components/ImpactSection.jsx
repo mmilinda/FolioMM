@@ -108,17 +108,17 @@ export default function ImpactSection() {
                   <div className="w-8 h-8 rounded-lg bg-cyan-400/20 border border-cyan-400/50 flex items-center justify-center shrink-0 shadow-sm">
                     <Lightbulb size={17} className="text-cyan-300" />
                   </div>
-                  <h3 className="text-sm sm:text-lg font-bold text-white m-0 tracking-wide">
+                  <h3 className="text-base sm:text-lg font-extrabold text-white m-0 tracking-wide">
                     Technologie avec un objectif
                   </h3>
                 </div>
-                <p className="text-slate-400 text-xs sm:text-sm leading-relaxed m-0 font-normal">
+                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed m-0 font-normal">
                   Je conçois des solutions numériques pour répondre à des problèmes concrets dans mon environnement.
                 </p>
               </div>
 
               {/* Paragraphs */}
-              <div className="space-y-2 text-xs sm:text-base leading-relaxed text-slate-400 font-normal">
+              <div className="space-y-2 text-xs sm:text-sm leading-relaxed text-slate-400 font-normal">
                 <p className="m-0">
                   À travers mes projets, je m'intéresse particulièrement à des secteurs où la technologie peut avoir un impact tangible : 
                   <span className="text-cyan-400 font-normal"> agriculture, sécurité, services, identité numérique et inclusion</span>.
@@ -153,8 +153,8 @@ export default function ImpactSection() {
                       <Rocket size={15} className="text-indigo-400" />
                     </div>
                     <div>
-                      <h3 className="text-sm sm:text-base font-bold text-white m-0 leading-none">Ce que j'initie</h3>
-                      <span className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 inline-block">Initiatives & Leadership</span>
+                      <h3 className="text-base sm:text-lg font-extrabold text-white m-0 leading-none">Ce que j'initie</h3>
+                      <span className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 inline-block font-normal">Initiatives & Leadership</span>
                     </div>
                   </div>
                   <span className="px-2 py-0.5 rounded bg-cyan-400 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-xs flex items-center gap-1">
@@ -174,7 +174,7 @@ export default function ImpactSection() {
                     <motion.div
                       key={item.text}
                       whileHover={{ x: 2 }}
-                      className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-slate-400 text-xs font-normal w-full hover:bg-white/10 hover:border-cyan-400/40 transition-all shadow-xs min-h-[28px] sm:min-h-[30px]"
+                      className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-slate-300 text-xs font-normal w-full hover:bg-white/10 hover:border-cyan-400/40 transition-all shadow-xs min-h-[28px] sm:min-h-[30px]"
                     >
                       <span className="text-xs shrink-0">{item.icon}</span>
                       <span className="w-full truncate">{item.text}</span>
@@ -245,16 +245,16 @@ export default function ImpactSection() {
                     </span>
                   </div>
 
-                  {/* Title and Description stacked tightly with high contrast */}
+                  {/* Title and Description stacked tightly with clear typography hierarchy */}
                   <div className="space-y-1.5 flex-1 flex flex-col justify-start">
-                    {/* Project Title with Arrow */}
-                    <h3 className="text-sm sm:text-base font-bold text-white m-0 tracking-wide flex items-center justify-between group-hover:text-cyan-300 transition-colors">
+                    {/* Project Title (Bold, Bright White, 16px-18px) */}
+                    <h3 className="text-base sm:text-lg font-extrabold text-white m-0 tracking-wide flex items-center justify-between group-hover:text-cyan-300 transition-colors leading-snug">
                       <span>{item.project}</span>
-                      <ArrowUpRight size={15} className="text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0" />
+                      <ArrowUpRight size={16} className="text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0" />
                     </h3>
 
-                    {/* Problem Statement directly under title */}
-                    <p className="text-xs sm:text-sm text-slate-200 leading-snug m-0 font-normal">
+                    {/* Problem Statement (Small 12px, Muted Slate Grey, Normal Weight) */}
+                    <p className="text-xs text-slate-400 leading-relaxed m-0 font-normal pt-1 border-t border-white/10">
                       {item.problem}
                     </p>
                   </div>
