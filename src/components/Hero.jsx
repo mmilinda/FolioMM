@@ -14,15 +14,15 @@ const ROLES = [
 const TECH_BADGES = [
   "React",
   "Laravel",
+  "WordPress",
   "Tailwind CSS",
   "JavaScript",
   "PHP",
-  "Vite",
   "Docker",
+  "Vite",
+  "Bootstrap",
   "REST API",
-  "Vercel",
-  "Leaflet",
-  "Bootstrap"
+  "Blogger"
 ];
 
 function TypewriterText({ words }) {

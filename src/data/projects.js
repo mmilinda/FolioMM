@@ -190,13 +190,13 @@ const projects = [
     featured: false,
     year: "2023",
     status: "Production",
-    category: "Web Design",
+    category: "Web Design • CMS",
     image: zawiyaImg,
     fallbackImage: previewImg,
     description:
-      "Site vitrine moderne présentant une organisation et ses activités.",
-    technologies: ["HTML5", "CSS3", "Bootstrap", "JavaScript"],
-    impact: "Amélioration de la communication digitale.",
+      "Site vitrine moderne conçu avec le CMS WordPress présentant une organisation et ses activités.",
+    technologies: ["WordPress", "PHP", "CSS3", "CMS", "SEO"],
+    impact: "Amélioration de la communication digitale et gestion de contenu via WordPress.",
     demo: "https://www.zawiya.defarsci.fr/",
     github: "https://github.com/mmilinda"
   },
