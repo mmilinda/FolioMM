@@ -468,28 +468,68 @@ const projects = [
 
 
   {
-    id:12,
+    id: 12,
 
-    slug:"site-vitrine-bootstrap",
+    slug: "site-statique-voyage-2",
 
-    title:"Site Vitrine Bootstrap",
+    title: "Voyage 2 — Site Statique",
 
-    featured:false,
+    featured: false,
 
-    year:"2024",
+    year: "2021",
 
-    status:"Production",
+    status: "Projet de Groupe",
 
-    category:"Web Design",
+    category: "Web Design",
 
-    image:"/images/projects/BoostrapSite.PNG",
+    image: "/images/projects/voyage2.PNG",
 
-    fallbackImage:"/images/projects/preview.png",
+    fallbackImage: "/images/projects/preview.png",
+
+    description:
+      "Site web statique de présentation touristique et de voyage réalisé en projet de groupe en 2021.",
+
+    technologies: [
+      "HTML5",
+      "CSS3",
+      "JavaScript"
+    ],
+
+    impact:
+      "Projet collaboratif de conception et d'intégration web.",
+
+    demo:
+      "https://voyage2-seven.vercel.app/",
+
+    github:
+      "https://github.com/mmilinda"
+
+  },
+
+
+  {
+    id: 13,
+
+    slug: "site-vitrine-bootstrap",
+
+    title: "Site Vitrine Bootstrap",
+
+    featured: false,
+
+    year: "2024",
+
+    status: "Production",
+
+    category: "Web Design",
+
+    image: "/images/projects/BoostrapSite.PNG",
+
+    fallbackImage: "/images/projects/preview.png",
 
     description:
       "Site vitrine responsive développé pour présenter une activité professionnelle.",
 
-    technologies:[
+    technologies: [
       "HTML",
       "CSS",
       "Bootstrap"
@@ -508,5 +548,5 @@ const projects = [
 
 ];
 
-
+export { projects as PROJECTS };
 export default projects;
