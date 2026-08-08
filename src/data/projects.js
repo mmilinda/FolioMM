@@ -31,7 +31,7 @@ const projects = [
       "Les producteurs rencontrent des difficultés pour accéder rapidement aux informations agricoles fiables.",
     solution:
       "Une solution digitale utilisant l'IA pour analyser les données agricoles et accompagner les acteurs du secteur.",
-    technologies: ["React", "AI", "Blockchain", "API", "Vercel"],
+    technologies: ["React", "TypeScript", "Tailwind CSS", "AI / Python", "Blockchain"],
     impact: "Innovation digitale agricole orientée Afrique.",
     demo: "https://agri-tech-puce.vercel.app/",
     github: "https://github.com/mmilinda"
@@ -53,7 +53,7 @@ const projects = [
       "Les sociétés de sécurité utilisent souvent des outils dispersés pour suivre leurs opérations.",
     solution:
       "Une application centralisée avec dashboards, localisation et gestion opérationnelle.",
-    technologies: ["React", "Laravel", "Tailwind CSS", "Leaflet", "API"],
+    technologies: ["React", "Laravel", "Tailwind CSS", "Leaflet JS", "REST API"],
     impact: "Digitalisation des opérations des entreprises de sécurité.",
     demo: "https://security-app-mauve.vercel.app/",
     github: "https://github.com/mmilinda"
@@ -75,7 +75,7 @@ const projects = [
       "Les utilisateurs rencontrent des difficultés pour trouver rapidement un service automobile fiable.",
     solution:
       "Une plateforme permettant de présenter les services et faciliter les demandes d'assistance.",
-    technologies: ["React", "Vite", "Tailwind CSS"],
+    technologies: ["React", "Vite", "Tailwind CSS", "JavaScript"],
     impact: "Amélioration de l'expérience utilisateur automobile.",
     demo: "https://garage-b.vercel.app/",
     github: "https://github.com/mmilinda"
@@ -92,7 +92,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Application SaaS destinée à simplifier la gestion digitale des entreprises.",
-    technologies: ["React", "Vite", "Tailwind"],
+    technologies: ["React", "Vite", "Tailwind CSS", "Node.js"],
     impact: "Automatisation des processus métiers.",
     demo: "https://noregis.vercel.app/",
     github: "https://github.com/mmilinda"
@@ -110,7 +110,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Site professionnel présentant les services d'une structure d'assurance.",
-    technologies: ["PHP", "Laravel", "Tailwind CSS"],
+    technologies: ["Laravel", "PHP", "Tailwind CSS", "MySQL"],
     impact: "Renforcement de la présence digitale de l'entreprise.",
     demo: "https://bermasss.com/",
     github: "https://github.com/mmilinda"
@@ -127,7 +127,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Plateforme web moderne proposant une expérience utilisateur optimisée.",
-    technologies: ["React", "JavaScript", "CSS"],
+    technologies: ["React", "Tailwind CSS", "JavaScript"],
     impact: "Création d'une interface web moderne.",
     demo: "https://sunuchampion.vercel.app/",
     github: "https://github.com/mmilinda"
@@ -144,7 +144,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Solution numérique destinée à améliorer les processus de gestion d'identité.",
-    technologies: ["React", "API", "Frontend"],
+    technologies: ["React", "Tailwind CSS", "REST API"],
     impact: "Optimisation des processus d'identification digitale.",
     demo: "https://afriaccess.vercel.app/",
     github: "https://github.com/mmilinda"
@@ -161,7 +161,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Projet développé à Défarsci lors de mon parcours de stagiaire pour permettre aux étudiants d'enregistrer des CV vidéo interactifs.",
-    technologies: ["Video", "Design", "Communication"],
+    technologies: ["HTML5", "CSS3", "JavaScript", "MediaRecorder API"],
     impact: "Plateforme de création de CV vidéo pour faciliter l'insertion professionnelle des étudiants.",
     demo: "#",
     github: "https://github.com/mmilinda"
@@ -178,7 +178,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Projet d'initiation au développement web avec le framework Laravel réalisé lors de mon stage pour la gestion et présentation d'annonces immobilières.",
-    technologies: ["Laravel", "PHP", "React", "CSS"],
+    technologies: ["Laravel", "PHP", "Blade", "Bootstrap", "MySQL"],
     impact: "Initiation pratique à l'architecture Laravel et digitalisation d'annonces immobilières.",
     demo: "#",
     github: "https://github.com/mmilinda"
@@ -195,7 +195,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Site vitrine moderne présentant une organisation et ses activités.",
-    technologies: ["React", "Bootstrap", "SEO"],
+    technologies: ["HTML5", "CSS3", "Bootstrap", "JavaScript"],
     impact: "Amélioration de la communication digitale.",
     demo: "https://www.zawiya.defarsci.fr/",
     github: "https://github.com/mmilinda"
@@ -212,7 +212,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Site vitrine responsive développé lors de mon stage à Bakeli pour apprendre et maîtriser l'intégration web avec le framework Bootstrap.",
-    technologies: ["HTML5", "CSS3", "Bootstrap"],
+    technologies: ["HTML5", "CSS3", "Bootstrap 5"],
     impact: "Apprentissage approfondi de l'intégration responsive avec Bootstrap.",
     demo: "https://site-bootstrap-six.vercel.app/",
     github: "https://github.com/mmilinda"
@@ -229,7 +229,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Application permettant de rechercher des itinéraires et informations de transport.",
-    technologies: ["JavaScript", "jQuery", "API"],
+    technologies: ["JavaScript", "jQuery", "HTML5", "CSS3", "REST API"],
     impact: "Facilitation de l'accès aux informations de déplacement.",
     demo: "https://jquerry-bus.vercel.app/",
     github: "https://github.com/mmilinda"
@@ -246,7 +246,7 @@ const projects = [
     fallbackImage: previewImg,
     description:
       "Blog personnalisé sur la plateforme Blogger réalisé lors de mon stage chez Webgram pour apprendre l'intégration web et la gestion de contenu.",
-    technologies: ["Blogger", "HTML/CSS", "CMS"],
+    technologies: ["Blogger Engine", "HTML5", "CSS3", "CMS"],
     impact: "Initiation pratique à l'intégration web et à la structuration de contenu en entreprise.",
     demo: "https://gmbusinessprayer.blogspot.com/",
     github: "https://github.com/mmilinda"
