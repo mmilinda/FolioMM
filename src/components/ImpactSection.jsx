@@ -76,7 +76,7 @@ export default function ImpactSection() {
   const inView = useInView(ref, { once: true, margin: "-40px" });
 
   return (
-    <section ref={ref} className="py-10 md:py-16 relative overflow-hidden">
+    <section ref={ref} className="pt-14 md:pt-24 pb-10 md:pb-16 relative overflow-hidden">
       {/* Background Ambient Glow Orbs */}
       <div className="absolute top-1/4 left-10 w-80 h-80 bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none" />
       <div className="absolute bottom-1/4 right-10 w-80 h-80 bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none" />
@@ -196,7 +196,7 @@ export default function ImpactSection() {
           </div>
         </motion.div>
 
-
+                  <div><br /></div>
         {/* ─── Part 2: Impact Tangible ────────────────────────────────────────── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

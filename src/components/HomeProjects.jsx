@@ -46,7 +46,7 @@ export default function HomeProjects() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.3, duration: 0.5 }}
-          className="text-center mt-8 md:mt-16 mb-6 md:mb-12"
+          className="text-center mt-8 md:mt-16 mb-12 md:mb-20 pb-4 md:pb-8"
         >
           <Link
             to="/projects"
