@@ -226,7 +226,7 @@ export default function ImpactSection() {
                   key={item.domain}
                   whileHover={{ y: -6, scale: 1.02 }}
                   transition={{ duration: 0.25 }}
-                  className="p-3.5 sm:p-4 rounded-2xl bg-slate-900/95 border-2 border-white/15 backdrop-blur-2xl shadow-xl hover:shadow-2xl hover:border-cyan-400/60 transition-all duration-300 relative overflow-hidden flex flex-col space-y-2.5 text-left group h-full"
+                  className="p-3.5 sm:p-4 rounded-2xl bg-slate-900/95 border-2 border-white/15 backdrop-blur-2xl shadow-xl hover:shadow-2xl hover:border-cyan-400/60 transition-all duration-300 relative overflow-hidden flex flex-col justify-between space-y-3 text-left group h-full"
                   style={{ background: `linear-gradient(155deg, ${item.glow} 0%, rgba(15, 23, 42, 0.98) 100%)` }}
                 >
                   {/* Glowing Top Colored Bar */}
@@ -237,7 +237,7 @@ export default function ImpactSection() {
                     <img src={item.image} alt={item.project} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
                     <span
-                      className="absolute bottom-2 left-2 inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-black uppercase tracking-wider border shadow-md backdrop-blur-md"
+                      className="absolute bottom-2 left-2 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-wider border shadow-md backdrop-blur-md"
                       style={{ borderColor: item.color + "66", color: item.color, background: "rgba(15, 23, 42, 0.9)" }}
                     >
                       <Icon size={12} />
@@ -246,15 +246,15 @@ export default function ImpactSection() {
                   </div>
 
                   {/* Title and Description stacked tightly with high contrast */}
-                  <div className="space-y-1 pt-0.5">
+                  <div className="space-y-1.5 flex-1 flex flex-col justify-start">
                     {/* Project Title with Arrow */}
-                    <h3 className="text-sm sm:text-base font-black text-white m-0 tracking-wide flex items-center justify-between group-hover:text-cyan-300 transition-colors">
+                    <h3 className="text-sm sm:text-base font-bold text-white m-0 tracking-wide flex items-center justify-between group-hover:text-cyan-300 transition-colors">
                       <span>{item.project}</span>
                       <ArrowUpRight size={15} className="text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0" />
                     </h3>
 
                     {/* Problem Statement directly under title */}
-                    <p className="text-xs sm:text-sm text-slate-400 leading-relaxed m-0 font-normal">
+                    <p className="text-xs sm:text-sm text-slate-200 leading-snug m-0 font-normal">
                       {item.problem}
                     </p>
                   </div>
