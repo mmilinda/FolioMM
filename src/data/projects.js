@@ -235,6 +235,23 @@ const projects = [
     impact: "Projet collaboratif de conception et d'intégration web.",
     demo: "https://voyage2-seven.vercel.app/",
     github: "https://github.com/mmilinda"
+  },
+  {
+    id: 14,
+    slug: "gm-business-prayer-blogger",
+    title: "GM Business Prayer — Blog Blogger",
+    featured: false,
+    year: "2021",
+    status: "Stage Webgram",
+    category: "Blogging • Web Design",
+    image: "/images/projects/blog.PNG",
+    fallbackImage: "/images/projects/preview.png",
+    description:
+      "Blog personnalisé sur la plateforme Blogger réalisé lors de mon stage chez Webgram pour apprendre l'intégration web et la gestion de contenu.",
+    technologies: ["Blogger", "HTML/CSS", "CMS"],
+    impact: "Initiation pratique à l'intégration web et à la structuration de contenu en entreprise.",
+    demo: "https://gmbusinessprayer.blogspot.com/",
+    github: "https://github.com/mmilinda"
   }
 ];
 
