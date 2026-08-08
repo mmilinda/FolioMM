@@ -18,7 +18,6 @@ const TECH_BADGES = [
   "Tailwind CSS",
   "JavaScript",
   "PHP",
-  "Docker",
   "Vite",
   "Bootstrap",
   "REST API",
