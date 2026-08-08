@@ -112,13 +112,13 @@ export default function ImpactSection() {
                     Technologie avec un objectif
                   </h3>
                 </div>
-                <p className="text-slate-200 text-xs sm:text-sm leading-relaxed m-0 font-normal">
+                <p className="text-slate-400 text-xs sm:text-sm leading-relaxed m-0 font-normal">
                   Je conçois des solutions numériques pour répondre à des problèmes concrets dans mon environnement.
                 </p>
               </div>
 
               {/* Paragraphs */}
-              <div className="space-y-2 text-xs sm:text-base leading-relaxed text-slate-300 font-normal">
+              <div className="space-y-2 text-xs sm:text-base leading-relaxed text-slate-400 font-normal">
                 <p className="m-0">
                   À travers mes projets, je m'intéresse particulièrement à des secteurs où la technologie peut avoir un impact tangible : 
                   <span className="text-cyan-400 font-normal"> agriculture, sécurité, services, identité numérique et inclusion</span>.
@@ -131,7 +131,7 @@ export default function ImpactSection() {
             </div>
 
             {/* Quote Block */}
-            <div className="p-3 sm:p-3.5 rounded-xl bg-cyan-950/60 border border-cyan-400/30 text-xs sm:text-sm text-cyan-100 font-normal leading-relaxed italic shadow-md mt-0.5">
+            <div className="p-3 sm:p-3.5 rounded-xl bg-cyan-950/60 border border-cyan-400/30 text-xs sm:text-sm text-slate-400 font-normal leading-relaxed italic shadow-md mt-0.5">
               "Je ne me limite pas à construire des applications. Je me consacre à édifier des solutions utiles, accessibles et capables de grandir durablement."
             </div>
           </div>
@@ -174,7 +174,7 @@ export default function ImpactSection() {
                     <motion.div
                       key={item.text}
                       whileHover={{ x: 2 }}
-                      className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-slate-200 text-xs font-normal w-full hover:bg-white/10 hover:border-cyan-400/40 transition-all shadow-xs min-h-[28px] sm:min-h-[30px]"
+                      className="flex items-center gap-2 px-2.5 py-1 rounded-md bg-white/5 border border-white/10 text-slate-400 text-xs font-normal w-full hover:bg-white/10 hover:border-cyan-400/40 transition-all shadow-xs min-h-[28px] sm:min-h-[30px]"
                     >
                       <span className="text-xs shrink-0">{item.icon}</span>
                       <span className="w-full truncate">{item.text}</span>
@@ -188,7 +188,7 @@ export default function ImpactSection() {
                 <span className="text-[10px] sm:text-xs uppercase tracking-wider font-black text-cyan-300 flex items-center gap-1">
                   <Compass size={13} className="text-cyan-400 shrink-0" /> MON OBJECTIF ULTIME
                 </span>
-                <p className="text-xs sm:text-sm text-slate-100 leading-snug font-normal m-0">
+                <p className="text-xs sm:text-sm text-slate-300 leading-snug font-normal m-0">
                   Passer de la création de produits numériques à la création d'écosystèmes technologiques ayant un impact durable.
                 </p>
               </div>
@@ -254,7 +254,7 @@ export default function ImpactSection() {
                     </h3>
 
                     {/* Problem Statement directly under title */}
-                    <p className="text-xs sm:text-sm text-slate-200 leading-relaxed m-0 font-normal">
+                    <p className="text-xs sm:text-sm text-slate-400 leading-relaxed m-0 font-normal">
                       {item.problem}
                     </p>
                   </div>
