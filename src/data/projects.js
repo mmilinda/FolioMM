@@ -428,87 +428,7 @@ const projects = [
 
 
   {
-    id:11,
-
-    slug:"guide-itineraire",
-
-    title:"Guide Itinéraire",
-
-    featured:false,
-
-    year:"2025",
-
-    status:"Prototype",
-
-    category:"Transport • Web App",
-
-    image:"/images/projects/JqueryProject.PNG",
-
-    fallbackImage:"/images/projects/preview.png",
-
-    description:
-      "Application permettant de rechercher des itinéraires et informations de transport.",
-
-    technologies:[
-      "JavaScript",
-      "jQuery",
-      "API"
-    ],
-
-    impact:
-      "Facilitation de l'accès aux informations de déplacement.",
-
-    demo:
-      "https://jquerry-bus.vercel.app/",
-
-    github:
-      "https://github.com/mmilinda"
-
-  },
-
-
-  {
-    id: 12,
-
-    slug: "site-statique-voyage-2",
-
-    title: "Voyage 2 — Site Statique",
-
-    featured: false,
-
-    year: "2021",
-
-    status: "Projet de Groupe",
-
-    category: "Web Design",
-
-    image: "/images/projects/voyage2.PNG",
-
-    fallbackImage: "/images/projects/preview.png",
-
-    description:
-      "Site web statique de présentation touristique et de voyage réalisé en projet de groupe en 2021.",
-
-    technologies: [
-      "HTML5",
-      "CSS3",
-      "JavaScript"
-    ],
-
-    impact:
-      "Projet collaboratif de conception et d'intégration web.",
-
-    demo:
-      "https://voyage2-seven.vercel.app/",
-
-    github:
-      "https://github.com/mmilinda"
-
-  },
-
-
-  {
-    id: 13,
+    id: 11,
 
     slug: "site-vitrine-bootstrap",
 
@@ -540,6 +460,86 @@ const projects = [
 
     demo:
       "https://site-bootstrap-six.vercel.app/",
+
+    github:
+      "https://github.com/mmilinda"
+
+  },
+
+
+  {
+    id: 12,
+
+    slug: "guide-itineraire",
+
+    title: "Guide Itinéraire",
+
+    featured: false,
+
+    year: "2025",
+
+    status: "Prototype",
+
+    category: "Transport • Web App",
+
+    image: "/images/projects/JqueryProject.PNG",
+
+    fallbackImage: "/images/projects/preview.png",
+
+    description:
+      "Application permettant de rechercher des itinéraires et informations de transport.",
+
+    technologies: [
+      "JavaScript",
+      "jQuery",
+      "API"
+    ],
+
+    impact:
+      "Facilitation de l'accès aux informations de déplacement.",
+
+    demo:
+      "https://jquerry-bus.vercel.app/",
+
+    github:
+      "https://github.com/mmilinda"
+
+  },
+
+
+  {
+    id: 13,
+
+    slug: "site-statique-voyage-2",
+
+    title: "Voyage 2 — Site Statique",
+
+    featured: false,
+
+    year: "2021",
+
+    status: "Projet de Groupe",
+
+    category: "Web Design",
+
+    image: "/images/projects/voyage2.PNG",
+
+    fallbackImage: "/images/projects/preview.png",
+
+    description:
+      "Site web statique de présentation touristique et de voyage réalisé en projet de groupe en 2021.",
+
+    technologies: [
+      "HTML5",
+      "CSS3",
+      "JavaScript"
+    ],
+
+    impact:
+      "Projet collaboratif de conception et d'intégration web.",
+
+    demo:
+      "https://voyage2-seven.vercel.app/",
 
     github:
       "https://github.com/mmilinda"
