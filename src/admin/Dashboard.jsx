@@ -48,6 +48,16 @@ export default function Dashboard() {
     }
   });
 
+  const [windowWidth, setWindowWidth] = useState(() => window.innerWidth);
+
+  useEffect(() => {
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   useEffect(() => {
     function refreshMessages() {
       try {
@@ -267,15 +277,13 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ── KPI Metric Cards Grid (Single Horizontal Row) ────────────────── */}
+        {/* ── KPI Metric Cards Grid (Responsive 4-col Desktop / 2-col Tablet / 1-col Mobile) ── */}
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+            gridTemplateColumns: windowWidth >= 1024 ? "repeat(4, minmax(0, 1fr))" : windowWidth >= 640 ? "repeat(2, minmax(0, 1fr))" : "1fr",
             gap: "1.25rem",
             width: "100%",
-            overflowX: "auto",
-            paddingBottom: "0.25rem",
           }}
         >
           {stats.map((item) => {
