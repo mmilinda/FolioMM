@@ -1,49 +1,48 @@
 import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import ProjectCard from "../components/ProjectCard";
 import useProjects from "../hooks/useProjects";
 import SEO from "../components/SEO";
 import { Layers, Sparkles } from "lucide-react";
 
-const ALL = "Tous";
-
-const CATEGORIES = [
-  ALL,
-  "SaaS",
-  "DevOps",
-  "AI",
-  "Web Design",
-  "Full Stack",
-  "Automobile",
-];
-
-function filterProjects(list, filter) {
-  if (filter === ALL) return list;
-  return list.filter(
-    (p) =>
-      p.category?.toLowerCase().includes(filter.toLowerCase()) ||
-      p.technologies?.some((t) => t.toLowerCase().includes(filter.toLowerCase()))
-  );
-}
-
 export default function Projects() {
+  const { t } = useTranslation();
   const { projects } = useProjects();
+
+  const ALL = t("projectsPage.all", "Tous");
+
+  const CATEGORIES = [
+    ALL,
+    "SaaS",
+    "DevOps",
+    "AI",
+    "Web Design",
+    "Full Stack",
+    "Automobile",
+  ];
+
+  function filterProjects(list, filter) {
+    if (filter === ALL) return list;
+    return list.filter(
+      (p) =>
+        p.category?.toLowerCase().includes(filter.toLowerCase()) ||
+        p.technologies?.some((tTech) => tTech.toLowerCase().includes(filter.toLowerCase()))
+    );
+  }
+
   const [filter, setFilter] = useState(ALL);
   const headerRef = useRef(null);
   const headerInView = useInView(headerRef, { once: true });
 
   const featured = projects.filter((p) => p.featured);
-  const allFiltered = filterProjects(projects, filter);
-  const filteredProjects =
-    filter === ALL
-      ? allFiltered.filter((p) => !p.featured)
-      : allFiltered;
+  const filteredProjects = filterProjects(projects, filter);
 
   return (
     <>
       <SEO
-        title="Mes Projets | Milinda Mendy - Développeuse Full Stack & DevOps"
-        description="Découvrez l'ensemble des projets de Milinda Mendy: SaaS, IA, solutions DevOps, applications React & Laravel."
+        title={`${t("projectsPage.title")} | Milinda Mendy`}
+        description={t("projectsPage.subtitle")}
       />
 
       <section className="container-custom py-20">
@@ -57,11 +56,10 @@ export default function Projects() {
         >
           <span className="section-eyebrow">Portfolio</span>
           <h1 className="section-title mt-3">
-            Mes <span className="gradient-text">réalisations</span>
+            {t("projectsPage.title")} <span className="gradient-text">{t("projectsPage.titleHighlight")}</span>
           </h1>
           <p style={{ color: "var(--text-secondary)", maxWidth: "560px", marginTop: "1rem", fontSize: "1rem", lineHeight: 1.7 }}>
-            {projects.length} projets livrés en production — du SaaS au DevOps, de l'IA
-            au web design. Chaque projet raconte une solution à un vrai problème.
+            {t("projectsPage.subtitle")}
           </p>
         </motion.div>
 
@@ -75,7 +73,7 @@ export default function Projects() {
           >
             <div className="featured-banner-label">
               <Sparkles size={13} />
-              Projets en vedette
+              {t("projectsPage.featuredLabel", "Projets en vedette")}
             </div>
             <div className="featured-grid">
               {featured.slice(0, 3).map((project, i) => (

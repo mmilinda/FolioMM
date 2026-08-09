@@ -1,6 +1,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Target, Rocket, Lightbulb, Compass, Sprout, Shield, Fingerprint, Car, Building2, Layers, Sparkles, ArrowUpRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import agriImg from "../assets/impact/agri.jpg";
 import secImg from "../assets/impact/sec.jpg";
@@ -8,72 +9,84 @@ import identityImg from "../assets/impact/identity.jpg";
 import mobilityImg from "../assets/impact/mobility.jpg";
 import enterpriseImg from "../assets/impact/enterprise.jpg";
 
-const impactDomains = [
-  {
-    domain: "Agriculture",
-    icon: Sprout,
-    project: "AgriChain AI",
-    problem: "Accès à l'information agricole & traçabilité.",
-    image: agriImg,
-    color: "#34d399",
-    glow: "rgba(52, 211, 153, 0.25)",
-    border: "border-emerald-500/50",
-  },
-  {
-    domain: "Sécurité",
-    icon: Shield,
-    project: "SecurityApp",
-    problem: "Gestion opérationnelle & supervision temps réel.",
-    image: secImg,
-    color: "#818cf8",
-    glow: "rgba(129, 140, 248, 0.25)",
-    border: "border-indigo-500/50",
-  },
-  {
-    domain: "Identité",
-    icon: Fingerprint,
-    project: "AfriAccess",
-    problem: "Identification numérique sécurisée & rapide.",
-    image: identityImg,
-    color: "#38bdf8",
-    glow: "rgba(56, 189, 248, 0.25)",
-    border: "border-cyan-500/50",
-  },
-  {
-    domain: "Mobilité",
-    icon: Car,
-    project: "Garabi",
-    problem: "Assistance automobile de proximité digitalisée.",
-    image: mobilityImg,
-    color: "#f472b6",
-    glow: "rgba(244, 114, 182, 0.25)",
-    border: "border-pink-500/50",
-  },
-  {
-    domain: "Entreprises",
-    icon: Building2,
-    project: "Noregis",
-    problem: "Digitalisation des processus & automatisation.",
-    image: enterpriseImg,
-    color: "#fb923c",
-    glow: "rgba(251, 146, 60, 0.25)",
-    border: "border-orange-500/50",
-  },
-];
-
-const initiatives = [
-  { text: "Projets technologiques personnels", icon: "🚀" },
-  { text: "Hackathons & compétitions tech", icon: "🏆" },
-  { text: "AgriChain AI — AgriTech & AI", icon: "🌾" },
-  { text: "SecurityApp — Ops & Sécurité", icon: "🛡️" },
-  { text: "Projets orientés problèmes locaux", icon: "🌍" },
-  { text: "Expérimentation IA & Blockchain", icon: "⚡" },
-  { text: "Création de solutions SaaS", icon: "💻" },
-];
-
 export default function ImpactSection() {
+  const { t, i18n } = useTranslation();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
+  const isEn = i18n.language?.toLowerCase().startsWith("en");
+
+  const impactDomains = [
+    {
+      domain: isEn ? "Agriculture" : "Agriculture",
+      icon: Sprout,
+      project: "AgriChain AI",
+      problem: isEn
+        ? "Agricultural information access & food supply chain traceability."
+        : "Accès à l'information agricole & traçabilité.",
+      image: agriImg,
+      color: "#34d399",
+      glow: "rgba(52, 211, 153, 0.25)",
+      border: "border-emerald-500/50",
+    },
+    {
+      domain: isEn ? "Security" : "Sécurité",
+      icon: Shield,
+      project: "SecurityApp",
+      problem: isEn
+        ? "Operational dispatch & real-time security monitoring."
+        : "Gestion opérationnelle & supervision temps réel.",
+      image: secImg,
+      color: "#818cf8",
+      glow: "rgba(129, 140, 248, 0.25)",
+      border: "border-indigo-500/50",
+    },
+    {
+      domain: isEn ? "Identity" : "Identité",
+      icon: Fingerprint,
+      project: "AfriAccess",
+      problem: isEn
+        ? "Fast & secure digital identity verification workflows."
+        : "Identification numérique sécurisée & rapide.",
+      image: identityImg,
+      color: "#38bdf8",
+      glow: "rgba(56, 189, 248, 0.25)",
+      border: "border-cyan-500/50",
+    },
+    {
+      domain: isEn ? "Mobility" : "Mobilité",
+      icon: Car,
+      project: "Garabi",
+      problem: isEn
+        ? "Digitized local roadside automotive assistance."
+        : "Assistance automobile de proximité digitalisée.",
+      image: mobilityImg,
+      color: "#f472b6",
+      glow: "rgba(244, 114, 182, 0.25)",
+      border: "border-pink-500/50",
+    },
+    {
+      domain: isEn ? "Enterprise" : "Entreprises",
+      icon: Building2,
+      project: "Noregis",
+      problem: isEn
+        ? "Automated document scanning & OCR data extraction from IDs & passports."
+        : "Numérisation & extraction automatique de données d'identité (CIN, passeport, permis, carte grise).",
+      image: enterpriseImg,
+      color: "#fb923c",
+      glow: "rgba(251, 146, 60, 0.25)",
+      border: "border-orange-500/50",
+    },
+  ];
+
+  const initiatives = [
+    { text: isEn ? "Personal tech projects" : "Projets technologiques personnels", icon: "🚀" },
+    { text: isEn ? "Hackathons & tech competitions" : "Hackathons & compétitions tech", icon: "🏆" },
+    { text: isEn ? "AgriChain AI — AgriTech & AI" : "AgriChain AI — AgriTech & AI", icon: "🌾" },
+    { text: isEn ? "SecurityApp — Ops & Security" : "SecurityApp — Ops & Sécurité", icon: "🛡️" },
+    { text: isEn ? "Local problem-oriented software" : "Projets orientés problèmes locaux", icon: "🌍" },
+    { text: isEn ? "AI & Blockchain experiments" : "Expérimentation IA & Blockchain", icon: "⚡" },
+    { text: isEn ? "SaaS platform engineering" : "Création de solutions SaaS", icon: "💻" },
+  ];
 
   return (
     <section ref={ref} className="pt-14 md:pt-24 pb-10 md:pb-16 relative overflow-hidden">
@@ -83,23 +96,23 @@ export default function ImpactSection() {
 
       <div className="container-custom relative z-10 space-y-12 md:space-y-16">
 
-        {/* ─── Part 1: Vision & Philosophie (Compact Scaled ~10-15%) ─────────── */}
+        {/* ─── Part 1: Vision & Philosophie ─────────── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch"
         >
-          {/* Left Column — Text (50% Width) */}
+          {/* Left Column — Text */}
           <div className="lg:col-span-6 flex flex-col justify-between space-y-4 text-left">
             <div className="space-y-3">
               <span className="section-eyebrow py-0.5 text-xs">
                 <Target size={13} className="inline-block mr-1 -mt-0.5 text-cyan-400" />
-                Vision & Philosophie
+                {isEn ? "Vision & Philosophy" : "Vision & Philosophie"}
               </span>
 
               <h2 className="section-title text-lg sm:text-2xl md:text-3xl font-extrabold text-left m-0 leading-tight">
-                Pourquoi je <span className="gradient-text">construis</span>
+                {isEn ? "Why I " : "Pourquoi je "}<span className="gradient-text">{isEn ? "Build" : "construis"}</span>
               </h2>
 
               {/* Glass Card Box */}
@@ -109,34 +122,44 @@ export default function ImpactSection() {
                     <Lightbulb size={17} className="text-cyan-300" />
                   </div>
                   <h3 className="text-base sm:text-lg font-extrabold text-white m-0 tracking-wide">
-                    Technologie avec un objectif
+                    {isEn ? "Purpose-Driven Technology" : "Technologie avec un objectif"}
                   </h3>
                 </div>
                 <p className="text-xs sm:text-sm text-slate-400 leading-relaxed m-0 font-normal">
-                  Je conçois des solutions numériques pour répondre à des problèmes concrets dans mon environnement.
+                  {isEn
+                    ? "I engineer digital solutions to solve real-world problems in my environment."
+                    : "Je conçois des solutions numériques pour répondre à des problèmes concrets dans mon environnement."}
                 </p>
               </div>
 
               {/* Paragraphs */}
               <div className="space-y-3 text-xs sm:text-sm leading-relaxed text-slate-400 font-normal">
                 <p className="m-0">
-                  À travers mes projets, je m'intéresse particulièrement à des secteurs où la technologie peut avoir un impact tangible : 
-                  <span className="text-cyan-400 font-normal"> agriculture, sécurité, services, identité numérique et inclusion</span>.
+                  {isEn
+                    ? "Through my work, I focus on key sectors where technology delivers tangible impact: "
+                    : "À travers mes projets, je m'intéresse particulièrement à des secteurs où la technologie peut avoir un impact tangible : "}
+                  <span className="text-cyan-400 font-normal">
+                    {isEn ? "agriculture, security, services, digital identity & inclusion" : "agriculture, sécurité, services, identité numérique et inclusion"}
+                  </span>.
                 </p>
 
                 <p className="m-0">
-                  Mon ambition est de transformer mes compétences techniques en projets capables de créer des opportunités, améliorer l'accès à l'information et contribuer au développement numérique en Afrique.
+                  {isEn
+                    ? "My ambition is to translate engineering skills into systems that unlock opportunities, improve access to information, and foster digital growth in Africa."
+                    : "Mon ambition est de transformer mes compétences techniques en projets capables de créer des opportunités, améliorer l'accès à l'information et contribuer au développement numérique en Afrique."}
                 </p>
               </div>
             </div>
 
             {/* Quote Block */}
             <div className="p-3.5 sm:p-4 rounded-xl bg-cyan-950/60 border border-cyan-400/30 text-xs sm:text-sm text-slate-400 font-normal leading-relaxed italic shadow-md mt-2">
-              "Je ne me limite pas à construire des applications. Je me consacre à édifier des solutions utiles, accessibles et capables de grandir durablement."
+              {isEn
+                ? '"I don\'t just build web apps. I build useful, accessible systems designed for resilient scale."'
+                : '"Je ne me limite pas à construire des applications. Je me consacre à édifier des solutions utiles, accessibles et capables de grandir durablement."'}
             </div>
           </div>
 
-          {/* Right Column — Initiatives & Leadership (50% Width) */}
+          {/* Right Column — Initiatives */}
           <div className="lg:col-span-6 flex">
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -146,29 +169,33 @@ export default function ImpactSection() {
             >
               <div className="space-y-3 flex-grow flex flex-col justify-between">
                 
-                {/* 1. Header Title at the top */}
+                {/* Header Title */}
                 <div className="flex items-center justify-between border-b border-white/10 pb-2 shrink-0">
                   <div className="flex items-center gap-2">
                     <div className="w-7 h-7 rounded-lg bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center shrink-0">
                       <Rocket size={15} className="text-indigo-400" />
                     </div>
                     <div>
-                      <h3 className="text-base sm:text-lg font-extrabold text-white m-0 leading-none">Ce que j'initie</h3>
-                      <span className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 inline-block font-normal">Initiatives & Leadership</span>
+                      <h3 className="text-base sm:text-lg font-extrabold text-white m-0 leading-none">
+                        {isEn ? "What I Initiate" : "Ce que j'initie"}
+                      </h3>
+                      <span className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 inline-block font-normal">
+                        {isEn ? "Initiatives & Leadership" : "Initiatives & Leadership"}
+                      </span>
                     </div>
                   </div>
                   <span className="px-2 py-0.5 rounded bg-cyan-400 text-slate-950 text-[10px] font-black uppercase tracking-wider shadow-xs flex items-center gap-1">
-                    <Sparkles size={10} /> Leadership Tech
+                    <Sparkles size={10} /> Tech Leadership
                   </span>
                 </div>
 
-                {/* 2. Illustrative Banner Image (Compact h-24 sm:h-28) */}
+                {/* Banner Image */}
                 <div className="w-full h-24 sm:h-28 rounded-lg sm:rounded-xl overflow-hidden border border-white/15 relative shadow-sm shrink-0">
-                  <img src="/initiatives_banner.jpg" alt="Leadership Tech" className="w-full h-full object-cover" />
+                  <img src="/initiatives_banner.jpg" alt="Tech Leadership" className="w-full h-full object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
                 </div>
 
-                {/* 3. Single-Column Initiative Rows */}
+                {/* Initiative Rows */}
                 <div className="flex flex-col justify-between space-y-1.5 w-full flex-grow my-auto pt-1">
                   {initiatives.map((item) => (
                     <motion.div
@@ -183,21 +210,23 @@ export default function ImpactSection() {
                 </div>
               </div>
 
-              {/* 4. High-Visibility Mon Objectif Ultime Box */}
+              {/* Goal Box */}
               <div className="p-3 sm:p-3.5 rounded-lg sm:rounded-xl bg-gradient-to-r from-cyan-950/90 via-cyan-900/80 to-slate-900/90 border-2 border-cyan-400/60 shadow-lg space-y-1 shrink-0 mt-2">
                 <span className="text-[10px] sm:text-xs uppercase tracking-wider font-black text-cyan-300 flex items-center gap-1">
-                  <Compass size={13} className="text-cyan-400 shrink-0" /> MON OBJECTIF ULTIME
+                  <Compass size={13} className="text-cyan-400 shrink-0" /> {isEn ? "MY ULTIMATE GOAL" : "MON OBJECTIF ULTIME"}
                 </span>
                 <p className="text-xs sm:text-sm text-slate-300 leading-snug font-normal m-0">
-                  Passer de la création de produits numériques à la création d'écosystèmes technologiques ayant un impact durable.
+                  {isEn
+                    ? "Transitioning from crafting software products to shaping technology ecosystems with sustainable impact."
+                    : "Passer de la création de produits numériques à la création d'écosystèmes technologiques ayant un impact durable."}
                 </p>
               </div>
             </motion.div>
           </div>
         </motion.div>
 
-                  <div><br /></div>
-        {/* ─── Part 2: Impact Tangible ────────────────────────────────────────── */}
+        <div><br /></div>
+        {/* ─── Part 2: Impact Tangible ─────────── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -207,16 +236,17 @@ export default function ImpactSection() {
           <div className="text-center flex flex-col items-center justify-center space-y-2 mb-6">
             <span className="section-eyebrow py-0.5 text-xs inline-flex items-center gap-1.5 mx-auto">
               <Layers size={13} className="text-cyan-400 shrink-0" />
-              Impact Tangible
+              {isEn ? "Tangible Impact" : "Impact Tangible"}
             </span>
             <h2 className="section-title text-base sm:text-2xl md:text-3xl lg:text-4xl font-extrabold m-0 text-center whitespace-nowrap max-w-full">
-              Des solutions pensées pour <span className="gradient-text">des problèmes réels</span>
+              {isEn ? "Solutions engineered for " : "Des solutions pensées pour "}
+              <span className="gradient-text">{isEn ? "real challenges" : "des problèmes réels"}</span>
             </h2>
             <p className="text-slate-400 text-xs sm:text-base text-center max-w-xl mx-auto m-0 leading-relaxed font-normal">
-              Chaque projet répond à un défi concret identifié sur le terrain.
+              {isEn ? "Every project tackles a concrete operational challenge identified on the ground." : "Chaque projet répond à un défi concret identifié sur le terrain."}
             </p>
           </div>
-                  <br />
+          <br />
           {/* 5 Premium Modern Impact Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 sm:gap-10">
             {impactDomains.map((item) => {
@@ -232,7 +262,7 @@ export default function ImpactSection() {
                   {/* Glowing Top Colored Bar */}
                   <div className="absolute top-0 left-0 right-0 h-1.5 w-full rounded-t-2xl" style={{ background: item.color }} />
 
-                  {/* Top Image Thumbnail Header with generous margins */}
+                  {/* Top Image Thumbnail Header */}
                   <div className="w-full h-32 sm:h-36 rounded-xl overflow-hidden border border-white/15 relative shadow-md shrink-0 mt-3 mb-3">
                     <img src={item.image} alt={item.project} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
@@ -245,15 +275,13 @@ export default function ImpactSection() {
                     </span>
                   </div>
 
-                  {/* Title and Description stacked with spacious inner margins */}
+                  {/* Title and Description */}
                   <div className="space-y-4 flex-1 flex flex-col justify-start my-3 px-1">
-                    {/* Project Title (Bold, Bright White, 16px-18px) */}
                     <h3 className="text-base sm:text-lg font-extrabold text-white m-0 tracking-wide flex items-center justify-between group-hover:text-cyan-300 transition-colors leading-snug mb-2">
                       <span>{item.project}</span>
                       <ArrowUpRight size={18} className="text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 ml-2" />
                     </h3>
 
-                    {/* Problem Statement (Small 12px, Muted Slate Grey, Normal Weight) with generous top margin */}
                     <p className="text-xs sm:text-sm text-slate-400 leading-relaxed m-0 font-normal pt-5 border-t border-white/10 mt-3">
                       {item.problem}
                     </p>

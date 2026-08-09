@@ -6,18 +6,32 @@ const translations = {
     subtitle: 'Mon Parcours Professionnel',
     experiences: [
       {
-        role: 'Développeuse Full Stack',
+        role: 'Développeuse Full Stack & DevOps',
         company: 'Freelance / Indépendante',
-        period: '2023 – Présent',
-        desc: "Conception et développement d'applications web complètes pour divers clients. Spécialisation dans les solutions React, Node.js et les intégrations d'API.",
-        techs: ['React', 'Node.js', 'Firebase', 'Laravel'],
+        period: '2025 – Présent',
+        desc: "Conception et déploiement d'applications SaaS & IA (AgriChain AI, Noregis SaaS, Garabi Assistance, SecurityApp). Automatisation CI/CD et déploiements Docker/Kubernetes.",
+        techs: ['React', 'Laravel', 'Docker', 'Kubernetes', 'CI/CD', 'TypeScript'],
       },
       {
-        role: 'Développeuse Web',
-        company: 'Formation & Projets Personnels',
-        period: '2022 – 2023',
-        desc: "Développement de projets académiques et personnels. Acquisition de compétences en développement Full Stack, bases de données et déploiement.",
-        techs: ['HTML', 'CSS', 'JavaScript', 'PHP'],
+        role: 'Développeuse Full Stack & Web Mobile',
+        company: 'Défarsci',
+        period: '2024 – 2025',
+        desc: "Développement de plateformes d'insertion professionnelle (CV Vidéo) et de gestion immobilière (Location Appartement). Intégration d'API REST et WebRTC.",
+        techs: ['Laravel', 'React', 'PHP', 'MySQL', 'WebRTC'],
+      },
+      {
+        role: 'Stagiaire Développeuse Web',
+        company: 'Défarsci',
+        period: '2023',
+        desc: "Conception et intégration de sites vitrines et plateformes CMS (Site Zawiya). Modélisation de bases de données et intégration d'interfaces web.",
+        techs: ['Laravel', 'PHP', 'WordPress', 'Bootstrap', 'MySQL'],
+      },
+      {
+        role: 'Stagiaire Intégratrice Web',
+        company: 'Bakeli & Webgram',
+        period: '2022',
+        desc: "Apprentissage pratique de l'intégration web responsive avec Bootstrap 5 et jQuery. Personnalisation de blogs d'entreprise.",
+        techs: ['Bootstrap 5', 'HTML5', 'CSS3', 'JavaScript', 'jQuery'],
       },
     ],
   },
@@ -26,25 +40,39 @@ const translations = {
     subtitle: 'My Professional Journey',
     experiences: [
       {
-        role: 'Full Stack Developer',
+        role: 'Full Stack & DevOps Engineer',
         company: 'Freelance / Independent',
-        period: '2022 – Present',
-        desc: "Design and development of complete web applications for various clients. Specialization in React, Node.js solutions and API integrations.",
-        techs: ['React', 'Node.js', 'Firebase', 'Laravel'],
+        period: '2025 – Present',
+        desc: "Design and deployment of SaaS & AI platforms (AgriChain AI, Noregis SaaS, Garabi Assistance, SecurityApp). CI/CD automation and Docker/Kubernetes deployments.",
+        techs: ['React', 'Laravel', 'Docker', 'Kubernetes', 'CI/CD', 'TypeScript'],
       },
       {
-        role: 'Web Developer',
-        company: 'Training & Personal Projects',
-        period: '2021 – 2022',
-        desc: "Development of academic and personal projects. Acquisition of skills in Full Stack development, databases and deployment.",
-        techs: ['HTML', 'CSS', 'JavaScript', 'PHP'],
+        role: 'Full Stack & Web Mobile Developer',
+        company: 'Défarsci',
+        period: '2024 – 2025',
+        desc: "Development of platforms for professional placement (CV Vidéo) and real estate management (Location Appartement). Integration of REST & WebRTC APIs.",
+        techs: ['Laravel', 'React', 'PHP', 'MySQL', 'WebRTC'],
+      },
+      {
+        role: 'Web Developer Intern',
+        company: 'Défarsci',
+        period: '2023',
+        desc: "Design and integration of showcase websites and CMS platforms (Site Zawiya). Relational database modeling and adaptive UI design.",
+        techs: ['Laravel', 'PHP', 'WordPress', 'Bootstrap', 'MySQL'],
+      },
+      {
+        role: 'Web Integrator Intern',
+        company: 'Bakeli & Webgram',
+        period: '2022',
+        desc: "Hands-on learning of responsive web integration with Bootstrap 5 and jQuery. Customization and management of corporate blogs.",
+        techs: ['Bootstrap 5', 'HTML5', 'CSS3', 'JavaScript', 'jQuery'],
       },
     ],
   },
 };
 
-const Experience = ({ lang }) => {
-  const t = translations[lang];
+const Experience = ({ lang = 'fr' }) => {
+  const t = translations[lang] || translations.fr;
 
   return (
     <section className="container animate-fade" style={{ padding: '5rem 0' }}>

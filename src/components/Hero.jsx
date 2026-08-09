@@ -2,7 +2,8 @@ import { motion } from "framer-motion";
 import { ArrowRight, Download, Sparkles, Mail } from "lucide-react";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const ROLES = [
   "DevOps Engineer",
@@ -61,13 +62,15 @@ const socialLinks = [
   { icon: Mail, href: "mailto:mmilinda00@gmail.com", label: "Email" },
 ];
 
-const stats = [
-  { value: "10+", label: "Projets livrés" },
-  { value: "3+", label: "Ans d'expérience" },
-  { value: "15+", label: "Technologies" },
-];
-
 export default function Hero() {
+  const { t } = useTranslation();
+
+  const stats = [
+    { value: "10+", label: t("hero.stats.projects") },
+    { value: "3+", label: t("hero.stats.experience") },
+    { value: "15+", label: t("hero.stats.tech") },
+  ];
+
   return (
     <section className="hero-section">
       {/* Animated background orbs */}
@@ -94,7 +97,7 @@ export default function Hero() {
             transition={{ delay: 0.2, duration: 0.5 }}
           >
             <Sparkles size={14} className="text-cyan-400" />
-            <span>Disponible pour des missions</span>
+            <span>{t("hero.badge")}</span>
             <span className="hero-badge-dot" />
           </motion.div>
 
@@ -113,8 +116,7 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.7 }}
           >
-            Je conçois et déploie des architectures cloud robustes, des pipelines CI/CD
-            efficaces et des applications full stack performantes — du code au serveur de production.
+            {t("hero.description")}
           </motion.p>
 
           {/* Tech badges */}
@@ -124,15 +126,15 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.65, duration: 0.6 }}
           >
-            {TECH_BADGES.map((t, i) => (
+            {TECH_BADGES.map((tBadge, i) => (
               <motion.span
-                key={t}
+                key={tBadge}
                 className="hero-tech-badge"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 + i * 0.05 }}
               >
-                {t}
+                {tBadge}
               </motion.span>
             ))}
           </motion.div>
@@ -145,12 +147,12 @@ export default function Hero() {
             transition={{ delay: 0.8, duration: 0.6 }}
           >
             <Link to="/projects" className="hero-btn-primary">
-              Voir mes projets
+              {t("hero.viewProjects")}
               <ArrowRight size={18} />
             </Link>
 
             <a href="/CV-Milinda-Mendy.pdf" download className="hero-btn-secondary">
-              Télécharger CV
+              {t("hero.downloadCv")}
               <Download size={18} />
             </a>
           </motion.div>
@@ -201,14 +203,14 @@ export default function Hero() {
               transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
             >
               <span className="hero-floating-dot hero-floating-dot-green" />
-              Available for work
+              {t("hero.availableForWork")}
             </motion.div>
             <motion.div
               className="hero-floating-card hero-floating-card-bottom"
               animate={{ y: [0, 8, 0] }}
               transition={{ repeat: Infinity, duration: 3.5, ease: "easeInOut", delay: 0.5 }}
             >
-              ⚡ 10+ projects shipped
+              {t("hero.shippedBadge")}
             </motion.div>
           </div>
 

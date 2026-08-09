@@ -2,24 +2,29 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, ExternalLink, Calendar, Tag } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 import useProjects from "../hooks/useProjects";
+import { getLocalizedProject } from "../data/projects";
 import SEO from "../components/SEO";
 
 export default function ProjectDetails() {
   const { id } = useParams();
   const { projects } = useProjects();
+  const { t, i18n } = useTranslation();
 
-  const project = projects.find(
+  const rawProject = projects.find(
     (p) => p.slug === id || String(p.id) === String(id)
   );
+
+  const project = getLocalizedProject(rawProject, i18n.language);
 
   if (!project) {
     return (
       <>
-        <SEO title="Projet introuvable" />
+        <SEO title={t("blogDetails.notFoundTitle", "Projet introuvable")} />
         <section className="container-custom py-20" style={{ textAlign: "center" }}>
           <p style={{ color: "var(--text-muted)", fontSize: "1.1rem" }}>
-            Projet introuvable.
+            {t("blogDetails.notFoundDesc", "Projet introuvable.")}
           </p>
           <Link
             to="/projects"
@@ -27,7 +32,7 @@ export default function ProjectDetails() {
             style={{ display: "inline-flex", marginTop: "2rem" }}
           >
             <ArrowLeft size={16} />
-            Retour aux projets
+            {t("blogDetails.backToBlog", "Retour aux projets")}
           </Link>
         </section>
       </>
@@ -37,7 +42,7 @@ export default function ProjectDetails() {
   return (
     <>
       <SEO
-        title={`${project.title} | Projet Milinda Mendy`}
+        title={`${project.title} | Milinda Mendy`}
         description={project.description}
         image={project.image}
       />
@@ -55,7 +60,7 @@ export default function ProjectDetails() {
           style={{ display: "inline-flex", marginBottom: "2.5rem" }}
         >
           <ArrowLeft size={16} />
-          Retour aux projets
+          {t("blogDetails.backToBlog", "Retour aux projets")}
         </Link>
 
         {/* Hero image */}
@@ -111,7 +116,9 @@ export default function ProjectDetails() {
             {/* Problem */}
             {project.problem && (
               <div style={{ padding: "1.5rem", background: "rgba(248,113,113,0.06)", border: "1px solid rgba(248,113,113,0.2)", borderRadius: "16px", marginBottom: "1.5rem" }}>
-                <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#f87171", marginBottom: "0.5rem" }}>🎯 Problème identifié</h3>
+                <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#f87171", marginBottom: "0.5rem" }}>
+                  🎯 {t("projectsPage.problemLabel", "Problème identifié")}
+                </h3>
                 <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.7 }}>{project.problem}</p>
               </div>
             )}
@@ -119,7 +126,9 @@ export default function ProjectDetails() {
             {/* Solution */}
             {project.solution && (
               <div style={{ padding: "1.5rem", background: "rgba(52,211,153,0.06)", border: "1px solid rgba(52,211,153,0.2)", borderRadius: "16px", marginBottom: "1.5rem" }}>
-                <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#34d399", marginBottom: "0.5rem" }}>💡 Solution apportée</h3>
+                <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#34d399", marginBottom: "0.5rem" }}>
+                  💡 {t("projectsPage.solutionLabel", "Solution apportée")}
+                </h3>
                 <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.7 }}>{project.solution}</p>
               </div>
             )}
@@ -127,7 +136,9 @@ export default function ProjectDetails() {
             {/* Impact */}
             {project.impact && (
               <div style={{ padding: "1.5rem", background: "rgba(56,189,248,0.06)", border: "1px solid rgba(56,189,248,0.2)", borderRadius: "16px" }}>
-                <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--primary)", marginBottom: "0.5rem" }}>📈 Impact</h3>
+                <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--primary)", marginBottom: "0.5rem" }}>
+                  📈 {t("projectsPage.impactLabel", "Impact")}
+                </h3>
                 <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.7 }}>{project.impact}</p>
               </div>
             )}
@@ -141,13 +152,13 @@ export default function ProjectDetails() {
               {project.demo && project.demo !== "#" && (
                 <a href={project.demo} target="_blank" rel="noopener noreferrer" className="hero-btn-primary" style={{ justifyContent: "center" }}>
                   <ExternalLink size={16} />
-                  Voir la démo
+                  {t("projectCard.demo", "Voir la démo")}
                 </a>
               )}
               {project.github && (
                 <a href={project.github} target="_blank" rel="noopener noreferrer" className="hero-btn-secondary" style={{ justifyContent: "center" }}>
                   <FaGithub size={16} />
-                  Voir le code
+                  {t("projectCard.github", "Voir le code")}
                 </a>
               )}
             </div>
@@ -156,7 +167,7 @@ export default function ProjectDetails() {
             {project.technologies?.length > 0 && (
               <div style={{ padding: "1.5rem", background: "rgba(255,255,255,0.03)", border: "1px solid var(--border)", borderRadius: "18px" }}>
                 <h3 style={{ fontSize: "0.85rem", fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "6px" }}>
-                  <Tag size={13} /> Technologies
+                  <Tag size={13} /> {t("projectCard.technologies", "Technologies")}
                 </h3>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
                   {project.technologies.map((tech) => (

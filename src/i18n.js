@@ -1,123 +1,299 @@
 import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
 
-import {
-initReactI18next
-}
-from "react-i18next";
-
-
-const resources={
-
-
-fr:{
-
-translation:{
-
-
-nav:{
-
-home:"Accueil",
-
-projects:"Projets",
-
-contact:"Contact",
-
-blog:"Blog"
-
-},
-
-
-hero:{
-
-title:"Développeuse Full Stack",
-
-description:
-"Je transforme vos idées en applications digitales performantes."
-
-},
-
-
-button:{
-
-projects:"Voir mes projets",
-
-contact:"Me contacter"
-
-}
-
-
-}
-
-},
-
-
-
-en:{
-
-
-translation:{
-
-
-nav:{
-
-home:"Home",
-
-projects:"Projects",
-
-contact:"Contact",
-
-blog:"Blog"
-
-},
-
-
-hero:{
-
-title:"Full Stack Developer",
-
-description:
-"I transform ideas into scalable digital products."
-
-},
-
-
-button:{
-
-projects:"View projects",
-
-contact:"Contact me"
-
-}
-
-
-}
-
-}
-
-
+const resources = {
+  fr: {
+    translation: {
+      nav: {
+        home: "Accueil",
+        projects: "Projets",
+        blog: "Blog",
+        contact: "Contact",
+      },
+      hero: {
+        badge: "Disponible pour des missions",
+        name: "Milinda Mendy",
+        description: "Je conçois et déploie des architectures cloud robustes, des pipelines CI/CD efficaces et des applications full stack performantes — du code au serveur de production.",
+        viewProjects: "Voir mes projets",
+        downloadCv: "Télécharger CV",
+        availableForWork: "Disponible pour travailler",
+        shippedBadge: "⚡ 10+ projets livrés",
+        stats: {
+          projects: "Projets livrés",
+          experience: "Ans d'expérience",
+          tech: "Technologies",
+        },
+      },
+      about: {
+        eyebrow: "À Propos",
+        title: "Passionnée par le",
+        titleHighlight: "DevOps & le Full Stack",
+        desc1: "Développeuse Full Stack & Ingénieure DevOps avec une solide expérience dans la création de solutions web scalables, l'automatisation de pipelines et la conteneurisation.",
+        desc2: "Basée sur des pratiques modernes (Docker, Kubernetes, React, Laravel, CI/CD), j'accompagne les entreprises et startups dans la numérisation de leurs opérations et l'optimisation de leur infrastructure.",
+        statsProjects: "Projets accomplis",
+        statsClient: "Satisfaction clients",
+      },
+      services: {
+        eyebrow: "Compétences & Services",
+        title: "Mes domaines d'",
+        titleHighlight: "expertise",
+        subtitle: "Des solutions techniques bout-en-bout adaptées à vos besoins métiers et vos enjeux de croissance.",
+        devopsTitle: "Architecture DevOps & CI/CD",
+        devopsDesc: "Automatisation des déploiements, conteneurisation Docker, orchestration Kubernetes et pipelines GitHub Actions zero-downtime.",
+        fullstackTitle: "Développement Full Stack",
+        fullstackDesc: "Conception d'applications web modernes et réactives avec React, Vite, Node.js, Laravel et bases de données SQL/NoSQL.",
+        cloudTitle: "Cloud & Infrastructure",
+        cloudDesc: "Configuration et administration de serveurs VPS, AWS, hébergement sécurisé, certificats SSL et optimisation Nginx.",
+        aiTitle: "IA & Innovation Digitale",
+        aiDesc: "Intégration d'outils d'IA (Computer Vision, OCR, modèles de prédiction) et développement de solutions SaaS innovantes.",
+      },
+      homeProjects: {
+        eyebrow: "Réalisations",
+        title: "Projets",
+        titleHighlight: "en vedette",
+        subtitle: "Un aperçu de mes récents travaux alliant architecture logicielle, expérience utilisateur soignée et déploiement cloud.",
+        viewAll: "Voir tous les projets",
+      },
+      projectCard: {
+        viewDetails: "Voir détails",
+        demo: "Démo live",
+        github: "Code source",
+        featured: "En vedette",
+        technologies: "Technologies :",
+      },
+      impact: {
+        eyebrow: "Vision & Engagement",
+        title: "Projets à",
+        titleHighlight: "Fort Impact",
+        subtitle: "Créer de la valeur à travers des technologies modernes répondant à de vraies problématiques du terrain.",
+        initiativesTitle: "Engagements & Initiatives Tech",
+      },
+      timeline: {
+        eyebrow: "Parcours",
+        title: "Mon expérience",
+        titleHighlight: "professionnelle",
+        subtitle: "Une progression constante allant de l'intégration front-end à la maîtrise de la pile Full Stack & des architectures DevOps.",
+      },
+      booking: {
+        eyebrow: "Prendre Rendez-vous",
+        title: "Réservez un créneau d'",
+        titleHighlight: "échange",
+        subtitle: "Discutons de votre projet, de vos besoins en infrastructure ou d'une opportunité de collaboration.",
+        nameLabel: "Votre nom complet",
+        emailLabel: "Adresse email",
+        subjectLabel: "Sujet / Projet",
+        dateLabel: "Date souhaitée",
+        timeLabel: "Heure souhaitée",
+        msgLabel: "Message / Détails du besoin",
+        submitBtn: "Confirmer la réservation",
+        successMsg: "Votre demande de réservation a été enregistrée avec succès !",
+      },
+      footer: {
+        desc: "Développeuse Full Stack & DevOps spécialisée dans la création de SaaS performants et d'architectures cloud résilientes.",
+        quickLinks: "Navigation rapide",
+        contactTitle: "Contact & Réseaux",
+        rights: "Tous droits réservés.",
+      },
+      projectsPage: {
+        title: "Mes",
+        titleHighlight: "réalisations",
+        subtitle: "Découvrez l'ensemble de mes projets : SaaS, IA, solutions DevOps, applications React & Laravel.",
+        all: "Tous",
+        featuredLabel: "Projets en vedette",
+        noProjects: "Aucun projet trouvé dans cette catégorie.",
+      },
+      blogPage: {
+        title: "Mes",
+        titleHighlight: "articles",
+        subtitle: "Je partage mes expériences, retours de terrain et bonnes pratiques sur le DevOps, le développement et l'IA.",
+        eyebrow: "Blog & Articles",
+        readArticle: "Lire l'article",
+        read: "Lire",
+        readTime: "de lecture",
+        all: "Tous",
+        comingSoon: "Plus d'articles arrivent bientôt... 🚀",
+      },
+      blogDetails: {
+        backToBlog: "Retour au blog",
+        share: "Partager",
+        copiedLink: "Lien copié !",
+        keywords: "Mots-clés :",
+        ctaTitle: "Vous avez un projet DevOps ou Full Stack ?",
+        ctaDesc: "Parlons de l'architecture et de la mise en production de votre plateforme.",
+        contactBtn: "Me contacter",
+        relatedTitle: "À lire également",
+        notFoundTitle: "Article non trouvé",
+        notFoundDesc: "L'article que vous cherchez n'existe pas ou a été déplacé.",
+      },
+      contactPage: {
+        eyebrow: "Contact",
+        title: "Parlons de votre",
+        titleHighlight: "projet",
+        subtitle: "Une question, un projet SaaS ou une opportunité de collaboration ? Envoyez-moi un message.",
+        name: "Nom complet",
+        email: "Adresse Email",
+        subject: "Sujet",
+        message: "Votre message",
+        send: "Envoyer le message",
+        sending: "Envoi en cours...",
+        success: "Message envoyé avec succès ! Je vous répondrai dans les plus brefs délais.",
+      },
+    },
+  },
+  en: {
+    translation: {
+      nav: {
+        home: "Home",
+        projects: "Projects",
+        blog: "Blog",
+        contact: "Contact",
+      },
+      hero: {
+        badge: "Available for contract & freelance",
+        name: "Milinda Mendy",
+        description: "I design and deploy robust cloud architectures, efficient CI/CD pipelines, and high-performance full stack applications — from code to production server.",
+        viewProjects: "View My Projects",
+        downloadCv: "Download Resume",
+        availableForWork: "Available for work",
+        shippedBadge: "⚡ 10+ projects shipped",
+        stats: {
+          projects: "Projects Delivered",
+          experience: "Years Experience",
+          tech: "Technologies",
+        },
+      },
+      about: {
+        eyebrow: "About Me",
+        title: "Passionate about",
+        titleHighlight: "DevOps & Full Stack",
+        desc1: "Full Stack Developer & DevOps Engineer with solid experience in building scalable web solutions, pipeline automation, and containerization.",
+        desc2: "Relying on modern standards (Docker, Kubernetes, React, Laravel, CI/CD), I assist companies and startups in digitizing operations and optimizing cloud infrastructure.",
+        statsProjects: "Completed Projects",
+        statsClient: "Client Satisfaction",
+      },
+      services: {
+        eyebrow: "Skills & Services",
+        title: "My Areas of",
+        titleHighlight: "Expertise",
+        subtitle: "End-to-end technical solutions tailored to your business goals and growth challenges.",
+        devopsTitle: "DevOps Architecture & CI/CD",
+        devopsDesc: "Deployment automation, Docker containerization, Kubernetes orchestration, and zero-downtime GitHub Actions pipelines.",
+        fullstackTitle: "Full Stack Development",
+        fullstackDesc: "Modern, responsive web applications built with React, Vite, Node.js, Laravel, and SQL/NoSQL databases.",
+        cloudTitle: "Cloud & Infrastructure",
+        cloudDesc: "VPS server configuration and administration, AWS cloud, secure hosting, SSL certificates, and Nginx tuning.",
+        aiTitle: "AI & Digital Innovation",
+        aiDesc: "Integration of AI tools (Computer Vision, OCR, predictive models) and innovative SaaS solution development.",
+      },
+      homeProjects: {
+        eyebrow: "Portfolio",
+        title: "Featured",
+        titleHighlight: "Projects",
+        subtitle: "A glimpse of recent work combining software architecture, polished user experience, and cloud deployment.",
+        viewAll: "View All Projects",
+      },
+      projectCard: {
+        viewDetails: "View Details",
+        demo: "Live Demo",
+        github: "Source Code",
+        featured: "Featured",
+        technologies: "Technologies:",
+      },
+      impact: {
+        eyebrow: "Vision & Commitment",
+        title: "High Impact",
+        titleHighlight: "Projects",
+        subtitle: "Creating value through modern technologies addressing real-world operational challenges.",
+        initiativesTitle: "Engagements & Tech Initiatives",
+      },
+      timeline: {
+        eyebrow: "Career Path",
+        title: "My Professional",
+        titleHighlight: "Experience",
+        subtitle: "Continuous progression from front-end integration to mastering Full Stack engineering and DevOps architectures.",
+      },
+      booking: {
+        eyebrow: "Schedule a Call",
+        title: "Book a Meeting",
+        titleHighlight: "Slot",
+        subtitle: "Let's discuss your project, infrastructure needs, or potential collaboration opportunities.",
+        nameLabel: "Full Name",
+        emailLabel: "Email Address",
+        subjectLabel: "Subject / Project",
+        dateLabel: "Preferred Date",
+        timeLabel: "Preferred Time",
+        msgLabel: "Message / Requirements Details",
+        submitBtn: "Confirm Booking",
+        successMsg: "Your booking request has been successfully recorded!",
+      },
+      footer: {
+        desc: "Full Stack & DevOps Engineer specializing in high-performance SaaS platforms and resilient cloud architectures.",
+        quickLinks: "Quick Navigation",
+        contactTitle: "Contact & Networks",
+        rights: "All rights reserved.",
+      },
+      projectsPage: {
+        title: "My",
+        titleHighlight: "Projects",
+        subtitle: "Explore my complete portfolio: SaaS platforms, AI tools, DevOps pipelines, React & Laravel applications.",
+        all: "All",
+        featuredLabel: "Featured Projects",
+        noProjects: "No projects found in this category.",
+      },
+      blogPage: {
+        title: "My",
+        titleHighlight: "Articles",
+        subtitle: "Sharing hands-on experience, field engineering insights, and best practices in DevOps, Web Dev, and AI.",
+        eyebrow: "Blog & Articles",
+        readArticle: "Read Article",
+        read: "Read",
+        readTime: "read time",
+        all: "All",
+        comingSoon: "More articles coming soon... 🚀",
+      },
+      blogDetails: {
+        backToBlog: "Back to Blog",
+        share: "Share",
+        copiedLink: "Link Copied!",
+        keywords: "Keywords:",
+        ctaTitle: "Have a DevOps or Full Stack Project?",
+        ctaDesc: "Let's discuss the architecture and production deployment of your platform.",
+        contactBtn: "Contact Me",
+        relatedTitle: "Related Articles",
+        notFoundTitle: "Article Not Found",
+        notFoundDesc: "The article you are looking for does not exist or has been moved.",
+      },
+      contactPage: {
+        eyebrow: "Contact",
+        title: "Let's Discuss Your",
+        titleHighlight: "Project",
+        subtitle: "Have a question, a SaaS project, or a collaboration opportunity? Drop me a message.",
+        name: "Full Name",
+        email: "Email Address",
+        subject: "Subject",
+        message: "Your Message",
+        send: "Send Message",
+        sending: "Sending...",
+        success: "Message sent successfully! I will get back to you shortly.",
+      },
+    },
+  },
 };
 
+const savedLang = localStorage.getItem("i18nextLng") || "fr";
 
-
-i18n
-
-.use(
-initReactI18next
-)
-
-.init({
-
-resources,
-
-lng:"fr",
-
-interpolation:{
-
-escapeValue:false
-
-}
-
+i18n.use(initReactI18next).init({
+  resources,
+  lng: savedLang.startsWith("en") ? "en" : "fr",
+  fallbackLng: "fr",
+  interpolation: {
+    escapeValue: false,
+  },
 });
 
+i18n.on("languageChanged", (lng) => {
+  localStorage.setItem("i18nextLng", lng);
+  document.documentElement.lang = lng;
+});
 
 export default i18n;

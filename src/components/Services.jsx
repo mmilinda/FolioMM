@@ -1,67 +1,69 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Code2, Cloud, GitBranch, Brain, Layers, Shield } from "lucide-react";
-
-const services = [
-  {
-    icon: Code2,
-    title: "Développement Full Stack",
-    desc: "Applications React performantes côté client, APIs Laravel robustes côté serveur. Du design au déploiement.",
-    tags: ["React", "Laravel", "TypeScript"],
-    gradient: "from-blue-500/20 to-cyan-500/20",
-    border: "border-blue-500/30",
-    glow: "#38bdf8",
-  },
-  {
-    icon: Cloud,
-    title: "Cloud & Infrastructure",
-    desc: "Architecture AWS / GCP, containers Docker, orchestration Kubernetes et gestion d'environnements multi-cloud.",
-    tags: ["AWS", "Docker", "Kubernetes"],
-    gradient: "from-purple-500/20 to-indigo-500/20",
-    border: "border-purple-500/30",
-    glow: "#818cf8",
-  },
-  {
-    icon: GitBranch,
-    title: "CI/CD & DevOps",
-    desc: "Pipelines automatisés GitHub Actions / GitLab CI, tests, déploiements continus et monitoring de production.",
-    tags: ["GitHub Actions", "CI/CD", "Monitoring"],
-    gradient: "from-emerald-500/20 to-teal-500/20",
-    border: "border-emerald-500/30",
-    glow: "#34d399",
-  },
-  {
-    icon: Brain,
-    title: "IA & Automatisation",
-    desc: "Intégration d'APIs IA (OpenAI, Gemini), workflows automatisés et agents intelligents pour booster la productivité.",
-    tags: ["OpenAI", "Gemini", "Python"],
-    gradient: "from-pink-500/20 to-rose-500/20",
-    border: "border-pink-500/30",
-    glow: "#f472b6",
-  },
-  {
-    icon: Layers,
-    title: "Architecture SaaS",
-    desc: "Conception de plateformes SaaS multi-tenant, systèmes de facturation, gestion des accès et scalabilité.",
-    tags: ["SaaS", "Multi-tenant", "Stripe"],
-    gradient: "from-orange-500/20 to-amber-500/20",
-    border: "border-orange-500/30",
-    glow: "#fb923c",
-  },
-  {
-    icon: Shield,
-    title: "Sécurité & Performance",
-    desc: "Audits de sécurité, optimisation des performances, HTTPS, rate limiting et bonnes pratiques OWASP.",
-    tags: ["Security", "OWASP", "Perf"],
-    gradient: "from-cyan-500/20 to-sky-500/20",
-    border: "border-cyan-500/30",
-    glow: "#22d3ee",
-  },
-];
+import { useTranslation } from "react-i18next";
 
 export default function Services() {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+
+  const services = [
+    {
+      icon: Code2,
+      title: t("services.fullstackTitle"),
+      desc: t("services.fullstackDesc"),
+      tags: ["React", "Laravel", "TypeScript"],
+      gradient: "from-blue-500/20 to-cyan-500/20",
+      border: "border-blue-500/30",
+      glow: "#38bdf8",
+    },
+    {
+      icon: Cloud,
+      title: t("services.cloudTitle"),
+      desc: t("services.cloudDesc"),
+      tags: ["AWS", "Docker", "Kubernetes"],
+      gradient: "from-purple-500/20 to-indigo-500/20",
+      border: "border-purple-500/30",
+      glow: "#818cf8",
+    },
+    {
+      icon: GitBranch,
+      title: t("services.devopsTitle"),
+      desc: t("services.devopsDesc"),
+      tags: ["GitHub Actions", "CI/CD", "Monitoring"],
+      gradient: "from-emerald-500/20 to-teal-500/20",
+      border: "border-emerald-500/30",
+      glow: "#34d399",
+    },
+    {
+      icon: Brain,
+      title: t("services.aiTitle"),
+      desc: t("services.aiDesc"),
+      tags: ["OpenAI", "Gemini", "Python"],
+      gradient: "from-pink-500/20 to-rose-500/20",
+      border: "border-pink-500/30",
+      glow: "#f472b6",
+    },
+    {
+      icon: Layers,
+      title: "Architecture SaaS",
+      desc: t("services.fullstackDesc"),
+      tags: ["SaaS", "Multi-tenant", "Stripe"],
+      gradient: "from-orange-500/20 to-amber-500/20",
+      border: "border-orange-500/30",
+      glow: "#fb923c",
+    },
+    {
+      icon: Shield,
+      title: "Sécurité & Performance",
+      desc: t("services.devopsDesc"),
+      tags: ["Security", "OWASP", "Perf"],
+      gradient: "from-cyan-500/20 to-sky-500/20",
+      border: "border-cyan-500/30",
+      glow: "#22d3ee",
+    },
+  ];
 
   return (
     <section ref={ref} className="services-section">
@@ -71,13 +73,13 @@ export default function Services() {
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.7 }}
       >
-        <span className="section-eyebrow">Services</span>
+        <span className="section-eyebrow">{t("services.eyebrow")}</span>
         <h2 className="section-title">
-          Ce que je fais
-          <span className="gradient-text"> mieux que tout</span>
+          {t("services.title")}{" "}
+          <span className="gradient-text">{t("services.titleHighlight")}</span>
         </h2>
         <p className="section-subtitle">
-          Des solutions complètes pensées pour durer, scalables et maintenues dans le temps.
+          {t("services.subtitle")}
         </p>
       </motion.div>
 
@@ -86,7 +88,7 @@ export default function Services() {
           const Icon = svc.icon;
           return (
             <motion.div
-              key={svc.title}
+              key={`${svc.title}-${i}`}
               className={`service-card ${svc.border}`}
               initial={{ opacity: 0, y: 40 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}

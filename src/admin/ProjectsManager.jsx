@@ -1,42 +1,43 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Trash2, ExternalLink, Search, Sparkles, FolderKanban } from "lucide-react";
+import { Plus, Trash2, ExternalLink, Search, FolderKanban } from "lucide-react";
+import useProjects from "../hooks/useProjects";
 import api from "../services/api";
-import staticProjects from "../data/projects";
 import SEO from "../components/SEO";
 
 export default function ProjectsManager() {
-  const [projects, setProjects] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { projects } = useProjects();
   const [searchTerm, setSearchTerm] = useState("");
 
-  async function load() {
+  async function remove(project) {
+    if (!confirm(`Voulez-vous vraiment supprimer le projet "${project.title}" ?`)) return;
+
     try {
-      const res = await api.get("/projects", { timeout: 3000 });
-      if (res.data && Array.isArray(res.data) && res.data.length > 0) {
-        setProjects(res.data);
-      } else {
-        setProjects(staticProjects);
-      }
+      await api.delete(`/projects/${project.id}`, { timeout: 1500 });
     } catch {
-      setProjects(staticProjects);
-    } finally {
-      setLoading(false);
+      console.warn("API Offline, deleting locally");
     }
-  }
-
-  useEffect(() => {
-    load();
-  }, []);
-
-  async function remove(id) {
-    if (!confirm("Voulez-vous vraiment supprimer ce projet ?")) return;
 
     try {
-      await api.delete(`/projects/${id}`);
-      setProjects((prev) => prev.filter((p) => p.id !== id));
-    } catch {
-      alert("Impossible de supprimer le projet via l'API. (En mode démo, la liste locale est conservée).");
+      // 1. Remove from custom_projects if present
+      const custom = JSON.parse(localStorage.getItem("custom_projects") || "[]");
+      const updatedCustom = custom.filter((p) => String(p.id) !== String(project.id) && p.slug !== project.slug);
+      localStorage.setItem("custom_projects", JSON.stringify(updatedCustom));
+
+      // 2. Add to deleted_project_ids
+      const deletedIds = JSON.parse(localStorage.getItem("deleted_project_ids") || "[]");
+      if (!deletedIds.includes(String(project.id))) {
+        deletedIds.push(String(project.id));
+      }
+      if (project.slug && !deletedIds.includes(project.slug)) {
+        deletedIds.push(project.slug);
+      }
+      localStorage.setItem("deleted_project_ids", JSON.stringify(deletedIds));
+
+      // 3. Dispatch update event
+      window.dispatchEvent(new CustomEvent("projects_updated"));
+    } catch (err) {
+      console.error("Deletion sync error:", err);
     }
   }
 
@@ -44,17 +45,6 @@ export default function ProjectsManager() {
     p.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     p.category?.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[300px]">
-        <div className="flex items-center gap-3 text-cyan-400 font-medium text-sm">
-          <span className="w-5 h-5 border-2 border-cyan-400/30 border-t-cyan-400 rounded-full animate-spin" />
-          Chargement des projets...
-        </div>
-      </div>
-    );
-  }
 
   return (
     <>
@@ -144,20 +134,17 @@ export default function ProjectsManager() {
                 {/* Footer Controls */}
                 <div className="p-5 pt-0 flex items-center justify-between border-t border-slate-800/40 mt-4">
                   <div className="flex items-center gap-1.5">
-                    {project.demo && project.demo !== "#" && (
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-xs text-slate-300 hover:text-cyan-400 transition"
-                      >
-                        <ExternalLink size={13} /> Démo
-                      </a>
-                    )}
+                    <Link
+                      to={`/projects/${project.slug || project.id}`}
+                      target="_blank"
+                      className="inline-flex items-center gap-1 text-xs text-slate-300 hover:text-cyan-400 transition"
+                    >
+                      <ExternalLink size={13} /> Aperçu public
+                    </Link>
                   </div>
 
                   <button
-                    onClick={() => remove(project.id)}
+                    onClick={() => remove(project)}
                     className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-400 hover:text-rose-300 p-2 rounded-lg hover:bg-rose-500/10 transition cursor-pointer"
                     title="Supprimer ce projet"
                   >

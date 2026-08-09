@@ -1,17 +1,19 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { CheckCircle, Code2, Server, Zap, Download } from "lucide-react";
-
-const highlights = [
-  { icon: Code2, text: "Architecture Full Stack moderne" },
-  { icon: Server, text: "Infrastructure DevOps & Cloud" },
-  { icon: Zap, text: "Pipelines CI/CD automatisés" },
-  { icon: CheckCircle, text: "Delivery rapide & code de qualité" },
-];
+import { useTranslation } from "react-i18next";
 
 export default function About() {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+
+  const highlights = [
+    { icon: Code2, text: t("about.highlights.stack", "Architecture Full Stack moderne") },
+    { icon: Server, text: t("about.highlights.devops", "Infrastructure DevOps & Cloud") },
+    { icon: Zap, text: t("about.highlights.cicd", "Pipelines CI/CD automatisés") },
+    { icon: CheckCircle, text: t("about.highlights.quality", "Delivery rapide & code de qualité") },
+  ];
 
   return (
     <section ref={ref} className="about-section">
@@ -22,24 +24,17 @@ export default function About() {
           animate={inView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.8, ease: "easeOut" }}
         >
-          <span className="section-eyebrow">À propos</span>
+          <span className="section-eyebrow">{t("about.eyebrow")}</span>
           <h2 className="section-title">
-            Développeuse qui
-            <span className="gradient-text"> pense systèmes</span>,
-            <br />pas juste fonctionnalités.
+            {t("about.title")} <span className="gradient-text">{t("about.titleHighlight")}</span>
           </h2>
 
           <p className="about-text">
-            Avec plus de 3 ans d'expérience, je conçois des produits digitaux robustes
-            de l'architecture à la mise en production. Ma force réside dans ma capacité
-            à marier performance technique, expérience utilisateur et vision produit.
+            {t("about.desc1")}
           </p>
 
           <p className="about-text" style={{ marginTop: "1rem" }}>
-            Spécialisée en <strong className="text-cyan-400">DevOps</strong>,{" "}
-            <strong className="text-cyan-400">React</strong>,{" "}
-            <strong className="text-cyan-400">Laravel</strong> et architectures cloud,
-            je transforme des exigences complexes en solutions élégantes et maintenables.
+            {t("about.desc2")}
           </p>
 
           <div className="about-highlights">
@@ -65,7 +60,7 @@ export default function About() {
           >
             <a href="/CV-Milinda-Mendy.pdf" download className="hero-btn-secondary" style={{ display: "inline-flex" }}>
               <Download size={16} />
-              Télécharger mon CV
+              {t("hero.downloadCv", "Télécharger mon CV")}
             </a>
           </motion.div>
         </motion.div>

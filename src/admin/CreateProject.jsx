@@ -4,6 +4,16 @@ import { FolderPlus, ArrowLeft, UploadCloud, CheckCircle, Sparkles } from "lucid
 import api from "../services/api";
 import SEO from "../components/SEO";
 
+function slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w\-]+/g, "")
+    .replace(/\-\-+/g, "-");
+}
+
 export default function CreateProject() {
   const navigate = useNavigate();
 
@@ -19,6 +29,7 @@ export default function CreateProject() {
     github: "",
   });
   const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -26,10 +37,52 @@ export default function CreateProject() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
+  function handleImageChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   async function submit(e) {
     e.preventDefault();
     setError("");
     setLoading(true);
+
+    const techArray = form.technologies
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+
+    const slug = slugify(form.title) || `project-${Date.now()}`;
+    const newProject = {
+      id: Date.now(),
+      slug,
+      title: form.title,
+      titleEn: form.title,
+      category: form.category,
+      categoryEn: form.category,
+      description: form.description,
+      descriptionEn: form.description,
+      problem: form.problem || form.description,
+      problemEn: form.problem || form.description,
+      solution: form.solution || form.description,
+      solutionEn: form.solution || form.description,
+      impact: form.impact || "Projet livré avec succès",
+      impactEn: form.impact || "Project successfully delivered",
+      technologies: techArray.length > 0 ? techArray : ["React", "Tailwind"],
+      demo: form.demo || "#",
+      github: form.github || "#",
+      featured: true,
+      image: imagePreview || "/images/projects/preview.png",
+      status: "Terminé",
+      statusEn: "Completed",
+    };
 
     try {
       const formData = new FormData();
@@ -41,29 +94,27 @@ export default function CreateProject() {
       formData.append("impact", form.impact);
       formData.append("demo", form.demo);
       formData.append("github", form.github);
-
-      const techArray = form.technologies
-        .split(",")
-        .map((t) => t.trim())
-        .filter(Boolean);
       techArray.forEach((tech) => formData.append("technologies[]", tech));
-
-      if (image) {
-        formData.append("image", image);
-      }
+      if (image) formData.append("image", image);
 
       await api.post("/projects", formData, {
         headers: { "Content-Type": "multipart/form-data" },
+        timeout: 2000,
       });
-
-      navigate("/admin/projects");
     } catch (err) {
-      const msg =
-        err?.response?.data?.message ||
-        "Erreur lors de la création du projet via l'API (En mode démo, le formulaire s'exécute en simulation).";
-      setError(msg);
+      console.warn("API Offline, storing locally in custom_projects");
     } finally {
+      // Local sync fallback
+      try {
+        const existing = JSON.parse(localStorage.getItem("custom_projects") || "[]");
+        localStorage.setItem("custom_projects", JSON.stringify([newProject, ...existing]));
+        window.dispatchEvent(new CustomEvent("projects_updated"));
+      } catch (err) {
+        console.error("Local storage error:", err);
+      }
+
       setLoading(false);
+      navigate("/admin/projects");
     }
   }
 
@@ -72,7 +123,6 @@ export default function CreateProject() {
       <SEO title="Nouveau projet | Administration" />
 
       <div className="space-y-6 max-w-4xl">
-        {/* Back Link */}
         <Link
           to="/admin/projects"
           className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-cyan-400 transition no-underline"
@@ -81,7 +131,6 @@ export default function CreateProject() {
           Retour à la liste des projets
         </Link>
 
-        {/* Header */}
         <div className="pb-4 border-b border-slate-800/80">
           <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
             <FolderPlus className="text-cyan-400" size={24} />
@@ -92,7 +141,6 @@ export default function CreateProject() {
           </p>
         </div>
 
-        {/* Form Container */}
         <form
           onSubmit={submit}
           className="bg-[#090d16] border border-slate-800/80 rounded-2xl p-6 md:p-8 space-y-6 shadow-xl"
@@ -104,7 +152,6 @@ export default function CreateProject() {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* Title */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
                 Titre du projet *
@@ -119,7 +166,6 @@ export default function CreateProject() {
               />
             </div>
 
-            {/* Category */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
                 Catégorie *
@@ -135,7 +181,6 @@ export default function CreateProject() {
             </div>
           </div>
 
-          {/* Description */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
               Description complète *
@@ -152,7 +197,6 @@ export default function CreateProject() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* Problem */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
                 🎯 Problème résolu
@@ -167,7 +211,6 @@ export default function CreateProject() {
               />
             </div>
 
-            {/* Solution */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
                 💡 Solution apportée
@@ -184,7 +227,6 @@ export default function CreateProject() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* Technologies */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
                 Technologies (séparées par des virgules)
@@ -198,7 +240,6 @@ export default function CreateProject() {
               />
             </div>
 
-            {/* Impact */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
                 📈 Impact & Résultats
@@ -214,7 +255,6 @@ export default function CreateProject() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {/* Demo Link */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
                 Lien Démo (URL)
@@ -228,7 +268,6 @@ export default function CreateProject() {
               />
             </div>
 
-            {/* GitHub Link */}
             <div>
               <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
                 Lien GitHub (URL)
@@ -243,7 +282,6 @@ export default function CreateProject() {
             </div>
           </div>
 
-          {/* Image Upload Area */}
           <div>
             <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
               Image / Capture d'écran du projet *
@@ -259,8 +297,7 @@ export default function CreateProject() {
                 type="file"
                 accept="image/*"
                 className="absolute inset-0 opacity-0 cursor-pointer"
-                onChange={(e) => setImage(e.target.files[0])}
-                required
+                onChange={handleImageChange}
               />
 
               {image && (
@@ -271,7 +308,6 @@ export default function CreateProject() {
             </div>
           </div>
 
-          {/* Submit Button */}
           <div className="pt-4 border-t border-slate-800/80">
             <button
               type="submit"

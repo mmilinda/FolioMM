@@ -1,8 +1,11 @@
 import { Mail, Phone } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Footer() {
+  const { t } = useTranslation();
+
   return (
     <footer className="footer-section border-t border-white/10 mt-12 md:mt-24 bg-slate-950/60 backdrop-blur-md">
       <div className="container-custom footer-grid py-4 md:py-12 grid grid-cols-3 items-start gap-3 sm:gap-6 md:gap-10">
@@ -18,7 +21,7 @@ export default function Footer() {
             </h2>
           </div>
           <p className="text-slate-400 text-[10px] sm:text-sm mt-2 leading-tight sm:leading-relaxed">
-            Développeuse Full Stack & DevOps. Produits digitaux & SaaS.
+            {t("footer.desc")}
           </p>
         </div>
 
@@ -31,16 +34,16 @@ export default function Footer() {
           </div>
           <ul className="space-y-1 sm:space-y-2 text-slate-400 text-[10px] sm:text-sm p-0 m-0 mt-2 list-none">
             <li>
-              <Link to="/" className="hover:text-cyan-400 transition-colors no-underline text-inherit">Accueil</Link>
+              <Link to="/" className="hover:text-cyan-400 transition-colors no-underline text-inherit">{t("nav.home")}</Link>
             </li>
             <li>
-              <Link to="/projects" className="hover:text-cyan-400 transition-colors no-underline text-inherit">Projets</Link>
+              <Link to="/projects" className="hover:text-cyan-400 transition-colors no-underline text-inherit">{t("nav.projects")}</Link>
             </li>
             <li>
-              <Link to="/blog" className="hover:text-cyan-400 transition-colors no-underline text-inherit">Blog</Link>
+              <Link to="/blog" className="hover:text-cyan-400 transition-colors no-underline text-inherit">{t("nav.blog")}</Link>
             </li>
             <li>
-              <Link to="/contact" className="hover:text-cyan-400 transition-colors no-underline text-inherit">Contact</Link>
+              <Link to="/contact" className="hover:text-cyan-400 transition-colors no-underline text-inherit">{t("nav.contact")}</Link>
             </li>
           </ul>
         </div>
@@ -89,7 +92,7 @@ export default function Footer() {
 
       {/* Copyright Line */}
       <div className="footer-bottom text-center border-t border-white/10 py-2.5 sm:py-4 text-[9px] sm:text-xs text-slate-500">
-        © 2026 Milinda Mendy — Crafted with Performance 🚀
+        © 2026 Milinda Mendy — {t("footer.rights")} 🚀
       </div>
     </footer>
   );

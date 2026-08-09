@@ -2,8 +2,10 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Mail, Calendar, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 export default function Booking() {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -24,7 +26,7 @@ export default function Booking() {
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.2 }}
         >
-          Contact
+          {t("booking.eyebrow")}
         </motion.span>
 
         <motion.h2
@@ -33,8 +35,8 @@ export default function Booking() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.3, duration: 0.7 }}
         >
-          Votre prochain projet
-          <span className="gradient-text"> mérite le meilleur.</span>
+          {t("booking.title")}
+          <span className="gradient-text"> {t("booking.titleHighlight")}</span>
         </motion.h2>
 
         <motion.p
@@ -43,8 +45,7 @@ export default function Booking() {
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.4, duration: 0.6 }}
         >
-          Que vous ayez un projet en tête, une idée à explorer ou simplement
-          envie d'échanger — je suis disponible et réactive.
+          {t("booking.subtitle")}
         </motion.p>
 
         <motion.div
@@ -55,7 +56,7 @@ export default function Booking() {
         >
           <Link to="/contact" className="hero-btn-primary">
             <Mail size={18} />
-            Me contacter
+            {t("hero.contact", "Me contacter")}
             <ArrowRight size={16} />
           </Link>
 

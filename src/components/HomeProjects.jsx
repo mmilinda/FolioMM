@@ -1,12 +1,15 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, FolderKanban } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import ProjectCard from "./ProjectCard";
-import projects from "../data/projects";
+import useProjects from "../hooks/useProjects";
 
 export default function HomeProjects() {
-  // Take top 3 projects (e.g. featured ones or first 3)
-  const homeProjects = projects.filter((p) => p.featured).slice(0, 3);
+  const { t } = useTranslation();
+  const { projects } = useProjects();
+  // Take top featured projects
+  const homeProjects = projects.filter((p) => p.featured).slice(0, 4);
 
   return (
     <section className="py-8 md:py-20 relative overflow-hidden">
@@ -21,14 +24,15 @@ export default function HomeProjects() {
         >
           <span className="section-eyebrow">
             <FolderKanban size={14} className="inline-block mr-1 -mt-0.5 text-cyan-400" />
-            Réalisations
+            {t("homeProjects.eyebrow")}
           </span>
           <h2 className="section-title mt-2 md:mt-4 text-xl sm:text-3xl md:text-4xl font-extrabold">
-            Projets <span className="gradient-text">en vedette</span>
+            {t("homeProjects.title")}{" "}
+            <span className="gradient-text">{t("homeProjects.titleHighlight")}</span>
           </h2>
           <div className="w-full text-center mt-3 md:mt-4 mb-6 md:mb-10 overflow-hidden">
             <p className="text-slate-400 text-xs sm:text-base md:text-lg inline-block whitespace-nowrap leading-normal px-4">
-              Un aperçu de mes récents travaux alliant architecture logicielle, expérience utilisateur soignée et déploiement cloud.
+              {t("homeProjects.subtitle")}
             </p>
             <br /><br />
           </div>
@@ -53,13 +57,12 @@ export default function HomeProjects() {
             to="/projects"
             className="hero-btn-primary px-5 py-2.5 sm:px-8 sm:py-3.5 text-xs sm:text-base font-bold inline-flex items-center justify-center gap-2 rounded-xl shadow-lg hover:-translate-y-1 transition-all no-underline"
           >
-            Voir tous les projets
+            {t("homeProjects.viewAll")}
             <ArrowRight size={16} className="shrink-0" />
           </Link>
         </motion.div>
       </div>
       <br />
     </section>
-
   );
 }

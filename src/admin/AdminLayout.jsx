@@ -7,6 +7,7 @@ import {
   LogOut,
   Globe,
   PlusCircle,
+  MessageSquare,
   Shield,
   Menu,
   X,
@@ -21,12 +22,14 @@ export default function AdminLayout() {
     { name: "Tableau de Bord", path: "/admin", icon: LayoutDashboard, end: true },
     { name: "Gestion Projets", path: "/admin/projects", icon: FolderKanban, end: true },
     { name: "Nouveau Projet", path: "/admin/projects/create", icon: PlusCircle, end: false },
+    { name: "Messages Reçus", path: "/admin/messages", icon: MessageSquare, end: false },
   ];
 
   const getPageTitle = () => {
     if (location.pathname === "/admin") return "Tableau de bord";
     if (location.pathname === "/admin/projects") return "Gestion des projets";
     if (location.pathname === "/admin/projects/create") return "Nouveau projet";
+    if (location.pathname === "/admin/messages") return "Boîte de réception";
     return "Administration";
   };
 

@@ -2,8 +2,13 @@ import { motion } from "framer-motion";
 import { ExternalLink, Calendar, Sparkles, TrendingUp, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { FaGithub } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
+import { getLocalizedProject } from "../data/projects";
 
-export default function ProjectCard({ project }) {
+export default function ProjectCard({ project: rawProject }) {
+  const { t, i18n } = useTranslation();
+  const project = getLocalizedProject(rawProject, i18n.language);
+
   return (
     <motion.article
       whileHover={{ y: -8 }}
@@ -72,11 +77,12 @@ export default function ProjectCard({ project }) {
             borderRadius: "999px",
             fontSize: "0.7rem",
             fontWeight: 700,
-            background: "linear-gradient(135deg, #38bdf8, #818cf8)",
+            background: "linear-gradient(135deg, rgba(56,189,248,0.9), rgba(129,140,248,0.9))",
             color: "#020617",
+            boxShadow: "0 4px 12px rgba(56,189,248,0.3)",
           }}>
             <Sparkles size={11} />
-            Featured
+            {t("projectCard.featured", "En vedette")}
           </span>
         )}
 

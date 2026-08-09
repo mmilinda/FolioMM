@@ -1,12 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
-
-const statsData = [
-  { value: 10, suffix: "+", label: "Projets livrés", color: "#38bdf8" },
-  { value: 3, suffix: "+", label: "Années d'expérience", color: "#818cf8" },
-  { value: 15, suffix: "+", label: "Technologies maîtrisées", color: "#34d399" },
-  { value: 100, suffix: "%", label: "Engagement", color: "#f472b6" },
-];
+import { useTranslation } from "react-i18next";
 
 function AnimatedCounter({ target, suffix, inView }) {
   const [count, setCount] = useState(0);
@@ -37,15 +31,23 @@ function AnimatedCounter({ target, suffix, inView }) {
 }
 
 export default function Stats() {
+  const { t } = useTranslation();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+
+  const statsData = [
+    { value: 10, suffix: "+", label: t("hero.stats.projects", "Projets livrés"), color: "#38bdf8" },
+    { value: 3, suffix: "+", label: t("hero.stats.experience", "Années d'expérience"), color: "#818cf8" },
+    { value: 15, suffix: "+", label: t("hero.stats.tech", "Technologies maîtrisées"), color: "#34d399" },
+    { value: 100, suffix: "%", label: t("about.commitment", "Engagement"), color: "#f472b6" },
+  ];
 
   return (
     <section ref={ref} className="stats-section">
       <div className="stats-grid">
         {statsData.map((stat, i) => (
           <motion.div
-            key={stat.label}
+            key={`${stat.label}-${i}`}
             className="stat-card"
             initial={{ opacity: 0, y: 30 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}

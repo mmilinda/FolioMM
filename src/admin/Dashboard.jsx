@@ -28,6 +28,14 @@ export default function Dashboard() {
   // Clean user display name
   const userName = user?.name ? user.name.replace(/\s*\(Admin\)/gi, "") : "Milinda";
 
+  const [messages, setMessages] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("contact_messages") || "[]");
+    } catch {
+      return [];
+    }
+  });
+
   const stats = [
     {
       title: "Projets en Vitrine",
@@ -58,8 +66,8 @@ export default function Dashboard() {
     },
     {
       title: "Formulaire Contact",
-      value: "24",
-      detail: "Messages reçus via EmailJS",
+      value: messages.length,
+      detail: `${messages.filter((m) => !m.read).length} non lus • Reçus via site`,
       icon: MessageSquare,
       color: "text-pink-400",
       bgColor: "bg-pink-400/10",
