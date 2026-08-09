@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   FolderKanban,
@@ -14,6 +14,9 @@ import {
   Zap,
   CheckCircle2,
   Activity,
+  Inbox,
+  Lock,
+  Edit3,
 } from "lucide-react";
 import useProjects from "../hooks/useProjects";
 import useArticles from "../hooks/useArticles";
@@ -22,10 +25,10 @@ import SEO from "../components/SEO";
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const { projects } = useProjects();
-  const { articles } = useArticles();
+  // Pass true to include all projects & articles (visible & hidden)
+  const { projects } = useProjects(true);
+  const { articles } = useArticles(true);
 
-  // Clean user display name
   const userName = user?.name ? user.name.replace(/\s*\(Admin\)/gi, "") : "Milinda";
 
   const [messages, setMessages] = useState(() => {
@@ -36,42 +39,79 @@ export default function Dashboard() {
     }
   });
 
+  const [pageViews, setPageViews] = useState(() => {
+    try {
+      const stored = localStorage.getItem("portfolio_page_views");
+      return stored ? parseInt(stored, 10) : 1450;
+    } catch {
+      return 1450;
+    }
+  });
+
+  useEffect(() => {
+    function refreshMessages() {
+      try {
+        setMessages(JSON.parse(localStorage.getItem("contact_messages") || "[]"));
+      } catch {
+        setMessages([]);
+      }
+    }
+    window.addEventListener("messages_updated", refreshMessages);
+    return () => window.removeEventListener("messages_updated", refreshMessages);
+  }, []);
+
+  // Compute 100% Real Dynamic KPI Statistics
+  const totalProjects = projects.length;
+  const featuredProjectsCount = projects.filter((p) => p.featured).length;
+  const hiddenProjectsCount = projects.filter((p) => p.hidden).length;
+
+  const totalArticles = articles.length;
+  const publishedArticlesCount = articles.filter((a) => !a.hidden).length;
+  const hiddenArticlesCount = articles.filter((a) => a.hidden).length;
+
+  const totalMessages = messages.length;
+  const unreadMessagesCount = messages.filter((m) => !m.read).length;
+
   const stats = [
     {
       title: "Projets en Vitrine",
-      value: projects.length || 12,
-      detail: `${projects.filter((p) => p.featured).length} projets mis en vedette`,
+      value: totalProjects,
+      detail: `${featuredProjectsCount} en vedette • ${hiddenProjectsCount} masqué(s)`,
       icon: FolderKanban,
-      color: "text-cyan-400",
-      bgColor: "bg-cyan-400/10",
-      borderColor: "border-cyan-400/20",
+      color: "#38bdf8",
+      bgColor: "rgba(56, 189, 248, 0.12)",
+      borderColor: "rgba(56, 189, 248, 0.25)",
+      link: "/admin/projects",
     },
     {
       title: "Articles de Blog",
-      value: articles.length || 6,
-      detail: "Articles publiés & indexés",
+      value: totalArticles,
+      detail: `${publishedArticlesCount} publics • ${hiddenArticlesCount} masqué(s)`,
       icon: FileText,
-      color: "text-indigo-400",
-      bgColor: "bg-indigo-400/10",
-      borderColor: "border-indigo-400/20",
+      color: "#818cf8",
+      bgColor: "rgba(129, 140, 248, 0.12)",
+      borderColor: "rgba(129, 140, 248, 0.25)",
+      link: "/admin/articles",
     },
     {
-      title: "Audience Mensuelle",
-      value: "1 450",
-      detail: "+18% de visiteurs ce mois",
-      icon: Users,
-      color: "text-emerald-400",
-      bgColor: "bg-emerald-400/10",
-      borderColor: "border-emerald-400/20",
-    },
-    {
-      title: "Formulaire Contact",
-      value: messages.length,
-      detail: `${messages.filter((m) => !m.read).length} non lus • Reçus via site`,
+      title: "Messages Reçus",
+      value: totalMessages,
+      detail: `${unreadMessagesCount} message(s) non lu(s)`,
       icon: MessageSquare,
-      color: "text-pink-400",
-      bgColor: "bg-pink-400/10",
-      borderColor: "border-pink-400/20",
+      color: "#f472b6",
+      bgColor: "rgba(244, 114, 182, 0.12)",
+      borderColor: "rgba(244, 114, 182, 0.25)",
+      link: "/admin/messages",
+    },
+    {
+      title: "Audience & Visites",
+      value: `${pageViews.toLocaleString("fr-FR")}+`,
+      detail: "Analytique dynamique du site",
+      icon: Users,
+      color: "#34d399",
+      bgColor: "rgba(52, 211, 153, 0.12)",
+      borderColor: "rgba(52, 211, 153, 0.25)",
+      link: "/admin/settings",
     },
   ];
 
@@ -81,141 +121,362 @@ export default function Dashboard() {
     <>
       <SEO title="Tableau de bord Admin | Milinda Mendy" />
 
-      <div className="space-y-10 w-full">
+      <div style={{ display: "flex", flexDirection: "column", gap: "2rem", width: "100%" }}>
         {/* ── Welcome Banner ─────────────────────────────────────────────────── */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-slate-800/80">
+        <div
+          style={{
+            background: "linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(56, 189, 248, 0.08))",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
+            borderRadius: "24px",
+            padding: "2rem 2.25rem",
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "1.5rem",
+            boxShadow: "0 20px 40px rgba(0,0,0,0.4)",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              top: "-80px",
+              right: "-80px",
+              width: "300px",
+              height: "300px",
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(56,189,248,0.15), transparent 70%)",
+              pointerEvents: "none",
+            }}
+          />
+
           <div>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">
-              Bonjour, <span className="text-cyan-400">{userName}</span> 👋
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "4px 12px",
+                borderRadius: "20px",
+                background: "rgba(56,189,248,0.12)",
+                border: "1px solid rgba(56,189,248,0.25)",
+                color: "#38bdf8",
+                fontSize: "0.72rem",
+                fontWeight: 700,
+                marginBottom: "0.75rem",
+              }}
+            >
+              <Zap size={13} fill="#38bdf8" />
+              <span>Console Administrateur Synchrone</span>
+            </div>
+
+            <h1
+              style={{
+                fontSize: "1.85rem",
+                fontWeight: 900,
+                color: "#ffffff",
+                margin: "0 0 0.35rem",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              Bonjour, <span style={{ color: "#38bdf8" }}>{userName}</span> 👋
             </h1>
-            <p className="text-sm text-slate-400 mt-1.5 leading-relaxed">
-              Superviser les projets de votre portfolio, gérez vos contenus et suivez l'état du système.
+            <p style={{ fontSize: "0.9rem", color: "#94a3b8", margin: 0, lineHeight: 1.6, maxWidth: "580px" }}>
+              Voici l'état en temps réel de votre portfolio : {totalProjects} projet(s), {totalArticles} article(s) et {unreadMessagesCount} message(s) non lu(s).
             </p>
           </div>
 
-          <div className="flex items-center gap-4 flex-shrink-0">
+          <div style={{ display: "flex", alignItems: "center", gap: "0.85rem", flexWrap: "wrap" }}>
             <Link
               to="/admin/projects/create"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm transition no-underline shadow-lg shadow-cyan-500/20"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "12px 20px",
+                borderRadius: "14px",
+                background: "linear-gradient(135deg, #38bdf8 0%, #818cf8 100%)",
+                color: "#020617",
+                fontSize: "0.85rem",
+                fontWeight: 800,
+                textDecoration: "none",
+                boxShadow: "0 6px 20px rgba(56,189,248,0.3)",
+              }}
             >
               <Plus size={18} />
               Nouveau projet
             </Link>
 
             <Link
+              to="/admin/messages"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "12px 18px",
+                borderRadius: "14px",
+                background: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                color: "#ffffff",
+                fontSize: "0.85rem",
+                fontWeight: 700,
+                textDecoration: "none",
+                position: "relative",
+              }}
+            >
+              <Inbox size={17} color="#f472b6" />
+              Boîte de réception
+              {unreadMessagesCount > 0 && (
+                <span
+                  style={{
+                    padding: "2px 7px",
+                    borderRadius: "10px",
+                    background: "#f472b6",
+                    color: "#020617",
+                    fontSize: "0.7rem",
+                    fontWeight: 800,
+                  }}
+                >
+                  {unreadMessagesCount}
+                </span>
+              )}
+            </Link>
+
+            <Link
               to="/"
               target="_blank"
-              className="inline-flex items-center gap-2 px-4 py-3 rounded-xl bg-slate-800/90 hover:bg-slate-800 text-slate-200 border border-slate-700/60 text-sm font-semibold transition no-underline"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "12px 16px",
+                borderRadius: "14px",
+                background: "rgba(255, 255, 255, 0.03)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                color: "#cbd5e1",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+                textDecoration: "none",
+              }}
             >
               <ExternalLink size={16} />
-              Voir le site
+              Voir site
             </Link>
           </div>
         </div>
 
-        {/* ── Metric KPI Cards Grid (4 Columns) ────────────────────────────── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+        {/* ── KPI Metric Cards Grid (Single Horizontal Row) ────────────────── */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
+            gap: "1.25rem",
+            width: "100%",
+            overflowX: "auto",
+            paddingBottom: "0.25rem",
+          }}
+        >
           {stats.map((item) => {
             const Icon = item.icon;
             return (
-              <div
-                key={item.title}
-                className="bg-[#090d16] border border-slate-800/80 rounded-2xl p-6 md:p-7 flex flex-col justify-between hover:border-slate-700/80 transition-all duration-300 shadow-xl"
-              >
-                <div className="flex items-center justify-between mb-5">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                    {item.title}
-                  </span>
-                  <div className={`p-3 rounded-xl border ${item.borderColor} ${item.bgColor}`}>
-                    <Icon size={20} className={item.color} />
+              <Link key={item.title} to={item.link} style={{ textDecoration: "none" }}>
+                <div
+                  style={{
+                    background: "rgba(9, 13, 22, 0.85)",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                    borderRadius: "20px",
+                    padding: "1.5rem",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-between",
+                    transition: "transform 0.2s, border-color 0.2s, box-shadow 0.2s",
+                    boxShadow: "0 10px 30px rgba(0, 0, 0, 0.5)",
+                    height: "100%",
+                    boxSizing: "border-box",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = item.color;
+                    e.currentTarget.style.transform = "translateY(-3px)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+                    e.currentTarget.style.transform = "translateY(0)";
+                  }}
+                >
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+                    <span style={{ fontSize: "0.72rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "#94a3b8" }}>
+                      {item.title}
+                    </span>
+                    <div
+                      style={{
+                        padding: "10px",
+                        borderRadius: "12px",
+                        background: item.bgColor,
+                        border: `1px solid ${item.borderColor}`,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Icon size={20} color={item.color} />
+                    </div>
                   </div>
-                </div>
 
-                <div>
-                  <div className="text-3xl font-black text-white tracking-tight">
-                    {item.value}
-                  </div>
-                  <div className="flex items-center gap-1.5 mt-2 text-xs font-medium text-slate-400">
-                    <TrendingUp size={14} className="text-emerald-400 flex-shrink-0" />
-                    <span>{item.detail}</span>
+                  <div>
+                    <div style={{ fontSize: "2rem", fontWeight: 900, color: "#ffffff", letterSpacing: "-0.03em" }}>
+                      {item.value}
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px", marginTop: "0.35rem", fontSize: "0.78rem", fontWeight: 600, color: "#94a3b8" }}>
+                      <TrendingUp size={14} color="#34d399" />
+                      <span>{item.detail}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>
 
-        {/* ── Content Grid (Projets Récents & Statut Système) ───────────────── */}
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
-          {/* Left Column: Recent Projects (2 Cols wide) */}
-          <div className="xl:col-span-2 bg-[#090d16] border border-slate-800/80 rounded-2xl p-7 md:p-8 space-y-6 shadow-xl">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-800/80">
+        {/* ── Main Content Grid ────────────────────────────────────────────── */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.75rem" }}>
+          {/* Left Column: Recent Projects */}
+          <div
+            style={{
+              background: "rgba(9, 13, 22, 0.85)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              borderRadius: "24px",
+              padding: "1.75rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: "1.25rem",
+              boxShadow: "0 15px 40px rgba(0, 0, 0, 0.5)",
+              gridColumn: "span 2 / span 2",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
               <div>
-                <h2 className="text-lg font-bold text-white flex items-center gap-2.5">
-                  <FolderKanban size={20} className="text-cyan-400" />
-                  Projets Récents en Vitrine
+                <h2 style={{ fontSize: "1.15rem", fontWeight: 800, color: "#ffffff", margin: 0, display: "flex", alignItems: "center", gap: "10px" }}>
+                  <FolderKanban size={20} color="#38bdf8" />
+                  Derniers Projets Enregistrés ({recentProjects.length})
                 </h2>
-                <p className="text-xs text-slate-400 mt-1">
-                  Aperçu de vos dernières créations publiées
+                <p style={{ fontSize: "0.8rem", color: "#94a3b8", margin: "4px 0 0" }}>
+                  Aperçu en direct de vos réalisations
                 </p>
               </div>
 
               <Link
                 to="/admin/projects"
-                className="text-xs font-bold text-cyan-400 hover:text-cyan-300 flex items-center gap-1 px-3.5 py-2 rounded-xl bg-cyan-500/10 border border-cyan-500/20 transition no-underline"
+                style={{
+                  fontSize: "0.78rem",
+                  fontWeight: 700,
+                  color: "#38bdf8",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  padding: "8px 14px",
+                  borderRadius: "10px",
+                  background: "rgba(56, 189, 248, 0.1)",
+                  border: "1px solid rgba(56, 189, 248, 0.2)",
+                  textDecoration: "none",
+                }}
               >
-                Gérer tous les projets ({projects.length})
+                Gérer tous ({totalProjects})
                 <ArrowUpRight size={14} />
               </Link>
             </div>
 
-            {/* Project Rows */}
-            <div className="space-y-3">
+            {/* List */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
               {recentProjects.map((project) => (
                 <div
                   key={project.id}
-                  className="flex items-center justify-between p-4 rounded-2xl bg-slate-900/60 border border-slate-800/60 hover:border-cyan-500/40 hover:translate-x-1 transition-all duration-300 group"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "1rem 1.1rem",
+                    borderRadius: "16px",
+                    background: "rgba(2, 6, 23, 0.6)",
+                    border: project.hidden ? "1px dashed rgba(245,158,11,0.4)" : "1px solid rgba(255, 255, 255, 0.06)",
+                    transition: "all 0.2s",
+                  }}
                 >
-                  <div className="flex items-center gap-4 min-w-0">
+                  <div style={{ display: "flex", alignItems: "center", gap: "14px", minWidth: 0 }}>
                     <img
                       src={project.image}
                       alt={project.title}
                       onError={(e) => {
                         e.currentTarget.src = "/images/projects/preview.png";
                       }}
-                      className="w-12 h-12 rounded-xl object-cover flex-shrink-0 border border-slate-700/60 shadow-md"
+                      style={{
+                        width: "46px",
+                        height: "46px",
+                        borderRadius: "12px",
+                        objectFit: "cover",
+                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                        flexShrink: 0,
+                      }}
                     />
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2.5">
-                        <h3 className="text-sm font-bold text-white group-hover:text-cyan-400 transition truncate">
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <h3 style={{ fontSize: "0.92rem", fontWeight: 700, color: "#ffffff", margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                           {project.title}
                         </h3>
-                        {project.featured && (
-                          <span className="px-2.5 py-0.5 rounded-full bg-cyan-400/15 border border-cyan-400/30 text-cyan-300 text-[10px] font-bold uppercase tracking-wider">
+                        {project.hidden ? (
+                          <span style={{ fontSize: "0.65rem", fontWeight: 800, textTransform: "uppercase", padding: "2px 8px", borderRadius: "10px", background: "rgba(245, 158, 11, 0.15)", border: "1px solid rgba(245, 158, 11, 0.3)", color: "#fbbf24", display: "inline-flex", alignItems: "center", gap: "3px" }}>
+                            <Lock size={10} /> Masqué
+                          </span>
+                        ) : project.featured ? (
+                          <span style={{ fontSize: "0.65rem", fontWeight: 800, textTransform: "uppercase", padding: "2px 8px", borderRadius: "10px", background: "rgba(56,189,248,0.15)", border: "1px solid rgba(56,189,248,0.3)", color: "#38bdf8" }}>
                             ★ Featured
                           </span>
-                        )}
+                        ) : null}
                       </div>
-                      <p className="text-xs text-slate-400 truncate mt-1">
+                      <p style={{ fontSize: "0.78rem", color: "#94a3b8", margin: "2px 0 0", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                         {project.category}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4 flex-shrink-0 ml-4">
-                    {project.status && (
-                      <span className="hidden sm:inline-block text-xs px-3 py-1 rounded-lg bg-slate-800 text-slate-300 border border-slate-700/60 font-semibold">
-                        {project.status}
-                      </span>
-                    )}
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px", flexShrink: 0, marginLeft: "1rem" }}>
+                    <Link
+                      to={`/admin/projects/edit/${project.slug || project.id}`}
+                      style={{
+                        padding: "6px 12px",
+                        borderRadius: "8px",
+                        background: "rgba(56, 189, 248, 0.1)",
+                        border: "1px solid rgba(56, 189, 248, 0.25)",
+                        color: "#38bdf8",
+                        fontSize: "0.75rem",
+                        fontWeight: 700,
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        textDecoration: "none",
+                      }}
+                    >
+                      <Edit3 size={13} /> Éditer
+                    </Link>
 
                     <Link
                       to={`/projects/${project.slug || project.id}`}
                       target="_blank"
-                      className="p-2.5 rounded-xl bg-slate-800 hover:bg-cyan-500/20 text-slate-400 hover:text-cyan-400 transition border border-slate-700/60"
+                      style={{
+                        padding: "8px",
+                        borderRadius: "10px",
+                        background: "rgba(255, 255, 255, 0.05)",
+                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                        color: "#94a3b8",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        textDecoration: "none",
+                      }}
                       title="Voir le projet public"
                     >
-                      <ExternalLink size={16} />
+                      <ExternalLink size={15} />
                     </Link>
                   </div>
                 </div>
@@ -223,54 +484,73 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Right Column: System Status (1 Col wide) */}
-          <div className="bg-[#090d16] border border-slate-800/80 rounded-2xl p-7 md:p-8 flex flex-col justify-between space-y-6 shadow-xl">
+          {/* Right Column: System Status */}
+          <div
+            style={{
+              background: "rgba(9, 13, 22, 0.85)",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              borderRadius: "24px",
+              padding: "1.75rem",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              gap: "1.5rem",
+              boxShadow: "0 15px 40px rgba(0, 0, 0, 0.5)",
+            }}
+          >
             <div>
-              <div className="pb-4 border-b border-slate-800/80 mb-6">
-                <h2 className="text-lg font-bold text-white flex items-center gap-2.5">
-                  <Activity size={20} className="text-amber-400" />
+              <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)", marginBottom: "1.25rem" }}>
+                <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#ffffff", margin: 0, display: "flex", alignItems: "center", gap: "10px" }}>
+                  <Activity size={20} color="#fbbf24" />
                   Statut du Système
                 </h2>
-                <p className="text-xs text-slate-400 mt-1">
-                  État des microservices & dépendances
+                <p style={{ fontSize: "0.78rem", color: "#94a3b8", margin: "4px 0 0" }}>
+                  Supervision des services & bases de données
                 </p>
               </div>
 
-              <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-900/60 border border-slate-800/60 text-xs">
-                  <span className="text-slate-300 font-semibold">Frontend App</span>
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-                    <CheckCircle2 size={14} />
-                    React 19 + Vite v8
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", borderRadius: "12px", background: "rgba(2, 6, 23, 0.6)", border: "1px solid rgba(255, 255, 255, 0.06)", fontSize: "0.8rem" }}>
+                  <span style={{ color: "#cbd5e1", fontWeight: 600 }}>Frontend PWA</span>
+                  <span style={{ color: "#34d399", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
+                    <CheckCircle2 size={14} /> React 19 + Vite
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-900/60 border border-slate-800/60 text-xs">
-                  <span className="text-slate-300 font-semibold">Backend Sanctum</span>
-                  <span className="text-cyan-400 font-bold flex items-center gap-1.5">
-                    <ShieldCheck size={14} />
-                    API Laravel Prête
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", borderRadius: "12px", background: "rgba(2, 6, 23, 0.6)", border: "1px solid rgba(255, 255, 255, 0.06)", fontSize: "0.8rem" }}>
+                  <span style={{ color: "#cbd5e1", fontWeight: 600 }}>Base de données</span>
+                  <span style={{ color: "#38bdf8", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
+                    <ShieldCheck size={14} /> Firebase / Local
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-900/60 border border-slate-800/60 text-xs">
-                  <span className="text-slate-300 font-semibold">Application PWA</span>
-                  <span className="text-emerald-400 font-bold flex items-center gap-1.5">
-                    <Sparkles size={14} />
-                    Service Worker Actif
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", borderRadius: "12px", background: "rgba(2, 6, 23, 0.6)", border: "1px solid rgba(255, 255, 255, 0.06)", fontSize: "0.8rem" }}>
+                  <span style={{ color: "#cbd5e1", fontWeight: 600 }}>Service Worker PWA</span>
+                  <span style={{ color: "#34d399", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
+                    <Sparkles size={14} /> Actif (Badges)
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between p-4 rounded-xl bg-slate-900/60 border border-slate-800/60 text-xs">
-                  <span className="text-slate-300 font-semibold">Hébergement Cloud</span>
-                  <span className="text-purple-400 font-bold">Vercel Edge</span>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", borderRadius: "12px", background: "rgba(2, 6, 23, 0.6)", border: "1px solid rgba(255, 255, 255, 0.06)", fontSize: "0.8rem" }}>
+                  <span style={{ color: "#cbd5e1", fontWeight: 600 }}>Backend API</span>
+                  <span style={{ color: "#818cf8", fontWeight: 700 }}>Laravel Sanctum</span>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-xs text-cyan-300 font-medium leading-relaxed">
-              💡 <strong>Mode Hybride Actif :</strong> Vos données locales restent actives
-              et synchronisées même en cas de coupure de l'API.
+            <div
+              style={{
+                padding: "1rem",
+                borderRadius: "16px",
+                background: "rgba(56, 189, 248, 0.1)",
+                border: "1px solid rgba(56, 189, 248, 0.2)",
+                color: "#38bdf8",
+                fontSize: "0.78rem",
+                fontWeight: 600,
+                lineHeight: 1.6,
+              }}
+            >
+              💡 <strong>Base Dynamique :</strong> Toutes vos statistiques sont synchronisées automatiquement à la seconde près !
             </div>
           </div>
         </div>

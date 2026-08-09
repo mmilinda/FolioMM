@@ -2,6 +2,9 @@
 .env
 .env.*
 !.env.example
+service-account.json
+*.json.key
+storage/app/firebase/*.json
 
 # 2. Dépendances Frontend & Backend
 node_modules/

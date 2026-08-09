@@ -1,13 +1,34 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Trash2, ExternalLink, Search, FolderKanban } from "lucide-react";
+import { Plus, Trash2, ExternalLink, Search, FolderKanban, Eye, EyeOff, Lock, Edit3 } from "lucide-react";
 import useProjects from "../hooks/useProjects";
 import api from "../services/api";
 import SEO from "../components/SEO";
 
 export default function ProjectsManager() {
-  const { projects } = useProjects();
+  // Pass true to include hidden projects in admin view
+  const { projects } = useProjects(true);
   const [searchTerm, setSearchTerm] = useState("");
+
+  function toggleHide(project) {
+    try {
+      const hiddenIds = JSON.parse(localStorage.getItem("hidden_project_ids") || "[]");
+      const key = String(project.id);
+      let updated;
+
+      if (project.hidden || hiddenIds.includes(key) || (project.slug && hiddenIds.includes(project.slug))) {
+        updated = hiddenIds.filter((id) => id !== key && id !== project.slug);
+      } else {
+        updated = [...hiddenIds, key];
+        if (project.slug) updated.push(project.slug);
+      }
+
+      localStorage.setItem("hidden_project_ids", JSON.stringify(updated));
+      window.dispatchEvent(new CustomEvent("projects_updated"));
+    } catch (err) {
+      console.error("Toggle hide error:", err);
+    }
+  }
 
   async function remove(project) {
     if (!confirm(`Voulez-vous vraiment supprimer le projet "${project.title}" ?`)) return;
@@ -19,22 +40,15 @@ export default function ProjectsManager() {
     }
 
     try {
-      // 1. Remove from custom_projects if present
       const custom = JSON.parse(localStorage.getItem("custom_projects") || "[]");
       const updatedCustom = custom.filter((p) => String(p.id) !== String(project.id) && p.slug !== project.slug);
       localStorage.setItem("custom_projects", JSON.stringify(updatedCustom));
 
-      // 2. Add to deleted_project_ids
       const deletedIds = JSON.parse(localStorage.getItem("deleted_project_ids") || "[]");
-      if (!deletedIds.includes(String(project.id))) {
-        deletedIds.push(String(project.id));
-      }
-      if (project.slug && !deletedIds.includes(project.slug)) {
-        deletedIds.push(project.slug);
-      }
+      if (!deletedIds.includes(String(project.id))) deletedIds.push(String(project.id));
+      if (project.slug && !deletedIds.includes(project.slug)) deletedIds.push(project.slug);
       localStorage.setItem("deleted_project_ids", JSON.stringify(deletedIds));
 
-      // 3. Dispatch update event
       window.dispatchEvent(new CustomEvent("projects_updated"));
     } catch (err) {
       console.error("Deletion sync error:", err);
@@ -50,34 +64,66 @@ export default function ProjectsManager() {
     <>
       <SEO title="Gestion des projets | Administration" />
 
-      <div className="space-y-6 max-w-7xl">
-        {/* Header & Controls */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800/80">
+      <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", maxWidth: "1200px" }}>
+        {/* Header Bar */}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "1rem",
+            paddingBottom: "1rem",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+          }}
+        >
           <div>
-            <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-              <FolderKanban className="text-cyan-400" size={24} />
+            <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.25rem", display: "flex", alignItems: "center", gap: "10px" }}>
+              <FolderKanban color="#38bdf8" size={26} />
               Gestion des Projets ({projects.length})
             </h1>
-            <p className="text-xs text-slate-400 mt-1">
-              Gérez l'ensemble des projets affichés sur votre portfolio public
+            <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
+              Gérez, modifiez, affichez ou masquez les projets affichés sur votre portfolio public.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="relative">
-              <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+            <div style={{ position: "relative", width: "240px" }}>
+              <Search size={16} color="#94a3b8" style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)" }} />
               <input
                 type="text"
-                placeholder="Rechercher un projet..."
+                placeholder="Rechercher..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition w-full sm:w-60"
+                style={{
+                  width: "100%",
+                  padding: "10px 14px 10px 40px",
+                  borderRadius: "12px",
+                  background: "rgba(15, 23, 42, 0.8)",
+                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  color: "#ffffff",
+                  fontSize: "0.85rem",
+                  outline: "none",
+                  boxSizing: "border-box",
+                }}
               />
             </div>
 
             <Link
               to="/admin/projects/create"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition no-underline shadow-sm flex-shrink-0"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "10px 18px",
+                borderRadius: "12px",
+                background: "#38bdf8",
+                color: "#020617",
+                fontSize: "0.85rem",
+                fontWeight: 800,
+                textDecoration: "none",
+                boxShadow: "0 4px 14px rgba(56, 189, 248, 0.3)",
+              }}
             >
               <Plus size={16} />
               Nouveau projet
@@ -87,70 +133,145 @@ export default function ProjectsManager() {
 
         {/* Projects Grid */}
         {filteredProjects.length === 0 ? (
-          <div className="text-center py-16 bg-[#090d16] border border-slate-800/80 rounded-2xl">
-            <p className="text-slate-400 text-sm">Aucun projet ne correspond à votre recherche.</p>
+          <div style={{ padding: "4rem 2rem", textAlign: "center", background: "rgba(9, 13, 22, 0.8)", borderRadius: "20px", border: "1px solid rgba(255,255,255,0.08)", color: "#94a3b8" }}>
+            Aucun projet ne correspond à votre recherche.
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "1.25rem" }}>
             {filteredProjects.map((project) => (
               <div
                 key={project.id}
-                className="bg-[#090d16] border border-slate-800/80 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-slate-700/80 transition group shadow-lg"
+                style={{
+                  background: "rgba(9, 13, 22, 0.85)",
+                  border: project.hidden
+                    ? "1px dashed rgba(245, 158, 11, 0.4)"
+                    : "1px solid rgba(255, 255, 255, 0.08)",
+                  borderRadius: "20px",
+                  overflow: "hidden",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  boxShadow: "0 10px 30px rgba(0, 0, 0, 0.5)",
+                  opacity: project.hidden ? 0.75 : 1,
+                }}
               >
                 <div>
                   {/* Thumbnail Image */}
-                  <div className="relative h-44 overflow-hidden bg-slate-900">
+                  <div style={{ position: "relative", height: "180px", overflow: "hidden", background: "#020617" }}>
                     <img
                       src={project.image}
                       alt={project.title}
                       onError={(e) => {
                         e.currentTarget.src = "/images/projects/preview.png";
                       }}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#090d16] via-transparent opacity-80" />
+                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(9,13,22,0.9), transparent 70%)" }} />
+
+                    {project.hidden && (
+                      <span style={{ position: "absolute", top: "12px", left: "12px", fontSize: "0.68rem", fontWeight: 800, textTransform: "uppercase", padding: "4px 10px", borderRadius: "8px", background: "rgba(245, 158, 11, 0.9)", color: "#020617", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                        <Lock size={12} /> Masqué sur le site
+                      </span>
+                    )}
 
                     {project.status && (
-                      <span className="absolute top-3 right-3 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-slate-950/80 backdrop-blur border border-slate-700/50 text-cyan-300">
+                      <span style={{ position: "absolute", top: "12px", right: "12px", fontSize: "0.68rem", fontWeight: 800, textTransform: "uppercase", padding: "4px 10px", borderRadius: "8px", background: "rgba(2, 6, 23, 0.8)", border: "1px solid rgba(255, 255, 255, 0.15)", color: "#38bdf8" }}>
                         {project.status}
                       </span>
                     )}
                   </div>
 
-                  {/* Body Info */}
-                  <div className="p-5 space-y-2">
-                    <span className="text-[11px] font-semibold text-cyan-400 uppercase tracking-wider block">
+                  {/* Body Content */}
+                  <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+                    <span style={{ fontSize: "0.72rem", fontWeight: 700, uppercase: "true", color: "#38bdf8", letterSpacing: "0.08em" }}>
                       {project.category}
                     </span>
-                    <h3 className="text-base font-bold text-white group-hover:text-cyan-400 transition">
+                    <h3 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#ffffff", margin: 0 }}>
                       {project.title}
                     </h3>
-                    <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">
+                    <p style={{ fontSize: "0.82rem", color: "#94a3b8", margin: 0, lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                       {project.description}
                     </p>
                   </div>
                 </div>
 
                 {/* Footer Controls */}
-                <div className="p-5 pt-0 flex items-center justify-between border-t border-slate-800/40 mt-4">
-                  <div className="flex items-center gap-1.5">
-                    <Link
-                      to={`/projects/${project.slug || project.id}`}
-                      target="_blank"
-                      className="inline-flex items-center gap-1 text-xs text-slate-300 hover:text-cyan-400 transition"
-                    >
-                      <ExternalLink size={13} /> Aperçu public
-                    </Link>
-                  </div>
-
-                  <button
-                    onClick={() => remove(project)}
-                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-rose-400 hover:text-rose-300 p-2 rounded-lg hover:bg-rose-500/10 transition cursor-pointer"
-                    title="Supprimer ce projet"
+                <div style={{ padding: "1rem 1.25rem", borderTop: "1px solid rgba(255, 255, 255, 0.06)", display: "flex", alignItems: "center", justify: "space-between" }}>
+                  <Link
+                    to={`/projects/${project.slug || project.id}`}
+                    target="_blank"
+                    style={{ fontSize: "0.78rem", fontWeight: 700, color: "#cbd5e1", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "4px" }}
                   >
-                    <Trash2 size={14} />
-                    Supprimer
-                  </button>
+                    <ExternalLink size={14} color="#38bdf8" /> Aperçu
+                  </Link>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                    {/* Edit Button */}
+                    <Link
+                      to={`/admin/projects/edit/${project.slug || project.id}`}
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        fontSize: "0.75rem",
+                        fontWeight: 700,
+                        color: "#38bdf8",
+                        background: "rgba(56, 189, 248, 0.1)",
+                        border: "1px solid rgba(56, 189, 248, 0.25)",
+                        padding: "6px 10px",
+                        borderRadius: "8px",
+                        textDecoration: "none",
+                      }}
+                      title="Modifier ce projet"
+                    >
+                      <Edit3 size={14} />
+                      Éditer
+                    </Link>
+
+                    {/* Toggle Hide/Unhide Button */}
+                    <button
+                      onClick={() => toggleHide(project)}
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        fontSize: "0.75rem",
+                        fontWeight: 700,
+                        color: project.hidden ? "#fbbf24" : "#cbd5e1",
+                        background: project.hidden ? "rgba(245, 158, 11, 0.12)" : "rgba(255, 255, 255, 0.05)",
+                        border: project.hidden ? "1px solid rgba(245, 158, 11, 0.3)" : "1px solid rgba(255, 255, 255, 0.1)",
+                        padding: "6px 10px",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                      }}
+                      title={project.hidden ? "Rendre visible aux visiteurs" : "Masquer du site public"}
+                    >
+                      {project.hidden ? <Eye size={14} /> : <EyeOff size={14} />}
+                      {project.hidden ? "Afficher" : "Masquer"}
+                    </button>
+
+                    {/* Delete Button */}
+                    <button
+                      onClick={() => remove(project)}
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        fontSize: "0.75rem",
+                        fontWeight: 700,
+                        color: "#f87171",
+                        background: "rgba(248, 113, 113, 0.08)",
+                        border: "1px solid rgba(248, 113, 113, 0.2)",
+                        padding: "6px 10px",
+                        borderRadius: "8px",
+                        cursor: "pointer",
+                      }}
+                      title="Supprimer définitivement"
+                    >
+                      <Trash2 size={14} />
+                      Supprimer
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

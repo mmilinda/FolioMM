@@ -19,7 +19,12 @@ import AdminLayout from "./admin/AdminLayout";
 import Dashboard from "./admin/Dashboard";
 import ProjectsManager from "./admin/ProjectsManager";
 import CreateProject from "./admin/CreateProject";
+import EditProject from "./admin/EditProject";
 import MessagesManager from "./admin/MessagesManager";
+import ArticlesManager from "./admin/ArticlesManager";
+import CreateArticle from "./admin/CreateArticle";
+import EditArticle from "./admin/EditArticle";
+import SiteSettings from "./admin/SiteSettings";
 
 // Protection de route
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -53,7 +58,12 @@ export default function App() {
           <Route index element={<Dashboard />} />
           <Route path="projects" element={<ProjectsManager />} />
           <Route path="projects/create" element={<CreateProject />} />
+          <Route path="projects/edit/:id" element={<EditProject />} />
+          <Route path="articles" element={<ArticlesManager />} />
+          <Route path="articles/create" element={<CreateArticle />} />
+          <Route path="articles/edit/:id" element={<EditArticle />} />
           <Route path="messages" element={<MessagesManager />} />
+          <Route path="settings" element={<SiteSettings />} />
         </Route>
       </Routes>
     </BrowserRouter>

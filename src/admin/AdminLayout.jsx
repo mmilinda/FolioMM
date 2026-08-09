@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Outlet, NavLink, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import {
@@ -11,6 +11,11 @@ import {
   Shield,
   Menu,
   X,
+  FileText,
+  FilePlus,
+  Settings,
+  Sun,
+  Moon,
 } from "lucide-react";
 
 export default function AdminLayout() {
@@ -18,62 +23,182 @@ export default function AdminLayout() {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // Responsive desktop detection
+  const [isDesktop, setIsDesktop] = useState(() => window.innerWidth >= 1024);
+
+  // Dark Mode Theme State (default: dark mode)
+  const [darkMode, setDarkMode] = useState(() => {
+    try {
+      const savedTheme = localStorage.getItem("admin_theme");
+      return savedTheme ? savedTheme === "dark" : true;
+    } catch {
+      return true;
+    }
+  });
+
+  useEffect(() => {
+    function handleResize() {
+      setIsDesktop(window.innerWidth >= 1024);
+    }
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  function toggleTheme() {
+    const nextTheme = !darkMode;
+    setDarkMode(nextTheme);
+    localStorage.setItem("admin_theme", nextTheme ? "dark" : "light");
+    window.dispatchEvent(new CustomEvent("theme_changed"));
+  }
+
   const navItems = [
     { name: "Tableau de Bord", path: "/admin", icon: LayoutDashboard, end: true },
     { name: "Gestion Projets", path: "/admin/projects", icon: FolderKanban, end: true },
     { name: "Nouveau Projet", path: "/admin/projects/create", icon: PlusCircle, end: false },
+    { name: "Articles de Blog", path: "/admin/articles", icon: FileText, end: true },
+    { name: "Rédiger Article", path: "/admin/articles/create", icon: FilePlus, end: false },
     { name: "Messages Reçus", path: "/admin/messages", icon: MessageSquare, end: false },
+    { name: "Paramètres Site", path: "/admin/settings", icon: Settings, end: false },
   ];
 
   const getPageTitle = () => {
     if (location.pathname === "/admin") return "Tableau de bord";
     if (location.pathname === "/admin/projects") return "Gestion des projets";
     if (location.pathname === "/admin/projects/create") return "Nouveau projet";
+    if (location.pathname === "/admin/articles") return "Gestion du blog";
+    if (location.pathname === "/admin/articles/create") return "Rédiger un article";
     if (location.pathname === "/admin/messages") return "Boîte de réception";
+    if (location.pathname === "/admin/settings") return "Paramètres du site";
     return "Administration";
   };
 
+  // Dynamic Theme Palette Colors (Adjusted Low-Glare Soft Slate)
+  const theme = {
+    bg: darkMode ? "#030712" : "#1e293b",
+    sidebarBg: darkMode ? "#090d16" : "#0f172a",
+    headerBg: darkMode ? "rgba(9, 13, 22, 0.95)" : "rgba(15, 23, 42, 0.95)",
+    cardBg: darkMode ? "rgba(9, 13, 22, 0.85)" : "rgba(30, 41, 59, 0.9)",
+    border: darkMode ? "rgba(255, 255, 255, 0.08)" : "rgba(255, 255, 255, 0.12)",
+    text: darkMode ? "#f8fafc" : "#f1f5f9",
+    subtext: darkMode ? "#94a3b8" : "#cbd5e1",
+    activeNavBg: darkMode ? "rgba(56, 189, 248, 0.12)" : "rgba(56, 189, 248, 0.2)",
+    activeNavText: "#38bdf8",
+  };
+
   return (
-    <div className="min-h-screen bg-[#030712] text-slate-100 flex font-sans antialiased relative">
-      {/* Mobile Overlay Background */}
-      {mobileOpen && (
+    <div
+      style={{
+        minHeight: "100vh",
+        background: theme.bg,
+        color: theme.text,
+        display: "flex",
+        fontFamily: "system-ui, -apple-system, sans-serif",
+        position: "relative",
+        transition: "background 0.3s, color 0.3s",
+      }}
+    >
+      {/* Mobile Drawer Overlay */}
+      {mobileOpen && !isDesktop && (
         <div
           onClick={() => setMobileOpen(false)}
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 lg:hidden"
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: darkMode ? "rgba(2, 6, 23, 0.8)" : "rgba(15, 23, 42, 0.4)",
+            backdropFilter: "blur(4px)",
+            zIndex: 40,
+          }}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar Navigation */}
       <aside
-        className={`w-64 bg-[#090d16] border-r border-slate-800/80 p-5 flex flex-col justify-between shrink-0 fixed inset-y-0 left-0 z-50 transition-transform duration-300 lg:translate-x-0 ${
-          mobileOpen ? "translate-x-0 shadow-2xl" : "-translate-x-full"
-        }`}
+        style={{
+          width: "260px",
+          background: theme.sidebarBg,
+          borderRight: `1px solid ${theme.border}`,
+          padding: "1.25rem",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          flexShrink: 0,
+          position: "fixed",
+          top: 0,
+          bottom: 0,
+          left: 0,
+          zIndex: 50,
+          transition: "transform 0.3s ease, background 0.3s",
+          transform: isDesktop || mobileOpen ? "translateX(0)" : "translateX(-100%)",
+          boxShadow: mobileOpen && !isDesktop ? "10px 0 30px rgba(0,0,0,0.5)" : "none",
+        }}
       >
         <div>
-          {/* Logo Brand */}
-          <div className="flex items-center justify-between mb-6">
-            <Link to="/admin" className="flex items-center gap-3 px-2 py-3 no-underline">
-              <div className="w-9 h-9 rounded-xl overflow-hidden border border-cyan-400/40 p-0.5 bg-cyan-400/10 flex-shrink-0 shadow-lg shadow-cyan-500/10">
-                <img src="/logoMM.jpg" alt="MM" className="w-full h-full object-cover rounded-lg" />
+          {/* Logo Brand Header */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "1.75rem",
+              paddingBottom: "1rem",
+              borderBottom: `1px solid ${theme.border}`,
+            }}
+          >
+            <Link
+              to="/admin"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "10px",
+                textDecoration: "none",
+              }}
+            >
+              <div
+                style={{
+                  width: "38px",
+                  height: "38px",
+                  borderRadius: "12px",
+                  overflow: "hidden",
+                  border: "1px solid rgba(56,189,248,0.4)",
+                  padding: "2px",
+                  background: "rgba(56,189,248,0.1)",
+                  flexShrink: 0,
+                }}
+              >
+                <img
+                  src="/logoMM.jpg"
+                  alt="MM Logo"
+                  style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "8px" }}
+                />
               </div>
               <div>
-                <h2 className="text-base font-extrabold tracking-wider text-white">
-                  MILINDA<span className="text-cyan-400">_ADMIN</span>
+                <h2 style={{ fontSize: "0.95rem", fontWeight: 800, color: theme.text, margin: 0, tracking: "0.05em" }}>
+                  MILINDA<span style={{ color: "#38bdf8" }}>_ADMIN</span>
                 </h2>
-                <span className="text-[11px] font-medium text-slate-400 block">Console Admin</span>
+                <span style={{ fontSize: "0.68rem", fontWeight: 500, color: theme.subtext, display: "block" }}>
+                  Console Administration
+                </span>
               </div>
             </Link>
 
-            <button
-              onClick={() => setMobileOpen(false)}
-              className="lg:hidden text-slate-400 hover:text-white p-1"
-            >
-              <X size={20} />
-            </button>
+            {!isDesktop && (
+              <button
+                onClick={() => setMobileOpen(false)}
+                style={{
+                  background: "none",
+                  border: "none",
+                  color: theme.subtext,
+                  cursor: "pointer",
+                  padding: "4px",
+                }}
+              >
+                <X size={20} />
+              </button>
+            )}
           </div>
 
-          {/* Navigation links */}
-          <nav className="space-y-1.5">
+          {/* Nav Items */}
+          <nav style={{ display: "flex", flexDirection: "column", gap: "0.35rem" }}>
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
@@ -82,13 +207,20 @@ export default function AdminLayout() {
                   to={item.path}
                   end={item.end}
                   onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) =>
-                    `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all no-underline ${
-                      isActive
-                        ? "bg-cyan-500/15 text-cyan-300 font-semibold border border-cyan-500/30 shadow-sm"
-                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
-                    }`
-                  }
+                  style={({ isActive }) => ({
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    padding: "10px 14px",
+                    borderRadius: "12px",
+                    fontSize: "0.85rem",
+                    fontWeight: isActive ? 700 : 500,
+                    color: isActive ? theme.activeNavText : theme.subtext,
+                    background: isActive ? theme.activeNavBg : "transparent",
+                    border: isActive ? "1px solid rgba(56, 189, 248, 0.25)" : "1px solid transparent",
+                    textDecoration: "none",
+                    transition: "all 0.2s ease",
+                  })}
                 >
                   <Icon size={18} />
                   <span>{item.name}</span>
@@ -98,23 +230,48 @@ export default function AdminLayout() {
           </nav>
         </div>
 
-        {/* Sidebar Footer */}
-        <div className="pt-4 border-t border-slate-800/80 space-y-2">
+        {/* Sidebar Bottom Footer */}
+        <div style={{ paddingTop: "1rem", borderTop: `1px solid ${theme.border}`, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
           <Link
             to="/"
             target="_blank"
-            className="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-800/50 transition no-underline group"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "10px 14px",
+              borderRadius: "12px",
+              fontSize: "0.78rem",
+              fontWeight: 600,
+              color: theme.subtext,
+              textDecoration: "none",
+              background: darkMode ? "rgba(255, 255, 255, 0.03)" : "rgba(0, 0, 0, 0.03)",
+              border: `1px solid ${theme.border}`,
+            }}
           >
-            <span className="flex items-center gap-2">
-              <Globe size={15} className="text-slate-500 group-hover:text-cyan-400 transition" />
+            <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <Globe size={15} color="#38bdf8" />
               Voir le site public
             </span>
-            <span className="text-[10px] text-slate-500">↗</span>
+            <span style={{ fontSize: "0.7rem", color: theme.subtext }}>↗</span>
           </Link>
 
           <button
             onClick={logout}
-            className="w-full flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 transition cursor-pointer border border-rose-500/20"
+            style={{
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              padding: "10px 14px",
+              borderRadius: "12px",
+              fontSize: "0.78rem",
+              fontWeight: 700,
+              color: "#f87171",
+              background: "rgba(248, 113, 113, 0.08)",
+              border: "1px solid rgba(248, 113, 113, 0.2)",
+              cursor: "pointer",
+            }}
           >
             <LogOut size={15} />
             Se déconnecter
@@ -122,43 +279,141 @@ export default function AdminLayout() {
         </div>
       </aside>
 
-      {/* Main Container */}
-      <div className="pl-0 lg:pl-64 flex-1 flex flex-col min-w-0 w-full">
+      {/* Main Content Area */}
+      <div
+        style={{
+          marginLeft: isDesktop ? "260px" : "0",
+          width: isDesktop ? "calc(100% - 260px)" : "100%",
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          minWidth: 0,
+          minHeight: "100vh",
+        }}
+      >
         {/* Top Header Bar */}
-        <header className="h-16 bg-[#090d16]/90 backdrop-blur-md border-b border-slate-800/80 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-20">
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setMobileOpen(true)}
-              className="lg:hidden text-slate-300 hover:text-cyan-400 p-2 rounded-xl bg-slate-800/60 border border-slate-700/50"
-            >
-              <Menu size={20} />
-            </button>
+        <header
+          style={{
+            height: "64px",
+            background: theme.headerBg,
+            backdropFilter: "blur(12px)",
+            borderBottom: `1px solid ${theme.border}`,
+            padding: "0 1.5rem",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            position: "sticky",
+            top: 0,
+            zIndex: 30,
+            transition: "background 0.3s",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            {!isDesktop && (
+              <button
+                onClick={() => setMobileOpen(true)}
+                style={{
+                  background: darkMode ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
+                  border: `1px solid ${theme.border}`,
+                  borderRadius: "10px",
+                  padding: "8px",
+                  color: theme.text,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <Menu size={20} />
+              </button>
+            )}
 
-            <h1 className="text-sm sm:text-base font-bold text-white tracking-tight">{getPageTitle()}</h1>
-            <span className="hidden sm:inline-flex px-2.5 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[11px] font-semibold items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <h1 style={{ fontSize: "0.95rem", fontWeight: 800, color: theme.text, margin: 0, letterSpacing: "-0.01em" }}>
+              {getPageTitle()}
+            </h1>
+
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "3px 10px",
+                borderRadius: "20px",
+                background: "rgba(52, 211, 153, 0.1)",
+                border: "1px solid rgba(52, 211, 153, 0.2)",
+                color: "#34d399",
+                fontSize: "0.7rem",
+                fontWeight: 700,
+              }}
+            >
+              <span style={{ width: "6px", height: "6px", borderRadius: "50%", background: "#34d399" }} />
               En Ligne
             </span>
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-800/40 border border-slate-700/50 text-xs">
-              <Shield size={14} className="text-cyan-400" />
-              <span className="text-slate-300 font-medium">{user?.email || "mmilinda00@gmail.com"}</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            {/* Dark Mode / Soft Slate Mode Toggle Button */}
+            <button
+              onClick={toggleTheme}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "6px 12px",
+                borderRadius: "10px",
+                background: darkMode ? "rgba(255,255,255,0.06)" : "rgba(56, 189, 248, 0.12)",
+                border: `1px solid ${theme.border}`,
+                color: theme.text,
+                fontSize: "0.75rem",
+                fontWeight: 700,
+                cursor: "pointer",
+                transition: "all 0.2s",
+              }}
+              title={darkMode ? "Passer en Thème Doux Slate" : "Passer en Thème Sombre OLED"}
+            >
+              {darkMode ? <Sun size={15} color="#fbbf24" /> : <Moon size={15} color="#38bdf8" />}
+              <span>{darkMode ? "Thème Doux" : "Thème OLED"}</span>
+            </button>
+
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "6px 12px",
+                borderRadius: "10px",
+                background: darkMode ? "rgba(255, 255, 255, 0.04)" : "rgba(0, 0, 0, 0.04)",
+                border: `1px solid ${theme.border}`,
+                fontSize: "0.78rem",
+              }}
+            >
+              <Shield size={14} color="#38bdf8" />
+              <span style={{ color: theme.text, fontWeight: 600 }}>{user?.email || "mmilinda00@gmail.com"}</span>
             </div>
 
             <Link
               to="/admin/projects/create"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-cyan-500 text-slate-950 text-xs font-bold hover:bg-cyan-400 transition no-underline shadow-sm"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 14px",
+                borderRadius: "10px",
+                background: "#38bdf8",
+                color: "#020617",
+                fontSize: "0.78rem",
+                fontWeight: 800,
+                textDecoration: "none",
+                boxShadow: "0 4px 14px rgba(56,189,248,0.25)",
+              }}
             >
               <PlusCircle size={15} />
-              <span className="hidden sm:inline">Ajouter projet</span>
+              <span>Nouveau projet</span>
             </Link>
           </div>
         </header>
 
-        {/* Dynamic Page Content */}
-        <main className="p-4 sm:p-6 md:p-8 flex-1 w-full bg-[#030712] overflow-x-hidden">
+        {/* Dynamic Page Main Content */}
+        <main style={{ padding: "1.75rem", flex: 1, width: "100%", background: theme.bg, boxSizing: "border-box", transition: "background 0.3s" }}>
           <Outlet />
         </main>
       </div>

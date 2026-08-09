@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { FolderPlus, ArrowLeft, UploadCloud, CheckCircle, Sparkles } from "lucide-react";
 import api from "../services/api";
 import SEO from "../components/SEO";
+import { db, collection, addDoc } from "../firebase";
 
 function slugify(text) {
   return text
@@ -82,8 +83,10 @@ export default function CreateProject() {
       image: imagePreview || "/images/projects/preview.png",
       status: "Terminé",
       statusEn: "Completed",
+      createdAt: new Date().toISOString(),
     };
 
+    // 1. Save to Laravel API Database
     try {
       const formData = new FormData();
       formData.append("title", form.title);
@@ -99,67 +102,131 @@ export default function CreateProject() {
 
       await api.post("/projects", formData, {
         headers: { "Content-Type": "multipart/form-data" },
-        timeout: 2000,
+        timeout: 2500,
       });
+      console.log("✅ Enregistré dans la base de données Laravel / MySQL");
     } catch (err) {
-      console.warn("API Offline, storing locally in custom_projects");
-    } finally {
-      // Local sync fallback
-      try {
-        const existing = JSON.parse(localStorage.getItem("custom_projects") || "[]");
-        localStorage.setItem("custom_projects", JSON.stringify([newProject, ...existing]));
-        window.dispatchEvent(new CustomEvent("projects_updated"));
-      } catch (err) {
-        console.error("Local storage error:", err);
-      }
-
-      setLoading(false);
-      navigate("/admin/projects");
+      console.warn("API Laravel non disponible, passage à la base Firebase / Firestore");
     }
+
+    // 2. Save to Firebase Firestore Database
+    try {
+      if (db) {
+        await addDoc(collection(db, "projects"), newProject);
+        console.log("🔥 Enregistré avec succès dans la base de données Firebase Firestore !");
+      }
+    } catch (fbErr) {
+      console.warn("Erreur d'écriture Firebase (Mode hors-ligne ou clés en cours de config)");
+    }
+
+    // 3. Sync local state fallback
+    try {
+      const existing = JSON.parse(localStorage.getItem("custom_projects") || "[]");
+      localStorage.setItem("custom_projects", JSON.stringify([newProject, ...existing]));
+      window.dispatchEvent(new CustomEvent("projects_updated"));
+    } catch (err) {
+      console.error("Local storage error:", err);
+    }
+
+    setLoading(false);
+    navigate("/admin/projects");
   }
+
+  const inputStyle = {
+    width: "100%",
+    padding: "14px 16px",
+    borderRadius: "12px",
+    background: "rgba(2, 6, 23, 0.75)",
+    border: "1px solid rgba(255, 255, 255, 0.12)",
+    color: "#ffffff",
+    fontSize: "0.92rem",
+    fontWeight: 500,
+    outline: "none",
+    boxSizing: "border-box",
+  };
+
+  const labelStyle = {
+    display: "block",
+    fontSize: "0.75rem",
+    fontWeight: 700,
+    letterSpacing: "0.08em",
+    textTransform: "uppercase",
+    color: "#cbd5e1",
+    marginBottom: "0.4rem",
+  };
 
   return (
     <>
       <SEO title="Nouveau projet | Administration" />
 
-      <div className="space-y-6 max-w-4xl">
+      <div style={{ maxWidth: "860px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+        {/* Back Link */}
         <Link
           to="/admin/projects"
-          className="inline-flex items-center gap-2 text-xs font-semibold text-slate-400 hover:text-cyan-400 transition no-underline"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "6px",
+            fontSize: "0.8rem",
+            fontWeight: 700,
+            color: "#94a3b8",
+            textDecoration: "none",
+          }}
         >
-          <ArrowLeft size={16} />
-          Retour à la liste des projets
+          <ArrowLeft size={16} color="#38bdf8" />
+          <span>Retour à la liste des projets</span>
         </Link>
 
-        <div className="pb-4 border-b border-slate-800/80">
-          <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-            <FolderPlus className="text-cyan-400" size={24} />
+        {/* Page Header */}
+        <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
+          <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
+            <FolderPlus color="#38bdf8" size={26} />
             Ajouter un Nouveau Projet
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Remplissez les informations ci-dessous pour publier un projet sur votre portfolio
+          <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
+            Remplissez les informations ci-dessous pour publier un projet sur votre portfolio public.
           </p>
         </div>
 
+        {/* Glassmorphic Form Card */}
         <form
           onSubmit={submit}
-          className="bg-[#090d16] border border-slate-800/80 rounded-2xl p-6 md:p-8 space-y-6 shadow-xl"
+          style={{
+            background: "rgba(9, 13, 22, 0.85)",
+            backdropFilter: "blur(20px)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            borderRadius: "24px",
+            padding: "2rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1.5rem",
+            boxShadow: "0 20px 50px rgba(0, 0, 0, 0.6)",
+          }}
         >
           {error && (
-            <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-medium">
+            <div
+              style={{
+                padding: "0.85rem 1.1rem",
+                borderRadius: "12px",
+                background: "rgba(245, 158, 11, 0.12)",
+                border: "1px solid rgba(245, 158, 11, 0.3)",
+                color: "#fbbf24",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+              }}
+            >
               ℹ️ {error}
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Row 1: Title & Category */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                Titre du projet *
-              </label>
+              <label style={labelStyle}>Titre du projet *</label>
               <input
                 name="title"
                 placeholder="Ex: AgriChain AI"
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
+                style={inputStyle}
                 value={form.title}
                 onChange={handleChange}
                 required
@@ -167,13 +234,11 @@ export default function CreateProject() {
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                Catégorie *
-              </label>
+              <label style={labelStyle}>Catégorie *</label>
               <input
                 name="category"
                 placeholder="Ex: SaaS • IA • DevOps"
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
+                style={inputStyle}
                 value={form.category}
                 onChange={handleChange}
                 required
@@ -181,148 +246,185 @@ export default function CreateProject() {
             </div>
           </div>
 
+          {/* Full Description */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-              Description complète *
-            </label>
+            <label style={labelStyle}>Description complète *</label>
             <textarea
               name="description"
               placeholder="Présentez brièvement l'objectif et les fonctionnalités clés du projet..."
               rows={3}
-              className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
+              style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
               value={form.description}
               onChange={handleChange}
               required
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Row 2: Problem & Solution */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                🎯 Problème résolu
-              </label>
+              <label style={labelStyle}>🎯 Problème résolu</label>
               <textarea
                 name="problem"
                 placeholder="Quel était le défi ou le besoin initial ?"
                 rows={2}
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
+                style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
                 value={form.problem}
                 onChange={handleChange}
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                💡 Solution apportée
-              </label>
+              <label style={labelStyle}>💡 Solution apportée</label>
               <textarea
                 name="solution"
                 placeholder="Comment votre application y répond-elle ?"
                 rows={2}
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
+                style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
                 value={form.solution}
                 onChange={handleChange}
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Row 3: Technologies & Impact */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                Technologies (séparées par des virgules)
-              </label>
+              <label style={labelStyle}>Technologies (séparées par des virgules)</label>
               <input
                 name="technologies"
                 placeholder="React, Laravel, Tailwind, Docker"
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
+                style={inputStyle}
                 value={form.technologies}
                 onChange={handleChange}
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                📈 Impact & Résultats
-              </label>
+              <label style={labelStyle}>📈 Impact & Résultats</label>
               <input
                 name="impact"
-                placeholder="Ex: Digitalisation des opérations & gain de 40% de temps"
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
+                placeholder="Ex: Digitalisation & gain de 40% de temps"
+                style={inputStyle}
                 value={form.impact}
                 onChange={handleChange}
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          {/* Row 4: Demo & GitHub Links */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                Lien Démo (URL)
-              </label>
+              <label style={labelStyle}>Lien Démo (URL)</label>
               <input
                 name="demo"
                 placeholder="https://mon-projet.vercel.app"
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
+                style={inputStyle}
                 value={form.demo}
                 onChange={handleChange}
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-                Lien GitHub (URL)
-              </label>
+              <label style={labelStyle}>Lien GitHub (URL)</label>
               <input
                 name="github"
                 placeholder="https://github.com/mmilinda/mon-projet"
-                className="w-full px-4 py-3 rounded-xl bg-slate-900/90 border border-slate-800 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition"
+                style={inputStyle}
                 value={form.github}
                 onChange={handleChange}
               />
             </div>
           </div>
 
+          {/* Image Upload Area */}
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-2">
-              Image / Capture d'écran du projet *
-            </label>
-            <div className="relative border-2 border-dashed border-slate-800 rounded-2xl p-6 text-center hover:border-cyan-500/50 transition bg-slate-900/40">
-              <UploadCloud size={32} className="mx-auto text-cyan-400 mb-2" />
-              <p className="text-xs text-slate-300 font-medium">
+            <label style={labelStyle}>Image / Capture d'écran du projet *</label>
+            <div
+              style={{
+                position: "relative",
+                border: "2px dashed rgba(56, 189, 248, 0.3)",
+                borderRadius: "16px",
+                padding: "2rem 1.5rem",
+                textAlign: "center",
+                background: "rgba(2, 6, 23, 0.5)",
+                transition: "border-color 0.2s",
+              }}
+            >
+              <UploadCloud size={36} color="#38bdf8" style={{ margin: "0 auto 8px" }} />
+              <p style={{ fontSize: "0.85rem", color: "#cbd5e1", fontWeight: 600, margin: "0 0 4px" }}>
                 Cliquez pour choisir un fichier image (PNG, JPG, WEBP)
               </p>
-              <p className="text-[11px] text-slate-500 mt-1">Taille maximale : 2 Mo</p>
+              <p style={{ fontSize: "0.75rem", color: "#64748b", margin: 0 }}>Taille recommandée : 1200 x 800px</p>
 
               <input
                 type="file"
                 accept="image/*"
-                className="absolute inset-0 opacity-0 cursor-pointer"
                 onChange={handleImageChange}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  opacity: 0,
+                  cursor: "pointer",
+                  width: "100%",
+                  height: "100%",
+                }}
               />
 
               {image && (
-                <div className="mt-3 text-xs font-bold text-emerald-400 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-400/10 border border-emerald-400/20">
-                  <CheckCircle size={14} /> Fichier sélectionné : {image.name}
+                <div
+                  style={{
+                    marginTop: "1rem",
+                    fontSize: "0.8rem",
+                    fontWeight: 700,
+                    color: "#34d399",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    padding: "6px 14px",
+                    borderRadius: "20px",
+                    background: "rgba(52, 211, 153, 0.1)",
+                    border: "1px solid rgba(52, 211, 153, 0.25)",
+                  }}
+                >
+                  <CheckCircle size={15} /> Fichier sélectionné : {image.name}
                 </div>
               )}
             </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-800/80">
+          {/* Submit Action */}
+          <div style={{ paddingTop: "1rem", borderTop: "1px solid rgba(255, 255, 255, 0.08)" }}>
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 px-6 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-sm flex items-center justify-center gap-2 transition cursor-pointer shadow-lg shadow-cyan-500/20 disabled:opacity-50"
+              style={{
+                width: "100%",
+                padding: "15px",
+                borderRadius: "14px",
+                background: "linear-gradient(135deg, #38bdf8 0%, #818cf8 100%)",
+                border: "none",
+                color: "#020617",
+                fontWeight: 800,
+                fontSize: "0.95rem",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "8px",
+                cursor: loading ? "not-allowed" : "pointer",
+                opacity: loading ? 0.7 : 1,
+                boxShadow: "0 6px 24px rgba(56, 189, 248, 0.3)",
+              }}
             >
               {loading ? (
-                <>
-                  <span className="w-4 h-4 border-2 border-slate-950/30 border-t-slate-950 rounded-full animate-spin" />
-                  Enregistrement du projet...
-                </>
+                <span>Enregistrement du projet...</span>
               ) : (
                 <>
-                  <Sparkles size={16} />
-                  Enregistrer et publier le projet
+                  <Sparkles size={18} />
+                  <span>Enregistrer et publier le projet</span>
                 </>
               )}
             </button>

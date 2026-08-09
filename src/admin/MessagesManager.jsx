@@ -18,11 +18,20 @@ export default function MessagesManager() {
 
   useEffect(() => {
     function refresh() {
-      setMessages(getStoredMessages());
+      const stored = getStoredMessages();
+      setMessages(stored);
       updatePWABadge();
+      if (!selectedMessage && stored.length > 0) {
+        setSelectedMessage(stored[0]);
+      }
     }
 
+    const stored = getStoredMessages();
+    if (stored.length > 0) {
+      setSelectedMessage(stored[0]);
+    }
     updatePWABadge();
+
     window.addEventListener("messages_updated", refresh);
     return () => window.removeEventListener("messages_updated", refresh);
   }, []);
@@ -43,7 +52,7 @@ export default function MessagesManager() {
     localStorage.setItem("contact_messages", JSON.stringify(updated));
     updatePWABadge();
     if (selectedMessage?.id === id) {
-      setSelectedMessage(null);
+      setSelectedMessage(updated[0] || null);
     }
   }
 
@@ -59,110 +68,204 @@ export default function MessagesManager() {
     <>
       <SEO title="Messages reçus | Administration" />
 
-      <div className="space-y-6 max-w-7xl">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800/80">
+      <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", maxWidth: "1200px" }}>
+        {/* Header Bar */}
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "1rem",
+            paddingBottom: "1rem",
+            borderBottom: "1px solid rgba(255, 255, 255, 0.08)",
+          }}
+        >
           <div>
-            <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-              <MessageSquare className="text-cyan-400" size={24} />
+            <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.25rem", display: "flex", alignItems: "center", gap: "10px" }}>
+              <MessageSquare color="#f472b6" size={26} />
               Boîte de Réception ({messages.length})
             </h1>
-            <p className="text-xs text-slate-400 mt-1">
-              Consultez et gérez les messages envoyés depuis le formulaire de contact public
+            <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
+              Consultez et répondez aux messages envoyés par vos visiteurs via le site public.
             </p>
           </div>
 
-          <div className="relative">
-            <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+          <div style={{ position: "relative", width: "280px" }}>
+            <Search size={16} color="#94a3b8" style={{ position: "absolute", left: "14px", top: "50%", transform: "translateY(-50%)" }} />
             <input
               type="text"
-              placeholder="Rechercher par nom, email ou sujet..."
+              placeholder="Rechercher nom, email, sujet..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10 pr-4 py-2.5 rounded-xl bg-slate-900/80 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition w-full sm:w-72"
+              style={{
+                width: "100%",
+                padding: "10px 14px 10px 40px",
+                borderRadius: "12px",
+                background: "rgba(15, 23, 42, 0.8)",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                color: "#ffffff",
+                fontSize: "0.85rem",
+                outline: "none",
+                boxSizing: "border-box",
+              }}
             />
           </div>
         </div>
 
-        {/* Layout split */}
+        {/* Inbox Grid Layout */}
         {messages.length === 0 ? (
-          <div className="text-center py-20 bg-[#090d16] border border-slate-800/80 rounded-2xl space-y-3">
-            <Inbox size={40} className="mx-auto text-slate-600" />
-            <h3 className="text-base font-bold text-slate-300">Aucun message pour le moment</h3>
-            <p className="text-xs text-slate-500 max-w-md mx-auto">
-              Les messages soumis via le formulaire de contact s'afficheront automatiquement ici en temps réel.
+          <div
+            style={{
+              padding: "4rem 2rem",
+              textAlign: "center",
+              background: "rgba(9, 13, 22, 0.85)",
+              borderRadius: "24px",
+              border: "1px solid rgba(255, 255, 255, 0.08)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <Inbox size={48} color="#64748b" />
+            <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#cbd5e1", margin: 0 }}>Aucun message pour le moment</h3>
+            <p style={{ fontSize: "0.85rem", color: "#64748b", margin: 0, maxWidth: "460px", lineHeight: 1.6 }}>
+              Les messages soumis par vos visiteurs via le formulaire de contact s'afficheront ici en direct avec notifications PWA.
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            {/* Left Messages List (5 cols) */}
-            <div className="lg:col-span-5 space-y-3">
-              {filtered.map((item) => (
-                <div
-                  key={item.id}
-                  onClick={() => {
-                    setSelectedMessage(item);
-                    if (!item.read) toggleRead(item.id);
-                  }}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer relative overflow-hidden ${
-                    selectedMessage?.id === item.id
-                      ? "bg-slate-800/90 border-cyan-500/60 shadow-lg"
-                      : item.read
-                      ? "bg-[#090d16] border-slate-800/80 opacity-85 hover:border-slate-700"
-                      : "bg-slate-900/95 border-cyan-500/30 hover:border-cyan-400/50 shadow-md"
-                  }`}
-                >
-                  {!item.read && (
-                    <div className="absolute top-0 left-0 bottom-0 w-1 bg-cyan-400 rounded-l-2xl" />
-                  )}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.5rem", alignItems: "start" }}>
+            {/* Inbox List (Left Panel) */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+              {filtered.map((item) => {
+                const isSelected = selectedMessage?.id === item.id;
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => {
+                      setSelectedMessage(item);
+                      if (!item.read) toggleRead(item.id);
+                    }}
+                    style={{
+                      padding: "1.1rem",
+                      borderRadius: "16px",
+                      background: isSelected
+                        ? "rgba(56, 189, 248, 0.12)"
+                        : item.read
+                        ? "rgba(9, 13, 22, 0.75)"
+                        : "rgba(15, 23, 42, 0.95)",
+                      border: isSelected
+                        ? "1px solid rgba(56, 189, 248, 0.4)"
+                        : item.read
+                        ? "1px solid rgba(255, 255, 255, 0.06)"
+                        : "1px solid rgba(244, 114, 182, 0.3)",
+                      cursor: "pointer",
+                      transition: "all 0.2s",
+                      position: "relative",
+                      boxShadow: "0 6px 20px rgba(0,0,0,0.3)",
+                    }}
+                  >
+                    {!item.read && (
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "12px",
+                          right: "12px",
+                          width: "8px",
+                          height: "8px",
+                          borderRadius: "50%",
+                          background: "#f472b6",
+                        }}
+                      />
+                    )}
 
-                  <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <span className="text-xs font-bold text-white truncate">{item.name}</span>
-                    <span className="text-[10px] text-slate-400 shrink-0">{item.date}</span>
-                  </div>
-
-                  <h4 className="text-xs font-semibold text-cyan-300 truncate mb-1">{item.subject}</h4>
-                  <p className="text-[11px] text-slate-400 line-clamp-2 leading-relaxed">{item.message}</p>
-
-                  <div className="flex items-center justify-between mt-3 pt-2 border-t border-slate-800/40 text-[10px] text-slate-500">
-                    <span className="truncate">{item.email}</span>
-                    <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-semibold">
-                      {item.type || "Contact"}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Right Message Details Pane (7 cols) */}
-            <div className="lg:col-span-7 bg-[#090d16] border border-slate-800/80 rounded-2xl p-6 space-y-6 shadow-xl min-h-[400px]">
-              {selectedMessage ? (
-                <div className="space-y-6">
-                  {/* Top Bar Controls */}
-                  <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
-                    <div>
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
-                        {selectedMessage.type || "Message de contact"}
-                      </span>
-                      <h2 className="text-lg font-bold text-white mt-0.5">{selectedMessage.subject}</h2>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "4px" }}>
+                      <span style={{ fontSize: "0.9rem", fontWeight: 800, color: "#ffffff" }}>{item.name}</span>
+                      <span style={{ fontSize: "0.72rem", color: "#64748b" }}>{item.date}</span>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <h4 style={{ fontSize: "0.82rem", fontWeight: 700, color: "#38bdf8", margin: "0 0 6px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {item.subject}
+                    </h4>
+
+                    <p style={{ fontSize: "0.78rem", color: "#94a3b8", margin: 0, lineHeight: 1.5, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                      {item.message}
+                    </p>
+
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginTop: "10px", paddingTop: "8px", borderTop: "1px solid rgba(255,255,255,0.06)", fontSize: "0.72rem", color: "#64748b" }}>
+                      <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{item.email}</span>
+                      <span style={{ padding: "2px 8px", borderRadius: "6px", background: "rgba(255,255,255,0.05)", color: "#cbd5e1", fontWeight: 600 }}>
+                        {item.type || "Contact"}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Reading View Pane (Right Panel) */}
+            <div
+              style={{
+                background: "rgba(9, 13, 22, 0.85)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderRadius: "24px",
+                padding: "1.75rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1.5rem",
+                boxShadow: "0 15px 40px rgba(0, 0, 0, 0.5)",
+                minHeight: "420px",
+              }}
+            >
+              {selectedMessage ? (
+                <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+                  {/* Top Bar Controls */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
+                    <div>
+                      <span style={{ fontSize: "0.72rem", fontWeight: 800, textTransform: "uppercase", color: "#f472b6", letterSpacing: "0.08em" }}>
+                        {selectedMessage.type || "Message de contact"}
+                      </span>
+                      <h2 style={{ fontSize: "1.25rem", fontWeight: 800, color: "#ffffff", margin: "4px 0 0" }}>
+                        {selectedMessage.subject}
+                      </h2>
+                    </div>
+
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       <button
                         onClick={() => toggleRead(selectedMessage.id)}
-                        className={`p-2 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition border ${
-                          selectedMessage.read
-                            ? "bg-slate-800 text-slate-300 border-slate-700"
-                            : "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
-                        }`}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "6px",
+                          padding: "8px 12px",
+                          borderRadius: "10px",
+                          fontSize: "0.78rem",
+                          fontWeight: 700,
+                          color: selectedMessage.read ? "#cbd5e1" : "#38bdf8",
+                          background: selectedMessage.read ? "rgba(255, 255, 255, 0.05)" : "rgba(56, 189, 248, 0.12)",
+                          border: selectedMessage.read ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(56, 189, 248, 0.3)",
+                          cursor: "pointer",
+                        }}
                       >
                         <Check size={14} />
-                        {selectedMessage.read ? "Marqué lu" : "Marquer comme lu"}
+                        {selectedMessage.read ? "Lu" : "Marquer lu"}
                       </button>
 
                       <button
                         onClick={() => remove(selectedMessage.id)}
-                        className="p-2 rounded-xl text-xs font-semibold text-rose-400 hover:bg-rose-500/10 transition border border-rose-500/20"
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          padding: "8px 12px",
+                          borderRadius: "10px",
+                          fontSize: "0.78rem",
+                          fontWeight: 700,
+                          color: "#f87171",
+                          background: "rgba(248, 113, 113, 0.08)",
+                          border: "1px solid rgba(248, 113, 113, 0.2)",
+                          cursor: "pointer",
+                        }}
                         title="Supprimer ce message"
                       >
                         <Trash2 size={15} />
@@ -170,46 +273,80 @@ export default function MessagesManager() {
                     </div>
                   </div>
 
-                  {/* Sender Info Card */}
-                  <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-bold text-white">{selectedMessage.name}</span>
-                      <span className="text-xs text-slate-400">{selectedMessage.date}</span>
+                  {/* Sender Info */}
+                  <div
+                    style={{
+                      padding: "1rem 1.25rem",
+                      borderRadius: "16px",
+                      background: "rgba(2, 6, 23, 0.6)",
+                      border: "1px solid rgba(255, 255, 255, 0.06)",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "6px",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <span style={{ fontSize: "0.95rem", fontWeight: 800, color: "#ffffff" }}>{selectedMessage.name}</span>
+                      <span style={{ fontSize: "0.75rem", color: "#94a3b8" }}>{selectedMessage.date}</span>
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-cyan-400 font-medium">
-                      <Mail size={14} />
-                      <a href={`mailto:${selectedMessage.email}`} className="hover:underline">
+
+                    <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "0.82rem", color: "#38bdf8", fontWeight: 600 }}>
+                      <Mail size={15} />
+                      <a href={`mailto:${selectedMessage.email}`} style={{ color: "#38bdf8", textDecoration: "none" }}>
                         {selectedMessage.email}
                       </a>
                     </div>
                   </div>
 
-                  {/* Message Body Content */}
-                  <div className="space-y-2">
-                    <label className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
+                  {/* Body Content */}
+                  <div>
+                    <label style={{ display: "block", fontSize: "0.72rem", fontWeight: 800, textTransform: "uppercase", color: "#64748b", letterSpacing: "0.08em", marginBottom: "0.5rem" }}>
                       Contenu du message :
                     </label>
-                    <div className="p-5 rounded-2xl bg-slate-950/70 border border-slate-800 text-xs sm:text-sm text-slate-200 leading-relaxed whitespace-pre-wrap">
+                    <div
+                      style={{
+                        padding: "1.25rem",
+                        borderRadius: "16px",
+                        background: "rgba(2, 6, 23, 0.8)",
+                        border: "1px solid rgba(255, 255, 255, 0.08)",
+                        color: "#f1f5f9",
+                        fontSize: "0.9rem",
+                        lineHeight: 1.7,
+                        whiteSpace: "pre-wrap",
+                      }}
+                    >
                       {selectedMessage.message}
                     </div>
                   </div>
 
-                  {/* Direct Action */}
-                  <div className="pt-2">
+                  {/* Action Bar */}
+                  <div style={{ paddingTop: "0.5rem" }}>
                     <a
                       href={`mailto:${selectedMessage.email}?subject=Re: ${encodeURIComponent(selectedMessage.subject)}`}
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs transition no-underline shadow-md"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        padding: "12px 20px",
+                        borderRadius: "12px",
+                        background: "#38bdf8",
+                        color: "#020617",
+                        fontSize: "0.85rem",
+                        fontWeight: 800,
+                        textDecoration: "none",
+                        boxShadow: "0 4px 16px rgba(56, 189, 248, 0.3)",
+                      }}
                     >
-                      <Mail size={15} />
+                      <Mail size={16} />
                       Répondre directement par email
                     </a>
                   </div>
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center h-full text-center py-24 space-y-3">
-                  <Mail size={36} className="text-slate-600" />
-                  <p className="text-xs text-slate-400">
-                    Sélectionnez un message à gauche pour lire son contenu complet.
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", padding: "4rem 0", color: "#64748b", textAlign: "center", gap: "1rem" }}>
+                  <Mail size={40} />
+                  <p style={{ fontSize: "0.85rem", margin: 0 }}>
+                    Sélectionnez un message à gauche pour consulter son contenu.
                   </p>
                 </div>
               )}
