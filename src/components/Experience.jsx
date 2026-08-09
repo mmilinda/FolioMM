@@ -9,7 +9,7 @@ const translations = {
         role: 'Développeuse Full Stack & DevOps',
         company: 'Freelance / Indépendante',
         period: '2025 – Présent',
-        desc: "Conception et déploiement d'applications SaaS & IA (AgriChain AI, Noregis SaaS, Garabi Assistance, SecurityApp). Automatisation CI/CD et déploiements Docker/Kubernetes.",
+        desc: "Conception et déploiement d'applications SaaS & IA (AgriChain AI, Noregis SaaS, Garagebi Assistance, SecurityApp). Automatisation CI/CD et déploiements Docker/Kubernetes.",
         techs: ['React', 'Laravel', 'Docker', 'Kubernetes', 'CI/CD', 'TypeScript'],
       },
       {
@@ -43,7 +43,7 @@ const translations = {
         role: 'Full Stack & DevOps Engineer',
         company: 'Freelance / Independent',
         period: '2025 – Present',
-        desc: "Design and deployment of SaaS & AI platforms (AgriChain AI, Noregis SaaS, Garabi Assistance, SecurityApp). CI/CD automation and Docker/Kubernetes deployments.",
+        desc: "Design and deployment of SaaS & AI platforms (AgriChain AI, Noregis SaaS, Garagebi Assistance, SecurityApp). CI/CD automation and Docker/Kubernetes deployments.",
         techs: ['React', 'Laravel', 'Docker', 'Kubernetes', 'CI/CD', 'TypeScript'],
       },
       {

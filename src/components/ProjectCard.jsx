@@ -117,18 +117,18 @@ export default function ProjectCard({ project: rawProject }) {
       </div>
 
       {/* ── Content ─────────────────────────────── */}
-      <div style={{ padding: "1.25rem", display: "flex", flexDirection: "column", gap: "0.75rem", flex: 1 }}>
+      <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", flex: 1 }}>
 
         {/* Title + link arrow */}
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px" }}>
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>
           <Link
             to={`/projects/${project.slug || project.id}`}
             style={{ textDecoration: "none", color: "inherit", flex: 1 }}
           >
             <h3 style={{
-              fontSize: "1.05rem",
+              fontSize: "1.08rem",
               fontWeight: 700,
-              lineHeight: 1.3,
+              lineHeight: 1.35,
               letterSpacing: "-0.01em",
               transition: "color 0.2s",
             }} className="project-card-title">
@@ -142,7 +142,7 @@ export default function ProjectCard({ project: rawProject }) {
 
         {/* Description — 2 lines max */}
         <p style={{
-          fontSize: "0.85rem",
+          fontSize: "0.86rem",
           color: "var(--text-secondary)",
           lineHeight: 1.65,
           display: "-webkit-box",
@@ -154,23 +154,25 @@ export default function ProjectCard({ project: rawProject }) {
           {project.description}
         </p>
 
-        {/* Impact — the "so what" line */}
+        {/* Impact — spacious inner box */}
         {project.impact && (
           <div style={{
             display: "flex",
             alignItems: "flex-start",
-            gap: "7px",
-            padding: "8px 12px",
-            borderRadius: "10px",
-            background: "rgba(52,211,153,0.07)",
-            border: "1px solid rgba(52,211,153,0.2)",
+            gap: "10px",
+            padding: "12px 16px",
+            margin: "4px 0",
+            borderRadius: "12px",
+            background: "rgba(52,211,153,0.08)",
+            border: "1px solid rgba(52,211,153,0.25)",
+            boxSizing: "border-box",
           }}>
-            <TrendingUp size={13} style={{ color: "#34d399", marginTop: "2px", flexShrink: 0 }} />
+            <TrendingUp size={15} style={{ color: "#34d399", marginTop: "2px", flexShrink: 0 }} />
             <span style={{
-              fontSize: "0.78rem",
+              fontSize: "0.8rem",
               color: "#34d399",
-              lineHeight: 1.5,
-              fontWeight: 500,
+              lineHeight: 1.6,
+              fontWeight: 600,
             }}>
               {project.impact}
             </span>

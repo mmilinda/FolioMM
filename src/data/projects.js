@@ -44,9 +44,9 @@ const projects = [
   },
   {
     id: 2,
-    slug: "garabi-assistance",
-    title: "Garabi Assistance",
-    titleEn: "Garabi Assistance",
+    slug: "garagebi-assistance",
+    title: "Garagebi Assistance",
+    titleEn: "Garagebi Assistance",
     featured: true,
     year: "2026",
     status: "Production",

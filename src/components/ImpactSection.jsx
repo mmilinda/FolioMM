@@ -55,7 +55,7 @@ export default function ImpactSection() {
     {
       domain: isEn ? "Mobility" : "Mobilité",
       icon: Car,
-      project: "Garabi",
+      project: "Garagebi",
       problem: isEn
         ? "Digitized local roadside automotive assistance."
         : "Assistance automobile de proximité digitalisée.",
@@ -256,14 +256,14 @@ export default function ImpactSection() {
                   key={item.domain}
                   whileHover={{ y: -6, scale: 1.02 }}
                   transition={{ duration: 0.25 }}
-                  className="p-8 sm:p-10 rounded-2xl bg-slate-900/95 border-2 border-white/15 backdrop-blur-2xl shadow-xl hover:shadow-2xl hover:border-cyan-400/60 transition-all duration-300 relative overflow-hidden flex flex-col justify-between space-y-6 text-left group h-full"
+                  className="p-8 sm:p-9 rounded-2xl bg-slate-900/95 border-2 border-white/15 backdrop-blur-2xl shadow-xl hover:shadow-2xl hover:border-cyan-400/60 transition-all duration-300 relative overflow-hidden flex flex-col justify-between space-y-6 text-left group h-full"
                   style={{ background: `linear-gradient(155deg, ${item.glow} 0%, rgba(15, 23, 42, 0.98) 100%)` }}
                 >
                   {/* Glowing Top Colored Bar */}
                   <div className="absolute top-0 left-0 right-0 h-1.5 w-full rounded-t-2xl" style={{ background: item.color }} />
 
                   {/* Top Image Thumbnail Header */}
-                  <div className="w-full h-32 sm:h-36 rounded-xl overflow-hidden border border-white/15 relative shadow-md shrink-0 mt-3 mb-3">
+                  <div className="w-full h-32 sm:h-36 rounded-xl overflow-hidden border border-white/15 relative shadow-md shrink-0 mt-4 mb-4">
                     <img src={item.image} alt={item.project} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
                     <span
@@ -275,14 +275,14 @@ export default function ImpactSection() {
                     </span>
                   </div>
 
-                  {/* Title and Description */}
-                  <div className="space-y-4 flex-1 flex flex-col justify-start my-3 px-1">
-                    <h3 className="text-base sm:text-lg font-extrabold text-white m-0 tracking-wide flex items-center justify-between group-hover:text-cyan-300 transition-colors leading-snug mb-2">
+                  {/* Title and Description Content Block with Spacious Padding */}
+                  <div className="space-y-4 flex-1 flex flex-col justify-start my-4 px-3 py-3 rounded-xl bg-slate-950/40 border border-white/10">
+                    <h3 className="text-base sm:text-lg font-extrabold text-white m-0 tracking-wide flex items-center justify-between group-hover:text-cyan-300 transition-colors leading-snug pb-2 border-b border-white/10">
                       <span>{item.project}</span>
                       <ArrowUpRight size={18} className="text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 ml-2" />
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-slate-400 leading-relaxed m-0 font-normal pt-5 border-t border-white/10 mt-3">
+                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed m-0 font-normal pt-2">
                       {item.problem}
                     </p>
                   </div>

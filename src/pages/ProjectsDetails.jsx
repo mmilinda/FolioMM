@@ -115,31 +115,31 @@ export default function ProjectDetails() {
 
             {/* Problem */}
             {project.problem && (
-              <div style={{ padding: "1.5rem", background: "rgba(248,113,113,0.06)", border: "1px solid rgba(248,113,113,0.2)", borderRadius: "16px", marginBottom: "1.5rem" }}>
-                <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#f87171", marginBottom: "0.5rem" }}>
+              <div style={{ padding: "1.75rem 2rem", background: "rgba(248,113,113,0.06)", border: "1px solid rgba(248,113,113,0.25)", borderRadius: "20px", marginBottom: "1.75rem" }}>
+                <h3 style={{ fontSize: "0.95rem", fontWeight: 800, color: "#f87171", marginBottom: "0.6rem" }}>
                   🎯 {t("projectsPage.problemLabel", "Problème identifié")}
                 </h3>
-                <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.7 }}>{project.problem}</p>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem", lineHeight: 1.8, margin: 0 }}>{project.problem}</p>
               </div>
             )}
 
             {/* Solution */}
             {project.solution && (
-              <div style={{ padding: "1.5rem", background: "rgba(52,211,153,0.06)", border: "1px solid rgba(52,211,153,0.2)", borderRadius: "16px", marginBottom: "1.5rem" }}>
-                <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#34d399", marginBottom: "0.5rem" }}>
+              <div style={{ padding: "1.75rem 2rem", background: "rgba(52,211,153,0.06)", border: "1px solid rgba(52,211,153,0.25)", borderRadius: "20px", marginBottom: "1.75rem" }}>
+                <h3 style={{ fontSize: "0.95rem", fontWeight: 800, color: "#34d399", marginBottom: "0.6rem" }}>
                   💡 {t("projectsPage.solutionLabel", "Solution apportée")}
                 </h3>
-                <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.7 }}>{project.solution}</p>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem", lineHeight: 1.8, margin: 0 }}>{project.solution}</p>
               </div>
             )}
 
             {/* Impact */}
             {project.impact && (
-              <div style={{ padding: "1.5rem", background: "rgba(56,189,248,0.06)", border: "1px solid rgba(56,189,248,0.2)", borderRadius: "16px" }}>
-                <h3 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--primary)", marginBottom: "0.5rem" }}>
-                  📈 {t("projectsPage.impactLabel", "Impact")}
+              <div style={{ padding: "1.75rem 2rem", background: "rgba(56,189,248,0.06)", border: "1px solid rgba(56,189,248,0.25)", borderRadius: "20px" }}>
+                <h3 style={{ fontSize: "0.95rem", fontWeight: 800, color: "var(--primary)", marginBottom: "0.6rem" }}>
+                  📈 {t("projectsPage.impactLabel", "Impact & Résultats")}
                 </h3>
-                <p style={{ color: "var(--text-secondary)", fontSize: "0.9rem", lineHeight: 1.7 }}>{project.impact}</p>
+                <p style={{ color: "var(--text-secondary)", fontSize: "0.92rem", lineHeight: 1.8, margin: 0 }}>{project.impact}</p>
               </div>
             )}
           </div>

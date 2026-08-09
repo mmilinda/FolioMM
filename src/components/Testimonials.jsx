@@ -13,7 +13,7 @@ const translations = {
       },
       {
         name: 'Fatou Ndiaye',
-        role: 'Directrice, Garabi Assistance',
+        role: 'Directrice, Garagebi Assistance',
         text: "Travail impeccable ! L'application répond parfaitement à nos besoins. Milinda a su comprendre nos exigences et les transformer en une solution robuste.",
         avatar: 'FN',
       },
@@ -37,7 +37,7 @@ const translations = {
       },
       {
         name: 'Fatou Ndiaye',
-        role: 'Director, Garabi Assistance',
+        role: 'Director, Garagebi Assistance',
         text: "Impeccable work! The application perfectly meets our needs. Milinda understood our requirements and transformed them into a robust solution.",
         avatar: 'FN',
       },

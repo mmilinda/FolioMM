@@ -16,17 +16,20 @@ import {
   Settings,
   Sun,
   Moon,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 
 export default function AdminLayout() {
   const { user, logout } = useAuth();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   // Responsive desktop detection
   const [isDesktop, setIsDesktop] = useState(() => window.innerWidth >= 1024);
 
-  // Dark Mode Theme State (default: dark mode)
+  // Dark Mode Theme State
   const [darkMode, setDarkMode] = useState(() => {
     try {
       const savedTheme = localStorage.getItem("admin_theme");
@@ -72,7 +75,7 @@ export default function AdminLayout() {
     return "Administration";
   };
 
-  // Dynamic Theme Palette Colors (Adjusted Low-Glare Soft Slate)
+  // Dynamic Theme Palette Colors
   const theme = {
     bg: darkMode ? "#030712" : "#1e293b",
     sidebarBg: darkMode ? "#090d16" : "#0f172a",
@@ -84,6 +87,8 @@ export default function AdminLayout() {
     activeNavBg: darkMode ? "rgba(56, 189, 248, 0.12)" : "rgba(56, 189, 248, 0.2)",
     activeNavText: "#38bdf8",
   };
+
+  const sidebarWidth = isCollapsed && isDesktop ? "78px" : "260px";
 
   return (
     <div
@@ -114,10 +119,10 @@ export default function AdminLayout() {
       {/* Sidebar Navigation */}
       <aside
         style={{
-          width: "260px",
+          width: sidebarWidth,
           background: theme.sidebarBg,
           borderRight: `1px solid ${theme.border}`,
-          padding: "1.25rem",
+          padding: isCollapsed && isDesktop ? "1.25rem 0.75rem" : "1.25rem",
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
@@ -127,9 +132,10 @@ export default function AdminLayout() {
           bottom: 0,
           left: 0,
           zIndex: 50,
-          transition: "transform 0.3s ease, background 0.3s",
+          transition: "all 0.3s ease",
           transform: isDesktop || mobileOpen ? "translateX(0)" : "translateX(-100%)",
           boxShadow: mobileOpen && !isDesktop ? "10px 0 30px rgba(0,0,0,0.5)" : "none",
+          overflowX: "hidden",
         }}
       >
         <div>
@@ -138,7 +144,7 @@ export default function AdminLayout() {
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
+              justifyContent: isCollapsed && isDesktop ? "center" : "space-between",
               marginBottom: "1.75rem",
               paddingBottom: "1rem",
               borderBottom: `1px solid ${theme.border}`,
@@ -171,15 +177,37 @@ export default function AdminLayout() {
                   style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: "8px" }}
                 />
               </div>
-              <div>
-                <h2 style={{ fontSize: "0.95rem", fontWeight: 800, color: theme.text, margin: 0, tracking: "0.05em" }}>
-                  MILINDA<span style={{ color: "#38bdf8" }}>_ADMIN</span>
-                </h2>
-                <span style={{ fontSize: "0.68rem", fontWeight: 500, color: theme.subtext, display: "block" }}>
-                  Console Administration
-                </span>
-              </div>
+              {(!isCollapsed || !isDesktop) && (
+                <div>
+                  <h2 style={{ fontSize: "0.95rem", fontWeight: 800, color: theme.text, margin: 0, tracking: "0.05em" }}>
+                    MILINDA<span style={{ color: "#38bdf8" }}>_ADMIN</span>
+                  </h2>
+                  <span style={{ fontSize: "0.68rem", fontWeight: 500, color: theme.subtext, display: "block" }}>
+                    Console Admin
+                  </span>
+                </div>
+              )}
             </Link>
+
+            {isDesktop && (
+              <button
+                onClick={() => setIsCollapsed(!isCollapsed)}
+                style={{
+                  background: darkMode ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)",
+                  border: `1px solid ${theme.border}`,
+                  borderRadius: "8px",
+                  padding: "4px",
+                  color: theme.subtext,
+                  cursor: "pointer",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                title={isCollapsed ? "Agrandir le menu" : "Réduire le menu"}
+              >
+                {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+              </button>
+            )}
 
             {!isDesktop && (
               <button
@@ -207,11 +235,13 @@ export default function AdminLayout() {
                   to={item.path}
                   end={item.end}
                   onClick={() => setMobileOpen(false)}
+                  title={isCollapsed && isDesktop ? item.name : undefined}
                   style={({ isActive }) => ({
                     display: "flex",
                     alignItems: "center",
+                    justifyContent: isCollapsed && isDesktop ? "center" : "flex-start",
                     gap: "12px",
-                    padding: "10px 14px",
+                    padding: isCollapsed && isDesktop ? "12px" : "10px 14px",
                     borderRadius: "12px",
                     fontSize: "0.85rem",
                     fontWeight: isActive ? 700 : 500,
@@ -223,7 +253,7 @@ export default function AdminLayout() {
                   })}
                 >
                   <Icon size={18} />
-                  <span>{item.name}</span>
+                  {(!isCollapsed || !isDesktop) && <span>{item.name}</span>}
                 </NavLink>
               );
             })}
@@ -238,8 +268,8 @@ export default function AdminLayout() {
             style={{
               display: "flex",
               alignItems: "center",
-              justifyContent: "space-between",
-              padding: "10px 14px",
+              justifyContent: isCollapsed && isDesktop ? "center" : "space-between",
+              padding: isCollapsed && isDesktop ? "10px" : "10px 14px",
               borderRadius: "12px",
               fontSize: "0.78rem",
               fontWeight: 600,
@@ -248,12 +278,13 @@ export default function AdminLayout() {
               background: darkMode ? "rgba(255, 255, 255, 0.03)" : "rgba(0, 0, 0, 0.03)",
               border: `1px solid ${theme.border}`,
             }}
+            title={isCollapsed && isDesktop ? "Voir le site public" : undefined}
           >
             <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
               <Globe size={15} color="#38bdf8" />
-              Voir le site public
+              {(!isCollapsed || !isDesktop) && "Voir le site public"}
             </span>
-            <span style={{ fontSize: "0.7rem", color: theme.subtext }}>↗</span>
+            {(!isCollapsed || !isDesktop) && <span style={{ fontSize: "0.7rem", color: theme.subtext }}>↗</span>}
           </Link>
 
           <button
@@ -262,8 +293,9 @@ export default function AdminLayout() {
               width: "100%",
               display: "flex",
               alignItems: "center",
+              justifyContent: isCollapsed && isDesktop ? "center" : "flex-start",
               gap: "8px",
-              padding: "10px 14px",
+              padding: isCollapsed && isDesktop ? "10px" : "10px 14px",
               borderRadius: "12px",
               fontSize: "0.78rem",
               fontWeight: 700,
@@ -272,9 +304,10 @@ export default function AdminLayout() {
               border: "1px solid rgba(248, 113, 113, 0.2)",
               cursor: "pointer",
             }}
+            title={isCollapsed && isDesktop ? "Se déconnecter" : undefined}
           >
             <LogOut size={15} />
-            Se déconnecter
+            {(!isCollapsed || !isDesktop) && "Se déconnecter"}
           </button>
         </div>
       </aside>
@@ -282,13 +315,14 @@ export default function AdminLayout() {
       {/* Main Content Area */}
       <div
         style={{
-          marginLeft: isDesktop ? "260px" : "0",
-          width: isDesktop ? "calc(100% - 260px)" : "100%",
+          marginLeft: isDesktop ? sidebarWidth : "0",
+          width: isDesktop ? `calc(100% - ${sidebarWidth})` : "100%",
           flex: 1,
           display: "flex",
           flexDirection: "column",
           minWidth: 0,
           minHeight: "100vh",
+          transition: "margin-left 0.3s ease, width 0.3s ease",
         }}
       >
         {/* Top Header Bar */}

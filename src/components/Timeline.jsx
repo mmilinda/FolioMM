@@ -16,8 +16,8 @@ export default function Timeline() {
       type: isEn ? "Current" : "Actuel",
       color: "#38bdf8",
       desc: isEn
-        ? "Engineering & deploying SaaS applications and AI platforms (AgriChain AI, Noregis SaaS, Garabi Assistance). Automating CI/CD pipelines, Docker containerization & Kubernetes orchestration."
-        : "Conception et déploiement d'applications SaaS et plateformes intelligentes (AgriChain AI, Noregis SaaS, Garabi Assistance). Automatisation des pipelines CI/CD, conteneurisation Docker et orchestration Kubernetes.",
+        ? "Engineering & deploying SaaS applications and AI platforms (AgriChain AI, Noregis SaaS, Garagebi Assistance). Automating CI/CD pipelines, Docker containerization & Kubernetes orchestration."
+        : "Conception et déploiement d'applications SaaS et plateformes intelligentes (AgriChain AI, Noregis SaaS, Garagebi Assistance). Automatisation des pipelines CI/CD, conteneurisation Docker et orchestration Kubernetes.",
       tags: ["React", "Laravel", "Docker", "Kubernetes", "CI/CD", "TypeScript"],
     },
     {
