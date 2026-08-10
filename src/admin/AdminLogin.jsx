@@ -476,11 +476,11 @@ export default function AdminLogin() {
             >
               <span style={{ display: "flex", alignItems: "center", gap: "6px", color: "#cbd5e1" }}>
                 <ShieldCheck size={16} color="#38bdf8" />
-                Session Sécurisée SSL
+                Firebase Auth & CMS Sécurisé
               </span>
               <span style={{ display: "flex", alignItems: "center", gap: "6px", color: "#34d399", fontWeight: 600 }}>
                 <CheckCircle2 size={15} />
-                Mode Hybride Actif
+                Protection Hybride Active
               </span>
             </div>
           </motion.div>

@@ -83,11 +83,16 @@ export default function Contact() {
     try {
       await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form.current, PUBLIC_KEY);
       setSuccess(true);
+      setError("");
       if (form.current) form.current.reset();
     } catch (err) {
-      console.warn("EmailJS Offline or missing credentials, saved to Admin Inbox");
-      setSuccess(true);
-      if (form.current) form.current.reset();
+      console.error("EmailJS Error:", err);
+      setSuccess(false);
+      setError(
+        isEn
+          ? "⚠️ Unable to send message via EmailJS. Please try again or contact me directly at mmilinda00@gmail.com."
+          : "⚠️ Impossible d'envoyer le message via le service EmailJS. Veuillez me contacter directement à mmilinda00@gmail.com."
+      );
     } finally {
       try {
         const stored = JSON.parse(localStorage.getItem("contact_messages") || "[]");

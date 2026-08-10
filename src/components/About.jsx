@@ -77,15 +77,15 @@ export default function About() {
               <span className="code-dot code-dot-red" />
               <span className="code-dot code-dot-yellow" />
               <span className="code-dot code-dot-green" />
-              <span className="code-filename">milinda.config.ts</span>
+              <span className="code-filename">milinda.config.js</span>
             </div>
             <pre className="about-code-body">
 {`const milinda = {
-  role: "DevOps & Full Stack Engineer",
+  role: "Développeuse Full Stack",
   location: "Sénégal 🇸🇳",
   
   stack: {
-    frontend: ["React", "TypeScript", "Tailwind"],
+    frontend: ["React", "JavaScript", "Tailwind"],
     backend:  ["Laravel", "Node.js", "PHP"],
     devops:   ["Docker", "K8s", "CI/CD", "AWS"],
     database: ["MySQL", "Firebase", "Redis"],

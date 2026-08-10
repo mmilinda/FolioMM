@@ -10,48 +10,59 @@ export default function Timeline() {
 
   const experiences = [
     {
-      year: isEn ? "2025 - Present" : "2025 - Présent",
-      role: isEn ? "Full Stack & DevOps Engineer" : "Développeuse Full Stack & DevOps",
-      company: isEn ? "Freelance / Independent" : "Freelance / Indépendante",
+      year: isEn ? "Jan 2026 - Present" : "Janvier 2026 - Présent",
+      role: isEn ? "Application & Digital Solutions Developer" : "Développeuse d'applications & solutions numériques",
+      company: "SamCorporate",
       type: isEn ? "Current" : "Actuel",
       color: "#38bdf8",
       desc: isEn
-        ? "Engineering & deploying SaaS applications and AI platforms (AgriChain AI, Noregis SaaS, Garagebi Assistance). Automating CI/CD pipelines, Docker containerization & Kubernetes orchestration."
-        : "Conception et déploiement d'applications SaaS et plateformes intelligentes (AgriChain AI, Noregis SaaS, Garagebi Assistance). Automatisation des pipelines CI/CD, conteneurisation Docker et orchestration Kubernetes.",
-      tags: ["React", "Laravel", "Docker", "Kubernetes", "CI/CD", "TypeScript"],
+        ? "Engineering & deploying enterprise digital solutions, web & mobile applications, and smart platforms: AgriChain AI (AgriTech & Blockchain), Garagebi Assistance (Automotive Roadside), Noregis SaaS (OCR Identity Scanner), SecurityApp (Security Patrol Management), BerMas Assurance & Sunu Champion."
+        : "Développement de solutions numériques d'entreprise, d'applications web & mobiles et de plateformes intelligentes sur-mesure : AgriChain AI (AgriTech & Blockchain), Garagebi Assistance (Assistance automobile), Noregis SaaS (OCR & Scan d'Identité), SecurityApp (Gestion de Sécurité), BerMas Assurance et Sunu Champion.",
+      tags: ["React", "JavaScript", "Tailwind CSS", "Laravel API", "Full Stack"],
     },
     {
       year: "2024 - 2025",
       role: isEn ? "Full Stack & Mobile Web Developer" : "Développeuse Full Stack & Web Mobile",
       company: "Défarsci",
       type: isEn ? "Internship & Project" : "Stage & Projet",
-      color: "#34d399",
+      color: "#818cf8",
       desc: isEn
-        ? "Development of interactive web apps for professional placement (CV Vidéo) and real estate management (Location Appartement). REST API & WebRTC multimedia integrations."
-        : "Développement d'applications web interactives pour l'insertion professionnelle (CV Vidéo) et la gestion immobilière (Location Appartement). Intégration d'API REST et d'APIs multimédia WebRTC.",
-      tags: ["Laravel", "React", "PHP", "MySQL", "WebRTC"],
+        ? "Development of interactive web applications: CV Vidéo (video resumes for employment) and Location Appartement (real estate listing management system)."
+        : "Développement d'applications web interactives : CV Vidéo (plateforme de création de CV vidéo pour l'insertion professionnelle) et Location Appartement (gestion d'annonces immobilières).",
+      tags: ["Laravel", "React", "PHP", "MySQL", "JavaScript"],
     },
     {
       year: "2023",
       role: isEn ? "Web Developer Intern" : "Stagiaire Développeuse Web",
       company: "Défarsci",
       type: isEn ? "Internship" : "Stage",
-      color: "#818cf8",
+      color: "#f472b6",
       desc: isEn
-        ? "Design & integration of corporate showcase websites and CMS platforms (Site Zawiya). Relational database modeling and responsive interface integration."
-        : "Conception et intégration de sites vitrines et plateformes CMS dynamiques (Site Zawiya). Modélisation de bases de données MySQL et création d'interfaces adaptatives.",
-      tags: ["Laravel", "PHP", "WordPress", "Bootstrap", "MySQL"],
+        ? "Design & integration of corporate showcase portals: Site Zawiya (WordPress CMS platform) and real estate database modeling."
+        : "Conception et intégration de sites vitrines et plateformes CMS : Site Zawiya (portail développé avec le CMS WordPress) et modélisation de bases de données relationnelles MySQL.",
+      tags: ["WordPress", "Laravel", "PHP", "MySQL", "CMS"],
     },
     {
       year: "2022",
       role: isEn ? "Web Integrator Intern" : "Stagiaire Intégratrice Web",
       company: "Bakeli & Webgram",
       type: isEn ? "Internship" : "Stage",
-      color: "#f472b6",
+      color: "#fb923c",
       desc: isEn
-        ? "Hands-on responsive web integration using Bootstrap 5 and jQuery. Customizing corporate blogs and front-end interface layouts."
-        : "Apprentissage intensif et intégration de sites web responsive avec Bootstrap 5 et jQuery. Personnalisation et structuration de blogs d'entreprise.",
-      tags: ["Bootstrap 5", "HTML5", "CSS3", "JavaScript", "jQuery"],
+        ? "Responsive web integration and customized corporate blogging: Site Vitrine Bootstrap, GM Business Prayer (corporate Blogger blog)."
+        : "Intégration web responsive et développement de blogs d'entreprise : Site Vitrine Bootstrap et GM Business Prayer (blog d'entreprise personnalisé sur Blogger).",
+      tags: ["Bootstrap 5", "HTML5", "CSS3", "JavaScript", "Blogger"],
+    },
+    {
+      year: "2019 - 2022",
+      role: isEn ? "Bachelor's Degree in Business Information Systems" : "Licence Professionnelle en Informatique de Gestion",
+      company: "UCAO (Université Catholique de l'Afrique de l'Ouest)",
+      type: isEn ? "Education" : "Diplôme / Formation",
+      color: "#a855f7",
+      desc: isEn
+        ? "Specialized higher education in software engineering, database administration, web development, and academic projects (Guide Itinéraire transport app with jQuery Mobile/Google Maps API and Voyage 2)."
+        : "Formation supérieure spécialisée en génie logiciel, bases de données, développement web et projets académiques de formation (Guide Itinéraire avec jQuery Mobile/Google Maps API et Voyage 2).",
+      tags: ["Informatique de Gestion", "Bases de Données", "Génie Logiciel", "Systèmes d'Information"],
     },
   ];
 

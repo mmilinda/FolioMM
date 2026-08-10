@@ -4,6 +4,7 @@ import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useSiteData } from "../context/SiteDataContext";
 
 const ROLES = [
   "DevOps Engineer",
@@ -15,14 +16,10 @@ const ROLES = [
 const TECH_BADGES = [
   "React",
   "Laravel",
-  "WordPress",
-  "Tailwind CSS",
-  "JavaScript",
-  "PHP",
-  "Vite",
-  "Bootstrap",
-  "REST API",
-  "Blogger"
+  "Node.js",
+  "AI",
+  "Cloud",
+  "DevOps",
 ];
 
 function TypewriterText({ words }) {
@@ -64,11 +61,16 @@ const socialLinks = [
 
 export default function Hero() {
   const { t } = useTranslation();
+  const { stats: siteStats } = useSiteData();
+
+  const projStat = siteStats?.find((s) => s.id === "stat-1" || s.label?.toLowerCase().includes("projet"))?.value || "14+";
+  const expStat = siteStats?.find((s) => s.id === "stat-2" || s.label?.toLowerCase().includes("expéri"))?.value || "3+";
+  const techStat = siteStats?.find((s) => s.id === "stat-3" || s.label?.toLowerCase().includes("tech"))?.value || "10+";
 
   const stats = [
-    { value: "10+", label: t("hero.stats.projects") },
-    { value: "3+", label: t("hero.stats.experience") },
-    { value: "15+", label: t("hero.stats.tech") },
+    { value: "10+", label: t("hero.stats.projects", "Projets") },
+    { value: "3+", label: t("hero.stats.experience", "Années d'expérience") },
+    { value: "3+", label: t("hero.stats.solutions", "Solutions de Production") },
   ];
 
   return (

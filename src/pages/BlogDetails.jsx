@@ -154,7 +154,7 @@ export default function BlogDetails() {
         image={article.image}
       />
 
-      <div style={{ position: "relative", minHeight: "100vh", padding: "4rem 0 8rem" }}>
+      <div style={{ position: "relative", minHeight: "100vh", padding: "7.5rem 0 8rem" }}>
         {/* Background glow */}
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, pointerEvents: "none", overflow: "hidden" }}>
           <div

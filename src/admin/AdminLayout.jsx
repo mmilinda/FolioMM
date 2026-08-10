@@ -18,6 +18,11 @@ import {
   Moon,
   ChevronLeft,
   ChevronRight,
+  Layers,
+  Cpu,
+  Briefcase,
+  BarChart3,
+  Zap,
 } from "lucide-react";
 
 export default function AdminLayout() {
@@ -57,21 +62,29 @@ export default function AdminLayout() {
   const navItems = [
     { name: "Tableau de Bord", path: "/admin", icon: LayoutDashboard, end: true },
     { name: "Gestion Projets", path: "/admin/projects", icon: FolderKanban, end: true },
-    { name: "Nouveau Projet", path: "/admin/projects/create", icon: PlusCircle, end: false },
+    { name: "Services Offerts", path: "/admin/services", icon: Layers, end: true },
+    { name: "Compétences & Stack", path: "/admin/skills", icon: Cpu, end: true },
+    { name: "Parcours / Timeline", path: "/admin/timeline", icon: Briefcase, end: true },
+    { name: "Statistiques Metrics", path: "/admin/stats", icon: BarChart3, end: true },
+    { name: "Impact & Témoignages", path: "/admin/impact", icon: Zap, end: true },
     { name: "Articles de Blog", path: "/admin/articles", icon: FileText, end: true },
-    { name: "Rédiger Article", path: "/admin/articles/create", icon: FilePlus, end: false },
     { name: "Messages Reçus", path: "/admin/messages", icon: MessageSquare, end: false },
-    { name: "Paramètres Site", path: "/admin/settings", icon: Settings, end: false },
+    { name: "Paramètres & Visibilité", path: "/admin/settings", icon: Settings, end: false },
   ];
 
   const getPageTitle = () => {
     if (location.pathname === "/admin") return "Tableau de bord";
     if (location.pathname === "/admin/projects") return "Gestion des projets";
     if (location.pathname === "/admin/projects/create") return "Nouveau projet";
+    if (location.pathname === "/admin/services") return "Gestion des services";
+    if (location.pathname === "/admin/skills") return "Gestion des compétences";
+    if (location.pathname === "/admin/timeline") return "Gestion du parcours";
+    if (location.pathname === "/admin/stats") return "Gestion des statistiques";
+    if (location.pathname === "/admin/impact") return "Gestion de l'impact & avis";
     if (location.pathname === "/admin/articles") return "Gestion du blog";
     if (location.pathname === "/admin/articles/create") return "Rédiger un article";
     if (location.pathname === "/admin/messages") return "Boîte de réception";
-    if (location.pathname === "/admin/settings") return "Paramètres du site";
+    if (location.pathname === "/admin/settings") return "Paramètres du site & Visibilité";
     return "Administration";
   };
 

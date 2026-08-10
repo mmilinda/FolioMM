@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { ExternalLink, Calendar, Sparkles, TrendingUp, ArrowUpRight } from "lucide-react";
+import { ExternalLink, Calendar, Sparkles, TrendingUp, ArrowUpRight, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { FaGithub } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
@@ -134,6 +134,17 @@ export default function ProjectCard({ project: rawProject }) {
             }} className="project-card-title">
               {project.title}
             </h3>
+            {project.role && (
+              <span style={{
+                fontSize: "0.74rem",
+                color: "#a855f7",
+                fontWeight: 600,
+                display: "inline-block",
+                marginTop: "3px",
+              }}>
+                👤 {project.role}
+              </span>
+            )}
           </Link>
           <Link to={`/projects/${project.slug || project.id}`} style={{ color: "var(--text-muted)", flexShrink: 0, marginTop: "2px" }}>
             <ArrowUpRight size={18} className="project-card-arrow" style={{ transition: "color 0.2s, opacity 0.2s" }} />
@@ -265,7 +276,28 @@ export default function ProjectCard({ project: rawProject }) {
             </Link>
           )}
 
-          {project.github && (
+          {project.isPrivate || !project.github ? (
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "5px",
+                padding: "8px 12px",
+                borderRadius: "10px",
+                border: "1px solid rgba(244, 63, 94, 0.25)",
+                background: "rgba(244, 63, 94, 0.08)",
+                color: "#f43f5e",
+                fontSize: "0.75rem",
+                fontWeight: 600,
+                flexShrink: 0,
+              }}
+              title={i18n.language?.startsWith("en") ? "Private repository / Proprietary code" : "Repository privé / Code propriétaire"}
+            >
+              <Lock size={12} />
+              {i18n.language?.startsWith("en") ? "Private repo" : "Repo privé"}
+            </span>
+          ) : (
             <a
               href={project.github}
               target="_blank"

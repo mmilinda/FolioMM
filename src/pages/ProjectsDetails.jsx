@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ExternalLink, Calendar, Tag } from "lucide-react";
+import { ArrowLeft, ExternalLink, Calendar, Tag, Lock } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import useProjects from "../hooks/useProjects";
@@ -39,16 +39,34 @@ export default function ProjectDetails() {
     );
   }
 
+  const projectSchema = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": project.title,
+    "description": project.description,
+    "applicationCategory": project.category,
+    "operatingSystem": "Web",
+    "author": {
+      "@type": "Person",
+      "name": "Milinda Mendy"
+    },
+    "image": project.image
+  };
+
   return (
     <>
       <SEO
-        title={`${project.title} | Milinda Mendy`}
+        title={`${project.title} — ${project.category}`}
         description={project.description}
         image={project.image}
+        path={`/projects/${project.slug || project.id}`}
+        type="article"
+        schemaData={projectSchema}
       />
 
       <motion.section
-        className="container-custom py-16"
+        className="container-custom pb-16"
+        style={{ paddingTop: "7.5rem" }}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
@@ -57,7 +75,24 @@ export default function ProjectDetails() {
         <Link
           to="/projects"
           className="hero-btn-secondary"
-          style={{ display: "inline-flex", marginBottom: "2.5rem" }}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            padding: "10px 20px",
+            borderRadius: "12px",
+            background: "rgba(15, 23, 42, 0.85)",
+            border: "1px solid rgba(56, 189, 248, 0.35)",
+            color: "#38bdf8",
+            fontSize: "0.9rem",
+            fontWeight: 600,
+            textDecoration: "none",
+            marginBottom: "2rem",
+            boxShadow: "0 4px 14px rgba(0,0,0,0.35)",
+            backdropFilter: "blur(12px)",
+            position: "relative",
+            zIndex: 10,
+          }}
         >
           <ArrowLeft size={16} />
           {t("blogDetails.backToBlog", "Retour aux projets")}
@@ -102,7 +137,12 @@ export default function ProjectDetails() {
               )}
               {project.client && (
                 <span style={{ fontSize: "0.85rem", color: "var(--text-muted)" }}>
-                  👤 {project.client}
+                  🏢 {project.client}
+                </span>
+              )}
+              {project.role && (
+                <span style={{ fontSize: "0.8rem", padding: "3px 12px", borderRadius: "999px", background: "rgba(168,85,247,0.1)", border: "1px solid rgba(168,85,247,0.3)", color: "#a855f7", fontWeight: 600 }}>
+                  👤 {project.role}
                 </span>
               )}
             </div>
@@ -155,7 +195,26 @@ export default function ProjectDetails() {
                   {t("projectCard.demo", "Voir la démo")}
                 </a>
               )}
-              {project.github && (
+              {project.isPrivate || !project.github ? (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    padding: "0.75rem 1.25rem",
+                    borderRadius: "12px",
+                    background: "rgba(244, 63, 94, 0.08)",
+                    border: "1px solid rgba(244, 63, 94, 0.25)",
+                    color: "#f43f5e",
+                    fontSize: "0.85rem",
+                    fontWeight: 600,
+                  }}
+                >
+                  <Lock size={15} />
+                  {i18n.language?.startsWith("en") ? "Private Repository" : "Repository privé"}
+                </div>
+              ) : (
                 <a href={project.github} target="_blank" rel="noopener noreferrer" className="hero-btn-secondary" style={{ justifyContent: "center" }}>
                   <FaGithub size={16} />
                   {t("projectCard.github", "Voir le code")}

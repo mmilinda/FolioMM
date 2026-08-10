@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import {
   FolderKanban,
   FileText,
-  Users,
   MessageSquare,
   Plus,
   ExternalLink,
@@ -17,14 +16,24 @@ import {
   Inbox,
   Lock,
   Edit3,
+  Eye,
+  EyeOff,
+  Layers,
+  Cpu,
+  Briefcase,
+  Settings,
+  Check,
 } from "lucide-react";
 import useProjects from "../hooks/useProjects";
 import useArticles from "../hooks/useArticles";
 import { useAuth } from "../context/AuthContext";
+import { useSiteData } from "../context/SiteDataContext";
 import SEO from "../components/SEO";
 
 export default function Dashboard() {
   const { user } = useAuth();
+  const { services, skills, timeline, impact, sectionVisibility } = useSiteData();
+
   // Pass true to include all projects & articles (visible & hidden)
   const { projects } = useProjects(true);
   const { articles } = useArticles(true);
@@ -36,15 +45,6 @@ export default function Dashboard() {
       return JSON.parse(localStorage.getItem("contact_messages") || "[]");
     } catch {
       return [];
-    }
-  });
-
-  const [pageViews, setPageViews] = useState(() => {
-    try {
-      const stored = localStorage.getItem("portfolio_page_views");
-      return stored ? parseInt(stored, 10) : 1450;
-    } catch {
-      return 1450;
     }
   });
 
@@ -70,23 +70,30 @@ export default function Dashboard() {
     return () => window.removeEventListener("messages_updated", refreshMessages);
   }, []);
 
-  // Compute 100% Real Dynamic KPI Statistics
+  const markMessageAsRead = (id) => {
+    const updated = messages.map((m) => (m.id === id ? { ...m, read: true } : m));
+    setMessages(updated);
+    localStorage.setItem("contact_messages", JSON.stringify(updated));
+    window.dispatchEvent(new CustomEvent("messages_updated"));
+  };
+
+  // Compute Dynamic KPI Statistics
   const totalProjects = projects.length;
   const featuredProjectsCount = projects.filter((p) => p.featured).length;
-  const hiddenProjectsCount = projects.filter((p) => p.hidden).length;
 
   const totalArticles = articles.length;
+  const totalServices = services.length;
+  const hiddenServicesCount = services.filter((s) => s.hidden).length;
   const publishedArticlesCount = articles.filter((a) => !a.hidden).length;
-  const hiddenArticlesCount = articles.filter((a) => a.hidden).length;
 
   const totalMessages = messages.length;
   const unreadMessagesCount = messages.filter((m) => !m.read).length;
 
   const stats = [
     {
-      title: "Projets en Vitrine",
+      title: "Projets Vitrine",
       value: totalProjects,
-      detail: `${featuredProjectsCount} en vedette • ${hiddenProjectsCount} masqué(s)`,
+      detail: `${featuredProjectsCount} en vedette`,
       icon: FolderKanban,
       color: "#38bdf8",
       bgColor: "rgba(56, 189, 248, 0.12)",
@@ -94,9 +101,49 @@ export default function Dashboard() {
       link: "/admin/projects",
     },
     {
+      title: "Services Offerts",
+      value: totalServices,
+      detail: hiddenServicesCount > 0 ? `${hiddenServicesCount} masqué(s)` : "Tous visibles",
+      icon: Layers,
+      color: "#34d399",
+      bgColor: "rgba(52, 211, 153, 0.12)",
+      borderColor: "rgba(52, 211, 153, 0.25)",
+      link: "/admin/services",
+    },
+    {
+      title: "Compétences & Stack",
+      value: skills.reduce((acc, c) => acc + (c.skills?.length || 0), 0),
+      detail: `${skills.length} catégories`,
+      icon: Cpu,
+      color: "#a855f7",
+      bgColor: "rgba(168, 85, 247, 0.12)",
+      borderColor: "rgba(168, 85, 247, 0.25)",
+      link: "/admin/skills",
+    },
+    {
+      title: "Parcours / Timeline",
+      value: timeline.length,
+      detail: "Expériences & Diplômes",
+      icon: Briefcase,
+      color: "#f59e0b",
+      bgColor: "rgba(245, 158, 11, 0.12)",
+      borderColor: "rgba(245, 158, 11, 0.25)",
+      link: "/admin/timeline",
+    },
+    {
+      title: "Impact & Avis",
+      value: (impact.metrics?.length || 0) + (impact.testimonials?.length || 0),
+      detail: `${impact.testimonials?.length || 0} témoignage(s)`,
+      icon: Zap,
+      color: "#ec4899",
+      bgColor: "rgba(236, 72, 153, 0.12)",
+      borderColor: "rgba(236, 72, 153, 0.25)",
+      link: "/admin/impact",
+    },
+    {
       title: "Articles de Blog",
       value: totalArticles,
-      detail: `${publishedArticlesCount} publics • ${hiddenArticlesCount} masqué(s)`,
+      detail: `${publishedArticlesCount} publiés`,
       icon: FileText,
       color: "#818cf8",
       bgColor: "rgba(129, 140, 248, 0.12)",
@@ -106,26 +153,27 @@ export default function Dashboard() {
     {
       title: "Messages Reçus",
       value: totalMessages,
-      detail: `${unreadMessagesCount} message(s) non lu(s)`,
+      detail: `${unreadMessagesCount} non lu(s)`,
       icon: MessageSquare,
       color: "#f472b6",
       bgColor: "rgba(244, 114, 182, 0.12)",
       borderColor: "rgba(244, 114, 182, 0.25)",
       link: "/admin/messages",
     },
-    {
-      title: "Audience & Visites",
-      value: `${pageViews.toLocaleString("fr-FR")}+`,
-      detail: "Analytique dynamique du site",
-      icon: Users,
-      color: "#34d399",
-      bgColor: "rgba(52, 211, 153, 0.12)",
-      borderColor: "rgba(52, 211, 153, 0.25)",
-      link: "/admin/settings",
-    },
   ];
 
   const recentProjects = projects.slice(0, 5);
+  const recentMessages = messages.slice(0, 4);
+
+  const sectionsList = [
+    { key: "hero", label: "Hero Banner" },
+    { key: "about", label: "À propos" },
+    { key: "services", label: "Services" },
+    { key: "projects", label: "Projets" },
+    { key: "impact", label: "Impact & Avis" },
+    { key: "timeline", label: "Parcours" },
+    { key: "contact", label: "Contact" },
+  ];
 
   return (
     <>
@@ -135,7 +183,7 @@ export default function Dashboard() {
         {/* ── Welcome Banner ─────────────────────────────────────────────────── */}
         <div
           style={{
-            background: "linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(56, 189, 248, 0.08))",
+            background: "linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(56, 189, 248, 0.08))",
             border: "1px solid rgba(255, 255, 255, 0.08)",
             borderRadius: "24px",
             padding: "2rem 2.25rem",
@@ -193,8 +241,8 @@ export default function Dashboard() {
             >
               Bonjour, <span style={{ color: "#38bdf8" }}>{userName}</span> 👋
             </h1>
-            <p style={{ fontSize: "0.9rem", color: "#94a3b8", margin: 0, lineHeight: 1.6, maxWidth: "580px" }}>
-              Voici l'état en temps réel de votre portfolio : {totalProjects} projet(s), {totalArticles} article(s) et {unreadMessagesCount} message(s) non lu(s).
+            <p style={{ fontSize: "0.9rem", color: "#94a3b8", margin: 0, lineHeight: 1.6, maxWidth: "620px" }}>
+              Bienvenue sur la console d'administration. Vous avez <strong>{totalProjects} projets</strong>, <strong>{totalArticles} articles</strong> et <strong>{unreadMessagesCount} message(s) non lu(s)</strong>.
             </p>
           </div>
 
@@ -277,7 +325,70 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* ── KPI Metric Cards Grid (Responsive 4-col Desktop / 2-col Tablet / 1-col Mobile) ── */}
+        {/* ── Quick Action Shortcuts Grid ───────────────────────────────────── */}
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: windowWidth >= 1024 ? "repeat(5, 1fr)" : windowWidth >= 640 ? "repeat(3, 1fr)" : "repeat(2, 1fr)",
+            gap: "0.85rem",
+            width: "100%",
+          }}
+        >
+          {[
+            { label: "Ajouter Projet", path: "/admin/projects/create", icon: Plus, color: "#38bdf8" },
+            { label: "Gérer Services", path: "/admin/services", icon: Layers, color: "#34d399" },
+            { label: "Créer Article", path: "/admin/articles/create", icon: FileText, color: "#818cf8" },
+            { label: "Gérer Compétences", path: "/admin/skills", icon: Cpu, color: "#a855f7" },
+            { label: "Paramètres Site", path: "/admin/settings", icon: Settings, color: "#fbbf24" },
+          ].map((act) => {
+            const Icon = act.icon;
+            return (
+              <Link
+                key={act.label}
+                to={act.path}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  padding: "12px 14px",
+                  borderRadius: "14px",
+                  background: "rgba(9, 13, 22, 0.75)",
+                  border: "1px solid rgba(255, 255, 255, 0.08)",
+                  color: "#e2e8f0",
+                  fontSize: "0.8rem",
+                  fontWeight: 700,
+                  textDecoration: "none",
+                  transition: "all 0.2s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = act.color;
+                  e.currentTarget.style.background = "rgba(15, 23, 42, 0.9)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "rgba(255, 255, 255, 0.08)";
+                  e.currentTarget.style.background = "rgba(9, 13, 22, 0.75)";
+                }}
+              >
+                <div
+                  style={{
+                    padding: "6px",
+                    borderRadius: "8px",
+                    background: `${act.color}15`,
+                    color: act.color,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Icon size={16} />
+                </div>
+                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{act.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* ── KPI Metric Cards Grid ─────────────────────────────────────────── */}
         <div
           style={{
             display: "grid",
@@ -348,7 +459,8 @@ export default function Dashboard() {
         </div>
 
         {/* ── Main Content Grid ────────────────────────────────────────────── */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "1.75rem" }}>
+        <div style={{ display: "grid", gridTemplateColumns: windowWidth >= 1024 ? "2fr 1fr" : "1fr", gap: "1.75rem" }}>
+          
           {/* Left Column: Recent Projects */}
           <div
             style={{
@@ -360,7 +472,6 @@ export default function Dashboard() {
               flexDirection: "column",
               gap: "1.25rem",
               boxShadow: "0 15px 40px rgba(0, 0, 0, 0.5)",
-              gridColumn: "span 2 / span 2",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
@@ -492,74 +603,177 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* Right Column: System Status */}
-          <div
-            style={{
-              background: "rgba(9, 13, 22, 0.85)",
-              border: "1px solid rgba(255, 255, 255, 0.08)",
-              borderRadius: "24px",
-              padding: "1.75rem",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              gap: "1.5rem",
-              boxShadow: "0 15px 40px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            <div>
-              <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)", marginBottom: "1.25rem" }}>
-                <h2 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#ffffff", margin: 0, display: "flex", alignItems: "center", gap: "10px" }}>
-                  <Activity size={20} color="#fbbf24" />
-                  Statut du Système
-                </h2>
-                <p style={{ fontSize: "0.78rem", color: "#94a3b8", margin: "4px 0 0" }}>
-                  Supervision des services & bases de données
-                </p>
-              </div>
-
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.85rem" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", borderRadius: "12px", background: "rgba(2, 6, 23, 0.6)", border: "1px solid rgba(255, 255, 255, 0.06)", fontSize: "0.8rem" }}>
-                  <span style={{ color: "#cbd5e1", fontWeight: 600 }}>Frontend PWA</span>
-                  <span style={{ color: "#34d399", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
-                    <CheckCircle2 size={14} /> React 19 + Vite
-                  </span>
-                </div>
-
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", borderRadius: "12px", background: "rgba(2, 6, 23, 0.6)", border: "1px solid rgba(255, 255, 255, 0.06)", fontSize: "0.8rem" }}>
-                  <span style={{ color: "#cbd5e1", fontWeight: 600 }}>Base de données</span>
-                  <span style={{ color: "#38bdf8", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
-                    <ShieldCheck size={14} /> Firebase / Local
-                  </span>
-                </div>
-
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", borderRadius: "12px", background: "rgba(2, 6, 23, 0.6)", border: "1px solid rgba(255, 255, 255, 0.06)", fontSize: "0.8rem" }}>
-                  <span style={{ color: "#cbd5e1", fontWeight: 600 }}>Service Worker PWA</span>
-                  <span style={{ color: "#34d399", fontWeight: 700, display: "flex", alignItems: "center", gap: "6px" }}>
-                    <Sparkles size={14} /> Actif (Badges)
-                  </span>
-                </div>
-
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "12px 14px", borderRadius: "12px", background: "rgba(2, 6, 23, 0.6)", border: "1px solid rgba(255, 255, 255, 0.06)", fontSize: "0.8rem" }}>
-                  <span style={{ color: "#cbd5e1", fontWeight: 600 }}>Backend API</span>
-                  <span style={{ color: "#818cf8", fontWeight: 700 }}>Laravel Sanctum</span>
-                </div>
-              </div>
-            </div>
-
+          {/* Right Column: System Status & Section Visibility */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "1.75rem" }}>
+            
+            {/* Recent Contact Messages Preview Widget */}
             <div
               style={{
-                padding: "1rem",
-                borderRadius: "16px",
-                background: "rgba(56, 189, 248, 0.1)",
-                border: "1px solid rgba(56, 189, 248, 0.2)",
-                color: "#38bdf8",
-                fontSize: "0.78rem",
-                fontWeight: 600,
-                lineHeight: 1.6,
+                background: "rgba(9, 13, 22, 0.85)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderRadius: "24px",
+                padding: "1.5rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+                boxShadow: "0 15px 40px rgba(0, 0, 0, 0.5)",
               }}
             >
-              💡 <strong>Base Dynamique :</strong> Toutes vos statistiques sont synchronisées automatiquement à la seconde près !
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "0.75rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
+                <h3 style={{ fontSize: "1rem", fontWeight: 800, color: "#ffffff", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
+                  <Inbox size={18} color="#f472b6" />
+                  Derniers Messages ({unreadMessagesCount} non lus)
+                </h3>
+                <Link to="/admin/messages" style={{ fontSize: "0.75rem", color: "#f472b6", fontWeight: 700, textDecoration: "none" }}>
+                  Tout voir ↗
+                </Link>
+              </div>
+
+              {recentMessages.length === 0 ? (
+                <p style={{ fontSize: "0.8rem", color: "#94a3b8", margin: 0, textAlign: "center", padding: "1rem 0" }}>
+                  Aucun message reçu pour le moment.
+                </p>
+              ) : (
+                <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+                  {recentMessages.map((msg) => (
+                    <div
+                      key={msg.id}
+                      style={{
+                        padding: "10px 12px",
+                        borderRadius: "12px",
+                        background: msg.read ? "rgba(2, 6, 23, 0.4)" : "rgba(244, 114, 182, 0.08)",
+                        border: msg.read ? "1px solid rgba(255, 255, 255, 0.05)" : "1px solid rgba(244, 114, 182, 0.25)",
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "4px",
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <span style={{ fontSize: "0.82rem", fontWeight: 700, color: "#ffffff" }}>{msg.name}</span>
+                        {!msg.read && (
+                          <button
+                            onClick={() => markMessageAsRead(msg.id)}
+                            style={{
+                              background: "none",
+                              border: "none",
+                              color: "#34d399",
+                              cursor: "pointer",
+                              fontSize: "0.7rem",
+                              fontWeight: 700,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "3px",
+                            }}
+                            title="Marquer comme lu"
+                          >
+                            <Check size={12} /> Marquer lu
+                          </button>
+                        )}
+                      </div>
+                      <span style={{ fontSize: "0.73rem", color: "#94a3b8" }}>{msg.email}</span>
+                      <p style={{ fontSize: "0.78rem", color: "#cbd5e1", margin: "2px 0 0", overflow: "hidden", textOverflow: "ellipsis", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
+                        {msg.message}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
+
+            {/* Section Visibility Live Widget */}
+            <div
+              style={{
+                background: "rgba(9, 13, 22, 0.85)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderRadius: "24px",
+                padding: "1.5rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+                boxShadow: "0 15px 40px rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", paddingBottom: "0.75rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
+                <h3 style={{ fontSize: "1rem", fontWeight: 800, color: "#ffffff", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
+                  <Eye size={18} color="#34d399" />
+                  Visibilité des Sections
+                </h3>
+                <Link to="/admin/settings" style={{ fontSize: "0.75rem", color: "#38bdf8", fontWeight: 700, textDecoration: "none" }}>
+                  Modifier ⚙️
+                </Link>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.6rem" }}>
+                {sectionsList.map((sec) => {
+                  const isVis = sectionVisibility ? sectionVisibility[sec.key] !== false : true;
+                  return (
+                    <div
+                      key={sec.key}
+                      style={{
+                        padding: "8px 10px",
+                        borderRadius: "10px",
+                        background: isVis ? "rgba(52, 211, 153, 0.08)" : "rgba(239, 68, 68, 0.08)",
+                        border: isVis ? "1px solid rgba(52, 211, 153, 0.2)" : "1px solid rgba(239, 68, 68, 0.2)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        fontSize: "0.75rem",
+                        fontWeight: 600,
+                        color: isVis ? "#34d399" : "#ef4444",
+                      }}
+                    >
+                      <span>{sec.label}</span>
+                      {isVis ? <Eye size={13} /> : <EyeOff size={13} />}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* System Status */}
+            <div
+              style={{
+                background: "rgba(9, 13, 22, 0.85)",
+                border: "1px solid rgba(255, 255, 255, 0.08)",
+                borderRadius: "24px",
+                padding: "1.5rem",
+                display: "flex",
+                flexDirection: "column",
+                gap: "1rem",
+                boxShadow: "0 15px 40px rgba(0, 0, 0, 0.5)",
+              }}
+            >
+              <div style={{ paddingBottom: "0.75rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
+                <h3 style={{ fontSize: "1rem", fontWeight: 800, color: "#ffffff", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
+                  <Activity size={18} color="#fbbf24" />
+                  Statut & Infrastructure
+                </h3>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.65rem" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", borderRadius: "10px", background: "rgba(2, 6, 23, 0.6)", border: "1px solid rgba(255, 255, 255, 0.06)", fontSize: "0.78rem" }}>
+                  <span style={{ color: "#cbd5e1", fontWeight: 600 }}>Frontend App</span>
+                  <span style={{ color: "#34d399", fontWeight: 700, display: "flex", alignItems: "center", gap: "5px" }}>
+                    <CheckCircle2 size={13} /> React 19 + Vite
+                  </span>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", borderRadius: "10px", background: "rgba(2, 6, 23, 0.6)", border: "1px solid rgba(255, 255, 255, 0.06)", fontSize: "0.78rem" }}>
+                  <span style={{ color: "#cbd5e1", fontWeight: 600 }}>Base de données</span>
+                  <span style={{ color: "#38bdf8", fontWeight: 700, display: "flex", alignItems: "center", gap: "5px" }}>
+                    <ShieldCheck size={13} /> Synchronisée
+                  </span>
+                </div>
+
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "10px 12px", borderRadius: "10px", background: "rgba(2, 6, 23, 0.6)", border: "1px solid rgba(255, 255, 255, 0.06)", fontSize: "0.78rem" }}>
+                  <span style={{ color: "#cbd5e1", fontWeight: 600 }}>PWA Offline & Notifs</span>
+                  <span style={{ color: "#34d399", fontWeight: 700, display: "flex", alignItems: "center", gap: "5px" }}>
+                    <Sparkles size={13} /> Actif
+                  </span>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

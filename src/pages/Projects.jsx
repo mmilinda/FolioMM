@@ -140,7 +140,7 @@ export default function Projects() {
             animate={{ opacity: 1 }}
             style={{ color: "var(--text-muted)", textAlign: "center", padding: "4rem 0" }}
           >
-            Aucun projet dans cette catégorie pour l'instant.
+            {t("projectsPage.noProjects", "Aucun projet dans cette catégorie pour l'instant.")}
           </motion.p>
         ) : (
           <motion.div
@@ -177,7 +177,7 @@ export default function Projects() {
             borderTop: "1px solid var(--border)",
           }}
         >
-          Plus de projets arrivent prochainement. 🚀
+          {t("projectsPage.moreProjects", "Plus de projets arrivent prochainement. 🚀")}
         </motion.p>
       </section>
     </>

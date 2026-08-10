@@ -1,26 +1,37 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useSiteData } from "../context/SiteDataContext";
 
-function AnimatedCounter({ target, suffix, inView }) {
+function AnimatedCounter({ rawValue, inView }) {
+  // Parse numeric part and suffix if any (e.g., "14+" -> 14 and "+", "99.9%" -> "99.9%")
+  const match = String(rawValue).match(/^([\d.]+)(.*)$/);
+  const numericVal = match ? parseFloat(match[1]) : null;
+  const suffix = match ? match[2] : "";
+
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    if (!inView) return;
+    if (!inView || numericVal === null || isNaN(numericVal)) return;
     let start = 0;
     const duration = 1800;
-    const step = Math.ceil(target / (duration / 16));
+    const isFloat = String(numericVal).includes(".");
+    const step = (numericVal / (duration / 16));
     const timer = setInterval(() => {
       start += step;
-      if (start >= target) {
-        setCount(target);
+      if (start >= numericVal) {
+        setCount(numericVal);
         clearInterval(timer);
       } else {
-        setCount(start);
+        setCount(isFloat ? parseFloat(start.toFixed(1)) : Math.ceil(start));
       }
     }, 16);
     return () => clearInterval(timer);
-  }, [inView, target]);
+  }, [inView, numericVal]);
+
+  if (numericVal === null || isNaN(numericVal)) {
+    return <span>{rawValue}</span>;
+  }
 
   return (
     <span>
@@ -32,20 +43,23 @@ function AnimatedCounter({ target, suffix, inView }) {
 
 export default function Stats() {
   const { t } = useTranslation();
+  const { stats: siteStats } = useSiteData();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
-  const statsData = [
-    { value: 10, suffix: "+", label: t("hero.stats.projects", "Projets livrés"), color: "#38bdf8" },
-    { value: 3, suffix: "+", label: t("hero.stats.experience", "Années d'expérience"), color: "#818cf8" },
-    { value: 15, suffix: "+", label: t("hero.stats.tech", "Technologies maîtrisées"), color: "#34d399" },
-    { value: 100, suffix: "%", label: t("about.commitment", "Engagement"), color: "#f472b6" },
+  const colors = ["#38bdf8", "#818cf8", "#34d399", "#f472b6", "#fb923c"];
+
+  const displayStats = [
+    { value: "10+", label: t("hero.stats.projects", "Projets"), desc: "Applications Web, SaaS & Mobile", color: "#38bdf8" },
+    { value: "3+", label: t("hero.stats.experience", "Années d'expérience"), desc: "En développement Full Stack (2022 - Présent)", color: "#818cf8" },
+    { value: "3+", label: t("hero.stats.solutions", "Solutions de Production"), desc: "SaaS et plateformes numériques d'entreprise", color: "#34d399" },
+    { value: "100%", label: t("about.commitment", "Engagement"), desc: "Livraison agile & Qualité de code", color: "#f472b6" },
   ];
 
   return (
     <section ref={ref} className="stats-section">
       <div className="stats-grid">
-        {statsData.map((stat, i) => (
+        {displayStats.map((stat, i) => (
           <motion.div
             key={`${stat.label}-${i}`}
             className="stat-card"
@@ -55,9 +69,14 @@ export default function Stats() {
             whileHover={{ y: -6, scale: 1.03 }}
           >
             <div className="stat-value" style={{ color: stat.color }}>
-              <AnimatedCounter target={stat.value} suffix={stat.suffix} inView={inView} />
+              <AnimatedCounter rawValue={stat.value} inView={inView} />
             </div>
             <div className="stat-label">{stat.label}</div>
+            {stat.desc && (
+              <div style={{ fontSize: "0.75rem", color: "#94a3b8", marginTop: "4px" }}>
+                {stat.desc}
+              </div>
+            )}
             <div className="stat-bar">
               <motion.div
                 className="stat-bar-fill"
@@ -72,4 +91,4 @@ export default function Stats() {
       </div>
     </section>
   );
-}
+}
