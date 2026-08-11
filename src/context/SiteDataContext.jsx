@@ -11,7 +11,7 @@ const defaultProfile = {
   availability: "Ouverte aux opportunités",
   github: "https://github.com/mmilinda",
   linkedin: "https://www.linkedin.com/in/milinda-mendy-5ba17928a/",
-  cvLink: "/milinda_mendy_cv.pdf",
+  cvLink: "/CV-Milinda-Mendy.pdf",
   bio: "Je conçois et développe des applications web, plateformes SaaS et solutions digitales de bout en bout, de l'interface utilisateur au backend, aux API et au déploiement.",
   yearsExp: "5+",
   projectsCount: "30+",
