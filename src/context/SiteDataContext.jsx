@@ -138,6 +138,15 @@ const defaultTimeline = [
     type: "work",
   },
   {
+    id: "time-cert-isca",
+    year: "2023",
+    title: "Certification en Développement Web & Mobile",
+    company: "ISCA (en partenariat avec le 3FPT)",
+    description: "Formation certifiante et compétences pratiques en Développement Web & Mobile dispensée à l'ISCA en partenariat avec le Fonds de Financement de la Formation Professionnelle et Technique (3FPT).",
+    tags: ["Développement Web", "Développement Mobile", "Certification", "3FPT", "ISCA"],
+    type: "education",
+  },
+  {
     id: "time-4",
     year: "2022",
     title: "Stagiaire Intégratrice Web",

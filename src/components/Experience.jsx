@@ -27,6 +27,13 @@ const translations = {
         techs: ['WordPress', 'Laravel', 'PHP', 'MySQL', 'CMS'],
       },
       {
+        role: 'Certification en Développement Web & Mobile',
+        company: 'ISCA (en partenariat avec le 3FPT)',
+        period: '2023',
+        desc: "Formation certifiante et compétences pratiques en Développement Web & Mobile dispensée à l'ISCA en partenariat avec le 3FPT.",
+        techs: ['Développement Web', 'Développement Mobile', 'Certification', '3FPT', 'ISCA'],
+      },
+      {
         role: 'Stagiaire Intégratrice Web',
         company: 'Bakeli & Webgram',
         period: '2022',
@@ -66,6 +73,13 @@ const translations = {
         period: '2023',
         desc: 'Design and integration of showcase websites and CMS portals (Site Zawiya). Relational database modeling with MySQL.',
         techs: ['WordPress', 'Laravel', 'PHP', 'MySQL', 'CMS'],
+      },
+      {
+        role: 'Web & Mobile Development Certification',
+        company: 'ISCA (in partnership with 3FPT)',
+        period: '2023',
+        desc: 'Professional Certification in Web & Mobile Development earned at ISCA in partnership with 3FPT.',
+        techs: ['Web Development', 'Mobile Development', 'Certification', '3FPT', 'ISCA'],
       },
       {
         role: 'Web Integrator Intern',

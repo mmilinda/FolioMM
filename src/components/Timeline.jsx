@@ -43,6 +43,17 @@ export default function Timeline() {
       tags: ["WordPress", "Laravel", "PHP", "MySQL", "CMS"],
     },
     {
+      year: "2023",
+      role: isEn ? "Web & Mobile Development Certification" : "Certification en Développement Web & Mobile",
+      company: "ISCA (en partenariat avec le 3FPT)",
+      type: isEn ? "Certification" : "Certification",
+      color: "#34d399",
+      desc: isEn
+        ? "Professional Certification in Web & Mobile Development earned at ISCA in partnership with the 3FPT (Professional and Technical Training Financing Fund)."
+        : "Formation certifiante et compétences pratiques en Développement Web & Mobile dispensée à l'ISCA en partenariat avec le 3FPT (Fonds de Financement de la Formation Professionnelle et Technique).",
+      tags: ["Développement Web", "Développement Mobile", "Certification", "3FPT", "ISCA"],
+    },
+    {
       year: "2022",
       role: isEn ? "Web Integrator Intern" : "Stagiaire Intégratrice Web",
       company: "Bakeli & Webgram",
