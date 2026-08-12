@@ -4,98 +4,66 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Str;
 
 class ArticleController extends Controller
 {
-    /**
-     * Récupère la liste de tous les articles.
-     */
     public function index()
     {
-        return Article::latest()->get();
+        return response()->json(Article::latest()->get());
     }
 
-    /**
-     * Crée un nouvel article avec upload d'image optionnel sur Cloudinary.
-     */
+    public function show($idOrSlug)
+    {
+        $article = Article::where('slug', $idOrSlug)->orWhere('id', $idOrSlug)->firstOrFail();
+        return response()->json($article);
+    }
+
     public function store(Request $request)
     {
-        // 1. Validation des champs
         $request->validate([
-            'title'     => 'required|string|max:255',
-            'content'   => 'required|string',
-            'image'     => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'published' => 'nullable|boolean',
+            'title'   => 'required|string|max:255',
+            'content' => 'required|string',
         ]);
 
-        $imageUrl = null;
+        $data = $request->all();
 
-        // 2. Upload de l'image sur Cloudinary si elle est fournie
-        if ($request->hasFile('image')) {
-            $imageUrl = Cloudinary::upload(
-                $request->file('image')->getRealPath(),
-                ['folder' => 'blog']
-            )->getSecurePath();
+        if (empty($data['slug'])) {
+            $data['slug'] = Str::slug($request->title);
         }
 
-        // 3. Enregistrement en BDD
-        $article = Article::create([
-            'title'     => $request->title,
-            'content'   => $request->content,
-            'image'     => $imageUrl,
-            'published' => $request->published ?? true,
-        ]);
+        if ($request->hasFile('image_file')) {
+            $path = $request->file('image_file')->storeAs('public/blog', Str::random(15) . '.' . $request->file('image_file')->getClientOriginalExtension());
+            $data['image'] = asset('storage/' . str_replace('public/', '', $path));
+        }
+
+        $article = Article::create($data);
 
         return response()->json($article, 201);
     }
 
-    /**
-     * Affiche un article spécifique.
-     */
-    public function show(Article $article)
+    public function update(Request $request, $id)
     {
-        return response()->json($article);
-    }
+        $article = Article::where('id', $id)->orWhere('slug', $id)->firstOrFail();
+        $data = $request->all();
 
-    /**
-     * Mettre à jour un article existant.
-     */
-    public function update(Request $request, Article $article)
-    {
-        // 1. Validation des champs
-        $request->validate([
-            'title'     => 'sometimes|required|string|max:255',
-            'content'   => 'sometimes|required|string',
-            'image'     => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
-            'published' => 'nullable|boolean',
-        ]);
-
-        // 2. Gestion de la nouvelle image si uploadée
-        if ($request->hasFile('image')) {
-            $imageUrl = Cloudinary::upload(
-                $request->file('image')->getRealPath(),
-                ['folder' => 'blog']
-            )->getSecurePath();
-
-            $article->image = $imageUrl;
+        if ($request->hasFile('image_file')) {
+            $path = $request->file('image_file')->storeAs('public/blog', Str::random(15) . '.' . $request->file('image_file')->getClientOriginalExtension());
+            $data['image'] = asset('storage/' . str_replace('public/', '', $path));
         }
 
-        // 3. Mise à jour des autres données
-        $article->update($request->only(['title', 'content', 'published']));
+        $article->update($data);
 
         return response()->json($article);
     }
 
-    /**
-     * Supprime un article.
-     */
-    public function destroy(Article $article)
+    public function destroy($id)
     {
+        $article = Article::where('id', $id)->orWhere('slug', $id)->firstOrFail();
         $article->delete();
 
         return response()->json([
-            "message" => "Article supprimé avec succès"
+            'message' => 'Article supprimé avec succès'
         ]);
     }
 }

@@ -1,15 +1,47 @@
 import { useState } from "react";
 import { useSiteData } from "../context/SiteDataContext";
-import { Settings, Save, CheckCircle, Eye, EyeOff, Sliders } from "lucide-react";
+import { Settings, Save, CheckCircle, Eye, EyeOff, Sliders, Upload, FileText, Image as ImageIcon, UserCheck } from "lucide-react";
 import SEO from "../components/SEO";
+import api from "../services/api";
 
 export default function SiteSettings() {
-  const { profile, updateProfile, sectionVisibility, updateSectionVisibility } = useSiteData();
+  const { profile, updateProfile, sectionVisibility, updateSectionVisibility, isBackendConnected } = useSiteData();
   const [formData, setFormData] = useState(profile);
   const [saved, setSaved] = useState(false);
+  const [uploadingField, setUploadingField] = useState(null);
 
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  }
+
+  async function handleFileUpload(e, fieldName) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUploadingField(fieldName);
+    try {
+      const data = new FormData();
+      data.append("file", file);
+      data.append("folder", fieldName === "cvLink" ? "documents" : "profiles");
+
+      const response = await api.post("/upload", data);
+      if (response.data && response.data.url) {
+        const fileUrl = response.data.url;
+        const updated = { ...formData, [fieldName]: fileUrl };
+        setFormData(updated);
+        updateProfile(updated);
+        triggerSuccess(`Fichier pour ${fieldName} téléchargé et synchronisé !`);
+      }
+    } catch (err) {
+      console.error("Erreur d'upload du fichier:", err);
+      // Fallback local URL if upload fails
+      const objectUrl = URL.createObjectURL(file);
+      const updated = { ...formData, [fieldName]: objectUrl };
+      setFormData(updated);
+      updateProfile(updated);
+    } finally {
+      setUploadingField(null);
+    }
   }
 
   function toggleSection(sectionKey) {
@@ -27,9 +59,9 @@ export default function SiteSettings() {
     triggerSuccess();
   }
 
-  function triggerSuccess() {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
+  function triggerSuccess(msg) {
+    setSaved(msg || "Paramètres enregistrés et appliqués en direct sur tout le site !");
+    setTimeout(() => setSaved(false), 3500);
   }
 
   const inputStyle = {
@@ -76,17 +108,129 @@ export default function SiteSettings() {
             <Settings color="#34d399" size={26} />
             Paramètres & Visibilité du Site
           </h1>
-          <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
-            Configurez vos informations personnelles et contrôlez l'activation de chaque section sur le site public.
+          <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
+            <span>Configurez vos informations personnelles, photos, documents et visibilité des sections.</span>
+            <span style={{ fontSize: "0.75rem", padding: "2px 8px", borderRadius: "10px", background: isBackendConnected ? "rgba(52, 211, 153, 0.15)" : "rgba(245, 158, 11, 0.15)", color: isBackendConnected ? "#34d399" : "#fbbf24", fontWeight: 700 }}>
+              {isBackendConnected ? "● Backend Laravel Connecté" : "○ Mode Synchrone Local"}
+            </span>
           </p>
         </div>
 
         {saved && (
           <div style={{ padding: "0.85rem 1.1rem", borderRadius: "12px", background: "rgba(52, 211, 153, 0.12)", border: "1px solid rgba(52, 211, 153, 0.3)", color: "#34d399", fontSize: "0.88rem", fontWeight: 600, display: "flex", alignItems: "center", gap: "8px" }}>
             <CheckCircle size={18} />
-            <span>Paramètres enregistrés et appliqués en direct sur tout le site !</span>
+            <span>{saved}</span>
           </div>
         )}
+
+        {/* SECTION MEDIAS : PHOTO DE PROFIL, AVATAR & CV */}
+        <div
+          style={{
+            background: "rgba(9, 13, 22, 0.85)",
+            border: "1px solid rgba(255, 255, 255, 0.1)",
+            borderRadius: "20px",
+            padding: "1.75rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1.25rem",
+          }}
+        >
+          <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#f8fafc", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
+            <ImageIcon color="#38bdf8" size={22} />
+            Photos de Profil, Avatar & Documents (CV)
+          </h3>
+          <p style={{ fontSize: "0.82rem", color: "#94a3b8", margin: 0 }}>
+            Téléversez directement vos photos et documents. Les fichiers sont enregistrés sur le serveur Laravel et mis à jour instantanément sur le site.
+          </p>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1.25rem" }}>
+            {/* Photo Principale */}
+            <div style={{ background: "rgba(2, 6, 23, 0.6)", padding: "1.25rem", borderRadius: "16px", border: "1px solid rgba(255, 255, 255, 0.08)", display: "flex", flexDirection: "column", gap: "10px", alignItems: "center" }}>
+              <span style={labelStyle}>Photo de Profil Principale (Hero)</span>
+              <img
+                src={formData.photo || "/images/profile/MM.png"}
+                alt="Photo de profil"
+                style={{ width: "90px", height: "90px", borderRadius: "50%", objectFit: "cover", border: "2px solid #38bdf8" }}
+              />
+              <label
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "8px 14px",
+                  borderRadius: "10px",
+                  background: "rgba(56, 189, 248, 0.15)",
+                  border: "1px solid rgba(56, 189, 248, 0.3)",
+                  color: "#38bdf8",
+                  fontSize: "0.78rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                <Upload size={14} />
+                <span>{uploadingField === "photo" ? "Téléversement..." : "Changer la Photo"}</span>
+                <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, "photo")} style={{ display: "none" }} />
+              </label>
+            </div>
+
+            {/* Avatar Miniature */}
+            <div style={{ background: "rgba(2, 6, 23, 0.6)", padding: "1.25rem", borderRadius: "16px", border: "1px solid rgba(255, 255, 255, 0.08)", display: "flex", flexDirection: "column", gap: "10px", alignItems: "center" }}>
+              <span style={labelStyle}>Avatar Miniature (Navbar & Bio)</span>
+              <img
+                src={formData.avatar || "/images/profile/MM.png"}
+                alt="Avatar"
+                style={{ width: "90px", height: "90px", borderRadius: "50%", objectFit: "cover", border: "2px solid #34d399" }}
+              />
+              <label
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "8px 14px",
+                  borderRadius: "10px",
+                  background: "rgba(52, 211, 153, 0.15)",
+                  border: "1px solid rgba(52, 211, 153, 0.3)",
+                  color: "#34d399",
+                  fontSize: "0.78rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                <UserCheck size={14} />
+                <span>{uploadingField === "avatar" ? "Téléversement..." : "Changer l'Avatar"}</span>
+                <input type="file" accept="image/*" onChange={(e) => handleFileUpload(e, "avatar")} style={{ display: "none" }} />
+              </label>
+            </div>
+
+            {/* Document CV PDF */}
+            <div style={{ background: "rgba(2, 6, 23, 0.6)", padding: "1.25rem", borderRadius: "16px", border: "1px solid rgba(255, 255, 255, 0.08)", display: "flex", flexDirection: "column", gap: "10px", alignItems: "center" }}>
+              <span style={labelStyle}>Document CV Officiel (PDF)</span>
+              <div style={{ width: "90px", height: "90px", borderRadius: "16px", background: "rgba(244, 114, 182, 0.12)", border: "1px dashed rgba(244, 114, 182, 0.4)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#f472b6" }}>
+                <FileText size={32} />
+                <span style={{ fontSize: "0.65rem", fontWeight: 800, marginTop: "4px" }}>PDF</span>
+              </div>
+              <label
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "8px 14px",
+                  borderRadius: "10px",
+                  background: "rgba(244, 114, 182, 0.15)",
+                  border: "1px solid rgba(244, 114, 182, 0.3)",
+                  color: "#f472b6",
+                  fontSize: "0.78rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                <Upload size={14} />
+                <span>{uploadingField === "cvLink" ? "Téléversement..." : "Téléverser un nouveau CV (PDF)"}</span>
+                <input type="file" accept=".pdf,.doc,.docx" onChange={(e) => handleFileUpload(e, "cvLink")} style={{ display: "none" }} />
+              </label>
+            </div>
+          </div>
+        </div>
 
         {/* CONTROLE DE VISIBILITE DES SECTIONS */}
         <div style={{ background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(255, 255, 255, 0.1)", borderRadius: "20px", padding: "1.75rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
@@ -199,8 +343,20 @@ export default function SiteSettings() {
             </div>
 
             <div>
-              <label style={labelStyle}>Lien du CV (PDF)</label>
+              <label style={labelStyle}>URL du CV (ou téléverser ci-dessus)</label>
               <input name="cvLink" style={inputStyle} value={formData.cvLink || ""} onChange={handleChange} />
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
+            <div>
+              <label style={labelStyle}>URL Photo de profil</label>
+              <input name="photo" style={inputStyle} value={formData.photo || ""} onChange={handleChange} />
+            </div>
+
+            <div>
+              <label style={labelStyle}>URL Avatar miniature</label>
+              <input name="avatar" style={inputStyle} value={formData.avatar || ""} onChange={handleChange} />
             </div>
           </div>
 

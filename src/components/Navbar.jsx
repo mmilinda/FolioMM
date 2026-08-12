@@ -3,9 +3,11 @@ import { NavLink } from "react-router-dom";
 import { Menu, X, Globe, Sun, Moon } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { useSiteData } from "../context/SiteDataContext";
 
 export default function Navbar() {
   const { i18n } = useTranslation();
+  const { profile } = useSiteData();
   const [open, setOpen] = useState(false);
 
   // ── Dark Mode State ──────────────────────────────────────────────────────────
@@ -48,7 +50,7 @@ export default function Navbar() {
         {/* Logo */}
         <NavLink to="/" className="flex items-center gap-3 text-xl font-bold tracking-wider no-underline text-inherit group">
           <div className="w-9 h-9 rounded-full overflow-hidden border border-cyan-400/40 p-0.5 bg-cyan-400/10 group-hover:scale-105 transition-transform flex-shrink-0">
-            <img src="/logoMM.jpg" alt="MM Logo" className="w-full h-full object-cover rounded-full" />
+            <img src={profile?.avatar || profile?.photo || "/logoMM.jpg"} alt={profile?.name || "Milinda Mendy"} className="w-full h-full object-cover rounded-full" />
           </div>
           <span>
             <span className="gradient-text">MILINDA</span>_MENDY

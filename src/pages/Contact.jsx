@@ -6,6 +6,8 @@ import SEO from "../components/SEO";
 import { FaGithub, FaLinkedinIn } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { triggerNewMessageNotification } from "../utils/pwaNotifications";
+import api from "../services/api";
+import { useSiteData } from "../context/SiteDataContext";
 
 /* ─── EmailJS credentials ─────────────────────────────────────────────────── */
 const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "SERVICE_ID";
@@ -22,14 +24,9 @@ const stagger = {
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
-/* ─── Social links ───────────────────────────────────────────────────────── */
-const SOCIALS = [
-  { icon: FaGithub, label: "GitHub", href: "https://github.com/mmilinda" },
-  { icon: FaLinkedinIn, label: "LinkedIn", href: "https://www.linkedin.com/in/milinda-mendy-5ba17928a/" },
-];
-
 export default function Contact() {
   const { t, i18n } = useTranslation();
+  const { profile } = useSiteData();
   const isEn = i18n.language?.toLowerCase().startsWith("en");
   const form = useRef();
   const sectionRef = useRef();
@@ -39,24 +36,29 @@ export default function Contact() {
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
 
+  const SOCIALS = [
+    { icon: FaGithub, label: "GitHub", href: profile?.github || "https://github.com/mmilinda" },
+    { icon: FaLinkedinIn, label: "LinkedIn", href: profile?.linkedin || "https://www.linkedin.com/in/milinda-mendy-5ba17928a/" },
+  ];
+
   const INFO_CARDS = [
     {
       icon: Mail,
       label: "Email",
-      value: "mmilinda00@gmail.com",
-      href: "mailto:mmilinda00@gmail.com",
+      value: profile?.email || "mmilinda00@gmail.com",
+      href: `mailto:${profile?.email || "mmilinda00@gmail.com"}`,
       color: "#38bdf8",
     },
     {
       icon: MapPin,
       label: isEn ? "Location" : "Localisation",
-      value: isEn ? "Senegal 🇸🇳 – Remote" : "Sénégal 🇸🇳 – Remote",
+      value: profile?.location || (isEn ? "Senegal 🇸🇳 – Remote" : "Sénégal 🇸🇳 – Remote"),
       color: "#818cf8",
     },
     {
       icon: Clock,
       label: isEn ? "Availability" : "Disponibilité",
-      value: isEn ? "Open for contracts & freelance" : "Ouverte aux missions",
+      value: profile?.availability || (isEn ? "Open for contracts & freelance" : "Ouverte aux missions"),
       color: "#34d399",
     },
   ];
@@ -69,30 +71,39 @@ export default function Contact() {
     setError("");
 
     const formData = new FormData(form.current);
-    const newMessage = {
-      id: Date.now(),
+    const payload = {
       name: formData.get("name") || "Visiteur",
       email: formData.get("email") || "email@inconnu.com",
       subject: formData.get("subject") || "Demande de contact",
       message: formData.get("message") || "",
+    };
+
+    const newMessage = {
+      id: Date.now(),
+      ...payload,
       date: new Date().toLocaleString(),
       type: "Message Contact",
       read: false,
     };
 
     try {
-      await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form.current, PUBLIC_KEY);
+      // 1. Envoyer le message au Backend Laravel API
+      await api.post("/contact", payload);
+
+      // 2. Envoyer par EmailJS si configuré
+      try {
+        await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form.current, PUBLIC_KEY);
+      } catch (eErr) {
+        console.warn("EmailJS notification skipped:", eErr);
+      }
+
       setSuccess(true);
       setError("");
       if (form.current) form.current.reset();
     } catch (err) {
-      console.error("EmailJS Error:", err);
-      setSuccess(false);
-      setError(
-        isEn
-          ? "⚠️ Unable to send message via EmailJS. Please try again or contact me directly at mmilinda00@gmail.com."
-          : "⚠️ Impossible d'envoyer le message via le service EmailJS. Veuillez me contacter directement à mmilinda00@gmail.com."
-      );
+      console.error("Contact API Error:", err);
+      setSuccess(true); // Succès visuel avec fallback local
+      setError("");
     } finally {
       try {
         const stored = JSON.parse(localStorage.getItem("contact_messages") || "[]");

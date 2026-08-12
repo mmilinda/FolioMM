@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { MessageSquare, Trash2, Mail, Calendar, Check, Search, Inbox, ShieldCheck } from "lucide-react";
+import { MessageSquare, Trash2, Mail, Search, Inbox, Check } from "lucide-react";
 import SEO from "../components/SEO";
 import { updatePWABadge } from "../utils/pwaNotifications";
+import api from "../services/api";
 
 function getStoredMessages() {
   try {
@@ -16,36 +17,59 @@ export default function MessagesManager() {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMessage, setSelectedMessage] = useState(null);
 
-  useEffect(() => {
-    function refresh() {
-      const stored = getStoredMessages();
-      setMessages(stored);
-      updatePWABadge();
-      if (!selectedMessage && stored.length > 0) {
-        setSelectedMessage(stored[0]);
+  async function fetchMessagesFromApi() {
+    try {
+      const res = await api.get("/admin/messages");
+      if (res.data && Array.isArray(res.data)) {
+        const formatted = res.data.map((m) => ({
+          id: m.id,
+          name: m.name,
+          email: m.email,
+          subject: m.subject,
+          message: m.message,
+          read: !!m.read,
+          date: m.created_at ? new Date(m.created_at).toLocaleString() : new Date().toLocaleString(),
+          type: "Contact Web",
+        }));
+        setMessages(formatted);
+        localStorage.setItem("contact_messages", JSON.stringify(formatted));
+        if (formatted.length > 0 && !selectedMessage) {
+          setSelectedMessage(formatted[0]);
+        }
       }
+    } catch (err) {
+      console.warn("Utilisation des messages locaux:", err);
     }
+  }
 
+  useEffect(() => {
+    fetchMessagesFromApi();
     const stored = getStoredMessages();
-    if (stored.length > 0) {
+    if (stored.length > 0 && !selectedMessage) {
       setSelectedMessage(stored[0]);
     }
     updatePWABadge();
 
-    window.addEventListener("messages_updated", refresh);
-    return () => window.removeEventListener("messages_updated", refresh);
+    window.addEventListener("messages_updated", fetchMessagesFromApi);
+    return () => window.removeEventListener("messages_updated", fetchMessagesFromApi);
   }, []);
 
-  function toggleRead(id) {
+  async function toggleRead(id) {
     const updated = messages.map((m) =>
       m.id === id ? { ...m, read: !m.read } : m
     );
     setMessages(updated);
     localStorage.setItem("contact_messages", JSON.stringify(updated));
     updatePWABadge();
+
+    try {
+      await api.patch(`/admin/messages/${id}/read`);
+    } catch (err) {
+      console.warn("Erreur marquage lu API:", err);
+    }
   }
 
-  function remove(id) {
+  async function remove(id) {
     if (!confirm("Voulez-vous vraiment supprimer ce message ?")) return;
     const updated = messages.filter((m) => m.id !== id);
     setMessages(updated);
@@ -53,6 +77,12 @@ export default function MessagesManager() {
     updatePWABadge();
     if (selectedMessage?.id === id) {
       setSelectedMessage(updated[0] || null);
+    }
+
+    try {
+      await api.delete(`/admin/messages/${id}`);
+    } catch (err) {
+      console.warn("Erreur suppression message API:", err);
     }
   }
 
@@ -87,7 +117,7 @@ export default function MessagesManager() {
               Boîte de Réception ({messages.length})
             </h1>
             <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
-              Consultez et répondez aux messages envoyés par vos visiteurs via le site public.
+              Consultez et répondez aux messages enregistrés en base de données Laravel.
             </p>
           </div>
 
@@ -131,7 +161,7 @@ export default function MessagesManager() {
             <Inbox size={48} color="#64748b" />
             <h3 style={{ fontSize: "1.1rem", fontWeight: 800, color: "#cbd5e1", margin: 0 }}>Aucun message pour le moment</h3>
             <p style={{ fontSize: "0.85rem", color: "#64748b", margin: 0, maxWidth: "460px", lineHeight: 1.6 }}>
-              Les messages soumis par vos visiteurs via le formulaire de contact s'afficheront ici en direct avec notifications PWA.
+              Les messages soumis par vos visiteurs via le formulaire de contact s'afficheront ici en direct.
             </p>
           </div>
         ) : (

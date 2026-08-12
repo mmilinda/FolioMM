@@ -2,41 +2,40 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
+    use HasFactory;
 
-protected $fillable=[
+    protected $fillable = [
+        'slug',
+        'title',
+        'category',
+        'description',
+        'full_desc',
+        'problem',
+        'solution',
+        'image',
+        'architecture_diagram',
+        'demo',
+        'github',
+        'featured',
+        'hidden',
+        'technologies',
+        'impact',
+        'highlights',
+        'metrics',
+        'architecture_details',
+    ];
 
-'title',
-
-'category',
-
-'description',
-
-'problem',
-
-'solution',
-
-'image',
-
-'technologies',
-
-'impact',
-
-'demo',
-
-'github'
-
-];
-
-
-protected $casts=[
-
-'technologies'=>'array'
-
-];
-
-
+    protected $casts = [
+        'featured' => 'boolean',
+        'hidden' => 'boolean',
+        'technologies' => 'array',
+        'highlights' => 'array',
+        'metrics' => 'array',
+        'architecture_details' => 'array',
+    ];
 }

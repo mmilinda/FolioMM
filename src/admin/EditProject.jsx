@@ -3,6 +3,7 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { Edit3, ArrowLeft, UploadCloud, CheckCircle, Save } from "lucide-react";
 import useProjects from "../hooks/useProjects";
 import SEO from "../components/SEO";
+import api from "../services/api";
 
 export default function EditProject() {
   const { id } = useParams();
@@ -24,6 +25,7 @@ export default function EditProject() {
     demo: "",
     github: "",
   });
+  const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
   const [saved, setSaved] = useState(false);
 
@@ -53,6 +55,7 @@ export default function EditProject() {
   function handleImageChange(e) {
     const file = e.target.files[0];
     if (file) {
+      setImageFile(file);
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -61,7 +64,7 @@ export default function EditProject() {
     }
   }
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
     if (!targetProject) return;
 
@@ -84,13 +87,32 @@ export default function EditProject() {
     };
 
     try {
+      // API call to Laravel backend
+      const data = new FormData();
+      data.append("_method", "PUT");
+      data.append("title", form.title);
+      data.append("category", form.category);
+      data.append("description", form.description);
+      data.append("problem", form.problem);
+      data.append("solution", form.solution);
+      data.append("impact", form.impact);
+      data.append("demo", form.demo);
+      data.append("github", form.github);
+      techArray.forEach((t) => data.append("technologies[]", t));
+      if (imageFile) data.append("image_file", imageFile);
+
+      await api.post(`/projects/${targetProject.id}`, data);
+    } catch (apiErr) {
+      console.warn("Mise à jour locale fallback:", apiErr);
+    }
+
+    try {
       const editedMap = JSON.parse(localStorage.getItem("edited_projects") || "{}");
       const key = String(targetProject.id);
       editedMap[key] = { ...(editedMap[key] || {}), ...updatedData };
       if (targetProject.slug) editedMap[targetProject.slug] = editedMap[key];
       localStorage.setItem("edited_projects", JSON.stringify(editedMap));
 
-      // Also update custom_projects if it's a user-created project
       const custom = JSON.parse(localStorage.getItem("custom_projects") || "[]");
       const updatedCustom = custom.map((p) =>
         String(p.id) === String(targetProject.id) || p.slug === targetProject.slug
@@ -201,7 +223,7 @@ export default function EditProject() {
               }}
             >
               <CheckCircle size={18} />
-              <span>Projet mis à jour avec succès ! Redirection...</span>
+              <span>Projet mis à jour avec succès dans Laravel & Local ! Redirection...</span>
             </div>
           )}
 

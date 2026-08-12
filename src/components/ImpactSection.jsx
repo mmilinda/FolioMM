@@ -1,5 +1,6 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
+import { Link } from "react-router-dom";
 import { Target, Rocket, Lightbulb, Compass, Sprout, Shield, Fingerprint, Car, Building2, Layers, Sparkles, ArrowUpRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -20,6 +21,7 @@ export default function ImpactSection() {
       domain: isEn ? "Agriculture" : "Agriculture",
       icon: Sprout,
       project: "AgriChain AI",
+      slug: "agri-chain-ai",
       problem: isEn
         ? "Agricultural information access & food supply chain traceability."
         : "Accès à l'information agricole & traçabilité.",
@@ -32,6 +34,7 @@ export default function ImpactSection() {
       domain: isEn ? "Security" : "Sécurité",
       icon: Shield,
       project: "SecurityApp",
+      slug: "security-app",
       problem: isEn
         ? "Operational dispatch & real-time security monitoring."
         : "Gestion opérationnelle & supervision temps réel.",
@@ -44,6 +47,7 @@ export default function ImpactSection() {
       domain: isEn ? "Identity" : "Identité",
       icon: Fingerprint,
       project: "AfriAccess",
+      slug: "afriaccess",
       problem: isEn
         ? "Fast & secure digital identity verification workflows."
         : "Identification numérique sécurisée & rapide.",
@@ -56,6 +60,7 @@ export default function ImpactSection() {
       domain: isEn ? "Mobility" : "Mobilité",
       icon: Car,
       project: "Garagebi",
+      slug: "garagebi-assistance",
       problem: isEn
         ? "Digitized local roadside automotive assistance."
         : "Assistance automobile de proximité digitalisée.",
@@ -68,6 +73,7 @@ export default function ImpactSection() {
       domain: isEn ? "Enterprise" : "Entreprises",
       icon: Building2,
       project: "Noregis",
+      slug: "noregis-saas",
       problem: isEn
         ? "Automated document scanning & OCR data extraction from IDs & passports."
         : "Numérisation & extraction automatique de données d'identité (CIN, passeport, permis, carte grise).",
@@ -256,36 +262,44 @@ export default function ImpactSection() {
                   key={item.domain}
                   whileHover={{ y: -6, scale: 1.02 }}
                   transition={{ duration: 0.25 }}
-                  className="p-8 sm:p-9 rounded-2xl bg-slate-900/95 border-2 border-white/15 backdrop-blur-2xl shadow-xl hover:shadow-2xl hover:border-cyan-400/60 transition-all duration-300 relative overflow-hidden flex flex-col justify-between space-y-6 text-left group h-full"
-                  style={{ background: `linear-gradient(155deg, ${item.glow} 0%, rgba(15, 23, 42, 0.98) 100%)` }}
+                  className="p-0 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group h-full"
                 >
-                  {/* Glowing Top Colored Bar */}
-                  <div className="absolute top-0 left-0 right-0 h-1.5 w-full rounded-t-2xl" style={{ background: item.color }} />
+                  <Link
+                    to={`/projects/${item.slug}`}
+                    className="p-8 sm:p-9 rounded-2xl bg-slate-900/95 border-2 border-white/15 backdrop-blur-2xl hover:border-cyan-400/60 transition-all duration-300 relative overflow-hidden flex flex-col justify-between space-y-6 text-left group h-full no-underline block"
+                    style={{ background: `linear-gradient(155deg, ${item.glow} 0%, rgba(15, 23, 42, 0.98) 100%)` }}
+                    title={`Voir les détails du projet ${item.project}`}
+                  >
+                    {/* Glowing Top Colored Bar */}
+                    <div className="absolute top-0 left-0 right-0 h-1.5 w-full rounded-t-2xl" style={{ background: item.color }} />
 
-                  {/* Top Image Thumbnail Header */}
-                  <div className="w-full h-32 sm:h-36 rounded-xl overflow-hidden border border-white/15 relative shadow-md shrink-0 mt-4 mb-4">
-                    <img src={item.image} alt={item.project} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
-                    <span
-                      className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-wider border shadow-md backdrop-blur-md"
-                      style={{ borderColor: item.color + "66", color: item.color, background: "rgba(15, 23, 42, 0.9)" }}
-                    >
-                      <Icon size={13} />
-                      {item.domain}
-                    </span>
-                  </div>
+                    {/* Top Image Thumbnail Header */}
+                    <div className="w-full h-32 sm:h-36 rounded-xl overflow-hidden border border-white/15 relative shadow-md shrink-0 mt-4 mb-4">
+                      <img src={item.image} alt={item.project} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent" />
+                      <span
+                        className="absolute bottom-3 left-3 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[10px] sm:text-xs font-bold uppercase tracking-wider border shadow-md backdrop-blur-md"
+                        style={{ borderColor: item.color + "66", color: item.color, background: "rgba(15, 23, 42, 0.9)" }}
+                      >
+                        <Icon size={13} />
+                        {item.domain}
+                      </span>
+                    </div>
 
-                  {/* Title and Description Content Block with Spacious Padding */}
-                  <div className="space-y-4 flex-1 flex flex-col justify-start my-4 px-3 py-3 rounded-xl bg-slate-950/40 border border-white/10">
-                    <h3 className="text-base sm:text-lg font-extrabold text-white m-0 tracking-wide flex items-center justify-between group-hover:text-cyan-300 transition-colors leading-snug pb-2 border-b border-white/10">
-                      <span>{item.project}</span>
-                      <ArrowUpRight size={18} className="text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform shrink-0 ml-2" />
-                    </h3>
+                    {/* Title and Description Content Block with Spacious Padding */}
+                    <div className="space-y-4 flex-1 flex flex-col justify-start my-4 px-3 py-3 rounded-xl bg-slate-950/40 border border-white/10">
+                      <h3 className="text-base sm:text-lg font-extrabold text-white m-0 tracking-wide flex items-center justify-between group-hover:text-cyan-300 transition-colors leading-snug pb-2 border-b border-white/10">
+                        <span>{item.project}</span>
+                        <div className="p-1.5 rounded-lg bg-cyan-400/10 border border-cyan-400/30 group-hover:bg-cyan-400 group-hover:text-slate-950 transition-all duration-300 flex items-center justify-center shrink-0 ml-2">
+                          <ArrowUpRight size={18} className="text-cyan-400 group-hover:text-slate-950 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                        </div>
+                      </h3>
 
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed m-0 font-normal pt-2">
-                      {item.problem}
-                    </p>
-                  </div>
+                      <p className="text-xs sm:text-sm text-slate-300 leading-relaxed m-0 font-normal pt-2">
+                        {item.problem}
+                      </p>
+                    </div>
+                  </Link>
                 </motion.div>
               );
             })}

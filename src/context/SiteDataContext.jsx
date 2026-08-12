@@ -1,8 +1,9 @@
 import { createContext, useContext, useState, useEffect } from "react";
+import api from "../services/api";
 
 const SiteDataContext = createContext();
 
-// Données par défaut pour les différentes sections du site
+// Données par défaut de secours si l'API n'est pas encore disponible
 const defaultProfile = {
   name: "Milinda Mendy",
   headline: "Développeuse Full Stack & Ingénieure DevOps",
@@ -11,6 +12,8 @@ const defaultProfile = {
   availability: "Ouverte aux opportunités",
   github: "https://github.com/mmilinda",
   linkedin: "https://www.linkedin.com/in/milinda-mendy-5ba17928a/",
+  photo: "/images/profile/MM.png",
+  avatar: "/images/profile/MM.png",
   cvLink: "/CV-Milinda-Mendy.pdf",
   bio: "Je conçois et développe des applications web, plateformes SaaS et solutions digitales de bout en bout, de l'interface utilisateur au backend, aux API et au déploiement.",
   yearsExp: "5+",
@@ -115,7 +118,7 @@ const defaultTimeline = [
     year: "Janvier 2026 - Présent",
     title: "Développeuse d'applications & solutions numériques",
     company: "SamCorporate",
-    description: "Développement de solutions numériques d'entreprise, d'applications web & mobiles et de plateformes intelligentes sur-mesure : AgriChain AI (AgriTech & Blockchain), Garagebi Assistance (Assistance automobile), Noregis SaaS (OCR & Scan d'Identité), SecurityApp (Gestion de Sécurité), BerMas Assurance et Sunu Champion.",
+    description: "Développement de solutions numériques d'entreprise, d'applications web & mobiles et de plateformes intelligentes sur-mesure.",
     tags: ["React", "JavaScript", "Tailwind CSS", "Laravel API", "Full Stack"],
     type: "work",
   },
@@ -124,7 +127,7 @@ const defaultTimeline = [
     year: "2024 - 2025",
     title: "Développeuse Full Stack & Web Mobile",
     company: "Défarsci",
-    description: "Développement d'applications web interactives : CV Vidéo (plateforme de création de CV vidéo pour l'insertion professionnelle) et Location Appartement (gestion d'annonces immobilières).",
+    description: "Développement d'applications web interactives : CV Vidéo et Location Appartement.",
     tags: ["Laravel", "React", "PHP", "MySQL", "JavaScript"],
     type: "work",
   },
@@ -133,7 +136,7 @@ const defaultTimeline = [
     year: "2023",
     title: "Stagiaire Développeuse Web",
     company: "Défarsci",
-    description: "Conception et intégration de sites vitrines et plateformes CMS : Site Zawiya (portail développé avec le CMS WordPress) et modélisation de bases de données relationnelles MySQL.",
+    description: "Conception et intégration de sites vitrines et plateformes CMS : Site Zawiya.",
     tags: ["WordPress", "Laravel", "PHP", "MySQL", "CMS"],
     type: "work",
   },
@@ -142,26 +145,8 @@ const defaultTimeline = [
     year: "2023",
     title: "Certification en Développement Web & Mobile",
     company: "ISCA (en partenariat avec le 3FPT)",
-    description: "Formation certifiante et compétences pratiques en Développement Web & Mobile dispensée à l'ISCA en partenariat avec le Fonds de Financement de la Formation Professionnelle et Technique (3FPT).",
+    description: "Formation certifiante et compétences pratiques en Développement Web & Mobile.",
     tags: ["Développement Web", "Développement Mobile", "Certification", "3FPT", "ISCA"],
-    type: "education",
-  },
-  {
-    id: "time-4",
-    year: "2022",
-    title: "Stagiaire Intégratrice Web",
-    company: "Bakeli & Webgram",
-    description: "Intégration web responsive et développement de blogs d'entreprise : Site Vitrine Bootstrap et GM Business Prayer (blog d'entreprise personnalisé sur Blogger).",
-    tags: ["Bootstrap 5", "HTML5", "CSS3", "JavaScript", "Blogger"],
-    type: "work",
-  },
-  {
-    id: "time-5",
-    year: "2019 - 2022",
-    title: "Licence Professionnelle en Informatique de Gestion",
-    company: "UCAO (Université Catholique de l'Afrique de l'Ouest)",
-    description: "Formation supérieure spécialisée en génie logiciel, bases de données, développement web et projets académiques de formation (Guide Itinéraire avec jQuery Mobile/Google Maps API et Voyage 2).",
-    tags: ["Informatique de Gestion", "Bases de Données", "Génie Logiciel", "Systèmes d'Information"],
     type: "education",
   },
 ];
@@ -266,39 +251,104 @@ export function SiteDataProvider({ children }) {
     }
   });
 
+  const [isBackendConnected, setIsBackendConnected] = useState(false);
+
+  // Charger les données en direct depuis l'API Laravel au démarrage
   useEffect(() => {
-    function handleUpdate() {
+    let isMounted = true;
+
+    async function loadDataFromApi() {
       try {
-        const storedProfile = localStorage.getItem("site_profile");
-        if (storedProfile) setProfileState({ ...defaultProfile, ...JSON.parse(storedProfile) });
+        const [profileRes, servicesRes, skillsRes, timelineRes, impactRes, settingsRes] = await Promise.allSettled([
+          api.get("/profile"),
+          api.get("/services"),
+          api.get("/skills"),
+          api.get("/timeline"),
+          api.get("/impact"),
+          api.get("/settings"),
+        ]);
 
-        const storedStats = localStorage.getItem("site_stats");
-        if (storedStats) setStatsState(JSON.parse(storedStats));
+        if (!isMounted) return;
 
-        const storedServices = localStorage.getItem("site_services");
-        if (storedServices) setServicesState(JSON.parse(storedServices));
+        if (profileRes.status === "fulfilled" && profileRes.value.data) {
+          const p = profileRes.value.data;
+          const formattedProfile = {
+            ...defaultProfile,
+            ...p,
+            cvLink: p.cv_link || p.cvLink || defaultProfile.cvLink,
+            yearsExp: p.years_exp || p.yearsExp || defaultProfile.yearsExp,
+            projectsCount: p.projects_count || p.projectsCount || defaultProfile.projectsCount,
+            uptimeRate: p.uptime_rate || p.uptimeRate || defaultProfile.uptimeRate,
+          };
+          setProfileState(formattedProfile);
+          localStorage.setItem("site_profile", JSON.stringify(formattedProfile));
+          setIsBackendConnected(true);
+        }
 
-        const storedSkills = localStorage.getItem("site_skills");
-        if (storedSkills) setSkillsState(JSON.parse(storedSkills));
+        if (servicesRes.status === "fulfilled" && Array.isArray(servicesRes.value.data) && servicesRes.value.data.length > 0) {
+          const sList = servicesRes.value.data.map((s) => ({
+            id: s.id,
+            title: s.title,
+            desc: s.desc,
+            iconName: s.icon_name || s.iconName || "Code2",
+            tags: s.tags || [],
+            glow: s.glow || "#38bdf8",
+            gradient: s.gradient || "from-blue-500/20 to-cyan-500/20",
+            hidden: !!s.hidden,
+          }));
+          setServicesState(sList);
+          localStorage.setItem("site_services", JSON.stringify(sList));
+        }
 
-        const storedTimeline = localStorage.getItem("site_timeline");
-        if (storedTimeline) setTimelineState(JSON.parse(storedTimeline));
+        if (skillsRes.status === "fulfilled" && Array.isArray(skillsRes.value.data) && skillsRes.value.data.length > 0) {
+          const skList = skillsRes.value.data.map((sk) => ({
+            id: sk.id,
+            category: sk.category,
+            iconName: sk.icon_name || sk.iconName || "Cpu",
+            skills: sk.skills || [],
+          }));
+          setSkillsState(skList);
+          localStorage.setItem("site_skills", JSON.stringify(skList));
+        }
 
-        const storedImpact = localStorage.getItem("site_impact");
-        if (storedImpact) setImpactState(JSON.parse(storedImpact));
+        if (timelineRes.status === "fulfilled" && Array.isArray(timelineRes.value.data) && timelineRes.value.data.length > 0) {
+          const tList = timelineRes.value.data.map((tl) => ({
+            id: tl.id,
+            year: tl.year,
+            title: tl.title,
+            company: tl.company,
+            description: tl.description,
+            tags: tl.tags || [],
+            type: tl.type || "work",
+          }));
+          setTimelineState(tList);
+          localStorage.setItem("site_timeline", JSON.stringify(tList));
+        }
 
-        const storedVisibility = localStorage.getItem("site_section_visibility");
-        if (storedVisibility) setSectionVisibilityState({ ...defaultSectionVisibility, ...JSON.parse(storedVisibility) });
+        if (impactRes.status === "fulfilled" && impactRes.value.data) {
+          const impData = impactRes.value.data;
+          const formattedImpact = {
+            metrics: impData.metrics || defaultImpact.metrics,
+            testimonials: impData.testimonials || defaultImpact.testimonials,
+          };
+          setImpactState(formattedImpact);
+          localStorage.setItem("site_impact", JSON.stringify(formattedImpact));
+        }
+
+        if (settingsRes.status === "fulfilled" && settingsRes.value.data?.sectionVisibility) {
+          const vis = { ...defaultSectionVisibility, ...settingsRes.value.data.sectionVisibility };
+          setSectionVisibilityState(vis);
+          localStorage.setItem("site_section_visibility", JSON.stringify(vis));
+        }
       } catch (err) {
-        console.error("Error refreshing site data:", err);
+        console.warn("Utilisation des données locales de secours (Backend hors ligne):", err);
       }
     }
 
-    window.addEventListener("site_data_updated", handleUpdate);
-    window.addEventListener("profile_updated", handleUpdate);
+    loadDataFromApi();
+
     return () => {
-      window.removeEventListener("site_data_updated", handleUpdate);
-      window.removeEventListener("profile_updated", handleUpdate);
+      isMounted = false;
     };
   }, []);
 
@@ -306,10 +356,31 @@ export function SiteDataProvider({ children }) {
     window.dispatchEvent(new CustomEvent("site_data_updated"));
   };
 
-  const updateProfile = (newProfile) => {
+  const updateProfile = async (newProfile) => {
     setProfileState(newProfile);
     localStorage.setItem("site_profile", JSON.stringify(newProfile));
     notifyUpdate();
+
+    try {
+      await api.post("/admin/profile", {
+        name: newProfile.name,
+        headline: newProfile.headline,
+        bio: newProfile.bio,
+        email: newProfile.email,
+        location: newProfile.location,
+        availability: newProfile.availability,
+        github: newProfile.github,
+        linkedin: newProfile.linkedin,
+        photo: newProfile.photo,
+        avatar: newProfile.avatar,
+        cv_link: newProfile.cvLink,
+        years_exp: newProfile.yearsExp,
+        projects_count: newProfile.projectsCount,
+        uptime_rate: newProfile.uptimeRate,
+      });
+    } catch (err) {
+      console.warn("Erreur de sauvegarde profil API:", err);
+    }
   };
 
   const updateStats = (newStats) => {
@@ -318,34 +389,64 @@ export function SiteDataProvider({ children }) {
     notifyUpdate();
   };
 
-  const updateServices = (newServices) => {
+  const updateServices = async (newServices) => {
     setServicesState(newServices);
     localStorage.setItem("site_services", JSON.stringify(newServices));
     notifyUpdate();
+
+    try {
+      await api.post("/admin/services/sync", { services: newServices });
+    } catch (err) {
+      console.warn("Erreur sync services API:", err);
+    }
   };
 
-  const updateSkills = (newSkills) => {
+  const updateSkills = async (newSkills) => {
     setSkillsState(newSkills);
     localStorage.setItem("site_skills", JSON.stringify(newSkills));
     notifyUpdate();
+
+    try {
+      await api.post("/admin/skills/sync", { skills: newSkills });
+    } catch (err) {
+      console.warn("Erreur sync skills API:", err);
+    }
   };
 
-  const updateTimeline = (newTimeline) => {
+  const updateTimeline = async (newTimeline) => {
     setTimelineState(newTimeline);
     localStorage.setItem("site_timeline", JSON.stringify(newTimeline));
     notifyUpdate();
+
+    try {
+      await api.post("/admin/timeline/sync", { timeline: newTimeline });
+    } catch (err) {
+      console.warn("Erreur sync timeline API:", err);
+    }
   };
 
-  const updateImpact = (newImpact) => {
+  const updateImpact = async (newImpact) => {
     setImpactState(newImpact);
     localStorage.setItem("site_impact", JSON.stringify(newImpact));
     notifyUpdate();
+
+    try {
+      await api.post("/admin/impact/sync", newImpact);
+    } catch (err) {
+      console.warn("Erreur sync impact API:", err);
+    }
   };
 
-  const updateSectionVisibility = (newVisibility) => {
+  const updateSectionVisibility = async (newVisibility) => {
     setSectionVisibilityState(newVisibility);
     localStorage.setItem("site_section_visibility", JSON.stringify(newVisibility));
     notifyUpdate();
+
+    try {
+      await api.post("/admin/settings", { sectionVisibility: newVisibility });
+    } catch (err) {
+      console.warn("Erreur sync settings API:", err);
+    }
   };
 
   return (
@@ -365,6 +466,7 @@ export function SiteDataProvider({ children }) {
         updateImpact,
         sectionVisibility,
         updateSectionVisibility,
+        isBackendConnected,
       }}
     >
       {children}

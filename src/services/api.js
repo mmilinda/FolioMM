@@ -1,10 +1,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  // Utilise l'URL Vercel/Prod si elle existe, sinon utilise l'URL local Laravel
   baseURL: import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api",
   headers: {
-    "Content-Type": "application/json",
     "Accept": "application/json",
   },
 });
@@ -16,6 +14,12 @@ api.interceptors.request.use(
 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    if (config.data instanceof FormData) {
+      delete config.headers["Content-Type"];
+    } else if (!config.headers["Content-Type"]) {
+      config.headers["Content-Type"] = "application/json";
     }
 
     return config;

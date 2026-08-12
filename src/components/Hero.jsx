@@ -53,24 +53,23 @@ function TypewriterText({ words }) {
   );
 }
 
-const socialLinks = [
-  { icon: FaGithub, href: "https://github.com/mmilinda", label: "GitHub" },
-  { icon: FaLinkedinIn, href: "https://www.linkedin.com/in/milinda-mendy-5ba17928a/", label: "LinkedIn" },
-  { icon: Mail, href: "mailto:mmilinda00@gmail.com", label: "Email" },
-];
-
 export default function Hero() {
   const { t } = useTranslation();
-  const { stats: siteStats } = useSiteData();
+  const { stats: siteStats, profile } = useSiteData();
+
+  const socialLinks = [
+    { icon: FaGithub, href: profile?.github || "https://github.com/mmilinda", label: "GitHub" },
+    { icon: FaLinkedinIn, href: profile?.linkedin || "https://www.linkedin.com/in/milinda-mendy-5ba17928a/", label: "LinkedIn" },
+    { icon: Mail, href: `mailto:${profile?.email || "mmilinda00@gmail.com"}`, label: "Email" },
+  ];
 
   const projStat = siteStats?.find((s) => s.id === "stat-1" || s.label?.toLowerCase().includes("projet"))?.value || "14+";
   const expStat = siteStats?.find((s) => s.id === "stat-2" || s.label?.toLowerCase().includes("expéri"))?.value || "3+";
-  const techStat = siteStats?.find((s) => s.id === "stat-3" || s.label?.toLowerCase().includes("tech"))?.value || "10+";
 
   const stats = [
-    { value: "10+", label: t("hero.stats.projects", "Projets") },
-    { value: "3+", label: t("hero.stats.experience", "Années d'expérience") },
-    { value: "3+", label: t("hero.stats.solutions", "Solutions de Production") },
+    { value: projStat, label: t("hero.stats.projects", "Projets Vitrine") },
+    { value: expStat, label: t("hero.stats.experience", "Années d'expérience") },
+    { value: profile?.uptimeRate || "99.9%", label: t("hero.stats.solutions", "Uptime & Fiabilité") },
   ];
 
   return (
@@ -99,15 +98,15 @@ export default function Hero() {
             transition={{ delay: 0.2, duration: 0.5 }}
           >
             <Sparkles size={14} className="text-cyan-400" />
-            <span>{t("hero.badge")}</span>
+            <span>{profile?.availability || t("hero.badge")}</span>
             <span className="hero-badge-dot" />
           </motion.div>
 
           {/* Heading */}
           <h1 className="hero-title">
-            <span className="hero-title-line">Milinda Mendy</span>
+            <span className="hero-title-line">{profile?.name || "Milinda Mendy"}</span>
             <span className="hero-title-role">
-              <TypewriterText words={ROLES} />
+              <TypewriterText words={profile?.headline ? [profile.headline, ...ROLES] : ROLES} />
             </span>
           </h1>
 
@@ -118,7 +117,7 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.7 }}
           >
-            {t("hero.description")}
+            {profile?.bio || t("hero.description")}
           </motion.p>
 
           {/* Tech badges */}
@@ -153,7 +152,7 @@ export default function Hero() {
               <ArrowRight size={18} />
             </Link>
 
-            <a href="/CV-Milinda-Mendy.pdf" download className="hero-btn-secondary">
+            <a href={profile?.cvLink || "/CV-Milinda-Mendy.pdf"} download target="_blank" rel="noopener noreferrer" className="hero-btn-secondary">
               {t("hero.downloadCv")}
               <Download size={18} />
             </a>
@@ -193,8 +192,8 @@ export default function Hero() {
             <div className="hero-glow-ring" />
             <div className="hero-glow-ring hero-glow-ring-2" />
             <img
-              src="/images/profile/MM.png"
-              alt="Milinda Mendy"
+              src={profile?.photo || profile?.avatar || "/images/profile/MM.png"}
+              alt={profile?.name || "Milinda Mendy"}
               className="hero-profile-img"
               loading="eager"
             />
@@ -205,7 +204,7 @@ export default function Hero() {
               transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
             >
               <span className="hero-floating-dot hero-floating-dot-green" />
-              {t("hero.availableForWork")}
+              {profile?.availability || t("hero.availableForWork")}
             </motion.div>
             <motion.div
               className="hero-floating-card hero-floating-card-bottom"

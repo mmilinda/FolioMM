@@ -13,10 +13,18 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
+            $table->string('slug')->unique()->nullable();
             $table->string('title');
-            $table->text('content');
+            $table->string('category')->default('DevOps & Tech');
+            $table->text('excerpt')->nullable();
+            $table->longText('content');
             $table->string('image')->nullable();
-            $table->boolean('published')->default(false);
+            $table->boolean('published')->default(true);
+            $table->string('read_time')->default('5 min');
+            $table->integer('views')->default(0);
+            $table->integer('likes')->default(0);
+            $table->json('tags')->nullable();
+            $table->timestamp('published_at')->nullable();
             $table->timestamps();
         });
     }

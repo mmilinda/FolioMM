@@ -2,9 +2,11 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { CheckCircle, Code2, Server, Zap, Download } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useSiteData } from "../context/SiteDataContext";
 
 export default function About() {
   const { t } = useTranslation();
+  const { profile } = useSiteData();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
@@ -30,7 +32,7 @@ export default function About() {
           </h2>
 
           <p className="about-text">
-            {t("about.desc1")}
+            {profile?.bio || t("about.desc1")}
           </p>
 
           <p className="about-text" style={{ marginTop: "1rem" }}>
@@ -58,7 +60,14 @@ export default function About() {
             transition={{ delay: 0.7 }}
             style={{ marginTop: "2rem" }}
           >
-            <a href="/CV-Milinda-Mendy.pdf" download className="hero-btn-secondary" style={{ display: "inline-flex" }}>
+            <a
+              href={profile?.cvLink || "/CV-Milinda-Mendy.pdf"}
+              download
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hero-btn-secondary"
+              style={{ display: "inline-flex" }}
+            >
               <Download size={16} />
               {t("hero.downloadCv", "Télécharger mon CV")}
             </a>
@@ -81,19 +90,19 @@ export default function About() {
             </div>
             <pre className="about-code-body">
 {`const milinda = {
-  role: "Développeuse Full Stack",
-  location: "Sénégal 🇸🇳",
+  name: "${profile?.name || "Milinda Mendy"}",
+  role: "${profile?.headline || "Développeuse Full Stack"}",
+  location: "${profile?.location || "Sénégal 🇸🇳"}",
   
   stack: {
     frontend: ["React", "JavaScript", "Tailwind"],
     backend:  ["Laravel", "Node.js", "PHP"],
     devops:   ["Docker", "K8s", "CI/CD", "AWS"],
-    database: ["MySQL", "Firebase", "Redis"],
+    database: ["MySQL", "SQLite", "Firebase"],
   },
 
   philosophy: "Ship fast. Break nothing.",
-  
-  openToWork: true, // ← always looking for challenges
+  availability: "${profile?.availability || "Open to challenges"}",
 };`}
             </pre>
           </div>

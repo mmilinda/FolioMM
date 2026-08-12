@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from "react";
+import api from "../services/api";
 import { loginWithFirebase, logoutWithFirebase } from "../firebase";
 
 const AuthContext = createContext();
@@ -21,6 +22,23 @@ export function AuthProvider({ children }) {
     }
 
     try {
+      // 1. Authentification via le Backend Laravel Sanctum API
+      const response = await api.post("/login", { email, password });
+      if (response.data && response.data.token) {
+        const { token, admin } = response.data;
+        const adminUser = admin || { name: "Milinda Mendy (Admin)", email };
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("admin", JSON.stringify(adminUser));
+        setUser(adminUser);
+        return adminUser;
+      }
+    } catch (apiErr) {
+      console.warn("Connexion via API Laravel échouée, essai via Firebase / Auth de secours:", apiErr);
+    }
+
+    // 2. Fallback Firebase Auth
+    try {
       const adminUser = await loginWithFirebase(email, password);
       const sessionToken = "firebase-token-" + Date.now();
 
@@ -30,11 +48,16 @@ export function AuthProvider({ children }) {
 
       return adminUser;
     } catch (err) {
-      throw new Error(err.message || "Échec d'authentification Administrateur Firebase.");
+      throw new Error(err.message || "Identifiants invalides. Vérifiez l'email et le mot de passe.");
     }
   }
 
   async function logout() {
+    try {
+      await api.post("/logout");
+    } catch (e) {
+      // Ignorer
+    }
     try {
       await logoutWithFirebase();
     } catch {
