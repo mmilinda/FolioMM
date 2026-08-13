@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useSiteData } from "../context/SiteDataContext";
 
 const ROLES = [
-  "DevOps Engineer",
+  "DevOps",
   "Full Stack Developer",
   "Cloud Architect",
   "Solutions Builder",
@@ -63,6 +63,8 @@ export default function Hero() {
     { icon: Mail, href: `mailto:${profile?.email || "mmilinda00@gmail.com"}`, label: "Email" },
   ];
 
+  const cleanHeadline = (profile?.headline || "").replace(/\s*(?:ingénieure|engineer)\s*/gi, " ").trim();
+
   const projStat = siteStats?.find((s) => s.id === "stat-1" || s.label?.toLowerCase().includes("projet"))?.value || "14+";
   const expStat = siteStats?.find((s) => s.id === "stat-2" || s.label?.toLowerCase().includes("expéri"))?.value || "3+";
 
@@ -106,7 +108,7 @@ export default function Hero() {
           <h1 className="hero-title">
             <span className="hero-title-line">{profile?.name || "Milinda Mendy"}</span>
             <span className="hero-title-role">
-              <TypewriterText words={profile?.headline ? [profile.headline, ...ROLES] : ROLES} />
+              <TypewriterText words={cleanHeadline ? [cleanHeadline, ...ROLES] : ROLES} />
             </span>
           </h1>
 

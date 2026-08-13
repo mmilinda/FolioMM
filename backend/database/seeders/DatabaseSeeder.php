@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         Profile::query()->delete();
         Profile::create([
             'name' => 'Milinda Mendy',
-            'headline' => 'Développeuse Full Stack & Ingénieure DevOps',
+            'headline' => 'Développeuse Full Stack & DevOps',
             'bio' => 'Je conçois et développe des applications web, plateformes SaaS et solutions digitales de bout en bout, de l\'interface utilisateur au backend, aux API et au déploiement.',
             'email' => 'mmilinda00@gmail.com',
             'location' => 'Sénégal 🇸🇳 – Remote',

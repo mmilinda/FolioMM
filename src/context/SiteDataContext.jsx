@@ -6,7 +6,7 @@ const SiteDataContext = createContext();
 // Données par défaut de secours si l'API n'est pas encore disponible
 const defaultProfile = {
   name: "Milinda Mendy",
-  headline: "Développeuse Full Stack & Ingénieure DevOps",
+  headline: "Développeuse Full Stack & DevOps",
   email: "mmilinda00@gmail.com",
   location: "Sénégal 🇸🇳 – Remote",
   availability: "Ouverte aux opportunités",
