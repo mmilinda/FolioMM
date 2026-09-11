@@ -74,6 +74,14 @@ export default function Hero() {
     { value: profile?.uptimeRate || "99.9%", label: t("hero.stats.solutions", "Uptime & Fiabilité") },
   ];
 
+  const activeRoles = Array.isArray(profile?.heroRoles) && profile.heroRoles.length > 0
+    ? profile.heroRoles
+    : ROLES;
+
+  const activeBadges = Array.isArray(profile?.heroBadges) && profile.heroBadges.length > 0
+    ? profile.heroBadges
+    : TECH_BADGES;
+
   return (
     <section className="hero-section">
       {/* Animated background orbs */}
@@ -108,7 +116,7 @@ export default function Hero() {
           <h1 className="hero-title">
             <span className="hero-title-line">{profile?.name || "Milinda Mendy"}</span>
             <span className="hero-title-role">
-              <TypewriterText words={cleanHeadline ? [cleanHeadline, ...ROLES] : ROLES} />
+              <TypewriterText words={cleanHeadline ? [cleanHeadline, ...activeRoles] : activeRoles} />
             </span>
           </h1>
 
@@ -129,7 +137,7 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.65, duration: 0.6 }}
           >
-            {TECH_BADGES.map((tBadge, i) => (
+            {activeBadges.map((tBadge, i) => (
               <motion.span
                 key={tBadge}
                 className="hero-tech-badge"

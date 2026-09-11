@@ -119,10 +119,10 @@ export default function ServicesManager() {
           <div>
             <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
               <Layers color="#38bdf8" size={26} />
-              Gestion des Services Offerts
+              Gestion des Domaines d'Expertise & Services
             </h1>
             <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
-              Modifiez, ajoutez, masquez et organisez les prestations affichées sur votre portfolio.
+              Modifiez le contenu des cartes de domaine d'expertise (titre, description, icône, badges, couleur de brillance et visibilité).
             </p>
           </div>
         </div>

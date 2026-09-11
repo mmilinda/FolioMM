@@ -19,6 +19,25 @@ const defaultProfile = {
   yearsExp: "5+",
   projectsCount: "30+",
   uptimeRate: "99.9%",
+  heroRoles: ["DevOps", "Full Stack Developer", "Cloud Architect", "Solutions Builder"],
+  heroBadges: ["React", "Laravel", "Node.js", "AI", "Cloud", "DevOps"],
+  highlights: [
+    { id: "hl-1", icon: "Code2", text: "Architecture Full Stack moderne" },
+    { id: "hl-2", icon: "Server", text: "Infrastructure DevOps & Cloud" },
+    { id: "hl-3", icon: "Zap", text: "Pipelines CI/CD automatisés" },
+    { id: "hl-4", icon: "CheckCircle", text: "Delivery rapide & code de qualité" },
+  ],
+  sectionTitles: {
+    servicesTitle: "Mes Domaines d'Expertise",
+    servicesSubtitle: "Des solutions techniques complètes et sur-mesure pour propulser vos projets web et cloud.",
+    aboutTitle: "À Propos",
+    aboutTitleHighlight: "de Moi",
+    projectsTitle: "Mes Projets",
+    projectsTitleHighlight: "en Vedette",
+    bookingTitle: "Prêt à propulser",
+    bookingTitleHighlight: "votre projet ?",
+    bookingSubtitle: "Discutons de vos besoins techniques, d'une opportunité ou d'une collaboration.",
+  },
 };
 
 const defaultStats = [

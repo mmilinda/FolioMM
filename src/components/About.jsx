@@ -1,8 +1,21 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { CheckCircle, Code2, Server, Zap, Download } from "lucide-react";
+import { CheckCircle, Code2, Server, Zap, Download, Sparkles, Shield, Cloud, Brain, Layers, Cpu } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useSiteData } from "../context/SiteDataContext";
+
+const iconMap = {
+  Code2,
+  Server,
+  Zap,
+  CheckCircle,
+  Sparkles,
+  Shield,
+  Cloud,
+  Brain,
+  Layers,
+  Cpu,
+};
 
 export default function About() {
   const { t } = useTranslation();
@@ -10,12 +23,19 @@ export default function About() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
-  const highlights = [
-    { icon: Code2, text: t("about.highlights.stack", "Architecture Full Stack moderne") },
-    { icon: Server, text: t("about.highlights.devops", "Infrastructure DevOps & Cloud") },
-    { icon: Zap, text: t("about.highlights.cicd", "Pipelines CI/CD automatisés") },
-    { icon: CheckCircle, text: t("about.highlights.quality", "Delivery rapide & code de qualité") },
+  const defaultHighlights = [
+    { id: "hl-1", icon: "Code2", text: t("about.highlights.stack", "Architecture Full Stack moderne") },
+    { id: "hl-2", icon: "Server", text: t("about.highlights.devops", "Infrastructure DevOps & Cloud") },
+    { id: "hl-3", icon: "Zap", text: t("about.highlights.cicd", "Pipelines CI/CD automatisés") },
+    { id: "hl-4", icon: "CheckCircle", text: t("about.highlights.quality", "Delivery rapide & code de qualité") },
   ];
+
+  const highlights = Array.isArray(profile?.highlights) && profile.highlights.length > 0
+    ? profile.highlights
+    : defaultHighlights;
+
+  const aboutTitle = profile?.sectionTitles?.aboutTitle || t("about.title", "À Propos");
+  const aboutTitleHighlight = profile?.sectionTitles?.aboutTitleHighlight || t("about.titleHighlight", "de Moi");
 
   return (
     <section ref={ref} className="about-section">
@@ -28,7 +48,7 @@ export default function About() {
         >
           <span className="section-eyebrow">{t("about.eyebrow")}</span>
           <h2 className="section-title">
-            {t("about.title")} <span className="gradient-text">{t("about.titleHighlight")}</span>
+            {aboutTitle} <span className="gradient-text">{aboutTitleHighlight}</span>
           </h2>
 
           <p className="about-text">
@@ -40,18 +60,22 @@ export default function About() {
           </p>
 
           <div className="about-highlights">
-            {highlights.map(({ icon: Icon, text }, i) => (
-              <motion.div
-                key={text}
-                className="about-highlight-item"
-                initial={{ opacity: 0, x: -20 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
-              >
-                <Icon size={16} className="text-cyan-400 shrink-0" />
-                <span>{text}</span>
-              </motion.div>
-            ))}
+            {highlights.map((item, i) => {
+              const IconComponent = iconMap[item.icon] || CheckCircle;
+              const textContent = typeof item === "string" ? item : item.text;
+              return (
+                <motion.div
+                  key={item.id || `hl-${i}`}
+                  className="about-highlight-item"
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={inView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
+                >
+                  <IconComponent size={16} className="text-cyan-400 shrink-0" />
+                  <span>{textContent}</span>
+                </motion.div>
+              );
+            })}
           </div>
 
           <motion.div

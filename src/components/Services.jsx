@@ -16,11 +16,15 @@ const iconMap = {
 
 export default function Services() {
   const { t } = useTranslation();
-  const { services: rawServices } = useSiteData();
+  const { profile, services: rawServices } = useSiteData();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   const activeServices = (rawServices || []).filter((s) => !s.hidden);
+
+  const servicesTitle = profile?.sectionTitles?.servicesTitle || t("services.title", "Mes Domaines");
+  const servicesTitleHighlight = profile?.sectionTitles?.servicesTitleHighlight || t("services.titleHighlight", "d'Expertise");
+  const servicesSubtitle = profile?.sectionTitles?.servicesSubtitle || t("services.subtitle", "Des solutions techniques complètes et sur-mesure pour propulser vos projets web et cloud.");
 
   return (
     <section ref={ref} className="services-section">
@@ -32,11 +36,11 @@ export default function Services() {
       >
         <span className="section-eyebrow">{t("services.eyebrow")}</span>
         <h2 className="section-title">
-          {t("services.title")}{" "}
-          <span className="gradient-text">{t("services.titleHighlight")}</span>
+          {servicesTitle}{" "}
+          {servicesTitleHighlight && <span className="gradient-text">{servicesTitleHighlight}</span>}
         </h2>
         <p className="section-subtitle">
-          {t("services.subtitle")}
+          {servicesSubtitle}
         </p>
       </motion.div>
 

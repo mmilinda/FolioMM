@@ -10,9 +10,60 @@ export default function SiteSettings() {
   const [saved, setSaved] = useState(false);
   const [uploadingField, setUploadingField] = useState(null);
 
+  // Cartes de points forts d'À Propos
+  const [highlights, setHighlights] = useState(() => {
+    return Array.isArray(profile?.highlights) && profile.highlights.length > 0
+      ? profile.highlights
+      : [
+          { id: "hl-1", icon: "Code2", text: "Architecture Full Stack moderne" },
+          { id: "hl-2", icon: "Server", text: "Infrastructure DevOps & Cloud" },
+          { id: "hl-3", icon: "Zap", text: "Pipelines CI/CD automatisés" },
+          { id: "hl-4", icon: "CheckCircle", text: "Delivery rapide & code de qualité" },
+        ];
+  });
+
+  // Rôles typewriter et Badges Techno Hero
+  const [heroRolesStr, setHeroRolesStr] = useState(() =>
+    Array.isArray(profile?.heroRoles) ? profile.heroRoles.join(", ") : "DevOps, Full Stack Developer, Cloud Architect, Solutions Builder"
+  );
+  const [heroBadgesStr, setHeroBadgesStr] = useState(() =>
+    Array.isArray(profile?.heroBadges) ? profile.heroBadges.join(", ") : "React, Laravel, Node.js, AI, Cloud, DevOps"
+  );
+
+  // Titres & sous-titres des sections
+  const [sectionTitles, setSectionTitles] = useState(() => ({
+    servicesTitle: profile?.sectionTitles?.servicesTitle || "Mes Domaines d'Expertise",
+    servicesSubtitle: profile?.sectionTitles?.servicesSubtitle || "Des solutions techniques complètes et sur-mesure pour propulser vos projets web et cloud.",
+    aboutTitle: profile?.sectionTitles?.aboutTitle || "À Propos",
+    aboutTitleHighlight: profile?.sectionTitles?.aboutTitleHighlight || "de Moi",
+    projectsTitle: profile?.sectionTitles?.projectsTitle || "Mes Projets",
+    projectsTitleHighlight: profile?.sectionTitles?.projectsTitleHighlight || "en Vedette",
+    bookingTitle: profile?.sectionTitles?.bookingTitle || "Prêt à propulser",
+    bookingTitleHighlight: profile?.sectionTitles?.bookingTitleHighlight || "votre projet ?",
+    bookingSubtitle: profile?.sectionTitles?.bookingSubtitle || "Discutons de vos besoins techniques, d'une opportunité ou d'une collaboration.",
+  }));
+
   function handleChange(e) {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   }
+
+  function handleSectionTitleChange(e) {
+    setSectionTitles({ ...sectionTitles, [e.target.name]: e.target.value });
+  }
+
+  const handleAddHighlight = () => {
+    setHighlights([...highlights, { id: `hl-${Date.now()}`, icon: "Code2", text: "Nouveau point d'expertise" }]);
+  };
+
+  const handleUpdateHighlight = (index, field, value) => {
+    const updated = [...highlights];
+    updated[index] = { ...updated[index], [field]: value };
+    setHighlights(updated);
+  };
+
+  const handleRemoveHighlight = (index) => {
+    setHighlights(highlights.filter((_, i) => i !== index));
+  };
 
   async function handleFileUpload(e, fieldName) {
     const file = e.target.files[0];
@@ -55,7 +106,15 @@ export default function SiteSettings() {
 
   function submitProfile(e) {
     e.preventDefault();
-    updateProfile(formData);
+    const updatedProfile = {
+      ...formData,
+      highlights,
+      heroRoles: heroRolesStr.split(",").map((s) => s.trim()).filter(Boolean),
+      heroBadges: heroBadgesStr.split(",").map((s) => s.trim()).filter(Boolean),
+      sectionTitles,
+    };
+    setFormData(updatedProfile);
+    updateProfile(updatedProfile);
     triggerSuccess();
   }
 
@@ -381,6 +440,180 @@ export default function SiteSettings() {
               value={formData.bio || ""}
               onChange={handleChange}
             />
+          </div>
+
+          {/* Rôles Animés & Badges Techno de la Bannière Hero */}
+          <div style={{ paddingTop: "1rem", borderTop: "1px solid rgba(255, 255, 255, 0.08)", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+            <h4 style={{ fontSize: "0.95rem", fontWeight: 800, color: "#38bdf8", margin: 0 }}>
+              ✨ Animation Typewriter & Badges Techno (Hero)
+            </h4>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
+              <div>
+                <label style={labelStyle}>Rôles défilants (séparés par des virgules)</label>
+                <input
+                  style={inputStyle}
+                  value={heroRolesStr}
+                  onChange={(e) => setHeroRolesStr(e.target.value)}
+                  placeholder="ex: DevOps, Full Stack Developer, Cloud Architect"
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Badges technologiques Hero (séparés par des virgules)</label>
+                <input
+                  style={inputStyle}
+                  value={heroBadgesStr}
+                  onChange={(e) => setHeroBadgesStr(e.target.value)}
+                  placeholder="ex: React, Laravel, Node.js, Cloud, DevOps"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Cartes de Points Forts (Section À Propos) */}
+          <div style={{ paddingTop: "1rem", borderTop: "1px solid rgba(255, 255, 255, 0.08)", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div>
+                <h4 style={{ fontSize: "0.95rem", fontWeight: 800, color: "#34d399", margin: 0 }}>
+                  💡 Cartes de Points Forts & Expertise (Section À Propos)
+                </h4>
+                <p style={{ fontSize: "0.78rem", color: "#94a3b8", margin: "2px 0 0" }}>
+                  Modifiez le texte et les icônes des cartes affichées dans la section À Propos.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleAddHighlight}
+                style={{
+                  padding: "6px 12px",
+                  borderRadius: "8px",
+                  background: "rgba(52, 211, 153, 0.15)",
+                  border: "1px solid rgba(52, 211, 153, 0.3)",
+                  color: "#34d399",
+                  fontSize: "0.78rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                + Ajouter une Carte
+              </button>
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+              {highlights.map((hl, index) => (
+                <div
+                  key={hl.id || index}
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "140px 1fr 40px",
+                    gap: "10px",
+                    alignItems: "center",
+                    background: "rgba(2, 6, 23, 0.6)",
+                    padding: "10px",
+                    borderRadius: "12px",
+                    border: "1px solid rgba(255, 255, 255, 0.08)",
+                  }}
+                >
+                  <select
+                    style={{ ...inputStyle, padding: "8px" }}
+                    value={hl.icon || "Code2"}
+                    onChange={(e) => handleUpdateHighlight(index, "icon", e.target.value)}
+                  >
+                    <option value="Code2">Code2 (Dev)</option>
+                    <option value="Server">Server (Cloud/Ops)</option>
+                    <option value="Zap">Zap (CI/CD/Vitesse)</option>
+                    <option value="CheckCircle">CheckCircle (Qualité)</option>
+                    <option value="Sparkles">Sparkles (IA/Innovation)</option>
+                    <option value="Shield">Shield (Sécurité)</option>
+                    <option value="Cloud">Cloud (Infrastructure)</option>
+                    <option value="Brain">Brain (Intelligence)</option>
+                    <option value="Layers">Layers (Architecture)</option>
+                    <option value="Cpu">Cpu (Système)</option>
+                  </select>
+
+                  <input
+                    style={inputStyle}
+                    value={hl.text || ""}
+                    onChange={(e) => handleUpdateHighlight(index, "text", e.target.value)}
+                    placeholder="Texte de la carte d'expertise"
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveHighlight(index)}
+                    style={{
+                      background: "rgba(248, 113, 113, 0.15)",
+                      border: "1px solid rgba(248, 113, 113, 0.3)",
+                      color: "#f87171",
+                      borderRadius: "8px",
+                      height: "38px",
+                      cursor: "pointer",
+                      fontWeight: 700,
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Titres & Sous-titres Personnalisés des Sections */}
+          <div style={{ paddingTop: "1rem", borderTop: "1px solid rgba(255, 255, 255, 0.08)", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+            <h4 style={{ fontSize: "0.95rem", fontWeight: 800, color: "#f472b6", margin: 0 }}>
+              🏷️ Titres & Sous-titres des Sections de la Page d'Accueil
+            </h4>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
+              <div>
+                <label style={labelStyle}>Titre Section Domaines d'Expertise (Services)</label>
+                <input
+                  name="servicesTitle"
+                  style={inputStyle}
+                  value={sectionTitles.servicesTitle || ""}
+                  onChange={handleSectionTitleChange}
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Complément/Highlight du Titre Services</label>
+                <input
+                  name="servicesTitleHighlight"
+                  style={inputStyle}
+                  value={sectionTitles.servicesTitleHighlight || "d'Expertise"}
+                  onChange={handleSectionTitleChange}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label style={labelStyle}>Sous-titre Section Domaines d'Expertise</label>
+              <input
+                name="servicesSubtitle"
+                style={inputStyle}
+                value={sectionTitles.servicesSubtitle || ""}
+                onChange={handleSectionTitleChange}
+              />
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
+              <div>
+                <label style={labelStyle}>Titre Section À Propos</label>
+                <input
+                  name="aboutTitle"
+                  style={inputStyle}
+                  value={sectionTitles.aboutTitle || ""}
+                  onChange={handleSectionTitleChange}
+                />
+              </div>
+              <div>
+                <label style={labelStyle}>Highlight Titre À Propos</label>
+                <input
+                  name="aboutTitleHighlight"
+                  style={inputStyle}
+                  value={sectionTitles.aboutTitleHighlight || ""}
+                  onChange={handleSectionTitleChange}
+                />
+              </div>
+            </div>
           </div>
 
           <div style={{ paddingTop: "1rem", borderTop: "1px solid rgba(255, 255, 255, 0.08)" }}>
