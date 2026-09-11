@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Plus, Trash2, ExternalLink, Search, FolderKanban, Eye, EyeOff, Lock, Edit3 } from "lucide-react";
+import { Plus, Trash2, ExternalLink, Search, FolderKanban, Eye, EyeOff, Lock, Edit3, ArrowUp, ArrowDown, Move } from "lucide-react";
 import useProjects from "../hooks/useProjects";
 import api from "../services/api";
 import SEO from "../components/SEO";
@@ -9,6 +9,20 @@ export default function ProjectsManager() {
   // Pass true to include hidden projects in admin view
   const { projects } = useProjects(true);
   const [searchTerm, setSearchTerm] = useState("");
+
+  function moveProject(index, direction) {
+    const targetIndex = index + direction;
+    if (targetIndex < 0 || targetIndex >= projects.length) return;
+
+    const updated = [...projects];
+    const temp = updated[index];
+    updated[index] = updated[targetIndex];
+    updated[targetIndex] = temp;
+
+    const orderList = updated.map((p) => p.slug || String(p.id));
+    localStorage.setItem("projects_order", JSON.stringify(orderList));
+    window.dispatchEvent(new CustomEvent("projects_updated"));
+  }
 
   function toggleHide(project) {
     try {
@@ -138,7 +152,7 @@ export default function ProjectsManager() {
           </div>
         ) : (
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "1.25rem" }}>
-            {filteredProjects.map((project) => (
+            {filteredProjects.map((project, idx) => (
               <div
                 key={project.id}
                 style={{
@@ -168,17 +182,55 @@ export default function ProjectsManager() {
                     />
                     <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(9,13,22,0.9), transparent 70%)" }} />
 
-                    {project.hidden && (
-                      <span style={{ position: "absolute", top: "12px", left: "12px", fontSize: "0.68rem", fontWeight: 800, textTransform: "uppercase", padding: "4px 10px", borderRadius: "8px", background: "rgba(245, 158, 11, 0.9)", color: "#020617", display: "inline-flex", alignItems: "center", gap: "4px" }}>
-                        <Lock size={12} /> Masqué sur le site
+                    {/* Position Badge & Order Controls */}
+                    <div style={{ position: "absolute", top: "12px", left: "12px", display: "flex", alignItems: "center", gap: "6px" }}>
+                      <span style={{ fontSize: "0.68rem", fontWeight: 800, padding: "4px 9px", borderRadius: "8px", background: "rgba(15, 23, 42, 0.9)", border: "1px solid rgba(56, 189, 248, 0.4)", color: "#38bdf8", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                        <Move size={11} /> Ordre #{idx + 1}
                       </span>
-                    )}
+                      {project.hidden && (
+                        <span style={{ fontSize: "0.68rem", fontWeight: 800, textTransform: "uppercase", padding: "4px 9px", borderRadius: "8px", background: "rgba(245, 158, 11, 0.9)", color: "#020617", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                          <Lock size={12} /> Masqué
+                        </span>
+                      )}
+                    </div>
 
-                    {project.status && (
-                      <span style={{ position: "absolute", top: "12px", right: "12px", fontSize: "0.68rem", fontWeight: 800, textTransform: "uppercase", padding: "4px 10px", borderRadius: "8px", background: "rgba(2, 6, 23, 0.8)", border: "1px solid rgba(255, 255, 255, 0.15)", color: "#38bdf8" }}>
-                        {project.status}
-                      </span>
-                    )}
+                    <div style={{ position: "absolute", top: "12px", right: "12px", display: "flex", alignItems: "center", gap: "4px" }}>
+                      {/* Move Up Button */}
+                      <button
+                        onClick={() => moveProject(idx, -1)}
+                        disabled={idx === 0 || searchTerm !== ""}
+                        style={{
+                          padding: "5px 8px",
+                          borderRadius: "8px",
+                          background: "rgba(2, 6, 23, 0.85)",
+                          border: "1px solid rgba(255, 255, 255, 0.2)",
+                          color: idx === 0 || searchTerm !== "" ? "#64748b" : "#38bdf8",
+                          cursor: idx === 0 || searchTerm !== "" ? "not-allowed" : "pointer",
+                          opacity: idx === 0 || searchTerm !== "" ? 0.4 : 1,
+                        }}
+                        title="Monter la position du projet"
+                      >
+                        <ArrowUp size={14} />
+                      </button>
+
+                      {/* Move Down Button */}
+                      <button
+                        onClick={() => moveProject(idx, 1)}
+                        disabled={idx === filteredProjects.length - 1 || searchTerm !== ""}
+                        style={{
+                          padding: "5px 8px",
+                          borderRadius: "8px",
+                          background: "rgba(2, 6, 23, 0.85)",
+                          border: "1px solid rgba(255, 255, 255, 0.2)",
+                          color: idx === filteredProjects.length - 1 || searchTerm !== "" ? "#64748b" : "#38bdf8",
+                          cursor: idx === filteredProjects.length - 1 || searchTerm !== "" ? "not-allowed" : "pointer",
+                          opacity: idx === filteredProjects.length - 1 || searchTerm !== "" ? 0.4 : 1,
+                        }}
+                        title="Descendre la position du projet"
+                      >
+                        <ArrowDown size={14} />
+                      </button>
+                    </div>
                   </div>
 
                   {/* Body Content */}

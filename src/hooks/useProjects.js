@@ -8,6 +8,7 @@ function getLocalProjects(includeHidden = false) {
     const deletedIds = new Set(JSON.parse(localStorage.getItem("deleted_project_ids") || "[]").map(String));
     const hiddenIds = new Set(JSON.parse(localStorage.getItem("hidden_project_ids") || "[]").map(String));
     const editedMap = JSON.parse(localStorage.getItem("edited_projects") || "{}");
+    const orderList = JSON.parse(localStorage.getItem("projects_order") || "[]");
 
     const combined = [...staticProjects, ...custom];
     const filtered = combined.filter((p) => !deletedIds.has(String(p.id)) && !deletedIds.has(p.slug));
@@ -18,6 +19,19 @@ function getLocalProjects(includeHidden = false) {
       const isHidden = hiddenIds.has(key) || (p.slug && hiddenIds.has(p.slug));
       return { ...p, ...edited, hidden: isHidden };
     });
+
+    if (orderList && Array.isArray(orderList) && orderList.length > 0) {
+      const orderMap = new Map();
+      orderList.forEach((idOrSlug, index) => {
+        orderMap.set(String(idOrSlug), index);
+      });
+
+      processed.sort((a, b) => {
+        const orderA = orderMap.has(String(a.id)) ? orderMap.get(String(a.id)) : (orderMap.has(a.slug) ? orderMap.get(a.slug) : 9999);
+        const orderB = orderMap.has(String(b.id)) ? orderMap.get(String(b.id)) : (orderMap.has(b.slug) ? orderMap.get(b.slug) : 9999);
+        return orderA - orderB;
+      });
+    }
 
     if (includeHidden) return processed;
     return processed.filter((p) => !p.hidden);
