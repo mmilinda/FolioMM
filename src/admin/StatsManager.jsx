@@ -85,8 +85,12 @@ export default function StatsManager() {
             Gestion des Métriques & Statistiques
           </h1>
           <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
-            Personnalisez les chiffres clés affichés en haut de votre page d'accueil (ex: 5+ Ans, 30+ Projets, 99.9% SLA).
+            Personnalisez les chiffres clés affichés sur votre page d'accueil.
           </p>
+        </div>
+
+        <div style={{ padding: "0.85rem 1.1rem", borderRadius: "14px", background: "rgba(56, 189, 248, 0.08)", border: "1px solid rgba(56, 189, 248, 0.25)", color: "#38bdf8", fontSize: "0.82rem", fontWeight: 600, display: "flex", alignItems: "center", gap: "10px" }}>
+          <span>💡 <strong>Calcul Dynamique Automatique :</strong> Le nombre total de projets et de solutions en production sont maintenant recalculés automatiquement en temps réel d'après les projets enregistrés et actifs dans la section Projets !</span>
         </div>
 
         {saved && (

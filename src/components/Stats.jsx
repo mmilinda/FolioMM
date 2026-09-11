@@ -49,12 +49,19 @@ export default function Stats() {
 
   const colors = ["#38bdf8", "#818cf8", "#34d399", "#f472b6", "#fb923c"];
 
-  const displayStats = [
-    { value: "10+", label: t("hero.stats.projects", "Projets"), desc: "Applications Web, SaaS & Mobile", color: "#38bdf8" },
+  const defaultStats = [
+    { value: "14+", label: t("hero.stats.projects", "Projets"), desc: "Applications Web, SaaS & Mobile", color: "#38bdf8" },
     { value: "3+", label: t("hero.stats.experience", "Années d'expérience"), desc: "En développement Full Stack (2022 - Présent)", color: "#818cf8" },
-    { value: "3+", label: t("hero.stats.solutions", "Solutions de Production"), desc: "SaaS et plateformes numériques d'entreprise", color: "#34d399" },
+    { value: "5+", label: t("hero.stats.solutions", "Solutions de Production"), desc: "SaaS et plateformes numériques d'entreprise", color: "#34d399" },
     { value: "100%", label: t("about.commitment", "Engagement"), desc: "Livraison agile & Qualité de code", color: "#f472b6" },
   ];
+
+  const displayStats = Array.isArray(siteStats) && siteStats.length > 0
+    ? siteStats.map((st, i) => ({
+        ...st,
+        color: colors[i % colors.length],
+      }))
+    : defaultStats;
 
   return (
     <section ref={ref} className="stats-section">

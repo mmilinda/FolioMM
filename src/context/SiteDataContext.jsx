@@ -1,7 +1,43 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import api from "../services/api";
+import projects from "../data/projects";
 
 const SiteDataContext = createContext();
+
+export function calculateProjectMetrics() {
+  try {
+    const custom = JSON.parse(localStorage.getItem("custom_projects") || "[]");
+    const deletedIds = JSON.parse(localStorage.getItem("deleted_project_ids") || "[]");
+    const hiddenIds = JSON.parse(localStorage.getItem("hidden_project_ids") || "[]");
+
+    let all = [...projects, ...custom].filter((p) => !deletedIds.includes(p.id));
+    const activeProjects = all.filter((p) => !hiddenIds.includes(p.id));
+
+    const totalCount = activeProjects.length;
+    const prodCount = activeProjects.filter((p) =>
+      (p.status || p.statusEn || "").toLowerCase().includes("production")
+    ).length;
+
+    return { totalCount, prodCount };
+  } catch {
+    return { totalCount: projects.length, prodCount: 5 };
+  }
+}
+
+export function updateDynamicStats(baseStats) {
+  const { totalCount, prodCount } = calculateProjectMetrics();
+  const base = Array.isArray(baseStats) && baseStats.length > 0 ? baseStats : defaultStats;
+
+  return base.map((st) => {
+    if (st.id === "stat-1" || (st.label && st.label.toLowerCase().includes("projet"))) {
+      return { ...st, value: `${totalCount}+` };
+    }
+    if (st.id === "stat-3" || (st.label && st.label.toLowerCase().includes("production"))) {
+      return { ...st, value: `${prodCount}+` };
+    }
+    return st;
+  });
+}
 
 // Données par défaut de secours si l'API n'est pas encore disponible
 const defaultProfile = {
@@ -219,9 +255,10 @@ export function SiteDataProvider({ children }) {
   const [stats, setStatsState] = useState(() => {
     try {
       const stored = localStorage.getItem("site_stats");
-      return stored ? JSON.parse(stored) : defaultStats;
+      const base = stored ? JSON.parse(stored) : defaultStats;
+      return updateDynamicStats(base);
     } catch {
-      return defaultStats;
+      return updateDynamicStats(defaultStats);
     }
   });
 
@@ -368,6 +405,29 @@ export function SiteDataProvider({ children }) {
 
     return () => {
       isMounted = false;
+    };
+  }, []);
+
+  // Recalculer dynamiquement les métriques de projets lors des mises à jour de projets
+  useEffect(() => {
+    function handleProjectsOrDataUpdated() {
+      setStatsState((prevStats) => {
+        const updated = updateDynamicStats(prevStats);
+        try {
+          localStorage.setItem("site_stats", JSON.stringify(updated));
+        } catch (e) {}
+        return updated;
+      });
+    }
+
+    window.addEventListener("projects_updated", handleProjectsOrDataUpdated);
+    window.addEventListener("site_data_updated", handleProjectsOrDataUpdated);
+
+    handleProjectsOrDataUpdated();
+
+    return () => {
+      window.removeEventListener("projects_updated", handleProjectsOrDataUpdated);
+      window.removeEventListener("site_data_updated", handleProjectsOrDataUpdated);
     };
   }, []);
 
