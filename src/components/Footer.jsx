@@ -1,4 +1,4 @@
-import { Mail } from "lucide-react";
+import { Mail, Lock } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -89,8 +89,13 @@ export default function Footer() {
       </div>
 
       {/* Copyright Line */}
-      <div className="footer-bottom text-center border-t border-white/10 py-2.5 sm:py-4 text-[9px] sm:text-xs text-slate-500">
-        © 2026 {profile?.name || "Milinda Mendy"} — {t("footer.rights")} 🚀
+      <div className="footer-bottom text-center border-t border-white/10 py-2.5 sm:py-4 text-[9px] sm:text-xs text-slate-500 flex items-center justify-center gap-3">
+        <span>© 2026 {profile?.name || "Milinda Mendy"} — {t("footer.rights")} 🚀</span>
+        <span className="text-slate-700">•</span>
+        <Link to="/admin/login" className="hover:text-cyan-400 transition-colors no-underline text-slate-500 flex items-center gap-1" title="Espace Administrateur">
+          <Lock size={11} className="text-cyan-400/70" />
+          <span>Admin</span>
+        </Link>
       </div>
     </footer>
   );
