@@ -157,7 +157,7 @@ export default function CreateProject() {
 
   return (
     <>
-      <SEO title="Nouveau projet | Administration" />
+      <SEO title="Nouveau projet | Administration" noindex={true} />
 
       <div style={{ maxWidth: "860px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         {/* Back Link */}

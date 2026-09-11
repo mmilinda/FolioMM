@@ -283,11 +283,33 @@ export default function Blog() {
       ? articles.filter((a) => a.id !== featured?.id)
       : articles.filter((a) => a.category?.toLowerCase() === activeCategory.toLowerCase());
 
+  const blogSchema = {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "name": "Blog DevOps & Tech — Milinda Mendy",
+    "description": "Retours d'expérience, tutoriels et bonnes pratiques sur le DevOps, Docker, Kubernetes, React et Laravel.",
+    "url": "https://folio-mm.vercel.app/blog",
+    "publisher": {
+      "@type": "Person",
+      "name": "Milinda Mendy",
+      "url": "https://folio-mm.vercel.app/"
+    },
+    "blogPost": articles.map((art) => ({
+      "@type": "BlogPosting",
+      "headline": art.title,
+      "description": art.desc,
+      "url": `https://folio-mm.vercel.app/blog/${art.slug || art.id}`,
+      "datePublished": art.date
+    }))
+  };
+
   return (
     <>
       <SEO
         title={`${t("blogPage.title")} | Milinda Mendy - DevOps & Full Stack`}
         description={t("blogPage.subtitle")}
+        path="/blog"
+        schemaData={blogSchema}
       />
 
       <div style={{ position: "relative", minHeight: "100vh", overflow: "hidden", padding: "5rem 0 7rem" }}>

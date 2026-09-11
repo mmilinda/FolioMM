@@ -1,6 +1,7 @@
 User-agent: *
 
 Allow: /
+Disallow: /admin
+Disallow: /admin/
 
-Sitemap:
-https://folio-mm.vercel.app/sitemap.xml
+Sitemap: https://folio-mm.vercel.app/sitemap.xml

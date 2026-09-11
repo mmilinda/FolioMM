@@ -117,11 +117,31 @@ export default function Contact() {
     }
   }
 
+  const contactSchema = {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact — Milinda Mendy",
+    "description": "Prenez contact avec Milinda Mendy pour vos projets DevOps, SaaS, développement React & Laravel.",
+    "url": "https://folio-mm.vercel.app/contact",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Milinda Mendy",
+      "email": "mmilinda00@gmail.com",
+      "jobTitle": "Développeuse Full Stack & DevOps",
+      "sameAs": [
+        "https://github.com/mmilinda",
+        "https://www.linkedin.com/in/milinda-mendy-5ba17928a/"
+      ]
+    }
+  };
+
   return (
     <>
       <SEO
         title={`${t("contactPage.eyebrow", "Contact")} | Milinda Mendy`}
         description={t("contactPage.subtitle")}
+        path="/contact"
+        schemaData={contactSchema}
       />
 
       <section

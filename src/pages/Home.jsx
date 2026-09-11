@@ -13,11 +13,47 @@ import { useSiteData } from "../context/SiteDataContext";
 export default function Home() {
   const { sectionVisibility } = useSiteData();
 
+  const homeSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://folio-mm.vercel.app/#website",
+        "url": "https://folio-mm.vercel.app/",
+        "name": "Milinda Mendy Portfolio",
+        "description": "Portfolio professionnel de Milinda Mendy, développeuse Full Stack & DevOps.",
+        "inLanguage": "fr-FR"
+      },
+      {
+        "@type": "Person",
+        "@id": "https://folio-mm.vercel.app/#author",
+        "name": "Milinda Mendy",
+        "jobTitle": "Développeuse Full Stack & DevOps",
+        "url": "https://folio-mm.vercel.app/",
+        "sameAs": [
+          "https://github.com/mmilinda",
+          "https://www.linkedin.com/in/milinda-mendy-5ba17928a/"
+        ],
+        "knowsAbout": [
+          "React",
+          "Laravel",
+          "DevOps",
+          "Docker",
+          "Kubernetes",
+          "CI/CD",
+          "SaaS Architecture"
+        ]
+      }
+    ]
+  };
+
   return (
     <>
       <SEO
         title="Accueil | Milinda Mendy - Développeuse Full Stack & DevOps"
         description="Découvrez le portfolio professionnel de Milinda Mendy: projets SaaS, architecture DevOps, React, Laravel et solutions cloud."
+        path="/"
+        schemaData={homeSchema}
       />
       {sectionVisibility.hero !== false && <Hero />}
       {sectionVisibility.stats !== false && <Stats />}

@@ -113,7 +113,7 @@ export default function ServicesManager() {
 
   return (
     <>
-      <SEO title="Gestion des Services | Admin" />
+      <SEO title="Gestion des Services | Admin" noindex={true} />
       <div style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>

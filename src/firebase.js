@@ -86,19 +86,22 @@ export async function loginWithFirebase(email, password) {
     console.info("ℹ️ API distant indisponible, validation en mode Administrateur local.");
   }
 
-  // 3. Validation locale sécurisée (Fallback CMS pour mode dev / offline)
-  if (password.length >= 6) {
+  // 3. Validation sécurisée des identifiants Administrateur
+  const authorizedEmail = (import.meta.env.VITE_ADMIN_EMAIL || "mmilinda00@gmail.com").toLowerCase().trim();
+  const authorizedPassword = import.meta.env.VITE_ADMIN_PASSWORD || "admin123";
+
+  if (email.toLowerCase().trim() === authorizedEmail && password === authorizedPassword) {
     const adminUser = {
-      uid: "firebase-admin-local-" + Date.now(),
+      uid: "admin-session-" + Date.now(),
       name: "Milinda Mendy (Admin)",
-      email: email || "mmilinda00@gmail.com",
-      authProvider: "Firebase CMS (Session Local)",
+      email: authorizedEmail,
+      authProvider: "Authentification Administrateur Accrédité",
       lastLogin: new Date().toISOString(),
     };
     return adminUser;
   }
 
-  throw new Error("Mot de passe invalide. Doit contenir au moins 6 caractères.");
+  throw new Error("Email ou mot de passe incorrect. Seul l'administrateur accrédité est autorisé.");
 }
 
 /**

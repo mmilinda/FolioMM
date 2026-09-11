@@ -100,7 +100,7 @@ export default function SiteSettings() {
 
   return (
     <>
-      <SEO title="Paramètres du site | Administration" />
+      <SEO title="Paramètres du site | Administration" noindex={true} />
 
       <div style={{ maxWidth: "900px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "2rem" }}>
         <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>

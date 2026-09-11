@@ -17,6 +17,7 @@ export default function Projects() {
     "SaaS",
     "DevOps",
     "AI",
+    "E-Commerce",
     "Web Design",
     "Full Stack",
     "Automobile",
@@ -38,11 +39,30 @@ export default function Projects() {
   const featured = projects.filter((p) => p.featured);
   const filteredProjects = filterProjects(projects, filter);
 
+  const projectsSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Projets & Réalisations — Milinda Mendy",
+    "description": "Découvrez les projets SaaS, applications Web et architectures DevOps développés par Milinda Mendy.",
+    "url": "https://folio-mm.vercel.app/projects",
+    "mainEntity": {
+      "@type": "ItemList",
+      "itemListElement": projects.slice(0, 10).map((proj, idx) => ({
+        "@type": "ListItem",
+        "position": idx + 1,
+        "name": proj.title,
+        "url": `https://folio-mm.vercel.app/projects/${proj.slug || proj.id}`
+      }))
+    }
+  };
+
   return (
     <>
       <SEO
         title={`${t("projectsPage.title")} | Milinda Mendy`}
         description={t("projectsPage.subtitle")}
+        path="/projects"
+        schemaData={projectsSchema}
       />
 
       <section className="container-custom py-20">

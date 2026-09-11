@@ -9,21 +9,21 @@ export default function AdminLogin() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("mmilinda00@gmail.com");
-  const [password, setPassword] = useState("admin123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleLogin(targetEmail = email, targetPass = password) {
+  async function handleLogin() {
     setError("");
     setLoading(true);
 
     try {
-      await login(targetEmail, targetPass);
+      await login(email, password);
       navigate("/admin");
     } catch (err) {
-      const msg = err?.response?.data?.message || "Identifiants invalides. Veuillez réessayez.";
+      const msg = err?.message || err?.response?.data?.message || "Identifiants invalides. Veuillez réessayez.";
       setError(msg);
     } finally {
       setLoading(false);
@@ -37,7 +37,7 @@ export default function AdminLogin() {
 
   return (
     <>
-      <SEO title="Connexion Admin | Milinda Mendy" />
+      <SEO title="Connexion Admin | Milinda Mendy" noindex={true} />
 
       <div
         style={{
@@ -281,7 +281,8 @@ export default function AdminLogin() {
                     id="admin-email"
                     type="email"
                     required
-                    placeholder="mmilinda00@gmail.com"
+                    autoComplete="username"
+                    placeholder="votre.email@domaine.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     style={{
@@ -338,6 +339,7 @@ export default function AdminLogin() {
                     id="admin-password"
                     type={showPassword ? "text" : "password"}
                     required
+                    autoComplete="current-password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -432,32 +434,6 @@ export default function AdminLogin() {
                   </>
                 )}
               </motion.button>
-
-              {/* One-Click Quick Access Shortcut */}
-              <button
-                type="button"
-                onClick={() => handleLogin("mmilinda00@gmail.com", "admin123")}
-                disabled={loading}
-                style={{
-                  width: "100%",
-                  padding: "12px",
-                  borderRadius: "14px",
-                  background: "rgba(56,189,248,0.08)",
-                  border: "1px solid rgba(56,189,248,0.25)",
-                  color: "#38bdf8",
-                  fontWeight: 700,
-                  fontSize: "0.85rem",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "8px",
-                  cursor: "pointer",
-                  transition: "background 0.2s",
-                }}
-              >
-                <Sparkles size={16} color="#38bdf8" />
-                <span>🚀 Accès Rapide 1-Clic (Milinda Mendy Admin)</span>
-              </button>
             </form>
 
             {/* Footer Trust Signals */}

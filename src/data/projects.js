@@ -13,6 +13,7 @@ import voyage2Img from "../assets/projects/voyage2.PNG";
 import blogImg from "../assets/projects/blog.PNG";
 import cvVideoImg from "../assets/projects/cv-video.jpg";
 import previewImg from "../assets/projects/preview.png";
+import ncCollectionImg from "../assets/projects/nc_collection.png";
 
 const projects = [
   {
@@ -434,6 +435,36 @@ const projects = [
     demo: "https://voyage2-seven.vercel.app/",
     github: "https://github.com/mmilinda/voyage2",
     isPrivate: false,
+  },
+  {
+    id: 15,
+    slug: "nc-collection-e-commerce",
+    title: "NC Collection",
+    titleEn: "NC Collection",
+    featured: false,
+    year: "2026",
+    status: "Production",
+    statusEn: "Production",
+    client: "NC Collection",
+    clientEn: "NC Collection",
+    role: "Développeuse Full Stack E-Commerce",
+    roleEn: "Full Stack E-Commerce Developer",
+    category: "E-Commerce • Mode & Accessoires",
+    categoryEn: "E-Commerce • Fashion & Accessories",
+    image: ncCollectionImg,
+    fallbackImage: previewImg,
+    description: "Boutique en ligne moderne dédiée à la vente de vêtements, chaussures et accessoires de mode avec expérience d'achat fluide, paiement Wave & Orange Money et suivi de commande.",
+    descriptionEn: "Modern e-commerce platform for selling clothing, shoes, and fashion accessories with seamless checkout, local mobile payments (Wave & Orange Money), and order tracking.",
+    problem: "Proposer une plateforme de vente en ligne élégante, rapide et adaptée aux modes de paiement locaux pour une marque de mode au Sénégal.",
+    problemEn: "Delivering a premium, mobile-first e-commerce shopping experience for fashion retail in Senegal with local mobile payments and express delivery.",
+    solution: "Une boutique en ligne réactive et complète comprenant un catalogue interactif par catégories (robes, t-shirts, chemises, accessoires...), un outil Mix & Match pour la création de looks, le paiement Wave/Orange Money et la livraison express 24h.",
+    solutionEn: "An elegant online store featuring category filtering, a Mix & Match outfit creator, integrated Wave and Orange Money checkout, and 24h express delivery.",
+    technologies: ["React", "Vite", "Tailwind CSS", "JavaScript", "REST API"],
+    impact: "Digitalisation de la vente de vêtements et accessoires avec expérience d'achat haut de gamme.",
+    impactEn: "Digital transformation of fashion retail with seamless mobile payments.",
+    demo: "https://nc-ebon.vercel.app/",
+    github: null,
+    isPrivate: true,
   }
 ];
 

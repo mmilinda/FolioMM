@@ -95,7 +95,7 @@ export default function CreateArticle() {
 
   return (
     <>
-      <SEO title="Rédiger un article | Administration" />
+      <SEO title="Rédiger un article | Administration" noindex={true} />
 
       <div style={{ maxWidth: "860px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         <Link

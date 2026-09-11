@@ -39,6 +39,11 @@ export default function ProjectDetails() {
     );
   }
 
+  const projectUrl = `https://folio-mm.vercel.app/projects/${project.slug || project.id}`;
+  const projectImage = project.image?.startsWith("http")
+    ? project.image
+    : `https://folio-mm.vercel.app${project.image?.startsWith("/") ? "" : "/"}${project.image}`;
+
   const projectSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
@@ -46,11 +51,13 @@ export default function ProjectDetails() {
     "description": project.description,
     "applicationCategory": project.category,
     "operatingSystem": "Web",
+    "url": projectUrl,
+    "image": projectImage,
     "author": {
       "@type": "Person",
-      "name": "Milinda Mendy"
-    },
-    "image": project.image
+      "name": "Milinda Mendy",
+      "url": "https://folio-mm.vercel.app/"
+    }
   };
 
   return (

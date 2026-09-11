@@ -96,7 +96,7 @@ export default function MessagesManager() {
 
   return (
     <>
-      <SEO title="Messages reçus | Administration" />
+      <SEO title="Messages reçus | Administration" noindex={true} />
 
       <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", maxWidth: "1200px" }}>
         {/* Header Bar */}

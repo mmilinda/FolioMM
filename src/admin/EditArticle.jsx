@@ -118,7 +118,7 @@ export default function EditArticle() {
 
   return (
     <>
-      <SEO title={`Modifier ${targetArticle.title} | Administration`} />
+      <SEO title={`Modifier ${targetArticle.title} | Administration`} noindex={true} />
 
       <div style={{ maxWidth: "860px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         <Link

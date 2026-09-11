@@ -56,7 +56,7 @@ export default function ArticlesManager() {
 
   return (
     <>
-      <SEO title="Gestion des articles | Administration" />
+      <SEO title="Gestion des articles | Administration" noindex={true} />
 
       <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem", maxWidth: "1200px" }}>
         {/* Header Bar */}

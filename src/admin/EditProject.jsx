@@ -164,7 +164,7 @@ export default function EditProject() {
 
   return (
     <>
-      <SEO title={`Modifier ${targetProject.title} | Administration`} />
+      <SEO title={`Modifier ${targetProject.title} | Administration`} noindex={true} />
 
       <div style={{ maxWidth: "860px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         <Link

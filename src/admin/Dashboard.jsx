@@ -177,7 +177,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <SEO title="Tableau de bord Admin | Milinda Mendy" />
+      <SEO title="Tableau de bord Admin | Milinda Mendy" noindex={true} />
 
       <div style={{ display: "flex", flexDirection: "column", gap: "2rem", width: "100%" }}>
         {/* ── Welcome Banner ─────────────────────────────────────────────────── */}

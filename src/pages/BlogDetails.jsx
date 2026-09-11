@@ -146,12 +146,45 @@ export default function BlogDetails() {
 
   const color = article.color || "#38bdf8";
 
+  const articleUrl = `https://folio-mm.vercel.app/blog/${article.slug || article.id}`;
+  const articleImage = article.image?.startsWith("http")
+    ? article.image
+    : `https://folio-mm.vercel.app${article.image?.startsWith("/") ? "" : "/"}${article.image}`;
+
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": article.title,
+    "description": article.desc,
+    "image": [articleImage],
+    "datePublished": article.date,
+    "author": {
+      "@type": "Person",
+      "name": article.author?.name || "Milinda Mendy",
+      "jobTitle": article.author?.role || "Développeuse Full Stack & DevOps",
+      "url": "https://folio-mm.vercel.app/"
+    },
+    "publisher": {
+      "@type": "Person",
+      "name": "Milinda Mendy",
+      "url": "https://folio-mm.vercel.app/"
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": articleUrl
+    },
+    "keywords": article.tags?.join(", ") || article.category
+  };
+
   return (
     <>
       <SEO
         title={`${article.title} | Blog Milinda Mendy`}
         description={article.desc}
         image={article.image}
+        path={`/blog/${article.slug || article.id}`}
+        type="article"
+        schemaData={articleSchema}
       />
 
       <div style={{ position: "relative", minHeight: "100vh", padding: "7.5rem 0 8rem" }}>

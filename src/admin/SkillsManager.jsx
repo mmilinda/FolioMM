@@ -75,7 +75,7 @@ export default function SkillsManager() {
 
   return (
     <>
-      <SEO title="Gestion des Compétences | Admin" />
+      <SEO title="Gestion des Compétences | Admin" noindex={true} />
       <div style={{ maxWidth: "900px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
         <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
           <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
