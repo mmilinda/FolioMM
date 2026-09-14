@@ -54,8 +54,9 @@ function TypewriterText({ words }) {
 }
 
 export default function Hero() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { stats: siteStats, profile } = useSiteData();
+  const isEn = i18n.language?.toLowerCase().startsWith("en");
 
   const socialLinks = [
     { icon: FaGithub, href: profile?.github || "https://github.com/mmilinda", label: "GitHub" },
@@ -63,7 +64,8 @@ export default function Hero() {
     { icon: Mail, href: `mailto:${profile?.email || "mmilinda00@gmail.com"}`, label: "Email" },
   ];
 
-  const cleanHeadline = (profile?.headline || "").replace(/\s*(?:ingénieure|engineer)\s*/gi, " ").trim();
+  const rawHeadline = isEn ? (profile?.headlineEn || profile?.headline || "") : (profile?.headline || "");
+  const cleanHeadline = rawHeadline.replace(/\s*(?:ingénieure|engineer)\s*/gi, " ").trim();
 
   const projStat = siteStats?.find((s) => s.id === "stat-1" || s.label?.toLowerCase().includes("projet"))?.value || "14+";
   const expStat = siteStats?.find((s) => s.id === "stat-2" || s.label?.toLowerCase().includes("expéri"))?.value || "3+";
@@ -81,6 +83,9 @@ export default function Hero() {
   const activeBadges = Array.isArray(profile?.heroBadges) && profile.heroBadges.length > 0
     ? profile.heroBadges
     : TECH_BADGES;
+
+  const availabilityText = isEn ? (profile?.availabilityEn || t("hero.badge")) : (profile?.availability || t("hero.badge"));
+  const bioText = isEn ? (profile?.bioEn || t("hero.description")) : (profile?.bio || t("hero.description"));
 
   return (
     <section className="hero-section">
@@ -108,7 +113,7 @@ export default function Hero() {
             transition={{ delay: 0.2, duration: 0.5 }}
           >
             <Sparkles size={14} className="text-cyan-400" />
-            <span>{profile?.availability || t("hero.badge")}</span>
+            <span>{availabilityText}</span>
             <span className="hero-badge-dot" />
           </motion.div>
 
@@ -127,7 +132,7 @@ export default function Hero() {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.5, duration: 0.7 }}
           >
-            {profile?.bio || t("hero.description")}
+            {bioText}
           </motion.p>
 
           {/* Tech badges */}

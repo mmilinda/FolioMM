@@ -251,7 +251,7 @@ export default function ProjectCard({ project: rawProject }) {
               onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
             >
               <ExternalLink size={13} />
-              Démo
+              {t("projectCard.demo", "Démo")}
             </a>
           ) : (
             <Link
@@ -272,7 +272,7 @@ export default function ProjectCard({ project: rawProject }) {
                 textDecoration: "none",
               }}
             >
-              Voir le projet
+              {t("projectCard.viewProject", "Voir le projet")}
             </Link>
           )}
 
@@ -295,7 +295,7 @@ export default function ProjectCard({ project: rawProject }) {
               title={i18n.language?.startsWith("en") ? "Private repository / Proprietary code" : "Repository privé / Code propriétaire"}
             >
               <Lock size={12} />
-              {i18n.language?.startsWith("en") ? "Private repo" : "Repo privé"}
+              {t("projectCard.privateRepo", "Repo privé")}
             </span>
           ) : (
             <a
@@ -322,7 +322,7 @@ export default function ProjectCard({ project: rawProject }) {
               onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-secondary)"; }}
             >
               <FaGithub size={14} />
-              Code
+              {t("projectCard.github", "Code")}
             </a>
           )}
         </div>

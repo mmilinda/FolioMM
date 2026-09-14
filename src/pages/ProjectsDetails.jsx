@@ -219,7 +219,7 @@ export default function ProjectDetails() {
                   }}
                 >
                   <Lock size={15} />
-                  {i18n.language?.startsWith("en") ? "Private Repository" : "Repository privé"}
+                  {t("projectCard.privateRepo", "Repository privé")}
                 </div>
               ) : (
                 <a href={project.github} target="_blank" rel="noopener noreferrer" className="hero-btn-secondary" style={{ justifyContent: "center" }}>

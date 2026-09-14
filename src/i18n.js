@@ -56,10 +56,12 @@ const resources = {
       },
       projectCard: {
         viewDetails: "Voir détails",
-        demo: "Démo live",
-        github: "Code source",
+        viewProject: "Voir le projet",
+        demo: "Démo",
+        github: "Code",
         featured: "En vedette",
         technologies: "Technologies :",
+        privateRepo: "Repo privé",
       },
       impact: {
         eyebrow: "Vision & Engagement",
@@ -87,6 +89,10 @@ const resources = {
         msgLabel: "Message / Détails du besoin",
         submitBtn: "Confirmer la réservation",
         successMsg: "Votre demande de réservation a été enregistrée avec succès !",
+        scheduleCall: "Planifier un appel",
+        trustResponse: "✅ Réponse sous 24h",
+        trustRemote: "🌍 Remote-friendly",
+        trustQuote: "📋 Devis gratuit",
       },
       footer: {
         desc: "Développeuse d'applications & solutions numériques spécialisée dans la création de SaaS performants et d'applications d'entreprise.",
@@ -102,6 +108,9 @@ const resources = {
         featuredLabel: "Projets en vedette",
         noProjects: "Aucun projet trouvé dans cette catégorie.",
         moreProjects: "Plus de projets arrivent prochainement. 🚀",
+        problemLabel: "Problème identifié",
+        solutionLabel: "Solution apportée",
+        impactLabel: "Impact & Résultats",
       },
       blogPage: {
         title: "Mes",
@@ -195,10 +204,12 @@ const resources = {
       },
       projectCard: {
         viewDetails: "View Details",
+        viewProject: "View Project",
         demo: "Live Demo",
         github: "Source Code",
         featured: "Featured",
         technologies: "Technologies:",
+        privateRepo: "Private Repo",
       },
       impact: {
         eyebrow: "Vision & Commitment",
@@ -226,6 +237,10 @@ const resources = {
         msgLabel: "Message / Project Details",
         submitBtn: "Confirm Booking",
         successMsg: "Your booking request has been successfully submitted!",
+        scheduleCall: "Schedule a Call",
+        trustResponse: "✅ Reply within 24h",
+        trustRemote: "🌍 Remote-friendly",
+        trustQuote: "📋 Free Quote",
       },
       footer: {
         desc: "Application & Digital Solutions Developer specializing in high-performance SaaS and enterprise applications.",
@@ -241,6 +256,9 @@ const resources = {
         featuredLabel: "Featured Projects",
         noProjects: "No projects found in this category.",
         moreProjects: "More projects coming soon. 🚀",
+        problemLabel: "Identified Problem",
+        solutionLabel: "Solution Provided",
+        impactLabel: "Impact & Results",
       },
       blogPage: {
         title: "My",

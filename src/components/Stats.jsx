@@ -42,18 +42,19 @@ function AnimatedCounter({ rawValue, inView }) {
 }
 
 export default function Stats() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { stats: siteStats } = useSiteData();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
+  const isEn = i18n.language?.toLowerCase().startsWith("en");
   const colors = ["#38bdf8", "#818cf8", "#34d399", "#f472b6", "#fb923c"];
 
   const defaultStats = [
-    { value: "14+", label: t("hero.stats.projects", "Projets"), desc: "Applications Web, SaaS & Mobile", color: "#38bdf8" },
-    { value: "3+", label: t("hero.stats.experience", "Années d'expérience"), desc: "En développement Full Stack (2022 - Présent)", color: "#818cf8" },
-    { value: "5+", label: t("hero.stats.solutions", "Solutions de Production"), desc: "SaaS et plateformes numériques d'entreprise", color: "#34d399" },
-    { value: "100%", label: t("about.commitment", "Engagement"), desc: "Livraison agile & Qualité de code", color: "#f472b6" },
+    { value: "14+", label: t("hero.stats.projects", "Projets"), desc: isEn ? "Web, SaaS & Mobile Apps" : "Applications Web, SaaS & Mobile", color: "#38bdf8" },
+    { value: "3+", label: t("hero.stats.experience", "Années d'expérience"), desc: isEn ? "In Full Stack Development (2022 - Present)" : "En développement Full Stack (2022 - Présent)", color: "#818cf8" },
+    { value: "5+", label: t("hero.stats.solutions", "Solutions de Production"), desc: isEn ? "SaaS & Enterprise Digital Platforms" : "SaaS et plateformes numériques d'entreprise", color: "#34d399" },
+    { value: "100%", label: t("about.commitment", "Engagement"), desc: isEn ? "Agile delivery & Code quality" : "Livraison agile & Qualité de code", color: "#f472b6" },
   ];
 
   const displayStats = Array.isArray(siteStats) && siteStats.length > 0
@@ -66,35 +67,40 @@ export default function Stats() {
   return (
     <section ref={ref} className="stats-section">
       <div className="stats-grid">
-        {displayStats.map((stat, i) => (
-          <motion.div
-            key={`${stat.label}-${i}`}
-            className="stat-card"
-            initial={{ opacity: 0, y: 30 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: i * 0.12, duration: 0.6, ease: "easeOut" }}
-            whileHover={{ y: -6, scale: 1.03 }}
-          >
-            <div className="stat-value" style={{ color: stat.color }}>
-              <AnimatedCounter rawValue={stat.value} inView={inView} />
-            </div>
-            <div className="stat-label">{stat.label}</div>
-            {stat.desc && (
-              <div style={{ fontSize: "0.75rem", color: "#94a3b8", marginTop: "4px" }}>
-                {stat.desc}
+        {displayStats.map((stat, i) => {
+          const label = (isEn && stat.labelEn) ? stat.labelEn : stat.label;
+          const desc = (isEn && stat.descEn) ? stat.descEn : stat.desc;
+
+          return (
+            <motion.div
+              key={`${stat.label}-${i}`}
+              className="stat-card"
+              initial={{ opacity: 0, y: 30 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: i * 0.12, duration: 0.6, ease: "easeOut" }}
+              whileHover={{ y: -6, scale: 1.03 }}
+            >
+              <div className="stat-value" style={{ color: stat.color }}>
+                <AnimatedCounter rawValue={stat.value} inView={inView} />
               </div>
-            )}
-            <div className="stat-bar">
-              <motion.div
-                className="stat-bar-fill"
-                style={{ background: stat.color }}
-                initial={{ width: 0 }}
-                animate={inView ? { width: "70%" } : {}}
-                transition={{ delay: 0.5 + i * 0.12, duration: 1, ease: "easeOut" }}
-              />
-            </div>
-          </motion.div>
-        ))}
+              <div className="stat-label">{label}</div>
+              {desc && (
+                <div style={{ fontSize: "0.75rem", color: "#94a3b8", marginTop: "4px" }}>
+                  {desc}
+                </div>
+              )}
+              <div className="stat-bar">
+                <motion.div
+                  className="stat-bar-fill"
+                  style={{ background: stat.color }}
+                  initial={{ width: 0 }}
+                  animate={inView ? { width: "70%" } : {}}
+                  transition={{ delay: 0.5 + i * 0.12, duration: 1, ease: "easeOut" }}
+                />
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </section>
   );

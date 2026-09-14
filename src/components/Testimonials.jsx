@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const translations = {
   fr: {
@@ -60,7 +61,9 @@ const StarRating = () => (
 );
 
 const Testimonials = ({ lang }) => {
-  const t = translations[lang];
+  const { i18n } = useTranslation();
+  const currentLang = (lang || i18n?.language || 'fr').toLowerCase().startsWith('en') ? 'en' : 'fr';
+  const t = translations[currentLang];
   const [active, setActive] = useState(0);
 
   return (

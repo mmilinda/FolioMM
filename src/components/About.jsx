@@ -18,24 +18,31 @@ const iconMap = {
 };
 
 export default function About() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { profile } = useSiteData();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
+  const isEn = i18n.language?.toLowerCase().startsWith("en");
 
   const defaultHighlights = [
-    { id: "hl-1", icon: "Code2", text: t("about.highlights.stack", "Architecture Full Stack moderne") },
-    { id: "hl-2", icon: "Server", text: t("about.highlights.devops", "Infrastructure DevOps & Cloud") },
-    { id: "hl-3", icon: "Zap", text: t("about.highlights.cicd", "Pipelines CI/CD automatisés") },
-    { id: "hl-4", icon: "CheckCircle", text: t("about.highlights.quality", "Delivery rapide & code de qualité") },
+    { id: "hl-1", icon: "Code2", text: "Architecture Full Stack moderne", textEn: "Modern Full Stack Architecture" },
+    { id: "hl-2", icon: "Server", text: "Infrastructure DevOps & Cloud", textEn: "DevOps & Cloud Infrastructure" },
+    { id: "hl-3", icon: "Zap", text: "Pipelines CI/CD automatisés", textEn: "Automated CI/CD Pipelines" },
+    { id: "hl-4", icon: "CheckCircle", text: "Delivery rapide & code de qualité", textEn: "Fast delivery & quality code" },
   ];
 
   const highlights = Array.isArray(profile?.highlights) && profile.highlights.length > 0
     ? profile.highlights
     : defaultHighlights;
 
-  const aboutTitle = profile?.sectionTitles?.aboutTitle || t("about.title", "À Propos");
-  const aboutTitleHighlight = profile?.sectionTitles?.aboutTitleHighlight || t("about.titleHighlight", "de Moi");
+  const aboutTitle = isEn ? t("about.title", "Passionate about") : (profile?.sectionTitles?.aboutTitle || t("about.title", "À Propos"));
+  const aboutTitleHighlight = isEn ? t("about.titleHighlight", "Full Stack Development") : (profile?.sectionTitles?.aboutTitleHighlight || t("about.titleHighlight", "de Moi"));
+  const bioText1 = isEn ? (profile?.bioEn || t("about.desc1")) : (profile?.bio || t("about.desc1"));
+  const bioText2 = t("about.desc2");
+
+  const codeRole = isEn ? (profile?.headlineEn || "Full Stack & DevOps Developer") : (profile?.headline || "Développeuse Full Stack");
+  const codeLocation = isEn ? (profile?.location?.replace("Sénégal", "Senegal") || "Senegal 🇸🇳 – Remote") : (profile?.location || "Sénégal 🇸🇳");
+  const codeAvailability = isEn ? (profile?.availabilityEn || "Open to opportunities") : (profile?.availability || "Ouverte aux opportunités");
 
   return (
     <section ref={ref} className="about-section">
@@ -52,17 +59,17 @@ export default function About() {
           </h2>
 
           <p className="about-text">
-            {profile?.bio || t("about.desc1")}
+            {bioText1}
           </p>
 
           <p className="about-text" style={{ marginTop: "1rem" }}>
-            {t("about.desc2")}
+            {bioText2}
           </p>
 
           <div className="about-highlights">
             {highlights.map((item, i) => {
               const IconComponent = iconMap[item.icon] || CheckCircle;
-              const textContent = typeof item === "string" ? item : item.text;
+              const textContent = (isEn && item.textEn) ? item.textEn : (typeof item === "string" ? item : item.text);
               return (
                 <motion.div
                   key={item.id || `hl-${i}`}
@@ -115,8 +122,8 @@ export default function About() {
             <pre className="about-code-body">
 {`const milinda = {
   name: "${profile?.name || "Milinda Mendy"}",
-  role: "${profile?.headline || "Développeuse Full Stack"}",
-  location: "${profile?.location || "Sénégal 🇸🇳"}",
+  role: "${codeRole}",
+  location: "${codeLocation}",
   
   stack: {
     frontend: ["React", "JavaScript", "Tailwind"],
@@ -126,7 +133,7 @@ export default function About() {
   },
 
   philosophy: "Ship fast. Break nothing.",
-  availability: "${profile?.availability || "Open to challenges"}",
+  availability: "${codeAvailability}",
 };`}
             </pre>
           </div>

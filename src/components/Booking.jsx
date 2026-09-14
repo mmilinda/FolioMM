@@ -67,7 +67,7 @@ export default function Booking() {
             className="hero-btn-secondary"
           >
             <Calendar size={18} />
-            Planifier un appel
+            {t("booking.scheduleCall", "Planifier un appel")}
           </a>
         </motion.div>
 
@@ -78,11 +78,11 @@ export default function Booking() {
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.7 }}
         >
-          <span className="cta-trust-item">✅ Réponse sous 24h</span>
+          <span className="cta-trust-item">{t("booking.trustResponse", "✅ Réponse sous 24h")}</span>
           <span className="cta-trust-sep">·</span>
-          <span className="cta-trust-item">🌍 Remote-friendly</span>
+          <span className="cta-trust-item">{t("booking.trustRemote", "🌍 Remote-friendly")}</span>
           <span className="cta-trust-sep">·</span>
-          <span className="cta-trust-item">📋 Devis gratuit</span>
+          <span className="cta-trust-item">{t("booking.trustQuote", "📋 Devis gratuit")}</span>
         </motion.div>
       </motion.div>
     </section>

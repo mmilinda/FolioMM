@@ -5,8 +5,11 @@ import { useTranslation } from "react-i18next";
 import { useSiteData } from "../context/SiteDataContext";
 
 export default function Footer() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { profile } = useSiteData();
+  const isEn = i18n.language?.toLowerCase().startsWith("en");
+
+  const footerBio = isEn ? (profile?.headlineEn || t("footer.desc")) : (profile?.headline || t("footer.desc"));
 
   return (
     <footer className="footer-section border-t border-white/10 mt-12 md:mt-24 bg-slate-950/60 backdrop-blur-md">
@@ -23,7 +26,7 @@ export default function Footer() {
             </h2>
           </div>
           <p className="text-slate-400 text-[10px] sm:text-sm mt-2 leading-tight sm:leading-relaxed">
-            {profile?.headline || t("footer.desc")}
+            {footerBio}
           </p>
         </div>
 
@@ -31,7 +34,7 @@ export default function Footer() {
         <div className="footer-nav flex flex-col items-start justify-start w-full pl-1 sm:pl-0">
           <div className="min-h-[24px] sm:min-h-[32px] flex items-center">
             <h3 className="font-bold text-xs sm:text-base text-white m-0 leading-none">
-              Navigation
+              {t("footer.quickLinks", "Navigation")}
             </h3>
           </div>
           <ul className="space-y-1 sm:space-y-2 text-slate-400 text-[10px] sm:text-sm p-0 m-0 mt-2 list-none">
@@ -54,7 +57,7 @@ export default function Footer() {
         <div className="footer-contact flex flex-col items-start justify-start w-full">
           <div className="min-h-[24px] sm:min-h-[32px] flex items-center">
             <h3 className="font-bold text-xs sm:text-base text-white m-0 leading-none">
-              Contact
+              {t("footer.contactTitle", "Contact")}
             </h3>
           </div>
           <div className="space-y-1.5 sm:space-y-2 text-slate-400 text-[10px] sm:text-sm mt-2 w-full">

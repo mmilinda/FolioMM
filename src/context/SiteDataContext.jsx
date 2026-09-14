@@ -52,25 +52,28 @@ export function updateDynamicStats(baseStats) {
 const defaultProfile = {
   name: "Milinda Mendy",
   headline: "Développeuse Full Stack & DevOps",
+  headlineEn: "Full Stack & DevOps Developer",
   email: "mmilinda00@gmail.com",
   location: "Sénégal 🇸🇳 – Remote",
   availability: "Ouverte aux opportunités",
+  availabilityEn: "Open to opportunities",
   github: "https://github.com/mmilinda",
   linkedin: "https://www.linkedin.com/in/milinda-mendy-5ba17928a/",
   photo: "/images/profile/MM.png",
   avatar: "/images/profile/MM.png",
   cvLink: "/CV-Milinda-Mendy.pdf",
   bio: "Je conçois et développe des applications web, plateformes SaaS et solutions digitales de bout en bout, de l'interface utilisateur au backend, aux API et au déploiement.",
+  bioEn: "I design and build end-to-end web applications, SaaS platforms, and digital solutions — from user interface to backend, APIs, and deployment.",
   yearsExp: "5+",
   projectsCount: "30+",
   uptimeRate: "99.9%",
   heroRoles: ["DevOps", "Full Stack Developer", "Cloud Architect", "Solutions Builder"],
   heroBadges: ["React", "Laravel", "Node.js", "AI", "Cloud", "DevOps"],
   highlights: [
-    { id: "hl-1", icon: "Code2", text: "Architecture Full Stack moderne" },
-    { id: "hl-2", icon: "Server", text: "Infrastructure DevOps & Cloud" },
-    { id: "hl-3", icon: "Zap", text: "Pipelines CI/CD automatisés" },
-    { id: "hl-4", icon: "CheckCircle", text: "Delivery rapide & code de qualité" },
+    { id: "hl-1", icon: "Code2", text: "Architecture Full Stack moderne", textEn: "Modern Full Stack Architecture" },
+    { id: "hl-2", icon: "Server", text: "Infrastructure DevOps & Cloud", textEn: "DevOps & Cloud Infrastructure" },
+    { id: "hl-3", icon: "Zap", text: "Pipelines CI/CD automatisés", textEn: "Automated CI/CD Pipelines" },
+    { id: "hl-4", icon: "CheckCircle", text: "Delivery rapide & code de qualité", textEn: "Fast delivery & quality code" },
   ],
   sectionTitles: {
     servicesTitle: "Mes Domaines d'Expertise",
@@ -86,17 +89,19 @@ const defaultProfile = {
 };
 
 const defaultStats = [
-  { id: "stat-1", value: "10+", label: "Projets", desc: "Applications Web, SaaS & Mobile" },
-  { id: "stat-2", value: "3+", label: "Années d'Expérience", desc: "En développement Full Stack (2022 - Présent)" },
-  { id: "stat-3", value: "3+", label: "Solutions de Production", desc: "SaaS et plateformes numériques d'entreprise" },
-  { id: "stat-4", value: "100%", label: "Engagement", desc: "Livraison agile & Qualité de code" },
+  { id: "stat-1", value: "10+", label: "Projets", labelEn: "Projects", desc: "Applications Web, SaaS & Mobile", descEn: "Web, SaaS & Mobile Applications" },
+  { id: "stat-2", value: "3+", label: "Années d'Expérience", labelEn: "Years Experience", desc: "En développement Full Stack (2022 - Présent)", descEn: "In Full Stack Development (2022 - Present)" },
+  { id: "stat-3", value: "3+", label: "Solutions de Production", labelEn: "Production Solutions", desc: "SaaS et plateformes numériques d'entreprise", descEn: "SaaS & Enterprise Digital Platforms" },
+  { id: "stat-4", value: "100%", label: "Engagement", labelEn: "Commitment", desc: "Livraison agile & Qualité de code", descEn: "Agile delivery & Code quality" },
 ];
 
 const defaultServices = [
   {
     id: "svc-1",
     title: "Développement Full Stack",
+    titleEn: "Full Stack Development",
     desc: "Applications web modernes, réactives et performantes construites avec React, Next.js, Node.js et Laravel.",
+    descEn: "Modern, responsive, high-performance web applications built with React, Next.js, Node.js, and Laravel.",
     iconName: "Code2",
     tags: ["React", "Laravel", "JavaScript"],
     glow: "#38bdf8",
@@ -105,7 +110,9 @@ const defaultServices = [
   {
     id: "svc-2",
     title: "Architecture Cloud & Infrastructure",
+    titleEn: "Cloud & Infrastructure Architecture",
     desc: "Conception d'infrastructures résilientes et scalables sur AWS, GCP, Docker et Kubernetes.",
+    descEn: "Designing resilient and scalable infrastructures on AWS, GCP, Docker, and Kubernetes.",
     iconName: "Cloud",
     tags: ["AWS", "Docker", "Kubernetes"],
     glow: "#818cf8",
@@ -114,7 +121,9 @@ const defaultServices = [
   {
     id: "svc-3",
     title: "CI/CD & Automatisation DevOps",
+    titleEn: "CI/CD & DevOps Automation",
     desc: "Mise en place de pipelines d'intégration et de déploiement continus automatisés avec GitHub Actions.",
+    descEn: "Setting up continuous integration and deployment pipelines with GitHub Actions.",
     iconName: "GitBranch",
     tags: ["GitHub Actions", "CI/CD", "Monitoring"],
     glow: "#34d399",
@@ -123,7 +132,9 @@ const defaultServices = [
   {
     id: "svc-4",
     title: "Intégration d'IA & Automation",
+    titleEn: "AI Integration & Automation",
     desc: "Intégration d'APIs LLM (OpenAI, Gemini), automatisation de workflows et agents intelligents.",
+    descEn: "Integrating LLM APIs (OpenAI, Gemini), workflow automation, and intelligent agents.",
     iconName: "Brain",
     tags: ["OpenAI", "Gemini", "API"],
     glow: "#f472b6",
@@ -132,7 +143,9 @@ const defaultServices = [
   {
     id: "svc-5",
     title: "Architecture SaaS Multi-tenant",
+    titleEn: "Multi-tenant SaaS Architecture",
     desc: "Développement de solutions SaaS clé en main avec gestion des abonnements Stripe, rôles et authentification.",
+    descEn: "Developing turn-key SaaS solutions with Stripe subscription management, roles, and auth.",
     iconName: "Layers",
     tags: ["SaaS", "Multi-tenant", "Stripe"],
     glow: "#fb923c",
@@ -141,7 +154,9 @@ const defaultServices = [
   {
     id: "svc-6",
     title: "Sécurité & Audit de Performance",
+    titleEn: "Security & Performance Audit",
     desc: "Audits de sécurité, optimisation des temps de chargement, configuration HTTPS et protection OWASP.",
+    descEn: "Security audits, load time optimization, HTTPS setup, and OWASP protection.",
     iconName: "Shield",
     tags: ["Security", "OWASP", "Performance"],
     glow: "#22d3ee",
@@ -153,24 +168,28 @@ const defaultSkills = [
   {
     id: "cat-1",
     category: "Development Frontend",
+    categoryEn: "Frontend Development",
     iconName: "Layout",
     skills: ["React", "Next.js", "JavaScript (ES6+)", "Tailwind CSS", "Redux / Zustand", "HTML5/CSS3"],
   },
   {
     id: "cat-2",
     category: "Development Backend",
+    categoryEn: "Backend Development",
     iconName: "Server",
     skills: ["Laravel / PHP", "Node.js / Express", "JavaScript", "REST APIs", "GraphQL"],
   },
   {
     id: "cat-3",
     category: "DevOps & Cloud",
+    categoryEn: "DevOps & Cloud",
     iconName: "Cpu",
     skills: ["Docker", "Kubernetes", "AWS (EC2, S3, RDS)", "Terraform", "GitHub Actions", "Nginx"],
   },
   {
     id: "cat-4",
     category: "Databases & Storage",
+    categoryEn: "Databases & Storage",
     iconName: "Database",
     skills: ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Supabase / Firebase"],
   },

@@ -15,16 +15,17 @@ const iconMap = {
 };
 
 export default function Services() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { profile, services: rawServices } = useSiteData();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
+  const isEn = i18n.language?.toLowerCase().startsWith("en");
   const activeServices = (rawServices || []).filter((s) => !s.hidden);
 
-  const servicesTitle = profile?.sectionTitles?.servicesTitle || t("services.title", "Mes Domaines");
-  const servicesTitleHighlight = profile?.sectionTitles?.servicesTitleHighlight || t("services.titleHighlight", "d'Expertise");
-  const servicesSubtitle = profile?.sectionTitles?.servicesSubtitle || t("services.subtitle", "Des solutions techniques complètes et sur-mesure pour propulser vos projets web et cloud.");
+  const servicesTitle = isEn ? t("services.title", "My Areas of") : (profile?.sectionTitles?.servicesTitle || t("services.title", "Mes Domaines"));
+  const servicesTitleHighlight = isEn ? t("services.titleHighlight", "Expertise") : (profile?.sectionTitles?.servicesTitleHighlight || t("services.titleHighlight", "d'Expertise"));
+  const servicesSubtitle = isEn ? t("services.subtitle", "End-to-end technical solutions tailored to your business goals and growth challenges.") : (profile?.sectionTitles?.servicesSubtitle || t("services.subtitle", "Des solutions techniques complètes et sur-mesure pour propulser vos projets web et cloud."));
 
   return (
     <section ref={ref} className="services-section">
@@ -49,6 +50,8 @@ export default function Services() {
           const Icon = iconMap[svc.iconName] || Code2;
           const glowColor = svc.glow || "#38bdf8";
           const tags = Array.isArray(svc.tags) ? svc.tags : [];
+          const title = (isEn && svc.titleEn) ? svc.titleEn : svc.title;
+          const desc = (isEn && svc.descEn) ? svc.descEn : svc.desc;
 
           return (
             <motion.div
@@ -63,8 +66,8 @@ export default function Services() {
               <div className="service-icon-wrapper" style={{ background: glowColor + "15" }}>
                 <Icon size={24} style={{ color: glowColor }} />
               </div>
-              <h3 className="service-title">{svc.title}</h3>
-              <p className="service-desc">{svc.desc}</p>
+              <h3 className="service-title">{title}</h3>
+              <p className="service-desc">{desc}</p>
               <div className="service-tags">
                 {tags.map((tag) => (
                   <span key={tag} className="service-tag" style={{ borderColor: glowColor + "55", color: glowColor }}>
