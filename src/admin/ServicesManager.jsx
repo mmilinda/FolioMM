@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSiteData } from "../context/SiteDataContext";
 import { Layers, Plus, Trash2, Edit3, CheckCircle, Save, X, Code2, Cloud, GitBranch, Brain, Shield, Sparkles, Eye, EyeOff, Lock } from "lucide-react";
 import SEO from "../components/SEO";
@@ -7,6 +7,7 @@ export default function ServicesManager() {
   const { services, updateServices } = useSiteData();
   const [saved, setSaved] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const formRef = useRef(null);
 
   const [form, setForm] = useState({
     title: "",
@@ -36,6 +37,9 @@ export default function ServicesManager() {
       glow: svc.glow || "#38bdf8",
       hidden: !!svc.hidden,
     });
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
   };
 
   const handleCancel = () => {
@@ -135,7 +139,7 @@ export default function ServicesManager() {
         )}
 
         {/* Formulaire d'ajout / modification */}
-        <form onSubmit={handleSubmit} style={{ background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(255, 255, 255, 0.1)", borderRadius: "20px", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+        <form ref={formRef} onSubmit={handleSubmit} style={{ background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(255, 255, 255, 0.1)", borderRadius: "20px", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#f8fafc", margin: 0 }}>
             {editingId ? "✏️ Éditer le Service" : "➕ Ajouter un Nouveau Service"}
           </h3>

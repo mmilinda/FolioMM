@@ -52,6 +52,11 @@ export default function AdminLayout() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Scroll to top automatically on route change
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+  }, [location.pathname]);
+
   function toggleTheme() {
     const nextTheme = !darkMode;
     setDarkMode(nextTheme);

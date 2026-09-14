@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSiteData } from "../context/SiteDataContext";
 import { Cpu, Plus, Trash2, Edit3, CheckCircle, Save, X, Server, Layout, Database } from "lucide-react";
 import SEO from "../components/SEO";
@@ -7,6 +7,7 @@ export default function SkillsManager() {
   const { skills, updateSkills } = useSiteData();
   const [saved, setSaved] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const formRef = useRef(null);
 
   const [form, setForm] = useState({
     category: "",
@@ -19,6 +20,9 @@ export default function SkillsManager() {
       category: cat.category,
       skillsStr: Array.isArray(cat.skills) ? cat.skills.join(", ") : "",
     });
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
   };
 
   const handleCancel = () => {
@@ -94,7 +98,7 @@ export default function SkillsManager() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} style={{ background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(255, 255, 255, 0.1)", borderRadius: "20px", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+        <form ref={formRef} onSubmit={handleSubmit} style={{ background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(255, 255, 255, 0.1)", borderRadius: "20px", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#f8fafc", margin: 0 }}>
             {editingId ? "✏️ Éditer la Catégorie" : "➕ Ajouter une Catégorie / Techno"}
           </h3>

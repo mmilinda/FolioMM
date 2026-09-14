@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSiteData } from "../context/SiteDataContext";
 import { BarChart3, Plus, Trash2, Edit3, CheckCircle, Save } from "lucide-react";
 import SEO from "../components/SEO";
@@ -7,6 +7,7 @@ export default function StatsManager() {
   const { stats, updateStats } = useSiteData();
   const [saved, setSaved] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const formRef = useRef(null);
 
   const [form, setForm] = useState({
     value: "",
@@ -21,6 +22,9 @@ export default function StatsManager() {
       label: st.label,
       desc: st.desc || "",
     });
+    setTimeout(() => {
+      formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
   };
 
   const handleCancel = () => {
@@ -100,7 +104,7 @@ export default function StatsManager() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} style={{ background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(255, 255, 255, 0.1)", borderRadius: "20px", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+        <form ref={formRef} onSubmit={handleSubmit} style={{ background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(255, 255, 255, 0.1)", borderRadius: "20px", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
           <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#f8fafc", margin: 0 }}>
             {editingId ? "✏️ Éditer la Métrique" : "➕ Ajouter une Métrique"}
           </h3>

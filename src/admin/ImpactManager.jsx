@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useSiteData } from "../context/SiteDataContext";
 import { Zap, Plus, Trash2, Edit3, CheckCircle, Save, MessageSquareQuote, TrendingUp } from "lucide-react";
 import SEO from "../components/SEO";
@@ -6,6 +6,8 @@ import SEO from "../components/SEO";
 export default function ImpactManager() {
   const { impact, updateImpact } = useSiteData();
   const [saved, setSaved] = useState(false);
+  const metricFormRef = useRef(null);
+  const testimonialFormRef = useRef(null);
 
   // States pour Métriques
   const [metricForm, setMetricForm] = useState({ number: "", label: "", desc: "" });
@@ -116,7 +118,7 @@ export default function ImpactManager() {
             Métriques d'Impact & Performance
           </h3>
 
-          <form onSubmit={handleSaveMetric} style={{ background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(255, 255, 255, 0.1)", borderRadius: "18px", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <form ref={metricFormRef} onSubmit={handleSaveMetric} style={{ background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(255, 255, 255, 0.1)", borderRadius: "18px", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
               <div>
                 <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Chiffre / Pourcentage</label>
@@ -153,7 +155,7 @@ export default function ImpactManager() {
                   <div style={{ fontSize: "0.75rem", color: "#94a3b8" }}>{m.desc}</div>
                 </div>
                 <div style={{ display: "flex", gap: "6px" }}>
-                  <button onClick={() => { setEditingMetricId(m.id); setMetricForm({ number: m.number, label: m.label, desc: m.desc || "" }); }} style={{ padding: "6px", borderRadius: "6px", background: "rgba(56, 189, 248, 0.1)", color: "#38bdf8", border: "none", cursor: "pointer" }}>
+                  <button onClick={() => { setEditingMetricId(m.id); setMetricForm({ number: m.number, label: m.label, desc: m.desc || "" }); setTimeout(() => metricFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50); }} style={{ padding: "6px", borderRadius: "6px", background: "rgba(56, 189, 248, 0.1)", color: "#38bdf8", border: "none", cursor: "pointer" }}>
                     <Edit3 size={14} />
                   </button>
                   <button onClick={() => handleDeleteMetric(m.id)} style={{ padding: "6px", borderRadius: "6px", background: "rgba(248, 113, 113, 0.1)", color: "#f87171", border: "none", cursor: "pointer" }}>
@@ -172,7 +174,7 @@ export default function ImpactManager() {
             Témoignages & Avis Clients
           </h3>
 
-          <form onSubmit={handleSaveTestimonial} style={{ background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(255, 255, 255, 0.1)", borderRadius: "18px", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <form ref={testimonialFormRef} onSubmit={handleSaveTestimonial} style={{ background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(255, 255, 255, 0.1)", borderRadius: "18px", padding: "1.25rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
               <div>
                 <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Nom du client</label>
@@ -226,7 +228,7 @@ export default function ImpactManager() {
                 </div>
 
                 <div style={{ display: "flex", gap: "8px", borderTop: "1px solid rgba(255, 255, 255, 0.08)", paddingTop: "0.6rem" }}>
-                  <button onClick={() => { setEditingTestimonialId(t.id); setTestimonialForm({ name: t.name, role: t.role, content: t.content, avatar: t.avatar || "" }); }} style={{ flex: 1, padding: "6px", borderRadius: "6px", background: "rgba(236, 72, 153, 0.1)", color: "#ec4899", border: "none", cursor: "pointer", fontSize: "0.78rem", fontWeight: 600 }}>
+                  <button onClick={() => { setEditingTestimonialId(t.id); setTestimonialForm({ name: t.name, role: t.role, content: t.content, avatar: t.avatar || "" }); setTimeout(() => testimonialFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 50); }} style={{ flex: 1, padding: "6px", borderRadius: "6px", background: "rgba(236, 72, 153, 0.1)", color: "#ec4899", border: "none", cursor: "pointer", fontSize: "0.78rem", fontWeight: 600 }}>
                     Modifier
                   </button>
                   <button onClick={() => handleDeleteTestimonial(t.id)} style={{ padding: "6px 12px", borderRadius: "6px", background: "rgba(248, 113, 113, 0.1)", color: "#f87171", border: "none", cursor: "pointer" }}>
