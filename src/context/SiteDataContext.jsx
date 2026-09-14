@@ -7,11 +7,20 @@ const SiteDataContext = createContext();
 export function calculateProjectMetrics() {
   try {
     const custom = JSON.parse(localStorage.getItem("custom_projects") || "[]");
-    const deletedIds = JSON.parse(localStorage.getItem("deleted_project_ids") || "[]");
-    const hiddenIds = JSON.parse(localStorage.getItem("hidden_project_ids") || "[]");
+    const deletedIds = new Set(JSON.parse(localStorage.getItem("deleted_project_ids") || "[]").map(String));
+    const hiddenIds = new Set(JSON.parse(localStorage.getItem("hidden_project_ids") || "[]").map(String));
 
-    let all = [...projects, ...custom].filter((p) => !deletedIds.includes(p.id));
-    const activeProjects = all.filter((p) => !hiddenIds.includes(p.id));
+    let all = [...projects, ...custom].filter((p) => {
+      if (p.slug && deletedIds.has(p.slug)) return false;
+      if (!p.slug && deletedIds.has(String(p.id))) return false;
+      return true;
+    });
+
+    const activeProjects = all.filter((p) => {
+      if (p.slug && hiddenIds.has(p.slug)) return false;
+      if (!p.slug && hiddenIds.has(String(p.id))) return false;
+      return true;
+    });
 
     const totalCount = activeProjects.length;
     const prodCount = activeProjects.filter((p) =>
