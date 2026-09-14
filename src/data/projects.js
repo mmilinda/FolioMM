@@ -107,7 +107,7 @@ const projects = [
     isPrivate: true,
   },
   {
-    id: 3,
+    id: 4,
     slug: "noregis-saas",
     title: "Noregis SaaS",
     titleEn: "Noregis SaaS",
@@ -137,7 +137,7 @@ const projects = [
     isPrivate: true,
   },
   {
-    id: 4,
+    id: 5,
     slug: "security-app",
     title: "SecurityApp",
     titleEn: "SecurityApp",
@@ -167,7 +167,7 @@ const projects = [
     isPrivate: true,
   },
   {
-    id: 5,
+    id: 6,
     slug: "bermas-assurance",
     title: "BerMas Assurance",
     titleEn: "BerMas Insurance",
@@ -197,7 +197,7 @@ const projects = [
     isPrivate: true,
   },
   {
-    id: 6,
+    id: 7,
     slug: "sunu-champion",
     title: "Sunu Champion",
     titleEn: "Sunu Champion",
@@ -227,7 +227,7 @@ const projects = [
     isPrivate: true,
   },
   {
-    id: 7,
+    id: 8,
     slug: "afriaccess",
     title: "AfriAccess",
     titleEn: "AfriAccess",
@@ -257,7 +257,7 @@ const projects = [
     isPrivate: true,
   },
   {
-    id: 8,
+    id: 9,
     slug: "cv-video",
     title: "CV Vidéo",
     titleEn: "Video Resume",
@@ -287,7 +287,7 @@ const projects = [
     isPrivate: true,
   },
   {
-    id: 9,
+    id: 10,
     slug: "location-appartement",
     title: "Location Appartement",
     titleEn: "Apartment Rental",
@@ -317,7 +317,7 @@ const projects = [
     isPrivate: true,
   },
   {
-    id: 10,
+    id: 11,
     slug: "zawiya",
     title: "Site Zawiya",
     titleEn: "Zawiya Portal",
@@ -347,7 +347,7 @@ const projects = [
     isPrivate: true,
   },
   {
-    id: 11,
+    id: 12,
     slug: "site-vitrine-bootstrap",
     title: "Site Vitrine Bootstrap",
     titleEn: "Bootstrap Showcase Site",
@@ -377,7 +377,7 @@ const projects = [
     isPrivate: false,
   },
   {
-    id: 12,
+    id: 13,
     slug: "gm-business-prayer-blogger",
     title: "GM Business Prayer — Blog Blogger",
     titleEn: "GM Business Prayer — Blogger Blog",
@@ -407,7 +407,7 @@ const projects = [
     isPrivate: true,
   },
   {
-    id: 13,
+    id: 14,
     slug: "guide-itineraire",
     title: "Guide Itinéraire",
     titleEn: "Transit Itinerary Guide",
@@ -437,7 +437,7 @@ const projects = [
     isPrivate: false,
   },
   {
-    id: 14,
+    id: 15,
     slug: "site-statique-voyage-2",
     title: "Voyage 2 — Site Statique",
     titleEn: "Travel 2 — Static Site",
