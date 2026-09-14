@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSiteData } from "../context/SiteDataContext";
+import DownloadCvButton from "./DownloadCvButton";
 
 const ROLES = [
   "DevOps",
@@ -167,10 +168,7 @@ export default function Hero() {
               <ArrowRight size={18} />
             </Link>
 
-            <a href={profile?.cvLink || "/CV-Milinda-Mendy.pdf"} download target="_blank" rel="noopener noreferrer" className="hero-btn-secondary">
-              {t("hero.downloadCv")}
-              <Download size={18} />
-            </a>
+            <DownloadCvButton className="hero-btn-secondary" />
           </motion.div>
 
           {/* Social links */}

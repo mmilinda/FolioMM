@@ -62,6 +62,8 @@ const defaultProfile = {
   photo: "/images/profile/MM.png",
   avatar: "/images/profile/MM.png",
   cvLink: "/CV-Milinda-Mendy.pdf",
+  cvLinkFr: "/CV-Milinda-Mendy-FR.pdf",
+  cvLinkEn: "/CV-Milinda-Mendy-EN.pdf",
   bio: "Je conçois et développe des applications web, plateformes SaaS et solutions digitales de bout en bout, de l'interface utilisateur au backend, aux API et au déploiement.",
   bioEn: "I design and build end-to-end web applications, SaaS platforms, and digital solutions — from user interface to backend, APIs, and deployment.",
   yearsExp: "5+",

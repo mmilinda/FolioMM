@@ -261,12 +261,12 @@ export default function SiteSettings() {
               </label>
             </div>
 
-            {/* Document CV PDF */}
+            {/* Document CV PDF (FR) */}
             <div style={{ background: "rgba(2, 6, 23, 0.6)", padding: "1.25rem", borderRadius: "16px", border: "1px solid rgba(255, 255, 255, 0.08)", display: "flex", flexDirection: "column", gap: "10px", alignItems: "center" }}>
-              <span style={labelStyle}>Document CV Officiel (PDF)</span>
-              <div style={{ width: "90px", height: "90px", borderRadius: "16px", background: "rgba(244, 114, 182, 0.12)", border: "1px dashed rgba(244, 114, 182, 0.4)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#f472b6" }}>
+              <span style={labelStyle}>🇫🇷 CV Version Française (PDF)</span>
+              <div style={{ width: "90px", height: "90px", borderRadius: "16px", background: "rgba(56, 189, 248, 0.12)", border: "1px dashed rgba(56, 189, 248, 0.4)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#38bdf8" }}>
                 <FileText size={32} />
-                <span style={{ fontSize: "0.65rem", fontWeight: 800, marginTop: "4px" }}>PDF</span>
+                <span style={{ fontSize: "0.65rem", fontWeight: 800, marginTop: "4px" }}>PDF (FR)</span>
               </div>
               <label
                 style={{
@@ -275,17 +275,45 @@ export default function SiteSettings() {
                   gap: "6px",
                   padding: "8px 14px",
                   borderRadius: "10px",
-                  background: "rgba(244, 114, 182, 0.15)",
-                  border: "1px solid rgba(244, 114, 182, 0.3)",
-                  color: "#f472b6",
+                  background: "rgba(56, 189, 248, 0.15)",
+                  border: "1px solid rgba(56, 189, 248, 0.3)",
+                  color: "#38bdf8",
                   fontSize: "0.78rem",
                   fontWeight: 700,
                   cursor: "pointer",
                 }}
               >
                 <Upload size={14} />
-                <span>{uploadingField === "cvLink" ? "Téléversement..." : "Téléverser un nouveau CV (PDF)"}</span>
-                <input type="file" accept=".pdf,.doc,.docx" onChange={(e) => handleFileUpload(e, "cvLink")} style={{ display: "none" }} />
+                <span>{uploadingField === "cvLinkFr" ? "Téléversement..." : "Changer CV Français"}</span>
+                <input type="file" accept=".pdf,.doc,.docx" onChange={(e) => handleFileUpload(e, "cvLinkFr")} style={{ display: "none" }} />
+              </label>
+            </div>
+
+            {/* Document CV PDF (EN) */}
+            <div style={{ background: "rgba(2, 6, 23, 0.6)", padding: "1.25rem", borderRadius: "16px", border: "1px solid rgba(255, 255, 255, 0.08)", display: "flex", flexDirection: "column", gap: "10px", alignItems: "center" }}>
+              <span style={labelStyle}>🇬🇧 English Resume (PDF)</span>
+              <div style={{ width: "90px", height: "90px", borderRadius: "16px", background: "rgba(168, 85, 247, 0.12)", border: "1px dashed rgba(168, 85, 247, 0.4)", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", color: "#c084fc" }}>
+                <FileText size={32} />
+                <span style={{ fontSize: "0.65rem", fontWeight: 800, marginTop: "4px" }}>PDF (EN)</span>
+              </div>
+              <label
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  padding: "8px 14px",
+                  borderRadius: "10px",
+                  background: "rgba(168, 85, 247, 0.15)",
+                  border: "1px solid rgba(168, 85, 247, 0.3)",
+                  color: "#c084fc",
+                  fontSize: "0.78rem",
+                  fontWeight: 700,
+                  cursor: "pointer",
+                }}
+              >
+                <Upload size={14} />
+                <span>{uploadingField === "cvLinkEn" ? "Téléversement..." : "Changer CV Anglais"}</span>
+                <input type="file" accept=".pdf,.doc,.docx" onChange={(e) => handleFileUpload(e, "cvLinkEn")} style={{ display: "none" }} />
               </label>
             </div>
           </div>
@@ -402,8 +430,13 @@ export default function SiteSettings() {
             </div>
 
             <div>
-              <label style={labelStyle}>URL du CV (ou téléverser ci-dessus)</label>
-              <input name="cvLink" style={inputStyle} value={formData.cvLink || ""} onChange={handleChange} />
+              <label style={labelStyle}>URL CV Français (FR)</label>
+              <input name="cvLinkFr" style={inputStyle} value={formData.cvLinkFr || formData.cvLink || "/CV-Milinda-Mendy-FR.pdf"} onChange={handleChange} />
+            </div>
+
+            <div>
+              <label style={labelStyle}>URL CV Anglais (EN)</label>
+              <input name="cvLinkEn" style={inputStyle} value={formData.cvLinkEn || formData.cvLink || "/CV-Milinda-Mendy-EN.pdf"} onChange={handleChange} />
             </div>
           </div>
 

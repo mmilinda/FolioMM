@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { CheckCircle, Code2, Server, Zap, Download, Sparkles, Shield, Cloud, Brain, Layers, Cpu } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useSiteData } from "../context/SiteDataContext";
+import DownloadCvButton from "./DownloadCvButton";
 
 const iconMap = {
   Code2,
@@ -91,17 +92,7 @@ export default function About() {
             transition={{ delay: 0.7 }}
             style={{ marginTop: "2rem" }}
           >
-            <a
-              href={profile?.cvLink || "/CV-Milinda-Mendy.pdf"}
-              download
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hero-btn-secondary"
-              style={{ display: "inline-flex" }}
-            >
-              <Download size={16} />
-              {t("hero.downloadCv", "Télécharger mon CV")}
-            </a>
+            <DownloadCvButton className="hero-btn-secondary" />
           </motion.div>
         </motion.div>
 
