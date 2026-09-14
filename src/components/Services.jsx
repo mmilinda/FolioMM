@@ -14,6 +14,50 @@ const iconMap = {
   Sparkles,
 };
 
+function getLocalizedService(svc, isEn) {
+  if (!isEn) return { title: svc.title, desc: svc.desc };
+  if (svc.titleEn) return { title: svc.titleEn, desc: svc.descEn || svc.desc };
+
+  const t = (svc.title || "").toLowerCase();
+  if (svc.id === "svc-1" || t.includes("full stack")) {
+    return {
+      title: "Full Stack Development",
+      desc: "Modern, responsive, high-performance web applications built with React, Next.js, Node.js, and Laravel."
+    };
+  }
+  if (svc.id === "svc-2" || t.includes("cloud") || t.includes("infrastructure")) {
+    return {
+      title: "Cloud & Infrastructure Architecture",
+      desc: "Designing resilient and scalable infrastructures on AWS, GCP, Docker, and Kubernetes."
+    };
+  }
+  if (svc.id === "svc-3" || t.includes("ci/cd") || t.includes("devops") || t.includes("automatisation")) {
+    return {
+      title: "CI/CD & DevOps Automation",
+      desc: "Setting up continuous integration and deployment pipelines with GitHub Actions."
+    };
+  }
+  if (svc.id === "svc-4" || t.includes("ia") || t.includes("ai") || t.includes("intelligence")) {
+    return {
+      title: "AI Integration & Automation",
+      desc: "Integrating LLM APIs (OpenAI, Gemini), workflow automation, and intelligent agents."
+    };
+  }
+  if (svc.id === "svc-5" || t.includes("saas") || t.includes("tenant")) {
+    return {
+      title: "Multi-tenant SaaS Architecture",
+      desc: "Developing turn-key SaaS solutions with Stripe subscription management, roles, and auth."
+    };
+  }
+  if (svc.id === "svc-6" || t.includes("sécurité") || t.includes("security") || t.includes("audit")) {
+    return {
+      title: "Security & Performance Audit",
+      desc: "Security audits, load time optimization, HTTPS setup, and OWASP protection."
+    };
+  }
+  return { title: svc.title, desc: svc.desc };
+}
+
 export default function Services() {
   const { t, i18n } = useTranslation();
   const { profile, services: rawServices } = useSiteData();
@@ -50,8 +94,7 @@ export default function Services() {
           const Icon = iconMap[svc.iconName] || Code2;
           const glowColor = svc.glow || "#38bdf8";
           const tags = Array.isArray(svc.tags) ? svc.tags : [];
-          const title = (isEn && svc.titleEn) ? svc.titleEn : svc.title;
-          const desc = (isEn && svc.descEn) ? svc.descEn : svc.desc;
+          const { title, desc } = getLocalizedService(svc, isEn);
 
           return (
             <motion.div

@@ -41,6 +41,26 @@ function AnimatedCounter({ rawValue, inView }) {
   );
 }
 
+function getLocalizedStat(stat, isEn) {
+  if (!isEn) return { label: stat.label, desc: stat.desc };
+  if (stat.labelEn) return { label: stat.labelEn, desc: stat.descEn || stat.desc };
+
+  const l = (stat.label || "").toLowerCase();
+  if (stat.id === "stat-1" || l.includes("projet")) {
+    return { label: "Projects", desc: "Web, SaaS & Mobile Applications" };
+  }
+  if (stat.id === "stat-2" || l.includes("expéri") || l.includes("année")) {
+    return { label: "Years Experience", desc: "In Full Stack Development (2022 - Present)" };
+  }
+  if (stat.id === "stat-3" || l.includes("solution") || l.includes("production")) {
+    return { label: "Production Solutions", desc: "SaaS & Enterprise Digital Platforms" };
+  }
+  if (stat.id === "stat-4" || l.includes("engagement") || l.includes("qualité")) {
+    return { label: "Commitment", desc: "Agile delivery & Code quality" };
+  }
+  return { label: stat.label, desc: stat.desc };
+}
+
 export default function Stats() {
   const { t, i18n } = useTranslation();
   const { stats: siteStats } = useSiteData();
@@ -68,8 +88,7 @@ export default function Stats() {
     <section ref={ref} className="stats-section">
       <div className="stats-grid">
         {displayStats.map((stat, i) => {
-          const label = (isEn && stat.labelEn) ? stat.labelEn : stat.label;
-          const desc = (isEn && stat.descEn) ? stat.descEn : stat.desc;
+          const { label, desc } = getLocalizedStat(stat, isEn);
 
           return (
             <motion.div
