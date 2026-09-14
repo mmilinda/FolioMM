@@ -16,12 +16,18 @@ export default function EditProject() {
 
   const [form, setForm] = useState({
     title: "",
+    titleEn: "",
     category: "",
+    categoryEn: "",
     description: "",
+    descriptionEn: "",
     problem: "",
+    problemEn: "",
     solution: "",
+    solutionEn: "",
     technologies: "",
     impact: "",
+    impactEn: "",
     demo: "",
     github: "",
   });
@@ -33,14 +39,20 @@ export default function EditProject() {
     if (targetProject) {
       setForm({
         title: targetProject.title || "",
+        titleEn: targetProject.titleEn || "",
         category: targetProject.category || "",
+        categoryEn: targetProject.categoryEn || "",
         description: targetProject.description || "",
+        descriptionEn: targetProject.descriptionEn || "",
         problem: targetProject.problem || "",
+        problemEn: targetProject.problemEn || "",
         solution: targetProject.solution || "",
+        solutionEn: targetProject.solutionEn || "",
         technologies: Array.isArray(targetProject.technologies)
           ? targetProject.technologies.join(", ")
           : targetProject.technologies || "",
         impact: targetProject.impact || "",
+        impactEn: targetProject.impactEn || "",
         demo: targetProject.demo || "",
         github: targetProject.github || "",
       });
@@ -75,12 +87,18 @@ export default function EditProject() {
 
     const updatedData = {
       title: form.title,
+      titleEn: form.titleEn || form.title,
       category: form.category,
+      categoryEn: form.categoryEn || form.category,
       description: form.description,
+      descriptionEn: form.descriptionEn || form.description,
       problem: form.problem,
+      problemEn: form.problemEn || form.problem,
       solution: form.solution,
+      solutionEn: form.solutionEn || form.solution,
       technologies: techArray,
       impact: form.impact,
+      impactEn: form.impactEn || form.impact,
       demo: form.demo,
       github: form.github,
       image: imagePreview,
@@ -91,11 +109,17 @@ export default function EditProject() {
       const data = new FormData();
       data.append("_method", "PUT");
       data.append("title", form.title);
+      data.append("titleEn", form.titleEn || form.title);
       data.append("category", form.category);
+      data.append("categoryEn", form.categoryEn || form.category);
       data.append("description", form.description);
+      data.append("descriptionEn", form.descriptionEn || form.description);
       data.append("problem", form.problem);
+      data.append("problemEn", form.problemEn || form.problem);
       data.append("solution", form.solution);
+      data.append("solutionEn", form.solutionEn || form.solution);
       data.append("impact", form.impact);
+      data.append("impactEn", form.impactEn || form.impact);
       data.append("demo", form.demo);
       data.append("github", form.github);
       techArray.forEach((t) => data.append("technologies[]", t));
@@ -227,28 +251,52 @@ export default function EditProject() {
             </div>
           )}
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.25rem" }}>
             <div>
-              <label style={labelStyle}>Titre du projet *</label>
+              <label style={labelStyle}>Titre (FR) *</label>
               <input name="title" style={inputStyle} value={form.title} onChange={handleChange} required />
             </div>
 
             <div>
-              <label style={labelStyle}>Catégorie *</label>
+              <label style={labelStyle}>Titre (EN - Optionnel)</label>
+              <input name="titleEn" style={inputStyle} value={form.titleEn} onChange={handleChange} placeholder="ex: AgriChain AI" />
+            </div>
+
+            <div>
+              <label style={labelStyle}>Catégorie (FR) *</label>
               <input name="category" style={inputStyle} value={form.category} onChange={handleChange} required />
+            </div>
+
+            <div>
+              <label style={labelStyle}>Catégorie (EN - Optionnel)</label>
+              <input name="categoryEn" style={inputStyle} value={form.categoryEn} onChange={handleChange} placeholder="ex: AI • Agriculture" />
             </div>
           </div>
 
-          <div>
-            <label style={labelStyle}>Description complète *</label>
-            <textarea
-              name="description"
-              rows={3}
-              style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
-              value={form.description}
-              onChange={handleChange}
-              required
-            />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
+            <div>
+              <label style={labelStyle}>Description complète (FR) *</label>
+              <textarea
+                name="description"
+                rows={3}
+                style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
+                value={form.description}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div>
+              <label style={labelStyle}>Description complète (EN - Optionnel)</label>
+              <textarea
+                name="descriptionEn"
+                rows={3}
+                style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
+                value={form.descriptionEn}
+                onChange={handleChange}
+                placeholder="Full description in English..."
+              />
+            </div>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>

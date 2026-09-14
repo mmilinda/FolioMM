@@ -11,7 +11,9 @@ export default function ServicesManager() {
 
   const [form, setForm] = useState({
     title: "",
+    titleEn: "",
     desc: "",
+    descEn: "",
     iconName: "Code2",
     tags: "",
     glow: "#38bdf8",
@@ -31,7 +33,9 @@ export default function ServicesManager() {
     setEditingId(svc.id);
     setForm({
       title: svc.title,
+      titleEn: svc.titleEn || "",
       desc: svc.desc,
+      descEn: svc.descEn || "",
       iconName: svc.iconName || "Code2",
       tags: Array.isArray(svc.tags) ? svc.tags.join(", ") : svc.tags || "",
       glow: svc.glow || "#38bdf8",
@@ -44,7 +48,7 @@ export default function ServicesManager() {
 
   const handleCancel = () => {
     setEditingId(null);
-    setForm({ title: "", desc: "", iconName: "Code2", tags: "", glow: "#38bdf8", hidden: false });
+    setForm({ title: "", titleEn: "", desc: "", descEn: "", iconName: "Code2", tags: "", glow: "#38bdf8", hidden: false });
   };
 
   const handleDelete = (id) => {
@@ -71,7 +75,9 @@ export default function ServicesManager() {
           ? {
               ...s,
               title: form.title,
+              titleEn: form.titleEn || form.title,
               desc: form.desc,
+              descEn: form.descEn || form.desc,
               iconName: form.iconName,
               tags: tagArray,
               glow: form.glow,
@@ -84,7 +90,9 @@ export default function ServicesManager() {
       const newService = {
         id: `svc-${Date.now()}`,
         title: form.title,
+        titleEn: form.titleEn || form.title,
         desc: form.desc,
+        descEn: form.descEn || form.desc,
         iconName: form.iconName,
         tags: tagArray,
         glow: form.glow,
@@ -118,23 +126,21 @@ export default function ServicesManager() {
   return (
     <>
       <SEO title="Gestion des Services | Admin" noindex={true} />
-      <div style={{ maxWidth: "1000px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-        <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
-              <Layers color="#38bdf8" size={26} />
-              Gestion des Domaines d'Expertise & Services
-            </h1>
-            <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
-              Modifiez le contenu des cartes de domaine d'expertise (titre, description, icône, badges, couleur de brillance et visibilité).
-            </p>
-          </div>
+      <div style={{ maxWidth: "900px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+        <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
+          <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
+            <Layers color="#38bdf8" size={26} />
+            Gestion des Domaines d'Expertise & Services
+          </h1>
+          <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
+            Ajoutez, éditez ou masquez les compétences et services affichés dans la section "Mes domaines d'expertise".
+          </p>
         </div>
 
         {saved && (
           <div style={{ padding: "0.85rem", borderRadius: "12px", background: "rgba(52, 211, 153, 0.12)", border: "1px solid rgba(52, 211, 153, 0.3)", color: "#34d399", fontSize: "0.88rem", fontWeight: 600, display: "flex", alignItems: "center", gap: "8px" }}>
             <CheckCircle size={18} />
-            <span>Mise à jour des services enregistrée !</span>
+            <span>Changements enregistrés avec succès !</span>
           </div>
         )}
 
@@ -144,10 +150,15 @@ export default function ServicesManager() {
             {editingId ? "✏️ Éditer le Service" : "➕ Ajouter un Nouveau Service"}
           </h3>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem" }}>
             <div>
-              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Titre du Service</label>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Titre (Français) *</label>
               <input style={inputStyle} value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="ex: Architecture SaaS" required />
+            </div>
+
+            <div>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Titre (Anglais - Optionnel)</label>
+              <input style={inputStyle} value={form.titleEn} onChange={(e) => setForm({ ...form, titleEn: e.target.value })} placeholder="ex: SaaS Architecture" />
             </div>
 
             <div>
@@ -160,9 +171,16 @@ export default function ServicesManager() {
             </div>
           </div>
 
-          <div>
-            <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Description</label>
-            <textarea style={{ ...inputStyle, resize: "vertical" }} rows={2} value={form.desc} onChange={(e) => setForm({ ...form, desc: e.target.value })} placeholder="Description claire de la prestation..." required />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Description (Français) *</label>
+              <textarea style={{ ...inputStyle, resize: "vertical" }} rows={2} value={form.desc} onChange={(e) => setForm({ ...form, desc: e.target.value })} placeholder="Description claire de la prestation..." required />
+            </div>
+
+            <div>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Description (Anglais - Optionnel)</label>
+              <textarea style={{ ...inputStyle, resize: "vertical" }} rows={2} value={form.descEn} onChange={(e) => setForm({ ...form, descEn: e.target.value })} placeholder="Clear description of the service..." />
+            </div>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem", alignItems: "center" }}>

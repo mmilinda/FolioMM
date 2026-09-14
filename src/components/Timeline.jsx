@@ -1,14 +1,16 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import { useSiteData } from "../context/SiteDataContext";
 
 export default function Timeline() {
   const { t, i18n } = useTranslation();
+  const { timeline: customTimeline } = useSiteData();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const isEn = i18n.language?.toLowerCase().startsWith("en");
 
-  const experiences = [
+  const defaultExperiences = [
     {
       year: isEn ? "Jan 2026 - Present" : "Janvier 2026 - Présent",
       role: isEn ? "Application & Digital Solutions Developer" : "Développeuse d'applications & solutions numériques",
@@ -76,6 +78,18 @@ export default function Timeline() {
       tags: ["Informatique de Gestion", "Bases de Données", "Génie Logiciel", "Systèmes d'Information"],
     },
   ];
+
+  const experiences = customTimeline && customTimeline.length > 0
+    ? customTimeline.map(item => ({
+        year: item.year,
+        role: isEn && item.titleEn ? item.titleEn : item.title,
+        company: item.company,
+        type: item.type === "education" ? (isEn ? "Education" : "Diplôme / Formation") : (isEn ? "Work Experience" : "Expérience Pro"),
+        color: item.type === "education" ? "#a855f7" : "#38bdf8",
+        desc: isEn && item.descriptionEn ? item.descriptionEn : item.description,
+        tags: item.tags || []
+      }))
+    : defaultExperiences;
 
   return (
     <section ref={ref} className="timeline-section py-16">

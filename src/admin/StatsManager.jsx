@@ -12,7 +12,9 @@ export default function StatsManager() {
   const [form, setForm] = useState({
     value: "",
     label: "",
+    labelEn: "",
     desc: "",
+    descEn: "",
   });
 
   const handleEdit = (st) => {
@@ -20,7 +22,9 @@ export default function StatsManager() {
     setForm({
       value: st.value,
       label: st.label,
+      labelEn: st.labelEn || "",
       desc: st.desc || "",
+      descEn: st.descEn || "",
     });
     setTimeout(() => {
       formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -29,7 +33,7 @@ export default function StatsManager() {
 
   const handleCancel = () => {
     setEditingId(null);
-    setForm({ value: "", label: "", desc: "" });
+    setForm({ value: "", label: "", labelEn: "", desc: "", descEn: "" });
   };
 
   const handleDelete = (id) => {
@@ -45,7 +49,16 @@ export default function StatsManager() {
 
     if (editingId) {
       const updated = stats.map((s) =>
-        s.id === editingId ? { ...s, value: form.value, label: form.label, desc: form.desc } : s
+        s.id === editingId
+          ? {
+              ...s,
+              value: form.value,
+              label: form.label,
+              labelEn: form.labelEn || form.label,
+              desc: form.desc,
+              descEn: form.descEn || form.desc,
+            }
+          : s
       );
       updateStats(updated);
     } else {
@@ -53,7 +66,9 @@ export default function StatsManager() {
         id: `stat-${Date.now()}`,
         value: form.value,
         label: form.label,
+        labelEn: form.labelEn || form.label,
         desc: form.desc,
+        descEn: form.descEn || form.desc,
       };
       updateStats([...stats, newStat]);
     }
@@ -109,21 +124,33 @@ export default function StatsManager() {
             {editingId ? "✏️ Éditer la Métrique" : "➕ Ajouter une Métrique"}
           </h3>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "1rem" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
             <div>
-              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Valeur Chiffrée</label>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Valeur Chiffrée *</label>
               <input style={inputStyle} value={form.value} onChange={(e) => setForm({ ...form, value: e.target.value })} placeholder="ex: 5+, 30+, 99.9%" required />
             </div>
 
             <div>
-              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Titre / Label</label>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Titre / Label (FR) *</label>
               <input style={inputStyle} value={form.label} onChange={(e) => setForm({ ...form, label: e.target.value })} placeholder="ex: Projets Déployés" required />
+            </div>
+
+            <div>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Label (EN - Optionnel)</label>
+              <input style={inputStyle} value={form.labelEn} onChange={(e) => setForm({ ...form, labelEn: e.target.value })} placeholder="ex: Deployed Projects" />
             </div>
           </div>
 
-          <div>
-            <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Sous-titre / Explication courte</label>
-            <input style={inputStyle} value={form.desc} onChange={(e) => setForm({ ...form, desc: e.target.value })} placeholder="ex: Applications Web, SaaS & Infrastructure Cloud" />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Description (FR)</label>
+              <input style={inputStyle} value={form.desc} onChange={(e) => setForm({ ...form, desc: e.target.value })} placeholder="ex: Applications Web, SaaS & Infrastructure Cloud" />
+            </div>
+
+            <div>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Description (EN - Optionnel)</label>
+              <input style={inputStyle} value={form.descEn} onChange={(e) => setForm({ ...form, descEn: e.target.value })} placeholder="ex: Web Apps, SaaS & Cloud Infrastructure" />
+            </div>
           </div>
 
           <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>

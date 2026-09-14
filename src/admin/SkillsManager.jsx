@@ -11,6 +11,7 @@ export default function SkillsManager() {
 
   const [form, setForm] = useState({
     category: "",
+    categoryEn: "",
     skillsStr: "",
   });
 
@@ -18,6 +19,7 @@ export default function SkillsManager() {
     setEditingId(cat.id);
     setForm({
       category: cat.category,
+      categoryEn: cat.categoryEn || "",
       skillsStr: Array.isArray(cat.skills) ? cat.skills.join(", ") : "",
     });
     setTimeout(() => {
@@ -27,7 +29,7 @@ export default function SkillsManager() {
 
   const handleCancel = () => {
     setEditingId(null);
-    setForm({ category: "", skillsStr: "" });
+    setForm({ category: "", categoryEn: "", skillsStr: "" });
   };
 
   const handleDelete = (id) => {
@@ -44,13 +46,21 @@ export default function SkillsManager() {
 
     if (editingId) {
       const updated = skills.map((s) =>
-        s.id === editingId ? { ...s, category: form.category, skills: skillsList } : s
+        s.id === editingId
+          ? {
+              ...s,
+              category: form.category,
+              categoryEn: form.categoryEn || form.category,
+              skills: skillsList,
+            }
+          : s
       );
       updateSkills(updated);
     } else {
       const newCategory = {
         id: `cat-${Date.now()}`,
         category: form.category,
+        categoryEn: form.categoryEn || form.category,
         skills: skillsList,
       };
       updateSkills([...skills, newCategory]);
@@ -103,9 +113,16 @@ export default function SkillsManager() {
             {editingId ? "✏️ Éditer la Catégorie" : "➕ Ajouter une Catégorie / Techno"}
           </h3>
 
-          <div>
-            <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Nom de la Catégorie</label>
-            <input style={inputStyle} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="ex: Development Frontend, Cloud & DevOps..." required />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Nom de la Catégorie (FR) *</label>
+              <input style={inputStyle} value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} placeholder="ex: Development Frontend, Cloud & DevOps..." required />
+            </div>
+
+            <div>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Nom de la Catégorie (EN - Optionnel)</label>
+              <input style={inputStyle} value={form.categoryEn} onChange={(e) => setForm({ ...form, categoryEn: e.target.value })} placeholder="ex: Frontend Development, Cloud & DevOps..." />
+            </div>
           </div>
 
           <div>

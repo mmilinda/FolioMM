@@ -12,8 +12,10 @@ export default function TimelineManager() {
   const [form, setForm] = useState({
     year: "",
     title: "",
+    titleEn: "",
     company: "",
     description: "",
+    descriptionEn: "",
     tagsStr: "",
     type: "work",
   });
@@ -23,8 +25,10 @@ export default function TimelineManager() {
     setForm({
       year: item.year,
       title: item.title,
+      titleEn: item.titleEn || "",
       company: item.company,
       description: item.description,
+      descriptionEn: item.descriptionEn || "",
       tagsStr: Array.isArray(item.tags) ? item.tags.join(", ") : item.tags || "",
       type: item.type || "work",
     });
@@ -35,7 +39,7 @@ export default function TimelineManager() {
 
   const handleCancel = () => {
     setEditingId(null);
-    setForm({ year: "", title: "", company: "", description: "", tagsStr: "", type: "work" });
+    setForm({ year: "", title: "", titleEn: "", company: "", description: "", descriptionEn: "", tagsStr: "", type: "work" });
   };
 
   const handleDelete = (id) => {
@@ -57,8 +61,10 @@ export default function TimelineManager() {
               ...t,
               year: form.year,
               title: form.title,
+              titleEn: form.titleEn || form.title,
               company: form.company,
               description: form.description,
+              descriptionEn: form.descriptionEn || form.description,
               tags: tagsList,
               type: form.type,
             }
@@ -70,8 +76,10 @@ export default function TimelineManager() {
         id: `time-${Date.now()}`,
         year: form.year,
         title: form.title,
+        titleEn: form.titleEn || form.title,
         company: form.company,
         description: form.description,
+        descriptionEn: form.descriptionEn || form.description,
         tags: tagsList,
         type: form.type,
       };
@@ -132,8 +140,13 @@ export default function TimelineManager() {
             </div>
 
             <div>
-              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Intitulé du Poste / Diplôme</label>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Intitulé du Poste / Diplôme (FR) *</label>
               <input style={inputStyle} value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="ex: Ingénieure DevOps" required />
+            </div>
+
+            <div>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Title / Degree (EN - Optionnel)</label>
+              <input style={inputStyle} value={form.titleEn} onChange={(e) => setForm({ ...form, titleEn: e.target.value })} placeholder="ex: DevOps Engineer" />
             </div>
 
             <div>
@@ -157,9 +170,16 @@ export default function TimelineManager() {
             </div>
           </div>
 
-          <div>
-            <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Description des missions</label>
-            <textarea style={{ ...inputStyle, resize: "vertical" }} rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Détaillez vos responsabilités et accomplissements..." required />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Description des missions (FR) *</label>
+              <textarea style={{ ...inputStyle, resize: "vertical" }} rows={3} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} placeholder="Détaillez vos responsabilités et accomplissements..." required />
+            </div>
+
+            <div>
+              <label style={{ display: "block", fontSize: "0.75rem", color: "#cbd5e1", fontWeight: 700, marginBottom: "0.3rem" }}>Description (EN - Optionnel)</label>
+              <textarea style={{ ...inputStyle, resize: "vertical" }} rows={3} value={form.descriptionEn} onChange={(e) => setForm({ ...form, descriptionEn: e.target.value })} placeholder="Detail your responsibilities and achievements..." />
+            </div>
           </div>
 
           <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>

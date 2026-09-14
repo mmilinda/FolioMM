@@ -20,12 +20,18 @@ export default function CreateProject() {
 
   const [form, setForm] = useState({
     title: "",
+    titleEn: "",
     category: "",
+    categoryEn: "",
     description: "",
+    descriptionEn: "",
     problem: "",
+    problemEn: "",
     solution: "",
+    solutionEn: "",
     technologies: "",
     impact: "",
+    impactEn: "",
     demo: "",
     github: "",
   });
@@ -65,17 +71,17 @@ export default function CreateProject() {
       id: Date.now(),
       slug,
       title: form.title,
-      titleEn: form.title,
+      titleEn: form.titleEn || form.title,
       category: form.category,
-      categoryEn: form.category,
+      categoryEn: form.categoryEn || form.category,
       description: form.description,
-      descriptionEn: form.description,
+      descriptionEn: form.descriptionEn || form.description,
       problem: form.problem || form.description,
-      problemEn: form.problem || form.description,
+      problemEn: form.problemEn || form.problem || form.descriptionEn || form.description,
       solution: form.solution || form.description,
-      solutionEn: form.solution || form.description,
+      solutionEn: form.solutionEn || form.solution || form.descriptionEn || form.description,
       impact: form.impact || "Projet livré avec succès",
-      impactEn: form.impact || "Project successfully delivered",
+      impactEn: form.impactEn || form.impact || "Project successfully delivered",
       technologies: techArray.length > 0 ? techArray : ["React", "Tailwind"],
       demo: form.demo || "#",
       github: form.github || "#",
@@ -222,7 +228,7 @@ export default function CreateProject() {
           {/* Row 1: Title & Category */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
             <div>
-              <label style={labelStyle}>Titre du projet *</label>
+              <label style={labelStyle}>Titre du projet (FR) *</label>
               <input
                 name="title"
                 placeholder="Ex: AgriChain AI"
@@ -234,7 +240,18 @@ export default function CreateProject() {
             </div>
 
             <div>
-              <label style={labelStyle}>Catégorie *</label>
+              <label style={labelStyle}>Title (EN - Optionnel)</label>
+              <input
+                name="titleEn"
+                placeholder="Ex: AgriChain AI"
+                style={inputStyle}
+                value={form.titleEn}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <label style={labelStyle}>Catégorie (FR) *</label>
               <input
                 name="category"
                 placeholder="Ex: SaaS • IA • DevOps"
@@ -244,26 +261,51 @@ export default function CreateProject() {
                 required
               />
             </div>
+
+            <div>
+              <label style={labelStyle}>Category (EN - Optionnel)</label>
+              <input
+                name="categoryEn"
+                placeholder="Ex: SaaS • AI • DevOps"
+                style={inputStyle}
+                value={form.categoryEn}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
           {/* Full Description */}
-          <div>
-            <label style={labelStyle}>Description complète *</label>
-            <textarea
-              name="description"
-              placeholder="Présentez brièvement l'objectif et les fonctionnalités clés du projet..."
-              rows={3}
-              style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
-              value={form.description}
-              onChange={handleChange}
-              required
-            />
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
+            <div>
+              <label style={labelStyle}>Description complète (FR) *</label>
+              <textarea
+                name="description"
+                placeholder="Présentez brièvement l'objectif et les fonctionnalités clés du projet..."
+                rows={3}
+                style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
+                value={form.description}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div>
+              <label style={labelStyle}>Description (EN - Optionnel)</label>
+              <textarea
+                name="descriptionEn"
+                placeholder="Briefly describe project goals and features..."
+                rows={3}
+                style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
+                value={form.descriptionEn}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
           {/* Row 2: Problem & Solution */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
             <div>
-              <label style={labelStyle}>🎯 Problème résolu</label>
+              <label style={labelStyle}>🎯 Problème résolu (FR)</label>
               <textarea
                 name="problem"
                 placeholder="Quel était le défi ou le besoin initial ?"
@@ -275,7 +317,19 @@ export default function CreateProject() {
             </div>
 
             <div>
-              <label style={labelStyle}>💡 Solution apportée</label>
+              <label style={labelStyle}>🎯 Problem Solved (EN)</label>
+              <textarea
+                name="problemEn"
+                placeholder="What was the initial challenge?"
+                rows={2}
+                style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
+                value={form.problemEn}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <label style={labelStyle}>💡 Solution apportée (FR)</label>
               <textarea
                 name="solution"
                 placeholder="Comment votre application y répond-elle ?"
@@ -285,12 +339,24 @@ export default function CreateProject() {
                 onChange={handleChange}
               />
             </div>
+
+            <div>
+              <label style={labelStyle}>💡 Solution Provided (EN)</label>
+              <textarea
+                name="solutionEn"
+                placeholder="How does your application solve it?"
+                rows={2}
+                style={{ ...inputStyle, resize: "vertical", fontFamily: "inherit" }}
+                value={form.solutionEn}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
           {/* Row 3: Technologies & Impact */}
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
             <div>
-              <label style={labelStyle}>Technologies (séparées par des virgules)</label>
+              <label style={labelStyle}>Technologies (virgules)</label>
               <input
                 name="technologies"
                 placeholder="React, Laravel, Tailwind, Docker"
@@ -301,12 +367,23 @@ export default function CreateProject() {
             </div>
 
             <div>
-              <label style={labelStyle}>📈 Impact & Résultats</label>
+              <label style={labelStyle}>📈 Impact & Résultats (FR)</label>
               <input
                 name="impact"
                 placeholder="Ex: Digitalisation & gain de 40% de temps"
                 style={inputStyle}
                 value={form.impact}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div>
+              <label style={labelStyle}>📈 Impact (EN - Optionnel)</label>
+              <input
+                name="impactEn"
+                placeholder="Ex: Digitalization & 40% time saved"
+                style={inputStyle}
+                value={form.impactEn}
                 onChange={handleChange}
               />
             </div>
