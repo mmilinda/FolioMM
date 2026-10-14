@@ -1,8 +1,9 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Link } from "react-router-dom";
-import { Target, Rocket, Lightbulb, Compass, Sprout, Shield, Fingerprint, Car, Building2, Layers, Sparkles, ArrowUpRight } from "lucide-react";
+import { Target, Rocket, Lightbulb, Compass, Sprout, Shield, Fingerprint, Car, Building2, Layers, Sparkles, ArrowUpRight, TrendingUp, MessageSquareQuote } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useSiteData } from "../context/SiteDataContext";
 
 import agriImg from "../assets/impact/agri.jpg";
 import secImg from "../assets/impact/sec.jpg";
@@ -12,6 +13,7 @@ import enterpriseImg from "../assets/impact/enterprise.jpg";
 
 export default function ImpactSection() {
   const { t, i18n } = useTranslation();
+  const { impact } = useSiteData();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-40px" });
   const isEn = i18n.language?.toLowerCase().startsWith("en");
@@ -305,6 +307,80 @@ export default function ImpactSection() {
             })}
           </div>
         </motion.div>
+
+        {/* ─── Part 3: Mes Métriques Clés d'Impact (Synchronisées Admin) ─── */}
+        {impact?.metrics && impact.metrics.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.22 }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-10"
+          >
+            {impact.metrics.map((m, idx) => (
+              <div
+                key={m.id || idx}
+                className="p-6 rounded-2xl bg-gradient-to-br from-slate-900/90 to-slate-950/90 border border-cyan-400/20 backdrop-blur-xl relative overflow-hidden group hover:border-cyan-400/50 transition-all duration-300"
+              >
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-sky-500 to-indigo-500" />
+                <div className="flex items-baseline justify-between mb-2">
+                  <span className="text-3xl sm:text-4xl font-black text-cyan-400 tracking-tight">
+                    {m.number}
+                  </span>
+                  <TrendingUp size={20} className="text-cyan-400/60" />
+                </div>
+                <h4 className="text-base font-bold text-white mb-1">{m.label}</h4>
+                <p className="text-xs sm:text-sm text-slate-400 leading-relaxed m-0 font-normal">{m.desc}</p>
+              </div>
+            ))}
+          </motion.div>
+        )}
+
+        {/* ─── Part 4: Témoignages & Recommandations (Synchronisées Admin) ─── */}
+        {impact?.testimonials && impact.testimonials.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.6, delay: 0.26 }}
+            className="pt-12 sm:pt-16 border-t border-white/10"
+          >
+            <div className="text-center flex flex-col items-center justify-center space-y-2 mb-8">
+              <span className="section-eyebrow py-0.5 text-xs inline-flex items-center gap-1.5 mx-auto">
+                <MessageSquareQuote size={13} className="text-pink-400 shrink-0" />
+                {isEn ? "Client & Peer Feedback" : "Retours & Témoignages"}
+              </span>
+              <h3 className="section-title text-base sm:text-2xl md:text-3xl font-extrabold m-0 text-center">
+                {isEn ? "What collaborators " : "Ce que disent mes "}
+                <span className="gradient-text">{isEn ? "say" : "collaborateurs & clients"}</span>
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto">
+              {impact.testimonials.map((t, i) => (
+                <div
+                  key={t.id || i}
+                  className="p-6 sm:p-7 rounded-2xl bg-slate-900/90 border border-white/10 backdrop-blur-xl relative flex flex-col justify-between hover:border-cyan-400/40 transition-all duration-300"
+                >
+                  <p className="text-xs sm:text-sm text-slate-300 italic leading-relaxed mb-6 font-normal">
+                    "{t.content}"
+                  </p>
+                  <div className="flex items-center gap-3 pt-4 border-t border-white/10">
+                    {t.avatar ? (
+                      <img src={t.avatar} alt={t.name} className="w-10 h-10 rounded-full object-cover border border-cyan-400/40 shrink-0" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-cyan-500/20 text-cyan-300 font-bold flex items-center justify-center text-xs shrink-0">
+                        {t.name ? t.name.slice(0, 2).toUpperCase() : "MM"}
+                      </div>
+                    )}
+                    <div>
+                      <h4 className="text-sm font-bold text-white m-0 leading-snug">{t.name}</h4>
+                      <p className="text-xs text-slate-400 m-0 leading-none mt-1 font-normal">{t.role}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
       </div>
     </section>

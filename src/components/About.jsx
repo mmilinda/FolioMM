@@ -20,7 +20,7 @@ const iconMap = {
 
 export default function About() {
   const { t, i18n } = useTranslation();
-  const { profile } = useSiteData();
+  const { profile, skills } = useSiteData();
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   const isEn = i18n.language?.toLowerCase().startsWith("en");
@@ -44,6 +44,11 @@ export default function About() {
   const codeRole = isEn ? (profile?.headlineEn || "Full Stack & DevOps Developer") : (profile?.headline || "Développeuse Full Stack");
   const codeLocation = isEn ? (profile?.location?.replace("Sénégal", "Senegal") || "Senegal 🇸🇳 – Remote") : (profile?.location || "Sénégal 🇸🇳");
   const codeAvailability = isEn ? (profile?.availabilityEn || "Open to opportunities") : (profile?.availability || "Ouverte aux opportunités");
+
+  const frontendSkills = skills?.find((s) => s.category?.toLowerCase().includes("front"))?.skills?.slice(0, 4) || ["React", "JavaScript", "Tailwind"];
+  const backendSkills = skills?.find((s) => s.category?.toLowerCase().includes("back"))?.skills?.slice(0, 4) || ["Laravel", "Node.js", "PHP"];
+  const devopsSkills = skills?.find((s) => s.category?.toLowerCase().includes("devops") || s.category?.toLowerCase().includes("cloud"))?.skills?.slice(0, 4) || ["Docker", "K8s", "CI/CD", "AWS"];
+  const dbSkills = skills?.find((s) => s.category?.toLowerCase().includes("database") || s.category?.toLowerCase().includes("données") || s.category?.toLowerCase().includes("storage"))?.skills?.slice(0, 4) || ["MySQL", "SQLite", "Firebase"];
 
   return (
     <section ref={ref} className="about-section">
@@ -117,10 +122,10 @@ export default function About() {
   location: "${codeLocation}",
   
   stack: {
-    frontend: ["React", "JavaScript", "Tailwind"],
-    backend:  ["Laravel", "Node.js", "PHP"],
-    devops:   ["Docker", "K8s", "CI/CD", "AWS"],
-    database: ["MySQL", "SQLite", "Firebase"],
+    frontend: ${JSON.stringify(frontendSkills)},
+    backend:  ${JSON.stringify(backendSkills)},
+    devops:   ${JSON.stringify(devopsSkills)},
+    database: ${JSON.stringify(dbSkills)},
   },
 
   philosophy: "Ship fast. Break nothing.",

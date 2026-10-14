@@ -86,17 +86,49 @@ export function useArticle(id) {
     );
   };
 
-  const found = findItem();
-  const [article, setArticle] = useState(found || staticArticles[0]);
+  const initialItem = findItem();
+  const [article, setArticle] = useState(initialItem || null);
+  const [loading, setLoading] = useState(!initialItem);
 
   useEffect(() => {
-    const currentStatic = findItem();
-    if (currentStatic) {
-      setArticle(currentStatic);
+    let isMounted = true;
+    const currentLocal = findItem();
+    if (currentLocal) {
+      setArticle(currentLocal);
+      setLoading(false);
+      return;
     }
+
+    async function fetchArticle() {
+      try {
+        setLoading(true);
+        const res = await api.get(`/articles/${id}`, { timeout: 2500 });
+        if (isMounted && res.data) {
+          setArticle(res.data);
+          const existing = JSON.parse(localStorage.getItem("custom_articles") || "[]");
+          if (!existing.some((a) => a.slug === res.data.slug || String(a.id) === String(res.data.id))) {
+            localStorage.setItem("custom_articles", JSON.stringify([res.data, ...existing]));
+          }
+        }
+      } catch (err) {
+        if (isMounted) {
+          setArticle(null);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    fetchArticle();
+
+    return () => {
+      isMounted = false;
+    };
   }, [id]);
 
-  return { article: article || found || staticArticles[0], loading: false };
+  return { article, loading };
 }
 
 export default useArticles;
