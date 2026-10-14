@@ -27,20 +27,50 @@ export function parseGitHubUrl(input) {
 }
 
 /**
- * Récupère les données publiques d'un dépôt GitHub via l'API REST v3.
+ * Récupère le token GitHub actif (passé en argument, stocké dans localStorage ou dans .env).
  */
-export async function fetchGitHubRepoData(owner, repo) {
+export function getActiveGitHubToken(customToken) {
+  if (customToken && customToken.trim()) return customToken.trim();
+  if (typeof localStorage !== "undefined") {
+    const stored = localStorage.getItem("github_access_token");
+    if (stored && stored.trim()) return stored.trim();
+  }
+  const envToken = import.meta.env?.VITE_GITHUB_TOKEN;
+  if (envToken && envToken.trim()) return envToken.trim();
+  return null;
+}
+
+/**
+ * Récupère les données d'un dépôt GitHub (public ou privé si token configuré) via l'API REST v3.
+ */
+export async function fetchGitHubRepoData(owner, repo, customToken) {
+  const token = getActiveGitHubToken(customToken);
+  const headers = {
+    Accept: "application/vnd.github.v3+json",
+  };
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  }
+
   // 1. Infos générales du dépôt
   const repoRes = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
-    headers: { Accept: "application/vnd.github.v3+json" },
+    headers,
   });
 
   if (!repoRes.ok) {
     if (repoRes.status === 404) {
-      throw new Error(`Dépôt introuvable (${owner}/${repo}). Vérifiez qu'il s'agit bien d'un dépôt public.`);
+      if (!token) {
+        throw new Error(
+          `Dépôt introuvable ou privé (${owner}/${repo}). Pour analyser un dépôt privé, renseignez votre Token GitHub ci-dessous (Personal Access Token avec permission 'repo').`
+        );
+      }
+      throw new Error(`Dépôt introuvable (${owner}/${repo}). Vérifiez le nom du dépôt ou les permissions de votre Token GitHub.`);
+    }
+    if (repoRes.status === 401) {
+      throw new Error("Token GitHub invalide ou expiré. Veuillez vérifier votre Personal Access Token.");
     }
     if (repoRes.status === 403) {
-      throw new Error("Limite d'appels temporaire atteinte sur GitHub. Réessayez dans un court instant.");
+      throw new Error("Accès refusé ou limite d'appels atteinte sur l'API GitHub. Renseignez un Token GitHub pour lever la limite.");
     }
     throw new Error(`Erreur GitHub (${repoRes.status}): ${repoRes.statusText}`);
   }
@@ -50,7 +80,9 @@ export async function fetchGitHubRepoData(owner, repo) {
   // 2. Langages utilisés
   let languages = {};
   try {
-    const langRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/languages`);
+    const langRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/languages`, {
+      headers,
+    });
     if (langRes.ok) {
       languages = await langRes.json();
     }
@@ -61,7 +93,9 @@ export async function fetchGitHubRepoData(owner, repo) {
   // 3. Contenu du README.md
   let readme = "";
   try {
-    const readmeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`);
+    const readmeRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/readme`, {
+      headers,
+    });
     if (readmeRes.ok) {
       const readmeJson = await readmeRes.json();
       if (readmeJson.content) {
@@ -72,9 +106,12 @@ export async function fetchGitHubRepoData(owner, repo) {
         );
       }
     } else {
-      // Fallback direct sur raw.githubusercontent.com
+      // Fallback direct sur raw.githubusercontent.com avec token si disponible
       const branch = repoData.default_branch || "main";
-      const rawRes = await fetch(`https://raw.githubusercontent.com/${owner}/${repo}/${branch}/README.md`);
+      const rawRes = await fetch(
+        `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/README.md`,
+        { headers: token ? { Authorization: `token ${token}` } : {} }
+      );
       if (rawRes.ok) {
         readme = await rawRes.text();
       }
@@ -396,9 +433,9 @@ Réponds STRICTEMENT par un JSON valide (sans markdown, sans backticks, juste le
 /**
  * Fonction Principale : Analyse complète d'un projet Git avec IA.
  */
-export async function analyzeGitHubProject({ repoUrl, customTitle }) {
+export async function analyzeGitHubProject({ repoUrl, customTitle, token }) {
   const { owner, repo } = parseGitHubUrl(repoUrl);
-  const { repoData, languages, readme } = await fetchGitHubRepoData(owner, repo);
+  const { repoData, languages, readme } = await fetchGitHubRepoData(owner, repo, token);
 
   // Vérifier si une clé Gemini est disponible dans l'environnement
   const geminiKey = import.meta.env?.VITE_GEMINI_API_KEY;

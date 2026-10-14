@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { Edit3, ArrowLeft, UploadCloud, CheckCircle, Save, Sparkles, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Edit3, ArrowLeft, UploadCloud, CheckCircle, Save, Sparkles, Loader2, AlertCircle, CheckCircle2, Key, Eye, EyeOff, Lock } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import useProjects from "../hooks/useProjects";
 import SEO from "../components/SEO";
 import api from "../services/api";
 import AutoTranslateButton from "../components/AutoTranslateButton";
 import { translateFields } from "../utils/translator";
-import { analyzeGitHubProject } from "../utils/githubAnalyzer";
+import { analyzeGitHubProject, getActiveGitHubToken } from "../utils/githubAnalyzer";
 
 export default function EditProject() {
   const { id } = useParams();
@@ -44,6 +44,31 @@ export default function EditProject() {
   const [gitAnalysisError, setGitAnalysisError] = useState("");
   const [gitAnalysisSuccess, setGitAnalysisSuccess] = useState(null);
 
+  // Gestion du Token GitHub pour dépôts privés
+  const [githubToken, setGithubToken] = useState(() => getActiveGitHubToken());
+  const [showTokenModal, setShowTokenModal] = useState(false);
+  const [tokenInput, setTokenInput] = useState(() => getActiveGitHubToken() || "");
+  const [showSecret, setShowSecret] = useState(false);
+  const [tokenFeedback, setTokenFeedback] = useState("");
+
+  function handleSaveToken(e) {
+    e?.preventDefault();
+    const val = tokenInput.trim();
+    if (val) {
+      localStorage.setItem("github_access_token", val);
+      setGithubToken(val);
+      setTokenFeedback("Token enregistré ! Vos dépôts privés sont déverrouillés.");
+    } else {
+      localStorage.removeItem("github_access_token");
+      setGithubToken("");
+      setTokenFeedback("Token supprimé.");
+    }
+    setTimeout(() => {
+      setTokenFeedback("");
+      setShowTokenModal(false);
+    }, 2200);
+  }
+
   // Analyse complète du dépôt Git par IA
   async function handleAnalyzeGitHub() {
     setGitAnalysisError("");
@@ -62,6 +87,7 @@ export default function EditProject() {
       const result = await analyzeGitHubProject({
         repoUrl,
         customTitle: form.title?.trim(),
+        token: githubToken,
       });
 
       setForm((prev) => ({
@@ -440,6 +466,137 @@ export default function EditProject() {
               />
             </div>
           </div>
+
+          {/* Section Accès Dépôts Privés */}
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px", padding: "10px 14px", borderRadius: "12px", background: "rgba(255, 255, 255, 0.04)", border: "1px solid rgba(255, 255, 255, 0.08)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.82rem" }}>
+              {githubToken ? (
+                <>
+                  <span style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#34d399", display: "inline-block" }} />
+                  <span style={{ color: "#34d399", fontWeight: 700 }}>Dépôts privés déverrouillés</span>
+                  <span style={{ color: "#94a3b8", fontSize: "0.75rem" }}>(Token GitHub actif)</span>
+                </>
+              ) : (
+                <>
+                  <Lock size={14} color="#fbbf24" />
+                  <span style={{ color: "#fbbf24", fontWeight: 600 }}>Dépôt privé ?</span>
+                  <span style={{ color: "#94a3b8", fontSize: "0.75rem" }}>Ajoutez un Token GitHub pour que l'IA puisse y accéder</span>
+                </>
+              )}
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setShowTokenModal(!showTokenModal)}
+              style={{
+                background: "none",
+                border: "none",
+                color: "#38bdf8",
+                fontSize: "0.78rem",
+                fontWeight: 700,
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "5px",
+                textDecoration: "underline",
+              }}
+            >
+              <Key size={13} />
+              <span>{githubToken ? "Gérer / Modifier le Token" : "Configurer le Token GitHub"}</span>
+            </button>
+          </div>
+
+          {/* Formulaire rétractable de configuration du Token */}
+          {showTokenModal && (
+            <div style={{ background: "rgba(2, 6, 23, 0.95)", border: "1px solid rgba(56, 189, 248, 0.3)", borderRadius: "14px", padding: "1.2rem", display: "flex", flexDirection: "column", gap: "0.85rem" }}>
+              <div>
+                <h4 style={{ fontSize: "0.9rem", fontWeight: 700, color: "#f8fafc", margin: "0 0 4px", display: "flex", alignItems: "center", gap: "8px" }}>
+                  <Key size={15} color="#38bdf8" />
+                  <span>Token GitHub Personnel (PAT) pour dépôts privés</span>
+                </h4>
+                <p style={{ fontSize: "0.78rem", color: "#94a3b8", margin: 0, lineHeight: 1.45 }}>
+                  GitHub protège vos dépôts privés : ils renvoient une erreur 404 sans authentification. Un token avec la permission <code>repo</code> permet à l'IA d'analyser vos projets confidentiels et leurs READMEs.
+                </p>
+              </div>
+
+              <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                <div style={{ position: "relative", flex: 1, minWidth: "240px" }}>
+                  <input
+                    type={showSecret ? "text" : "password"}
+                    value={tokenInput}
+                    onChange={(e) => setTokenInput(e.target.value)}
+                    placeholder="Collez votre token (ex: ghp_xxxxxxxxxxxxxxxxxxxx)"
+                    style={{
+                      width: "100%",
+                      padding: "10px 40px 10px 12px",
+                      borderRadius: "10px",
+                      background: "rgba(15, 23, 42, 0.85)",
+                      border: "1px solid rgba(255, 255, 255, 0.15)",
+                      color: "#ffffff",
+                      fontSize: "0.85rem",
+                      outline: "none",
+                      boxSizing: "border-box",
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowSecret(!showSecret)}
+                    style={{
+                      position: "absolute",
+                      right: "10px",
+                      top: "50%",
+                      transform: "translateY(-50%)",
+                      background: "none",
+                      border: "none",
+                      color: "#94a3b8",
+                      cursor: "pointer",
+                      padding: 0,
+                    }}
+                  >
+                    {showSecret ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleSaveToken}
+                  style={{
+                    padding: "10px 20px",
+                    borderRadius: "10px",
+                    background: "#38bdf8",
+                    border: "none",
+                    color: "#020617",
+                    fontSize: "0.85rem",
+                    fontWeight: 700,
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  Enregistrer le Token
+                </button>
+              </div>
+
+              {tokenFeedback && (
+                <div style={{ fontSize: "0.8rem", color: "#34d399", fontWeight: 600 }}>
+                  ✅ {tokenFeedback}
+                </div>
+              )}
+
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "8px", fontSize: "0.75rem", color: "#64748b" }}>
+                <span>
+                  💡 Enregistré dans votre navigateur (ou dans <code>.env</code> sous <code>VITE_GITHUB_TOKEN</code>).
+                </span>
+                <a
+                  href="https://github.com/settings/tokens/new?scopes=repo&description=Portfolio+AI+Analyzer"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ color: "#38bdf8", fontWeight: 700, textDecoration: "none" }}
+                >
+                  Créer un token sur GitHub (accès direct sécurisé) ➔
+                </a>
+              </div>
+            </div>
+          )}
 
           <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
             <button
