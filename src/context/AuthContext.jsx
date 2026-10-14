@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import api from "../services/api";
-import { loginWithFirebase, logoutWithFirebase } from "../firebase";
+import { loginWithFirebase, logoutWithFirebase, updateFirebaseCredentials } from "../firebase";
 
 const AuthContext = createContext();
 
@@ -52,6 +52,56 @@ export function AuthProvider({ children }) {
     }
   }
 
+  async function updateCredentials({ name, email, password, currentPassword }) {
+    let apiSuccess = false;
+
+    // 1. Tenter la mise à jour via l'API Backend Laravel
+    try {
+      const payload = {};
+      if (name) payload.name = name;
+      if (email) payload.email = email;
+      if (password) {
+        payload.password = password;
+        if (currentPassword) payload.current_password = currentPassword;
+      }
+      const response = await api.post("/admin/credentials", payload);
+      if (response?.data) {
+        apiSuccess = true;
+      }
+    } catch (apiErr) {
+      console.warn("Échec mise à jour accès via API Laravel:", apiErr);
+      const apiErrorMsg = apiErr?.response?.data?.message;
+      if (apiErr?.response?.status === 422) {
+        throw new Error(apiErrorMsg || "L'ancien mot de passe saisi est incorrect.");
+      }
+    }
+
+    // 2. Synchroniser avec Firebase Auth si disponible
+    try {
+      await updateFirebaseCredentials(email, password);
+    } catch (fbErr) {
+      console.warn("Mise à jour Firebase Auth:", fbErr);
+    }
+
+    // 3. Mettre à jour l'utilisateur dans l'état local et localStorage
+    const updatedUser = {
+      ...(user || {}),
+      ...(name ? { name } : {}),
+      ...(email ? { email } : {}),
+      lastUpdated: new Date().toISOString(),
+    };
+
+    localStorage.setItem("admin", JSON.stringify(updatedUser));
+    setUser(updatedUser);
+
+    return {
+      success: true,
+      user: updatedUser,
+      apiSynced: apiSuccess,
+      message: "Identifiants et accès mis à jour avec succès !",
+    };
+  }
+
   async function logout() {
     try {
       await api.post("/logout");
@@ -71,7 +121,7 @@ export function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, updateCredentials }}>
       {children}
     </AuthContext.Provider>
   );

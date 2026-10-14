@@ -23,6 +23,7 @@ import {
   Briefcase,
   Settings,
   Check,
+  UserCheck,
 } from "lucide-react";
 import useProjects from "../hooks/useProjects";
 import useArticles from "../hooks/useArticles";
@@ -300,6 +301,26 @@ export default function Dashboard() {
                   {unreadMessagesCount}
                 </span>
               )}
+            </Link>
+
+            <Link
+              to="/admin/profile"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "12px 18px",
+                borderRadius: "14px",
+                background: "rgba(56, 189, 248, 0.08)",
+                border: "1px solid rgba(56, 189, 248, 0.25)",
+                color: "#38bdf8",
+                fontSize: "0.85rem",
+                fontWeight: 700,
+                textDecoration: "none",
+              }}
+            >
+              <UserCheck size={17} />
+              Mon Profil & Accès
             </Link>
 
             <Link

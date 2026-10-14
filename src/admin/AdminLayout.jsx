@@ -23,6 +23,7 @@ import {
   Briefcase,
   BarChart3,
   Zap,
+  UserCheck,
 } from "lucide-react";
 
 export default function AdminLayout() {
@@ -74,6 +75,7 @@ export default function AdminLayout() {
     { name: "Impact & Témoignages", path: "/admin/impact", icon: Zap, end: true },
     { name: "Articles de Blog", path: "/admin/articles", icon: FileText, end: true },
     { name: "Messages Reçus", path: "/admin/messages", icon: MessageSquare, end: false },
+    { name: "Mon Profil & Accès", path: "/admin/profile", icon: UserCheck, end: true },
     { name: "Paramètres & Visibilité", path: "/admin/settings", icon: Settings, end: false },
   ];
 
@@ -89,6 +91,7 @@ export default function AdminLayout() {
     if (location.pathname === "/admin/articles") return "Gestion du blog";
     if (location.pathname === "/admin/articles/create") return "Rédiger un article";
     if (location.pathname === "/admin/messages") return "Boîte de réception";
+    if (location.pathname === "/admin/profile") return "Mon Profil & Accès Administrateur";
     if (location.pathname === "/admin/settings") return "Paramètres du site & Visibilité";
     return "Administration";
   };
@@ -426,7 +429,8 @@ export default function AdminLayout() {
               <span>{darkMode ? "Thème Doux" : "Thème OLED"}</span>
             </button>
 
-            <div
+            <Link
+              to="/admin/profile"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -436,11 +440,15 @@ export default function AdminLayout() {
                 background: darkMode ? "rgba(255, 255, 255, 0.04)" : "rgba(0, 0, 0, 0.04)",
                 border: `1px solid ${theme.border}`,
                 fontSize: "0.78rem",
+                textDecoration: "none",
+                cursor: "pointer",
+                transition: "all 0.2s",
               }}
+              title="Gérer mon profil et mes accès"
             >
               <Shield size={14} color="#38bdf8" />
               <span style={{ color: theme.text, fontWeight: 600 }}>{user?.email || "mmilinda00@gmail.com"}</span>
-            </div>
+            </Link>
 
             <Link
               to="/admin/projects/create"

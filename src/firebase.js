@@ -119,6 +119,29 @@ export async function logoutWithFirebase() {
 }
 
 /**
+ * Mise à jour des identifiants Firebase Auth de l'administrateur
+ */
+export async function updateFirebaseCredentials(newEmail, newPassword) {
+  if (!firebaseAuth || !firebaseAuth.currentUser) {
+    return false;
+  }
+  try {
+    if (newEmail && newEmail !== firebaseAuth.currentUser.email) {
+      const { updateEmail } = await import("firebase/auth");
+      await updateEmail(firebaseAuth.currentUser, newEmail);
+    }
+    if (newPassword) {
+      const { updatePassword } = await import("firebase/auth");
+      await updatePassword(firebaseAuth.currentUser, newPassword);
+    }
+    return true;
+  } catch (err) {
+    console.warn("Mise à jour des identifiants Firebase:", err?.message || err);
+    return false;
+  }
+}
+
+/**
  * Sauvegarde de documents dans Firebase / API
  */
 export async function addDoc(collectionName, data) {

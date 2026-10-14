@@ -55,6 +55,8 @@ Route::middleware('auth:sanctum')->group(function () {
     
     // Auth
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/admin/credentials', [AuthController::class, 'updateCredentials']);
+    Route::put('/admin/credentials', [AuthController::class, 'updateCredentials']);
 
     // Upload générique (Photo, Avatar, Document CV PDF, Image Projet)
     Route::post('/upload', [UploadController::class, 'upload']);

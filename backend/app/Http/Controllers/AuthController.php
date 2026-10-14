@@ -71,21 +71,68 @@ return response()->json([
 
 
 
-public function logout(Request $request)
-{
+    public function logout(Request $request)
+    {
+        if ($request->user()) {
+            $request->user()->tokens()->delete();
+        }
 
+        return response()->json([
+            "message" => "Déconnecté"
+        ]);
+    }
 
-$request->user()->tokens()->delete();
+    /**
+     * Mettre à jour les accès administrateur (nom, email, mot de passe).
+     */
+    public function updateCredentials(Request $request)
+    {
+        $admin = $request->user() ?: Admin::first();
 
+        if (!$admin) {
+            return response()->json([
+                "message" => "Compte administrateur introuvable."
+            ], 404);
+        }
 
-return response()->json([
+        $request->validate([
+            'email' => 'sometimes|nullable|email',
+            'name' => 'sometimes|nullable|string|max:255',
+            'password' => 'sometimes|nullable|string|min:6',
+            'current_password' => 'sometimes|nullable|string',
+        ]);
 
-"message"=>"Déconnecté"
+        // Mise à jour du mot de passe
+        if ($request->filled('password')) {
+            if ($request->filled('current_password')) {
+                if (!Hash::check($request->current_password, $admin->password)) {
+                    return response()->json([
+                        "message" => "L'ancien mot de passe saisi est incorrect."
+                    ], 422);
+                }
+            }
+            $admin->password = Hash::make($request->password);
+        }
 
-]);
+        // Mise à jour de l'email
+        if ($request->filled('email')) {
+            $admin->email = strtolower(trim($request->email));
+        }
 
+        // Mise à jour du nom
+        if ($request->filled('name')) {
+            $admin->name = trim($request->name);
+        }
 
-}
+        $admin->save();
 
-
+        return response()->json([
+            "message" => "Identifiants d'accès mis à jour avec succès !",
+            "admin" => [
+                "id" => $admin->id,
+                "name" => $admin->name,
+                "email" => $admin->email,
+            ]
+        ]);
+    }
 }

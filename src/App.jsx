@@ -33,6 +33,7 @@ import ArticlesManager from "./admin/ArticlesManager";
 import CreateArticle from "./admin/CreateArticle";
 import EditArticle from "./admin/EditArticle";
 import SiteSettings from "./admin/SiteSettings";
+import AdminProfile from "./admin/AdminProfile";
 
 // Protection de route
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -79,6 +80,7 @@ export default function App() {
             <Route path="articles/create" element={<CreateArticle />} />
             <Route path="articles/edit/:id" element={<EditArticle />} />
             <Route path="messages" element={<MessagesManager />} />
+            <Route path="profile" element={<AdminProfile />} />
             <Route path="settings" element={<SiteSettings />} />
           </Route>
         </Routes>
