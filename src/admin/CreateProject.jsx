@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { FolderPlus, ArrowLeft, UploadCloud, CheckCircle, Sparkles } from "lucide-react";
+import { FolderPlus, ArrowLeft, UploadCloud, CheckCircle, Sparkles, Loader2, AlertCircle, CheckCircle2 } from "lucide-react";
+import { FaGithub } from "react-icons/fa6";
 import api from "../services/api";
 import SEO from "../components/SEO";
 import { db, collection, addDoc } from "../firebase";
 import AutoTranslateButton from "../components/AutoTranslateButton";
 import { translateFields } from "../utils/translator";
+import { analyzeGitHubProject } from "../utils/githubAnalyzer";
 
 function slugify(text) {
   return text
@@ -42,8 +44,65 @@ export default function CreateProject() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // État de l'analyse IA via Git
+  const [analyzingGit, setAnalyzingGit] = useState(false);
+  const [gitAnalysisError, setGitAnalysisError] = useState("");
+  const [gitAnalysisSuccess, setGitAnalysisSuccess] = useState(null);
+
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  // Analyse complète du dépôt Git par IA
+  async function handleAnalyzeGitHub() {
+    setGitAnalysisError("");
+    setGitAnalysisSuccess(null);
+
+    const repoUrl = form.github?.trim();
+    if (!repoUrl) {
+      setGitAnalysisError(
+        "Veuillez renseigner le lien du dépôt Git (ex: https://github.com/votre-compte/nom-du-projet)"
+      );
+      return;
+    }
+
+    setAnalyzingGit(true);
+    try {
+      const result = await analyzeGitHubProject({
+        repoUrl,
+        customTitle: form.title?.trim(),
+      });
+
+      setForm((prev) => ({
+        ...prev,
+        title: result.title || prev.title,
+        titleEn: result.titleEn || prev.titleEn,
+        category: result.category || prev.category,
+        categoryEn: result.categoryEn || prev.categoryEn,
+        description: result.description || prev.description,
+        descriptionEn: result.descriptionEn || prev.descriptionEn,
+        problem: result.problem || prev.problem,
+        problemEn: result.problemEn || prev.problemEn,
+        solution: result.solution || prev.solution,
+        solutionEn: result.solutionEn || prev.solutionEn,
+        technologies: result.technologies || prev.technologies,
+        impact: result.impact || prev.impact,
+        impactEn: result.impactEn || prev.impactEn,
+        demo: result.demo || prev.demo,
+        github: result.github || prev.github,
+      }));
+
+      setGitAnalysisSuccess({
+        message: "Dépôt Git analysé et formulaire complété avec succès par l'IA !",
+        stats: result.stats,
+        techs: result.technologies,
+      });
+    } catch (err) {
+      console.error("Erreur analyse Git:", err);
+      setGitAnalysisError(err?.message || "Impossible d'analyser ce dépôt Git. Vérifiez que l'URL est accessible.");
+    } finally {
+      setAnalyzingGit(false);
+    }
   }
 
   async function handleAutoTranslate() {
@@ -250,11 +309,214 @@ export default function CreateProject() {
               Ajouter un Nouveau Projet
             </h1>
             <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
-              Remplissez les informations en français ci-dessous. Le bouton IA ou la validation génère automatiquement la version anglaise !
+              Remplissez les informations ci-dessous, ou utilisez notre assistant IA pour générer tout le contenu depuis votre dépôt Git !
             </p>
           </div>
 
           <AutoTranslateButton onTranslate={handleAutoTranslate} />
+        </div>
+
+        {/* Assistant IA : Remplissage Automatique depuis GitHub */}
+        <div
+          style={{
+            background: "linear-gradient(135deg, rgba(56, 189, 248, 0.09) 0%, rgba(168, 85, 247, 0.12) 100%)",
+            border: "1px solid rgba(56, 189, 248, 0.3)",
+            borderRadius: "20px",
+            padding: "1.5rem",
+            display: "flex",
+            flexDirection: "column",
+            gap: "1.1rem",
+            position: "relative",
+            overflow: "hidden",
+            boxShadow: "0 10px 30px rgba(0, 0, 0, 0.35)",
+          }}
+        >
+          {/* Subtle neon glow overlay */}
+          <div
+            style={{
+              position: "absolute",
+              top: "-40px",
+              right: "-40px",
+              width: "140px",
+              height: "140px",
+              background: "radial-gradient(circle, rgba(168, 85, 247, 0.25) 0%, transparent 70%)",
+              filter: "blur(25px)",
+              pointerEvents: "none",
+            }}
+          />
+
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <div
+                style={{
+                  width: "38px",
+                  height: "38px",
+                  borderRadius: "10px",
+                  background: "linear-gradient(135deg, #38bdf8, #a855f7)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#ffffff",
+                  boxShadow: "0 0 15px rgba(56, 189, 248, 0.4)",
+                  flexShrink: 0,
+                }}
+              >
+                <Sparkles size={20} />
+              </div>
+              <div>
+                <h3 style={{ fontSize: "1.05rem", fontWeight: 700, color: "#f8fafc", margin: 0, display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span>Génération Automatique par IA depuis GitHub</span>
+                  <FaGithub size={17} color="#cbd5e1" />
+                </h3>
+                <p style={{ fontSize: "0.82rem", color: "#94a3b8", margin: 0 }}>
+                  Indiquez le nom et le lien du dépôt Git : l'IA analyse le code, le README et les langages pour remplir instantanément les 9 champs du projet en français et en anglais !
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1rem" }}>
+            <div>
+              <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "#cbd5e1", marginBottom: "0.35rem" }}>
+                Nom du Projet (Optionnel ou personnalisé)
+              </label>
+              <input
+                type="text"
+                name="title"
+                value={form.title}
+                onChange={handleChange}
+                placeholder="Ex: AgriChain AI (ou laisser vide pour déduction auto)"
+                style={{
+                  width: "100%",
+                  padding: "11px 14px",
+                  borderRadius: "10px",
+                  background: "rgba(2, 6, 23, 0.8)",
+                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  color: "#ffffff",
+                  fontSize: "0.88rem",
+                  outline: "none",
+                  boxSizing: "border-box",
+                }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: "block", fontSize: "0.75rem", fontWeight: 700, color: "#cbd5e1", marginBottom: "0.35rem" }}>
+                Lien du dépôt Git (URL GitHub) *
+              </label>
+              <input
+                type="url"
+                name="github"
+                value={form.github}
+                onChange={handleChange}
+                placeholder="https://github.com/votre-compte/votre-depot"
+                style={{
+                  width: "100%",
+                  padding: "11px 14px",
+                  borderRadius: "10px",
+                  background: "rgba(2, 6, 23, 0.8)",
+                  border: "1px solid rgba(255, 255, 255, 0.12)",
+                  color: "#ffffff",
+                  fontSize: "0.88rem",
+                  outline: "none",
+                  boxSizing: "border-box",
+                }}
+              />
+            </div>
+          </div>
+
+          <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", flexWrap: "wrap", gap: "10px" }}>
+            <button
+              type="button"
+              onClick={handleAnalyzeGitHub}
+              disabled={analyzingGit}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "11px 22px",
+                borderRadius: "12px",
+                background: "linear-gradient(135deg, #0284c7 0%, #7c3aed 100%)",
+                border: "1px solid rgba(255, 255, 255, 0.2)",
+                color: "#ffffff",
+                fontSize: "0.9rem",
+                fontWeight: 700,
+                cursor: analyzingGit ? "not-allowed" : "pointer",
+                boxShadow: "0 0 20px rgba(124, 58, 237, 0.35)",
+                transition: "all 0.2s ease",
+                opacity: analyzingGit ? 0.75 : 1,
+              }}
+            >
+              {analyzingGit ? (
+                <>
+                  <Loader2 size={16} className="animate-spin" />
+                  <span>Analyse du dépôt Git & génération IA en cours...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles size={16} />
+                  <span>⚡ Analyser le dépôt Git & Remplir par IA</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Feedback d'erreur d'analyse */}
+          {gitAnalysisError && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "10px 14px",
+                borderRadius: "10px",
+                background: "rgba(239, 68, 68, 0.12)",
+                border: "1px solid rgba(239, 68, 68, 0.3)",
+                color: "#f87171",
+                fontSize: "0.85rem",
+                fontWeight: 600,
+              }}
+            >
+              <AlertCircle size={16} />
+              <span>{gitAnalysisError}</span>
+            </div>
+          )}
+
+          {/* Feedback de succès d'analyse */}
+          {gitAnalysisSuccess && (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "8px",
+                padding: "12px 16px",
+                borderRadius: "12px",
+                background: "rgba(16, 185, 129, 0.12)",
+                border: "1px solid rgba(16, 185, 129, 0.3)",
+                color: "#34d399",
+                fontSize: "0.85rem",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: "8px", fontWeight: 700 }}>
+                <CheckCircle2 size={18} />
+                <span>{gitAnalysisSuccess.message}</span>
+              </div>
+              <div style={{ display: "flex", alignItems: "center", flexWrap: "wrap", gap: "8px", fontSize: "0.78rem", color: "#cbd5e1" }}>
+                <span style={{ padding: "3px 8px", borderRadius: "6px", background: "rgba(255, 255, 255, 0.08)" }}>
+                  ⭐ {gitAnalysisSuccess.stats?.stars || 0} stars
+                </span>
+                <span style={{ padding: "3px 8px", borderRadius: "6px", background: "rgba(255, 255, 255, 0.08)" }}>
+                  🔀 {gitAnalysisSuccess.stats?.forks || 0} forks
+                </span>
+                <span style={{ padding: "3px 8px", borderRadius: "6px", background: "rgba(255, 255, 255, 0.08)" }}>
+                  Langage : {gitAnalysisSuccess.stats?.language || "Multi"}
+                </span>
+                <span style={{ padding: "3px 8px", borderRadius: "6px", background: "rgba(56, 189, 248, 0.15)", color: "#38bdf8" }}>
+                  Stack : {gitAnalysisSuccess.techs}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Glassmorphic Form Card */}
@@ -466,7 +728,31 @@ export default function CreateProject() {
             </div>
 
             <div>
-              <label style={labelStyle}>Lien GitHub (URL)</label>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.4rem" }}>
+                <label style={{ ...labelStyle, marginBottom: 0 }}>Lien GitHub (URL) *</label>
+                {form.github && (
+                  <button
+                    type="button"
+                    onClick={handleAnalyzeGitHub}
+                    disabled={analyzingGit}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "#38bdf8",
+                      fontSize: "0.75rem",
+                      fontWeight: 700,
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "4px",
+                      padding: 0,
+                    }}
+                  >
+                    <Sparkles size={13} />
+                    <span>{analyzingGit ? "Analyse..." : "Remplir avec l'IA"}</span>
+                  </button>
+                )}
+              </div>
               <input
                 name="github"
                 placeholder="https://github.com/mmilinda/mon-projet"
