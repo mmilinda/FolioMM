@@ -345,13 +345,14 @@ export function SiteDataProvider({ children }) {
 
     async function loadDataFromApi() {
       try {
-        const [profileRes, servicesRes, skillsRes, timelineRes, impactRes, settingsRes] = await Promise.allSettled([
+        const [profileRes, servicesRes, skillsRes, timelineRes, impactRes, settingsRes, statsRes] = await Promise.allSettled([
           api.get("/profile"),
           api.get("/services"),
           api.get("/skills"),
           api.get("/timeline"),
           api.get("/impact"),
           api.get("/settings"),
+          api.get("/stats"),
         ]);
 
         if (!isMounted) return;
@@ -361,10 +362,19 @@ export function SiteDataProvider({ children }) {
           const formattedProfile = {
             ...defaultProfile,
             ...p,
+            headlineEn: p.headline_en || p.headlineEn || defaultProfile.headlineEn,
+            bioEn: p.bio_en || p.bioEn || defaultProfile.bioEn,
+            availabilityEn: p.availability_en || p.availabilityEn || defaultProfile.availabilityEn,
             cvLink: p.cv_link || p.cvLink || defaultProfile.cvLink,
+            cvLinkFr: p.cv_link_fr || p.cvLinkFr || defaultProfile.cvLinkFr,
+            cvLinkEn: p.cv_link_en || p.cvLinkEn || defaultProfile.cvLinkEn,
             yearsExp: p.years_exp || p.yearsExp || defaultProfile.yearsExp,
             projectsCount: p.projects_count || p.projectsCount || defaultProfile.projectsCount,
             uptimeRate: p.uptime_rate || p.uptimeRate || defaultProfile.uptimeRate,
+            heroRoles: p.hero_roles || p.heroRoles || defaultProfile.heroRoles,
+            heroBadges: p.hero_badges || p.heroBadges || defaultProfile.heroBadges,
+            highlights: p.highlights || defaultProfile.highlights,
+            sectionTitles: p.section_titles || p.sectionTitles || defaultProfile.sectionTitles,
           };
           setProfileState(formattedProfile);
           localStorage.setItem("site_profile", JSON.stringify(formattedProfile));
@@ -375,7 +385,9 @@ export function SiteDataProvider({ children }) {
           const sList = servicesRes.value.data.map((s) => ({
             id: s.id,
             title: s.title,
+            titleEn: s.title_en || s.titleEn || s.title,
             desc: s.desc,
+            descEn: s.desc_en || s.descEn || s.desc,
             iconName: s.icon_name || s.iconName || "Code2",
             tags: s.tags || [],
             glow: s.glow || "#38bdf8",
@@ -390,6 +402,7 @@ export function SiteDataProvider({ children }) {
           const skList = skillsRes.value.data.map((sk) => ({
             id: sk.id,
             category: sk.category,
+            categoryEn: sk.category_en || sk.categoryEn || sk.category,
             iconName: sk.icon_name || sk.iconName || "Cpu",
             skills: sk.skills || [],
           }));
@@ -419,6 +432,19 @@ export function SiteDataProvider({ children }) {
           };
           setImpactState(formattedImpact);
           localStorage.setItem("site_impact", JSON.stringify(formattedImpact));
+        }
+
+        if (statsRes.status === "fulfilled" && Array.isArray(statsRes.value.data) && statsRes.value.data.length > 0) {
+          const stList = statsRes.value.data.map((st) => ({
+            id: st.stat_id || `stat-${st.id}`,
+            value: st.value,
+            label: st.label,
+            labelEn: st.label_en || st.labelEn || st.label,
+            desc: st.desc || "",
+            descEn: st.desc_en || st.descEn || st.desc,
+          }));
+          setStatsState(stList);
+          localStorage.setItem("site_stats", JSON.stringify(stList));
         }
 
         if (settingsRes.status === "fulfilled" && settingsRes.value.data?.sectionVisibility) {
@@ -474,28 +500,43 @@ export function SiteDataProvider({ children }) {
       await api.post("/admin/profile", {
         name: newProfile.name,
         headline: newProfile.headline,
+        headline_en: newProfile.headlineEn || newProfile.headline_en,
         bio: newProfile.bio,
+        bio_en: newProfile.bioEn || newProfile.bio_en,
         email: newProfile.email,
         location: newProfile.location,
         availability: newProfile.availability,
+        availability_en: newProfile.availabilityEn || newProfile.availability_en,
         github: newProfile.github,
         linkedin: newProfile.linkedin,
         photo: newProfile.photo,
         avatar: newProfile.avatar,
         cv_link: newProfile.cvLink,
+        cv_link_fr: newProfile.cvLinkFr || newProfile.cv_link_fr,
+        cv_link_en: newProfile.cvLinkEn || newProfile.cv_link_en,
         years_exp: newProfile.yearsExp,
         projects_count: newProfile.projectsCount,
         uptime_rate: newProfile.uptimeRate,
+        hero_roles: newProfile.heroRoles || newProfile.hero_roles,
+        hero_badges: newProfile.heroBadges || newProfile.hero_badges,
+        highlights: newProfile.highlights,
+        section_titles: newProfile.sectionTitles || newProfile.section_titles,
       });
     } catch (err) {
       console.warn("Erreur de sauvegarde profil API:", err);
     }
   };
 
-  const updateStats = (newStats) => {
+  const updateStats = async (newStats) => {
     setStatsState(newStats);
     localStorage.setItem("site_stats", JSON.stringify(newStats));
     notifyUpdate();
+
+    try {
+      await api.post("/admin/stats/sync", { stats: newStats });
+    } catch (err) {
+      console.warn("Erreur sync stats API:", err);
+    }
   };
 
   const updateServices = async (newServices) => {

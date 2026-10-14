@@ -12,6 +12,7 @@ use App\Http\Controllers\TimelineController;
 use App\Http\Controllers\ImpactController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\SiteSettingController;
+use App\Http\Controllers\StatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,11 +34,12 @@ Route::get('/projects/{slug}', [ProjectController::class, 'show']);
 Route::get('/articles', [ArticleController::class, 'index']);
 Route::get('/articles/{slug}', [ArticleController::class, 'show']);
 
-// Services, Skills, Timeline, Impact & Réglages
+// Services, Skills, Timeline, Impact, Stats & Réglages
 Route::get('/services', [ServiceController::class, 'index']);
 Route::get('/skills', [SkillController::class, 'index']);
 Route::get('/timeline', [TimelineController::class, 'index']);
 Route::get('/impact', [ImpactController::class, 'index']);
+Route::get('/stats', [StatController::class, 'index']);
 Route::get('/settings', [SiteSettingController::class, 'show']);
 
 // Formulaire de contact public
@@ -65,21 +67,24 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/admin/settings', [SiteSettingController::class, 'update']);
     Route::put('/admin/settings', [SiteSettingController::class, 'update']);
 
-    // Projets (Création, Édition, Suppression)
+    // Projets (Création, Édition POST/PUT, Suppression)
     Route::post('/projects', [ProjectController::class, 'store']);
+    Route::post('/projects/{id}', [ProjectController::class, 'update']);
     Route::put('/projects/{id}', [ProjectController::class, 'update']);
     Route::delete('/projects/{id}', [ProjectController::class, 'destroy']);
 
-    // Articles (Création, Édition, Suppression)
+    // Articles (Création, Édition POST/PUT, Suppression)
     Route::post('/articles', [ArticleController::class, 'store']);
+    Route::post('/articles/{id}', [ArticleController::class, 'update']);
     Route::put('/articles/{id}', [ArticleController::class, 'update']);
     Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
 
-    // Synchronization des services, compétences, timeline & impact
+    // Synchronization des services, compétences, timeline, impact & stats
     Route::post('/admin/services/sync', [ServiceController::class, 'sync']);
     Route::post('/admin/skills/sync', [SkillController::class, 'sync']);
     Route::post('/admin/timeline/sync', [TimelineController::class, 'sync']);
     Route::post('/admin/impact/sync', [ImpactController::class, 'sync']);
+    Route::post('/admin/stats/sync', [StatController::class, 'sync']);
 
     // Boîte de Réception Messages
     Route::get('/admin/messages', [MessageController::class, 'index']);

@@ -14,19 +14,22 @@ class SkillController extends Controller
 
     public function sync(Request $request)
     {
-        $request->validate([
-            'skills' => 'required|array',
-        ]);
+        $skillsData = $request->input('skills', $request->all());
 
-        Skill::query()->delete();
+        if (is_array($skillsData)) {
+            Skill::query()->delete();
 
-        foreach ($request->skills as $index => $item) {
-            Skill::create([
-                'category' => $item['category'],
-                'icon_name' => $item['iconName'] ?? $item['icon_name'] ?? 'Cpu',
-                'skills' => $item['skills'] ?? [],
-                'order' => $index,
-            ]);
+            foreach ($skillsData as $index => $item) {
+                if (!is_array($item)) continue;
+
+                Skill::create([
+                    'category' => $item['category'] ?? '',
+                    'category_en' => $item['categoryEn'] ?? $item['category_en'] ?? null,
+                    'icon_name' => $item['iconName'] ?? $item['icon_name'] ?? 'Cpu',
+                    'skills' => $item['skills'] ?? [],
+                    'order' => $index,
+                ]);
+            }
         }
 
         return response()->json(Skill::orderBy('order', 'asc')->get());

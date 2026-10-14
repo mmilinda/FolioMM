@@ -4,6 +4,8 @@ import { Edit3, ArrowLeft, CheckCircle, Save } from "lucide-react";
 import useArticles from "../hooks/useArticles";
 import SEO from "../components/SEO";
 
+import api from "../services/api";
+
 export default function EditArticle() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -29,9 +31,9 @@ export default function EditArticle() {
       setForm({
         title: targetArticle.title || "",
         category: targetArticle.category || "DevOps",
-        readTime: targetArticle.readTime || "5 min",
+        readTime: targetArticle.readTime || targetArticle.read_time || "5 min",
         excerpt: targetArticle.desc || targetArticle.excerpt || "",
-        content: targetArticle.sections?.[0]?.text || targetArticle.desc || "",
+        content: targetArticle.sections?.[0]?.text || targetArticle.content || targetArticle.desc || "",
         tags: Array.isArray(targetArticle.tags) ? targetArticle.tags.join(", ") : targetArticle.tags || "",
       });
     }
@@ -41,7 +43,7 @@ export default function EditArticle() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
     if (!targetArticle) return;
 
@@ -58,6 +60,24 @@ export default function EditArticle() {
         { type: "paragraph", text: form.content },
       ],
     };
+
+    try {
+      await api.post(`/articles/${targetArticle.id || targetArticle.slug}`, {
+        title: form.title,
+        title_en: form.title,
+        category: form.category,
+        category_en: form.category,
+        excerpt: form.excerpt,
+        desc_en: form.excerpt,
+        content: form.content,
+        read_time: form.readTime,
+        read_time_en: form.readTime,
+        tags: tagArray,
+        sections: updatedData.sections,
+      });
+    } catch (apiErr) {
+      console.warn("API article update fallback:", apiErr);
+    }
 
     try {
       const editedMap = JSON.parse(localStorage.getItem("edited_articles") || "{}");

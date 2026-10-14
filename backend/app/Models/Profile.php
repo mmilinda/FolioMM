@@ -12,17 +12,33 @@ class Profile extends Model
     protected $fillable = [
         'name',
         'headline',
+        'headline_en',
         'bio',
+        'bio_en',
         'email',
         'location',
         'availability',
+        'availability_en',
         'github',
         'linkedin',
         'photo',
         'avatar',
         'cv_link',
+        'cv_link_fr',
+        'cv_link_en',
         'years_exp',
         'projects_count',
         'uptime_rate',
+        'hero_roles',
+        'hero_badges',
+        'highlights',
+        'section_titles',
+    ];
+
+    protected $casts = [
+        'hero_roles' => 'array',
+        'hero_badges' => 'array',
+        'highlights' => 'array',
+        'section_titles' => 'array',
     ];
 }

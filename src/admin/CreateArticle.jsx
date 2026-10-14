@@ -3,6 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { FilePlus, ArrowLeft, Sparkles } from "lucide-react";
 import SEO from "../components/SEO";
 
+import api from "../services/api";
+
 function slugify(text) {
   return text
     .toString()
@@ -31,7 +33,7 @@ export default function CreateArticle() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
-  function submit(e) {
+  async function submit(e) {
     e.preventDefault();
     setLoading(true);
 
@@ -58,6 +60,27 @@ export default function CreateArticle() {
       ],
     };
 
+    // 1. Sauvegarde dans l'API Backend Laravel
+    try {
+      await api.post("/articles", {
+        slug,
+        title: form.title,
+        title_en: form.title,
+        category: form.category,
+        category_en: form.category,
+        excerpt: form.excerpt,
+        desc_en: form.excerpt,
+        content: form.content,
+        read_time: form.readTime,
+        read_time_en: form.readTime,
+        tags: tagArray,
+        sections: newArticle.sections,
+      });
+    } catch (apiErr) {
+      console.warn("API article creation fallback:", apiErr);
+    }
+
+    // 2. Persistance locale fallback
     try {
       const existing = JSON.parse(localStorage.getItem("custom_articles") || "[]");
       localStorage.setItem("custom_articles", JSON.stringify([newArticle, ...existing]));

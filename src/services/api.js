@@ -1,7 +1,12 @@
 import axios from "axios";
 
+// En production, ne jamais tomber sur 127.0.0.1 : Chrome afficherait une demande
+// d'autorisation "Accéder à d'autres applis et services sur cet appareil".
+const API_URL =
+  import.meta.env.VITE_API_URL || (import.meta.env.DEV ? "http://127.0.0.1:8000/api" : null);
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://127.0.0.1:8000/api",
+  baseURL: API_URL || undefined,
   headers: {
     "Accept": "application/json",
   },
@@ -10,6 +15,11 @@ const api = axios.create({
 // Intercepteur pour ajouter le Token d'authentification à chaque requête
 api.interceptors.request.use(
   (config) => {
+    if (!API_URL) {
+      // Aucun backend configuré : on bloque la requête (les appelants utilisent les données de secours)
+      return Promise.reject(new Error("API backend non configurée (VITE_API_URL manquant)"));
+    }
+
     const token = localStorage.getItem("token");
 
     if (token) {

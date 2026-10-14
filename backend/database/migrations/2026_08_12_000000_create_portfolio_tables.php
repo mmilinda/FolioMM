@@ -16,18 +16,27 @@ return new class extends Migration
             $table->id();
             $table->string('name')->default('Milinda Mendy');
             $table->string('headline')->default('Développeuse Full Stack & Ingénieure DevOps');
+            $table->string('headline_en')->nullable()->default('Full Stack & DevOps Developer');
             $table->text('bio')->nullable();
+            $table->text('bio_en')->nullable();
             $table->string('email')->default('mmilinda00@gmail.com');
             $table->string('location')->default('Sénégal 🇸🇳 – Remote');
             $table->string('availability')->default('Ouverte aux opportunités');
+            $table->string('availability_en')->nullable()->default('Open to opportunities');
             $table->string('github')->default('https://github.com/mmilinda');
             $table->string('linkedin')->default('https://www.linkedin.com/in/milinda-mendy-5ba17928a/');
             $table->string('photo')->nullable()->default('/images/profile/MM.png');
             $table->string('avatar')->nullable()->default('/images/profile/MM.png');
             $table->string('cv_link')->nullable()->default('/CV-Milinda-Mendy.pdf');
+            $table->string('cv_link_fr')->nullable()->default('/CV-Milinda-Mendy-FR.pdf');
+            $table->string('cv_link_en')->nullable()->default('/CV-Milinda-Mendy-EN.pdf');
             $table->string('years_exp')->default('5+');
             $table->string('projects_count')->default('30+');
             $table->string('uptime_rate')->default('99.9%');
+            $table->json('hero_roles')->nullable();
+            $table->json('hero_badges')->nullable();
+            $table->json('highlights')->nullable();
+            $table->json('section_titles')->nullable();
             $table->timestamps();
         });
 
@@ -35,7 +44,9 @@ return new class extends Migration
         Schema::create('services', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->string('title_en')->nullable();
             $table->text('desc');
+            $table->text('desc_en')->nullable();
             $table->string('icon_name')->default('Code2');
             $table->json('tags')->nullable();
             $table->string('glow')->nullable()->default('#38bdf8');
@@ -49,6 +60,7 @@ return new class extends Migration
         Schema::create('skills', function (Blueprint $table) {
             $table->id();
             $table->string('category');
+            $table->string('category_en')->nullable();
             $table->string('icon_name')->default('Cpu');
             $table->json('skills');
             $table->integer('order')->default(0);
@@ -89,6 +101,19 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        // Table Stats (Statistiques portfolio pour StatsManager)
+        Schema::create('stats', function (Blueprint $table) {
+            $table->id();
+            $table->string('stat_id')->unique()->nullable();
+            $table->string('value');
+            $table->string('label');
+            $table->string('label_en')->nullable();
+            $table->text('desc')->nullable();
+            $table->text('desc_en')->nullable();
+            $table->integer('order')->default(0);
+            $table->timestamps();
+        });
+
         // Table Messages
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
@@ -116,6 +141,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('site_settings');
         Schema::dropIfExists('messages');
+        Schema::dropIfExists('stats');
         Schema::dropIfExists('testimonials');
         Schema::dropIfExists('impact_metrics');
         Schema::dropIfExists('timelines');

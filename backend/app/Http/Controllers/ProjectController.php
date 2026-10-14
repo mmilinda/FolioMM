@@ -10,7 +10,7 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        return response()->json(Project::latest()->get());
+        return response()->json(Project::orderBy('order', 'asc')->latest()->get());
     }
 
     public function show($idOrSlug)
@@ -27,22 +27,10 @@ class ProjectController extends Controller
             'description' => 'nullable|string',
         ]);
 
-        $data = $request->all();
+        $data = $this->formatProjectData($request);
 
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($request->title);
-        }
-
-        // Upload de l'image principale si présente
-        if ($request->hasFile('image_file')) {
-            $path = $request->file('image_file')->storeAs('public/projects', Str::random(15) . '.' . $request->file('image_file')->getClientOriginalExtension());
-            $data['image'] = asset('storage/' . str_replace('public/', '', $path));
-        }
-
-        // Upload du schéma d'architecture si présent
-        if ($request->hasFile('architecture_diagram_file')) {
-            $path = $request->file('architecture_diagram_file')->storeAs('public/projects', Str::random(15) . '.' . $request->file('architecture_diagram_file')->getClientOriginalExtension());
-            $data['architecture_diagram'] = asset('storage/' . str_replace('public/', '', $path));
         }
 
         $project = Project::create($data);
@@ -53,17 +41,8 @@ class ProjectController extends Controller
     public function update(Request $request, $id)
     {
         $project = Project::where('id', $id)->orWhere('slug', $id)->firstOrFail();
-        $data = $request->all();
-
-        if ($request->hasFile('image_file')) {
-            $path = $request->file('image_file')->storeAs('public/projects', Str::random(15) . '.' . $request->file('image_file')->getClientOriginalExtension());
-            $data['image'] = asset('storage/' . str_replace('public/', '', $path));
-        }
-
-        if ($request->hasFile('architecture_diagram_file')) {
-            $path = $request->file('architecture_diagram_file')->storeAs('public/projects', Str::random(15) . '.' . $request->file('architecture_diagram_file')->getClientOriginalExtension());
-            $data['architecture_diagram'] = asset('storage/' . str_replace('public/', '', $path));
-        }
+        
+        $data = $this->formatProjectData($request, $project);
 
         $project->update($data);
 
@@ -78,5 +57,61 @@ class ProjectController extends Controller
         return response()->json([
             'message' => 'Projet supprimé avec succès'
         ]);
+    }
+
+    private function formatProjectData(Request $request, ?Project $existing = null): array
+    {
+        $data = $request->all();
+
+        // Support both camelCase and snake_case for bilingual attributes
+        $mappings = [
+            'titleEn' => 'title_en',
+            'categoryEn' => 'category_en',
+            'descriptionEn' => 'description_en',
+            'problemEn' => 'problem_en',
+            'solutionEn' => 'solution_en',
+            'impactEn' => 'impact_en',
+            'clientEn' => 'client_en',
+            'roleEn' => 'role_en',
+            'statusEn' => 'status_en',
+            'isPrivate' => 'is_private',
+            'fallbackImage' => 'fallback_image',
+            'architectureDiagram' => 'architecture_diagram',
+            'architectureDetails' => 'architecture_details',
+        ];
+
+        foreach ($mappings as $camel => $snake) {
+            if ($request->has($camel) && !$request->has($snake)) {
+                $data[$snake] = $request->input($camel);
+            }
+        }
+
+        // Upload de l'image principale (supporte à la fois image_file et image comme fichier)
+        $imageFile = $request->file('image_file') ?? $request->file('image');
+        if ($imageFile) {
+            $filename = Str::random(20) . '.' . $imageFile->getClientOriginalExtension();
+            $path = $imageFile->storeAs('public/projects', $filename);
+            $data['image'] = asset('storage/projects/' . $filename);
+        } elseif ($existing && empty($data['image'])) {
+            $data['image'] = $existing->image;
+        }
+
+        // Upload schéma architecture
+        $archFile = $request->file('architecture_diagram_file') ?? $request->file('architecture_diagram');
+        if ($archFile) {
+            $filename = Str::random(20) . '.' . $archFile->getClientOriginalExtension();
+            $path = $archFile->storeAs('public/projects', $filename);
+            $data['architecture_diagram'] = asset('storage/projects/' . $filename);
+        } elseif ($existing && empty($data['architecture_diagram'])) {
+            $data['architecture_diagram'] = $existing->architecture_diagram;
+        }
+
+        // Gestion des tableaux JSON si passés en chaînes
+        if (isset($data['technologies']) && is_string($data['technologies'])) {
+            $decoded = json_decode($data['technologies'], true);
+            $data['technologies'] = is_array($decoded) ? $decoded : array_filter(array_map('trim', explode(',', $data['technologies'])));
+        }
+
+        return $data;
     }
 }

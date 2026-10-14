@@ -4,6 +4,8 @@ import { FileText, Plus, Trash2, ExternalLink, Search, Clock, Eye, EyeOff, Lock,
 import useArticles from "../hooks/useArticles";
 import SEO from "../components/SEO";
 
+import api from "../services/api";
+
 export default function ArticlesManager() {
   // Pass true to include hidden articles in admin list
   const { articles } = useArticles(true);
@@ -29,8 +31,14 @@ export default function ArticlesManager() {
     }
   }
 
-  function remove(article) {
+  async function remove(article) {
     if (!confirm(`Voulez-vous vraiment supprimer l'article "${article.title}" ?`)) return;
+
+    try {
+      await api.delete(`/articles/${article.id || article.slug}`);
+    } catch (apiErr) {
+      console.warn("API article delete fallback:", apiErr);
+    }
 
     try {
       const custom = JSON.parse(localStorage.getItem("custom_articles") || "[]");
