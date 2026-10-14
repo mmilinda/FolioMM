@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FilePlus, ArrowLeft, Sparkles } from "lucide-react";
 import SEO from "../components/SEO";
-
 import api from "../services/api";
+import AutoTranslateButton from "../components/AutoTranslateButton";
+import { translateFields } from "../utils/translator";
 
 function slugify(text) {
   return text
@@ -20,10 +21,15 @@ export default function CreateArticle() {
 
   const [form, setForm] = useState({
     title: "",
+    titleEn: "",
     category: "DevOps",
+    categoryEn: "DevOps",
     readTime: "5 min",
+    readTimeEn: "5 min",
     excerpt: "",
+    excerptEn: "",
     content: "",
+    contentEn: "",
     tags: "",
   });
 
@@ -33,9 +39,50 @@ export default function CreateArticle() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
+  async function handleAutoTranslate() {
+    const toTranslate = {};
+    if (form.title) toTranslate.titleEn = form.title;
+    if (form.category) toTranslate.categoryEn = form.category;
+    if (form.excerpt) toTranslate.excerptEn = form.excerpt;
+    if (form.content) toTranslate.contentEn = form.content;
+
+    const translated = await translateFields(toTranslate);
+    setForm((prev) => ({
+      ...prev,
+      titleEn: translated.titleEn || prev.titleEn,
+      categoryEn: translated.categoryEn || prev.categoryEn,
+      excerptEn: translated.excerptEn || prev.excerptEn,
+      contentEn: translated.contentEn || prev.contentEn,
+    }));
+  }
+
   async function submit(e) {
     e.preventDefault();
     setLoading(true);
+
+    // Auto-traduire à la volée si les champs anglais sont vides
+    let finalTitleEn = form.titleEn;
+    let finalCategoryEn = form.categoryEn;
+    let finalExcerptEn = form.excerptEn;
+    let finalContentEn = form.contentEn;
+
+    const missingEn = {};
+    if (!finalTitleEn && form.title) missingEn.titleEn = form.title;
+    if (!finalCategoryEn && form.category) missingEn.categoryEn = form.category;
+    if (!finalExcerptEn && form.excerpt) missingEn.excerptEn = form.excerpt;
+    if (!finalContentEn && form.content) missingEn.contentEn = form.content;
+
+    if (Object.keys(missingEn).length > 0) {
+      try {
+        const autoTranslated = await translateFields(missingEn);
+        if (autoTranslated.titleEn) finalTitleEn = autoTranslated.titleEn;
+        if (autoTranslated.categoryEn) finalCategoryEn = autoTranslated.categoryEn;
+        if (autoTranslated.excerptEn) finalExcerptEn = autoTranslated.excerptEn;
+        if (autoTranslated.contentEn) finalContentEn = autoTranslated.contentEn;
+      } catch (trErr) {
+        console.warn("Auto-traduction de secours:", trErr);
+      }
+    }
 
     const slug = slugify(form.title) || `article-${Date.now()}`;
     const tagArray = form.tags.split(",").map((t) => t.trim()).filter(Boolean);
@@ -44,19 +91,24 @@ export default function CreateArticle() {
       id: Date.now(),
       slug,
       title: form.title,
-      titleEn: form.title,
+      titleEn: finalTitleEn || form.title,
       category: form.category,
-      categoryEn: form.category,
+      categoryEn: finalCategoryEn || form.category,
       readTime: form.readTime,
-      readTimeEn: form.readTime,
+      readTimeEn: form.readTimeEn || form.readTime,
       desc: form.excerpt,
-      descEn: form.excerpt,
+      descEn: finalExcerptEn || form.excerpt,
       date: new Date().toLocaleDateString("fr-FR", { year: "numeric", month: "long", day: "numeric" }),
       tags: tagArray.length > 0 ? tagArray : ["DevOps", "Tech"],
       sections: [
         { type: "intro", title: "Introduction", text: form.content },
         { type: "paragraph", text: form.content },
         { type: "conclusion", title: "Conclusion", text: "En conclusion, cette démarche permet d'optimiser l'infrastructure et la productivité." },
+      ],
+      sectionsEn: [
+        { type: "intro", title: "Introduction", text: finalContentEn || form.content },
+        { type: "paragraph", text: finalContentEn || form.content },
+        { type: "conclusion", title: "Conclusion", text: "In conclusion, this approach optimizes infrastructure scalability and team productivity." },
       ],
     };
 
@@ -65,16 +117,18 @@ export default function CreateArticle() {
       await api.post("/articles", {
         slug,
         title: form.title,
-        title_en: form.title,
+        title_en: finalTitleEn || form.title,
         category: form.category,
-        category_en: form.category,
+        category_en: finalCategoryEn || form.category,
         excerpt: form.excerpt,
-        desc_en: form.excerpt,
+        desc_en: finalExcerptEn || form.excerpt,
         content: form.content,
+        content_en: finalContentEn || form.content,
         read_time: form.readTime,
-        read_time_en: form.readTime,
+        read_time_en: form.readTimeEn || form.readTime,
         tags: tagArray,
         sections: newArticle.sections,
+        sections_en: newArticle.sectionsEn,
       });
     } catch (apiErr) {
       console.warn("API article creation fallback:", apiErr);
@@ -137,14 +191,18 @@ export default function CreateArticle() {
           <span>Retour à la liste des articles</span>
         </Link>
 
-        <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
-          <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
-            <FilePlus color="#818cf8" size={26} />
-            Rédiger et Publier un Article
-          </h1>
-          <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
-            Publiez vos retours d'expérience, tutoriels et bonnes pratiques DevOps / Web.
-          </p>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem", paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
+          <div>
+            <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
+              <FilePlus color="#818cf8" size={26} />
+              Rédiger et Publier un Article
+            </h1>
+            <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
+              Rédigez en français : le bouton IA ou la publication génère automatiquement la version anglaise !
+            </p>
+          </div>
+
+          <AutoTranslateButton onTranslate={handleAutoTranslate} />
         </div>
 
         <form

@@ -4,6 +4,8 @@ import { Edit3, ArrowLeft, UploadCloud, CheckCircle, Save } from "lucide-react";
 import useProjects from "../hooks/useProjects";
 import SEO from "../components/SEO";
 import api from "../services/api";
+import AutoTranslateButton from "../components/AutoTranslateButton";
+import { translateFields } from "../utils/translator";
 
 export default function EditProject() {
   const { id } = useParams();
@@ -64,6 +66,27 @@ export default function EditProject() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
+  async function handleAutoTranslate() {
+    const toTranslate = {};
+    if (form.title) toTranslate.titleEn = form.title;
+    if (form.category) toTranslate.categoryEn = form.category;
+    if (form.description) toTranslate.descriptionEn = form.description;
+    if (form.problem) toTranslate.problemEn = form.problem;
+    if (form.solution) toTranslate.solutionEn = form.solution;
+    if (form.impact) toTranslate.impactEn = form.impact;
+
+    const translated = await translateFields(toTranslate);
+    setForm((prev) => ({
+      ...prev,
+      titleEn: translated.titleEn || prev.titleEn,
+      categoryEn: translated.categoryEn || prev.categoryEn,
+      descriptionEn: translated.descriptionEn || prev.descriptionEn,
+      problemEn: translated.problemEn || prev.problemEn,
+      solutionEn: translated.solutionEn || prev.solutionEn,
+      impactEn: translated.impactEn || prev.impactEn,
+    }));
+  }
+
   function handleImageChange(e) {
     const file = e.target.files[0];
     if (file) {
@@ -80,6 +103,36 @@ export default function EditProject() {
     e.preventDefault();
     if (!targetProject) return;
 
+    // Auto-traduire si des champs anglais sont vides
+    let finalTitleEn = form.titleEn;
+    let finalCategoryEn = form.categoryEn;
+    let finalDescriptionEn = form.descriptionEn;
+    let finalProblemEn = form.problemEn;
+    let finalSolutionEn = form.solutionEn;
+    let finalImpactEn = form.impactEn;
+
+    const missingEn = {};
+    if (!finalTitleEn && form.title) missingEn.titleEn = form.title;
+    if (!finalCategoryEn && form.category) missingEn.categoryEn = form.category;
+    if (!finalDescriptionEn && form.description) missingEn.descriptionEn = form.description;
+    if (!finalProblemEn && form.problem) missingEn.problemEn = form.problem;
+    if (!finalSolutionEn && form.solution) missingEn.solutionEn = form.solution;
+    if (!finalImpactEn && form.impact) missingEn.impactEn = form.impact;
+
+    if (Object.keys(missingEn).length > 0) {
+      try {
+        const autoTranslated = await translateFields(missingEn);
+        if (autoTranslated.titleEn) finalTitleEn = autoTranslated.titleEn;
+        if (autoTranslated.categoryEn) finalCategoryEn = autoTranslated.categoryEn;
+        if (autoTranslated.descriptionEn) finalDescriptionEn = autoTranslated.descriptionEn;
+        if (autoTranslated.problemEn) finalProblemEn = autoTranslated.problemEn;
+        if (autoTranslated.solutionEn) finalSolutionEn = autoTranslated.solutionEn;
+        if (autoTranslated.impactEn) finalImpactEn = autoTranslated.impactEn;
+      } catch (trErr) {
+        console.warn("Auto-traduction de secours:", trErr);
+      }
+    }
+
     const techArray = form.technologies
       .split(",")
       .map((t) => t.trim())
@@ -87,18 +140,18 @@ export default function EditProject() {
 
     const updatedData = {
       title: form.title,
-      titleEn: form.titleEn || form.title,
+      titleEn: finalTitleEn || form.title,
       category: form.category,
-      categoryEn: form.categoryEn || form.category,
+      categoryEn: finalCategoryEn || form.category,
       description: form.description,
-      descriptionEn: form.descriptionEn || form.description,
+      descriptionEn: finalDescriptionEn || form.description,
       problem: form.problem,
-      problemEn: form.problemEn || form.problem,
+      problemEn: finalProblemEn || form.problem,
       solution: form.solution,
-      solutionEn: form.solutionEn || form.solution,
+      solutionEn: finalSolutionEn || form.solution,
       technologies: techArray,
       impact: form.impact,
-      impactEn: form.impactEn || form.impact,
+      impactEn: finalImpactEn || form.impact,
       demo: form.demo,
       github: form.github,
       image: imagePreview,
@@ -207,14 +260,18 @@ export default function EditProject() {
           <span>Retour à la liste des projets</span>
         </Link>
 
-        <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
-          <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
-            <Edit3 color="#38bdf8" size={26} />
-            Modifier le Projet : <span style={{ color: "#38bdf8" }}>{targetProject.title}</span>
-          </h1>
-          <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
-            Mettez à jour les informations et l'image du projet.
-          </p>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem", paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
+          <div>
+            <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
+              <Edit3 color="#38bdf8" size={26} />
+              Modifier le Projet : <span style={{ color: "#38bdf8" }}>{targetProject.title}</span>
+            </h1>
+            <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
+              Mettez à jour les informations en français ci-dessous. Le bouton IA ou la sauvegarde met à jour automatiquement la version anglaise !
+            </p>
+          </div>
+
+          <AutoTranslateButton onTranslate={handleAutoTranslate} />
         </div>
 
         <form

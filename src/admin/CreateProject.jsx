@@ -4,6 +4,8 @@ import { FolderPlus, ArrowLeft, UploadCloud, CheckCircle, Sparkles } from "lucid
 import api from "../services/api";
 import SEO from "../components/SEO";
 import { db, collection, addDoc } from "../firebase";
+import AutoTranslateButton from "../components/AutoTranslateButton";
+import { translateFields } from "../utils/translator";
 
 function slugify(text) {
   return text
@@ -44,6 +46,27 @@ export default function CreateProject() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
+  async function handleAutoTranslate() {
+    const toTranslate = {};
+    if (form.title) toTranslate.titleEn = form.title;
+    if (form.category) toTranslate.categoryEn = form.category;
+    if (form.description) toTranslate.descriptionEn = form.description;
+    if (form.problem) toTranslate.problemEn = form.problem;
+    if (form.solution) toTranslate.solutionEn = form.solution;
+    if (form.impact) toTranslate.impactEn = form.impact;
+
+    const translated = await translateFields(toTranslate);
+    setForm((prev) => ({
+      ...prev,
+      titleEn: translated.titleEn || prev.titleEn,
+      categoryEn: translated.categoryEn || prev.categoryEn,
+      descriptionEn: translated.descriptionEn || prev.descriptionEn,
+      problemEn: translated.problemEn || prev.problemEn,
+      solutionEn: translated.solutionEn || prev.solutionEn,
+      impactEn: translated.impactEn || prev.impactEn,
+    }));
+  }
+
   function handleImageChange(e) {
     const file = e.target.files[0];
     if (file) {
@@ -61,6 +84,36 @@ export default function CreateProject() {
     setError("");
     setLoading(true);
 
+    // Auto-traduire à la volée tout champ anglais laissé vide
+    let finalTitleEn = form.titleEn;
+    let finalCategoryEn = form.categoryEn;
+    let finalDescriptionEn = form.descriptionEn;
+    let finalProblemEn = form.problemEn;
+    let finalSolutionEn = form.solutionEn;
+    let finalImpactEn = form.impactEn;
+
+    const missingEn = {};
+    if (!finalTitleEn && form.title) missingEn.titleEn = form.title;
+    if (!finalCategoryEn && form.category) missingEn.categoryEn = form.category;
+    if (!finalDescriptionEn && form.description) missingEn.descriptionEn = form.description;
+    if (!finalProblemEn && form.problem) missingEn.problemEn = form.problem;
+    if (!finalSolutionEn && form.solution) missingEn.solutionEn = form.solution;
+    if (!finalImpactEn && form.impact) missingEn.impactEn = form.impact;
+
+    if (Object.keys(missingEn).length > 0) {
+      try {
+        const autoTranslated = await translateFields(missingEn);
+        if (autoTranslated.titleEn) finalTitleEn = autoTranslated.titleEn;
+        if (autoTranslated.categoryEn) finalCategoryEn = autoTranslated.categoryEn;
+        if (autoTranslated.descriptionEn) finalDescriptionEn = autoTranslated.descriptionEn;
+        if (autoTranslated.problemEn) finalProblemEn = autoTranslated.problemEn;
+        if (autoTranslated.solutionEn) finalSolutionEn = autoTranslated.solutionEn;
+        if (autoTranslated.impactEn) finalImpactEn = autoTranslated.impactEn;
+      } catch (trErr) {
+        console.warn("Auto-traduction de secours:", trErr);
+      }
+    }
+
     const techArray = form.technologies
       .split(",")
       .map((t) => t.trim())
@@ -71,17 +124,17 @@ export default function CreateProject() {
       id: Date.now(),
       slug,
       title: form.title,
-      titleEn: form.titleEn || form.title,
+      titleEn: finalTitleEn || form.title,
       category: form.category,
-      categoryEn: form.categoryEn || form.category,
+      categoryEn: finalCategoryEn || form.category,
       description: form.description,
-      descriptionEn: form.descriptionEn || form.description,
+      descriptionEn: finalDescriptionEn || form.description,
       problem: form.problem || form.description,
-      problemEn: form.problemEn || form.problem || form.descriptionEn || form.description,
+      problemEn: finalProblemEn || form.problem || finalDescriptionEn || form.description,
       solution: form.solution || form.description,
-      solutionEn: form.solutionEn || form.solution || form.descriptionEn || form.description,
+      solutionEn: finalSolutionEn || form.solution || finalDescriptionEn || form.description,
       impact: form.impact || "Projet livré avec succès",
-      impactEn: form.impactEn || form.impact || "Project successfully delivered",
+      impactEn: finalImpactEn || form.impact || "Project successfully delivered",
       technologies: techArray.length > 0 ? techArray : ["React", "Tailwind"],
       demo: form.demo || "#",
       github: form.github || "#",
@@ -96,11 +149,17 @@ export default function CreateProject() {
     try {
       const formData = new FormData();
       formData.append("title", form.title);
+      formData.append("title_en", finalTitleEn || form.title);
       formData.append("category", form.category);
+      formData.append("category_en", finalCategoryEn || form.category);
       formData.append("description", form.description);
+      formData.append("description_en", finalDescriptionEn || form.description);
       formData.append("problem", form.problem);
+      formData.append("problem_en", finalProblemEn || form.problem);
       formData.append("solution", form.solution);
+      formData.append("solution_en", finalSolutionEn || form.solution);
       formData.append("impact", form.impact);
+      formData.append("impact_en", finalImpactEn || form.impact);
       formData.append("demo", form.demo);
       formData.append("github", form.github);
       techArray.forEach((tech) => formData.append("technologies[]", tech));
@@ -184,14 +243,18 @@ export default function CreateProject() {
         </Link>
 
         {/* Page Header */}
-        <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
-          <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
-            <FolderPlus color="#38bdf8" size={26} />
-            Ajouter un Nouveau Projet
-          </h1>
-          <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
-            Remplissez les informations ci-dessous pour publier un projet sur votre portfolio public.
-          </p>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem", paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
+          <div>
+            <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
+              <FolderPlus color="#38bdf8" size={26} />
+              Ajouter un Nouveau Projet
+            </h1>
+            <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
+              Remplissez les informations en français ci-dessous. Le bouton IA ou la validation génère automatiquement la version anglaise !
+            </p>
+          </div>
+
+          <AutoTranslateButton onTranslate={handleAutoTranslate} />
         </div>
 
         {/* Glassmorphic Form Card */}

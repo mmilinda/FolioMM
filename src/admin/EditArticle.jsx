@@ -3,8 +3,9 @@ import { useNavigate, useParams, Link } from "react-router-dom";
 import { Edit3, ArrowLeft, CheckCircle, Save } from "lucide-react";
 import useArticles from "../hooks/useArticles";
 import SEO from "../components/SEO";
-
 import api from "../services/api";
+import AutoTranslateButton from "../components/AutoTranslateButton";
+import { translateFields } from "../utils/translator";
 
 export default function EditArticle() {
   const { id } = useParams();
@@ -17,10 +18,15 @@ export default function EditArticle() {
 
   const [form, setForm] = useState({
     title: "",
+    titleEn: "",
     category: "DevOps",
+    categoryEn: "DevOps",
     readTime: "5 min",
+    readTimeEn: "5 min",
     excerpt: "",
+    excerptEn: "",
     content: "",
+    contentEn: "",
     tags: "",
   });
 
@@ -30,10 +36,15 @@ export default function EditArticle() {
     if (targetArticle) {
       setForm({
         title: targetArticle.title || "",
+        titleEn: targetArticle.titleEn || targetArticle.title_en || "",
         category: targetArticle.category || "DevOps",
+        categoryEn: targetArticle.categoryEn || targetArticle.category_en || "DevOps",
         readTime: targetArticle.readTime || targetArticle.read_time || "5 min",
+        readTimeEn: targetArticle.readTimeEn || targetArticle.read_time_en || "5 min",
         excerpt: targetArticle.desc || targetArticle.excerpt || "",
+        excerptEn: targetArticle.descEn || targetArticle.desc_en || "",
         content: targetArticle.sections?.[0]?.text || targetArticle.content || targetArticle.desc || "",
+        contentEn: targetArticle.sectionsEn?.[0]?.text || targetArticle.contentEn || targetArticle.content_en || "",
         tags: Array.isArray(targetArticle.tags) ? targetArticle.tags.join(", ") : targetArticle.tags || "",
       });
     }
@@ -43,37 +54,88 @@ export default function EditArticle() {
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
+  async function handleAutoTranslate() {
+    const toTranslate = {};
+    if (form.title) toTranslate.titleEn = form.title;
+    if (form.category) toTranslate.categoryEn = form.category;
+    if (form.excerpt) toTranslate.excerptEn = form.excerpt;
+    if (form.content) toTranslate.contentEn = form.content;
+
+    const translated = await translateFields(toTranslate);
+    setForm((prev) => ({
+      ...prev,
+      titleEn: translated.titleEn || prev.titleEn,
+      categoryEn: translated.categoryEn || prev.categoryEn,
+      excerptEn: translated.excerptEn || prev.excerptEn,
+      contentEn: translated.contentEn || prev.contentEn,
+    }));
+  }
+
   async function submit(e) {
     e.preventDefault();
     if (!targetArticle) return;
+
+    // Auto-traduire si des champs anglais sont vides
+    let finalTitleEn = form.titleEn;
+    let finalCategoryEn = form.categoryEn;
+    let finalExcerptEn = form.excerptEn;
+    let finalContentEn = form.contentEn;
+
+    const missingEn = {};
+    if (!finalTitleEn && form.title) missingEn.titleEn = form.title;
+    if (!finalCategoryEn && form.category) missingEn.categoryEn = form.category;
+    if (!finalExcerptEn && form.excerpt) missingEn.excerptEn = form.excerpt;
+    if (!finalContentEn && form.content) missingEn.contentEn = form.content;
+
+    if (Object.keys(missingEn).length > 0) {
+      try {
+        const autoTranslated = await translateFields(missingEn);
+        if (autoTranslated.titleEn) finalTitleEn = autoTranslated.titleEn;
+        if (autoTranslated.categoryEn) finalCategoryEn = autoTranslated.categoryEn;
+        if (autoTranslated.excerptEn) finalExcerptEn = autoTranslated.excerptEn;
+        if (autoTranslated.contentEn) finalContentEn = autoTranslated.contentEn;
+      } catch (trErr) {
+        console.warn("Auto-traduction de secours:", trErr);
+      }
+    }
 
     const tagArray = form.tags.split(",").map((t) => t.trim()).filter(Boolean);
 
     const updatedData = {
       title: form.title,
+      titleEn: finalTitleEn || form.title,
       category: form.category,
+      categoryEn: finalCategoryEn || form.category,
       readTime: form.readTime,
+      readTimeEn: form.readTimeEn || form.readTime,
       desc: form.excerpt,
+      descEn: finalExcerptEn || form.excerpt,
       tags: tagArray,
       sections: [
         { type: "intro", title: "Introduction", text: form.content },
         { type: "paragraph", text: form.content },
+      ],
+      sectionsEn: [
+        { type: "intro", title: "Introduction", text: finalContentEn || form.content },
+        { type: "paragraph", text: finalContentEn || form.content },
       ],
     };
 
     try {
       await api.post(`/articles/${targetArticle.id || targetArticle.slug}`, {
         title: form.title,
-        title_en: form.title,
+        title_en: finalTitleEn || form.title,
         category: form.category,
-        category_en: form.category,
+        category_en: finalCategoryEn || form.category,
         excerpt: form.excerpt,
-        desc_en: form.excerpt,
+        desc_en: finalExcerptEn || form.excerpt,
         content: form.content,
+        content_en: finalContentEn || form.content,
         read_time: form.readTime,
-        read_time_en: form.readTime,
+        read_time_en: form.readTimeEn || form.readTime,
         tags: tagArray,
         sections: updatedData.sections,
+        sections_en: updatedData.sectionsEn,
       });
     } catch (apiErr) {
       console.warn("API article update fallback:", apiErr);
@@ -157,14 +219,18 @@ export default function EditArticle() {
           <span>Retour à la liste des articles</span>
         </Link>
 
-        <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
-          <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
-            <Edit3 color="#818cf8" size={26} />
-            Modifier l'Article : <span style={{ color: "#818cf8" }}>{targetArticle.title}</span>
-          </h1>
-          <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
-            Mettez à jour le titre, la catégorie et le contenu de votre article.
-          </p>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem", paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
+          <div>
+            <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
+              <Edit3 color="#818cf8" size={26} />
+              Modifier l'Article : <span style={{ color: "#818cf8" }}>{targetArticle.title}</span>
+            </h1>
+            <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
+              Mettez à jour vos contenus en français. Le bouton IA ou la sauvegarde synchronise la version anglaise !
+            </p>
+          </div>
+
+          <AutoTranslateButton onTranslate={handleAutoTranslate} />
         </div>
 
         <form

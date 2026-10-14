@@ -23,6 +23,8 @@ import {
   Camera,
 } from "lucide-react";
 import { FaGithub, FaLinkedin, FaXTwitter } from "react-icons/fa6";
+import AutoTranslateButton from "../components/AutoTranslateButton";
+import { translateFields } from "../utils/translator";
 
 export default function AdminProfile() {
   const { user, updateCredentials } = useAuth();
@@ -59,6 +61,21 @@ export default function AdminProfile() {
   const [infoFeedback, setInfoFeedback] = useState(null);
   const [uploadingField, setUploadingField] = useState(null);
 
+  // Traduction automatique via IA des champs textuels du profil
+  async function handleAutoTranslate() {
+    const res = await translateFields({
+      headline: profileData.headline,
+      availability: profileData.availability,
+      bio: profileData.bio,
+    });
+    setProfileData((prev) => ({
+      ...prev,
+      headlineEn: res.headline || prev.headlineEn,
+      availabilityEn: res.availability || prev.availabilityEn,
+      bioEn: res.bio || prev.bioEn,
+    }));
+  }
+
   // État de la sécurité / accès administrateur
   const [securityData, setSecurityData] = useState({
     adminName: user?.name || profile?.name || "Milinda Mendy",
@@ -86,8 +103,31 @@ export default function AdminProfile() {
     setInfoSaving(true);
     setInfoFeedback(null);
 
+    let updatedData = { ...profileData };
+
+    // Auto-traduction si les champs anglais sont laissés vides
+    const missingHeadline = !updatedData.headlineEn?.trim();
+    const missingAvail = !updatedData.availabilityEn?.trim();
+    const missingBio = !updatedData.bioEn?.trim();
+
+    if (missingHeadline || missingAvail || missingBio) {
+      try {
+        const auto = await translateFields({
+          headline: missingHeadline ? updatedData.headline : "",
+          availability: missingAvail ? updatedData.availability : "",
+          bio: missingBio ? updatedData.bio : "",
+        });
+        if (missingHeadline && auto.headline) updatedData.headlineEn = auto.headline;
+        if (missingAvail && auto.availability) updatedData.availabilityEn = auto.availability;
+        if (missingBio && auto.bio) updatedData.bioEn = auto.bio;
+        setProfileData(updatedData);
+      } catch (err) {
+        console.warn("Échec traduction auto profil:", err);
+      }
+    }
+
     try {
-      await updateProfile(profileData);
+      await updateProfile(updatedData);
       setInfoFeedback({
         type: "success",
         message: "Vos coordonnées et informations ont été enregistrées et synchronisées avec succès !",
@@ -433,21 +473,23 @@ export default function AdminProfile() {
                     marginBottom: "1.5rem",
                   }}
                 >
-                  <h3
-                    style={{
-                      fontSize: "1.05rem",
-                      fontWeight: 700,
-                      color: "#f8fafc",
-                      marginTop: 0,
-                      marginBottom: "1.25rem",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                    }}
-                  >
-                    <Mail size={18} color="#38bdf8" />
-                    <span>Identité & Coordonnées Directes</span>
-                  </h3>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px", marginBottom: "1.25rem" }}>
+                    <h3
+                      style={{
+                        fontSize: "1.05rem",
+                        fontWeight: 700,
+                        color: "#f8fafc",
+                        margin: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                      }}
+                    >
+                      <Mail size={18} color="#38bdf8" />
+                      <span>Identité & Coordonnées Directes</span>
+                    </h3>
+                    <AutoTranslateButton onTranslate={handleAutoTranslate} label="Traduire les textes en Anglais (IA)" />
+                  </div>
 
                   <div
                     style={{

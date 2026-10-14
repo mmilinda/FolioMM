@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { useSiteData } from "../context/SiteDataContext";
 import { Layers, Plus, Trash2, Edit3, CheckCircle, Save, X, Code2, Cloud, GitBranch, Brain, Shield, Sparkles, Eye, EyeOff, Lock } from "lucide-react";
 import SEO from "../components/SEO";
+import AutoTranslateButton from "../components/AutoTranslateButton";
+import { translateFields } from "../utils/translator";
 
 export default function ServicesManager() {
   const { services, updateServices } = useSiteData();
@@ -19,6 +21,18 @@ export default function ServicesManager() {
     glow: "#38bdf8",
     hidden: false,
   });
+
+  const handleAutoTranslate = async () => {
+    const res = await translateFields({
+      title: form.title,
+      desc: form.desc,
+    });
+    setForm((prev) => ({
+      ...prev,
+      titleEn: res.title || prev.titleEn,
+      descEn: res.desc || prev.descEn,
+    }));
+  };
 
   const availableIcons = [
     { name: "Code2", label: "Code & Dev", icon: Code2 },
@@ -65,9 +79,26 @@ export default function ServicesManager() {
     triggerSuccess();
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const tagArray = form.tags.split(",").map((t) => t.trim()).filter(Boolean);
+
+    let finalTitleEn = form.titleEn?.trim();
+    let finalDescEn = form.descEn?.trim();
+
+    // Traduction automatique si les champs anglais sont vides
+    if (!finalTitleEn || !finalDescEn) {
+      try {
+        const auto = await translateFields({
+          title: !finalTitleEn ? form.title : "",
+          desc: !finalDescEn ? form.desc : "",
+        });
+        if (!finalTitleEn && auto.title) finalTitleEn = auto.title;
+        if (!finalDescEn && auto.desc) finalDescEn = auto.desc;
+      } catch (err) {
+        console.warn("Échec traduction auto services:", err);
+      }
+    }
 
     if (editingId) {
       const updated = services.map((s) =>
@@ -75,9 +106,9 @@ export default function ServicesManager() {
           ? {
               ...s,
               title: form.title,
-              titleEn: form.titleEn || form.title,
+              titleEn: finalTitleEn || form.title,
               desc: form.desc,
-              descEn: form.descEn || form.desc,
+              descEn: finalDescEn || form.desc,
               iconName: form.iconName,
               tags: tagArray,
               glow: form.glow,
@@ -90,9 +121,9 @@ export default function ServicesManager() {
       const newService = {
         id: `svc-${Date.now()}`,
         title: form.title,
-        titleEn: form.titleEn || form.title,
+        titleEn: finalTitleEn || form.title,
         desc: form.desc,
-        descEn: form.descEn || form.desc,
+        descEn: finalDescEn || form.desc,
         iconName: form.iconName,
         tags: tagArray,
         glow: form.glow,
@@ -146,9 +177,12 @@ export default function ServicesManager() {
 
         {/* Formulaire d'ajout / modification */}
         <form ref={formRef} onSubmit={handleSubmit} style={{ background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(255, 255, 255, 0.1)", borderRadius: "20px", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-          <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#f8fafc", margin: 0 }}>
-            {editingId ? "✏️ Éditer le Service" : "➕ Ajouter un Nouveau Service"}
-          </h3>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
+            <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#f8fafc", margin: 0 }}>
+              {editingId ? "✏️ Éditer le Service" : "➕ Ajouter un Nouveau Service"}
+            </h3>
+            <AutoTranslateButton onTranslate={handleAutoTranslate} label="Traduire en Anglais (IA)" />
+          </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem" }}>
             <div>

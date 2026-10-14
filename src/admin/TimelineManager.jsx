@@ -2,6 +2,8 @@ import { useState, useRef } from "react";
 import { useSiteData } from "../context/SiteDataContext";
 import { Briefcase, Plus, Trash2, Edit3, CheckCircle, Save, Calendar, GraduationCap, ArrowUp, ArrowDown, GripVertical } from "lucide-react";
 import SEO from "../components/SEO";
+import AutoTranslateButton from "../components/AutoTranslateButton";
+import { translateFields } from "../utils/translator";
 
 export default function TimelineManager() {
   const { timeline, updateTimeline } = useSiteData();
@@ -20,6 +22,18 @@ export default function TimelineManager() {
     tagsStr: "",
     type: "work",
   });
+
+  const handleAutoTranslate = async () => {
+    const res = await translateFields({
+      title: form.title,
+      description: form.description,
+    });
+    setForm((prev) => ({
+      ...prev,
+      titleEn: res.title || prev.titleEn,
+      descriptionEn: res.description || prev.descriptionEn,
+    }));
+  };
 
   const handleEdit = (item) => {
     setEditingId(item.id);
@@ -86,9 +100,26 @@ export default function TimelineManager() {
     triggerSuccess();
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const tagsList = form.tagsStr.split(",").map((t) => t.trim()).filter(Boolean);
+
+    let finalTitleEn = form.titleEn?.trim();
+    let finalDescEn = form.descriptionEn?.trim();
+
+    // Traduction automatique en tâche de fond si les champs anglais sont vides
+    if (!finalTitleEn || !finalDescEn) {
+      try {
+        const auto = await translateFields({
+          title: !finalTitleEn ? form.title : "",
+          description: !finalDescEn ? form.description : "",
+        });
+        if (!finalTitleEn && auto.title) finalTitleEn = auto.title;
+        if (!finalDescEn && auto.description) finalDescEn = auto.description;
+      } catch (err) {
+        console.warn("Échec traduction auto timeline:", err);
+      }
+    }
 
     if (editingId) {
       const updated = timeline.map((t) =>
@@ -97,10 +128,10 @@ export default function TimelineManager() {
               ...t,
               year: form.year,
               title: form.title,
-              titleEn: form.titleEn || form.title,
+              titleEn: finalTitleEn || form.title,
               company: form.company,
               description: form.description,
-              descriptionEn: form.descriptionEn || form.description,
+              descriptionEn: finalDescEn || form.description,
               tags: tagsList,
               type: form.type,
             }
@@ -112,10 +143,10 @@ export default function TimelineManager() {
         id: `time-${Date.now()}`,
         year: form.year,
         title: form.title,
-        titleEn: form.titleEn || form.title,
+        titleEn: finalTitleEn || form.title,
         company: form.company,
         description: form.description,
-        descriptionEn: form.descriptionEn || form.description,
+        descriptionEn: finalDescEn || form.description,
         tags: tagsList,
         type: form.type,
       };
@@ -165,9 +196,12 @@ export default function TimelineManager() {
         )}
 
         <form ref={formRef} onSubmit={handleSubmit} style={{ background: "rgba(9, 13, 22, 0.85)", border: "1px solid rgba(255, 255, 255, 0.1)", borderRadius: "20px", padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-          <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#f8fafc", margin: 0 }}>
-            {editingId ? "✏️ Éditer l'Étape" : "➕ Ajouter une Étape au Parcours"}
-          </h3>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "10px" }}>
+            <h3 style={{ fontSize: "1rem", fontWeight: 700, color: "#f8fafc", margin: 0 }}>
+              {editingId ? "✏️ Éditer l'Étape" : "➕ Ajouter une Étape au Parcours"}
+            </h3>
+            <AutoTranslateButton onTranslate={handleAutoTranslate} label="Traduire en Anglais (IA)" />
+          </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem" }}>
             <div>
