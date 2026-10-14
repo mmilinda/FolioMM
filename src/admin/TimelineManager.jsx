@@ -1,12 +1,13 @@
 import { useState, useRef } from "react";
 import { useSiteData } from "../context/SiteDataContext";
-import { Briefcase, Plus, Trash2, Edit3, CheckCircle, Save, Calendar, GraduationCap } from "lucide-react";
+import { Briefcase, Plus, Trash2, Edit3, CheckCircle, Save, Calendar, GraduationCap, ArrowUp, ArrowDown, GripVertical } from "lucide-react";
 import SEO from "../components/SEO";
 
 export default function TimelineManager() {
   const { timeline, updateTimeline } = useSiteData();
   const [saved, setSaved] = useState(false);
   const [editingId, setEditingId] = useState(null);
+  const [draggedIndex, setDraggedIndex] = useState(null);
   const formRef = useRef(null);
 
   const [form, setForm] = useState({
@@ -48,6 +49,41 @@ export default function TimelineManager() {
       updateTimeline(updated);
       triggerSuccess();
     }
+  };
+
+  const moveItem = (index, direction) => {
+    const newIndex = index + direction;
+    if (newIndex < 0 || newIndex >= timeline.length) return;
+    const updated = [...timeline];
+    const temp = updated[index];
+    updated[index] = updated[newIndex];
+    updated[newIndex] = temp;
+    updateTimeline(updated);
+    triggerSuccess();
+  };
+
+  const handleDragStart = (e, index) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = "move";
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  };
+
+  const handleDrop = (e, targetIndex) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === targetIndex) {
+      setDraggedIndex(null);
+      return;
+    }
+    const updated = [...timeline];
+    const [moved] = updated.splice(draggedIndex, 1);
+    updated.splice(targetIndex, 0, moved);
+    updateTimeline(updated);
+    setDraggedIndex(null);
+    triggerSuccess();
   };
 
   const handleSubmit = (e) => {
@@ -117,7 +153,7 @@ export default function TimelineManager() {
             Gestion de l'Expérience & Parcours (Timeline)
           </h1>
           <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
-            Gérez la frise chronologique de vos expériences professionnelles, diplômes et certifications.
+            Gérez et réorganisez la frise chronologique de vos expériences. Déplacez les cartes à l'aide des flèches ▲/▼ ou par glisser-déposer.
           </p>
         </div>
 
@@ -196,37 +232,154 @@ export default function TimelineManager() {
         </form>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-          {timeline.map((item) => (
-            <div key={item.id} style={{ background: "rgba(9, 13, 22, 0.6)", border: "1px solid rgba(255, 255, 255, 0.08)", borderRadius: "16px", padding: "1.25rem", display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "1rem" }}>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "0.3rem" }}>
-                  <span style={{ fontSize: "0.75rem", fontWeight: 800, padding: "3px 10px", borderRadius: "12px", background: "rgba(168, 85, 247, 0.12)", color: "#c084fc", border: "1px solid rgba(168, 85, 247, 0.25)" }}>
-                    {item.year}
-                  </span>
-                  <span style={{ fontSize: "0.75rem", color: "#94a3b8" }}>• {item.type === "education" ? "🎓 Formation" : "💼 Expérience"}</span>
-                </div>
-                <h4 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.2rem" }}>{item.title}</h4>
-                <p style={{ fontSize: "0.85rem", fontWeight: 600, color: "#38bdf8", margin: "0 0 0.5rem" }}>{item.company}</p>
-                <p style={{ fontSize: "0.82rem", color: "#cbd5e1", margin: "0 0 0.8rem", lineHeight: 1.5 }}>{item.description}</p>
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
-                  {(item.tags || []).map((tg) => (
-                    <span key={tg} style={{ fontSize: "0.68rem", padding: "2px 8px", borderRadius: "6px", background: "rgba(255, 255, 255, 0.05)", color: "#94a3b8" }}>
-                      #{tg}
-                    </span>
-                  ))}
-                </div>
-              </div>
+          {timeline.map((item, index) => {
+            const isFirst = index === 0;
+            const isLast = index === timeline.length - 1;
+            const isDragging = draggedIndex === index;
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <button onClick={() => handleEdit(item)} style={{ padding: "8px", borderRadius: "8px", background: "rgba(168, 85, 247, 0.1)", border: "1px solid rgba(168, 85, 247, 0.2)", color: "#c084fc", cursor: "pointer" }}>
-                  <Edit3 size={16} />
-                </button>
-                <button onClick={() => handleDelete(item.id)} style={{ padding: "8px", borderRadius: "8px", background: "rgba(248, 113, 113, 0.1)", border: "1px solid rgba(248, 113, 113, 0.2)", color: "#f87171", cursor: "pointer" }}>
-                  <Trash2 size={16} />
-                </button>
+            return (
+              <div
+                key={item.id}
+                draggable
+                onDragStart={(e) => handleDragStart(e, index)}
+                onDragOver={handleDragOver}
+                onDrop={(e) => handleDrop(e, index)}
+                onDragEnd={() => setDraggedIndex(null)}
+                style={{
+                  background: isDragging ? "rgba(168, 85, 247, 0.18)" : "rgba(9, 13, 22, 0.6)",
+                  border: isDragging ? "1px dashed #c084fc" : "1px solid rgba(255, 255, 255, 0.08)",
+                  borderRadius: "16px",
+                  padding: "1.25rem",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "1rem",
+                  transition: "all 0.2s ease",
+                  opacity: isDragging ? 0.5 : 1,
+                  boxShadow: isDragging ? "0 8px 24px rgba(168, 85, 247, 0.25)" : "none",
+                }}
+              >
+                {/* Drag Handle & Position Index */}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "6px",
+                    cursor: "grab",
+                    color: "#64748b",
+                    paddingTop: "4px",
+                    userSelect: "none",
+                  }}
+                  title="Glisser-déposer pour réordonner"
+                >
+                  <GripVertical size={20} />
+                  <span
+                    style={{
+                      fontSize: "0.7rem",
+                      fontWeight: 800,
+                      color: "#94a3b8",
+                      background: "rgba(255, 255, 255, 0.05)",
+                      padding: "2px 6px",
+                      borderRadius: "6px",
+                    }}
+                  >
+                    #{index + 1}
+                  </span>
+                </div>
+
+                {/* Content */}
+                <div style={{ flex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "0.3rem" }}>
+                    <span style={{ fontSize: "0.75rem", fontWeight: 800, padding: "3px 10px", borderRadius: "12px", background: "rgba(168, 85, 247, 0.12)", color: "#c084fc", border: "1px solid rgba(168, 85, 247, 0.25)" }}>
+                      {item.year}
+                    </span>
+                    <span style={{ fontSize: "0.75rem", color: "#94a3b8" }}>• {item.type === "education" ? "🎓 Formation" : "💼 Expérience"}</span>
+                  </div>
+                  <h4 style={{ fontSize: "1.05rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.2rem" }}>{item.title}</h4>
+                  <p style={{ fontSize: "0.85rem", fontWeight: 600, color: "#38bdf8", margin: "0 0 0.5rem" }}>{item.company}</p>
+                  <p style={{ fontSize: "0.82rem", color: "#cbd5e1", margin: "0 0 0.8rem", lineHeight: 1.5 }}>{item.description}</p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}>
+                    {(item.tags || []).map((tg) => (
+                      <span key={tg} style={{ fontSize: "0.68rem", padding: "2px 8px", borderRadius: "6px", background: "rgba(255, 255, 255, 0.05)", color: "#94a3b8" }}>
+                        #{tg}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Actions: Reorder Buttons + Edit + Delete */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px", alignItems: "center" }}>
+                  <button
+                    type="button"
+                    onClick={() => moveItem(index, -1)}
+                    disabled={isFirst}
+                    style={{
+                      padding: "8px",
+                      borderRadius: "8px",
+                      background: isFirst ? "rgba(255, 255, 255, 0.02)" : "rgba(255, 255, 255, 0.06)",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      color: isFirst ? "#475569" : "#ffffff",
+                      cursor: isFirst ? "not-allowed" : "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                    title={isFirst ? "Déjà au premier rang" : "Monter cette carte"}
+                  >
+                    <ArrowUp size={15} />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => moveItem(index, 1)}
+                    disabled={isLast}
+                    style={{
+                      padding: "8px",
+                      borderRadius: "8px",
+                      background: isLast ? "rgba(255, 255, 255, 0.02)" : "rgba(255, 255, 255, 0.06)",
+                      border: "1px solid rgba(255, 255, 255, 0.1)",
+                      color: isLast ? "#475569" : "#ffffff",
+                      cursor: isLast ? "not-allowed" : "pointer",
+                      transition: "all 0.2s ease",
+                    }}
+                    title={isLast ? "Déjà au dernier rang" : "Descendre cette carte"}
+                  >
+                    <ArrowDown size={15} />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleEdit(item)}
+                    style={{
+                      padding: "8px",
+                      borderRadius: "8px",
+                      background: "rgba(168, 85, 247, 0.1)",
+                      border: "1px solid rgba(168, 85, 247, 0.2)",
+                      color: "#c084fc",
+                      cursor: "pointer",
+                    }}
+                    title="Modifier cette étape"
+                  >
+                    <Edit3 size={15} />
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(item.id)}
+                    style={{
+                      padding: "8px",
+                      borderRadius: "8px",
+                      background: "rgba(248, 113, 113, 0.1)",
+                      border: "1px solid rgba(248, 113, 113, 0.2)",
+                      color: "#f87171",
+                      cursor: "pointer",
+                    }}
+                    title="Supprimer cette étape"
+                  >
+                    <Trash2 size={15} />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </>
