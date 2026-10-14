@@ -65,13 +65,29 @@ export function useProjects(includeHidden = false) {
         if (isMounted && res.data && Array.isArray(res.data) && res.data.length > 0) {
           const apiMap = new Map(res.data.map((p) => [String(p.id), p]));
           const baseList = getLocalProjects(includeHidden);
+function resolveProjectImage(apiImage, staticImage) {
+  if (!apiImage) return staticImage;
+  if (typeof apiImage === "string" && apiImage.startsWith("/src/assets/projects/")) {
+    const filename = apiImage.replace("/src/assets/projects/", "");
+    return staticImage || `/images/projects/${filename}`;
+  }
+  return apiImage;
+}
+
           const mergedStatic = baseList.map((sp) => {
             const apiItem = apiMap.get(String(sp.id)) || res.data.find((p) => p.slug === sp.slug);
-            return apiItem ? { ...sp, ...apiItem, image: apiItem.image || sp.image } : sp;
+            return apiItem
+              ? { ...sp, ...apiItem, image: resolveProjectImage(apiItem.image, sp.image) }
+              : sp;
           });
 
           const existingSlugs = new Set(mergedStatic.map((p) => p.slug));
-          const extraApiProjects = res.data.filter((p) => p.slug && !existingSlugs.has(p.slug));
+          const extraApiProjects = res.data
+            .filter((p) => p.slug && !existingSlugs.has(p.slug))
+            .map((p) => ({
+              ...p,
+              image: resolveProjectImage(p.image, "/images/projects/preview.png"),
+            }));
 
           const allMerged = [...mergedStatic, ...extraApiProjects];
           setProjects(includeHidden ? allMerged : allMerged.filter((p) => !p.hidden));

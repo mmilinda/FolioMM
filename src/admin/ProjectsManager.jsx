@@ -173,9 +173,16 @@ export default function ProjectsManager() {
                   {/* Thumbnail Image */}
                   <div style={{ position: "relative", height: "180px", overflow: "hidden", background: "#020617" }}>
                     <img
-                      src={project.image}
+                      src={project.image || "/images/projects/preview.png"}
                       alt={project.title}
                       onError={(e) => {
+                        const raw = project.image || "";
+                        const filename = raw.split("/").pop();
+                        if (filename && !e.currentTarget.dataset.retried) {
+                          e.currentTarget.dataset.retried = "true";
+                          e.currentTarget.src = `/images/projects/${filename}`;
+                          return;
+                        }
                         e.currentTarget.src = "/images/projects/preview.png";
                       }}
                       style={{ width: "100%", height: "100%", objectFit: "cover" }}
