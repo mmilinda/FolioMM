@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MessageSquare, Trash2, Mail, Search, Inbox, Check } from "lucide-react";
+import { MessageSquare, Trash2, Mail, Search, Inbox, Check, ExternalLink, Copy, CheckCheck } from "lucide-react";
 import SEO from "../components/SEO";
 import { updatePWABadge } from "../utils/pwaNotifications";
 import api from "../services/api";
@@ -16,6 +16,7 @@ export default function MessagesManager() {
   const [messages, setMessages] = useState(getStoredMessages);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedMessage, setSelectedMessage] = useState(null);
+  const [copiedEmail, setCopiedEmail] = useState(false);
 
   async function fetchMessagesFromApi() {
     try {
@@ -350,27 +351,96 @@ export default function MessagesManager() {
                   </div>
 
                   {/* Action Bar */}
-                  <div style={{ paddingTop: "0.5rem" }}>
-                    <a
-                      href={`mailto:${selectedMessage.email}?subject=Re: ${encodeURIComponent(selectedMessage.subject)}`}
-                      style={{
-                        display: "inline-flex",
-                        alignItems: "center",
-                        gap: "8px",
-                        padding: "12px 20px",
-                        borderRadius: "12px",
-                        background: "#38bdf8",
-                        color: "#020617",
-                        fontSize: "0.85rem",
-                        fontWeight: 800,
-                        textDecoration: "none",
-                        boxShadow: "0 4px 16px rgba(56, 189, 248, 0.3)",
-                      }}
-                    >
-                      <Mail size={16} />
-                      Répondre directement par email
-                    </a>
-                  </div>
+                  {(() => {
+                    const replySubject = selectedMessage.subject
+                      ? `Re: ${selectedMessage.subject}`
+                      : "Réponse à votre message - Milinda Mendy";
+
+                    const replyBody = `Bonjour ${selectedMessage.name || ""},\n\nMerci pour votre message concernant "${selectedMessage.subject || "votre demande"}".\n\n--------------------------------------------------\nMessage reçu le : ${selectedMessage.date || ""}\nDe : ${selectedMessage.name || ""} <${selectedMessage.email || ""}>\nSujet : ${selectedMessage.subject || ""}\n\n"${selectedMessage.message || ""}"\n--------------------------------------------------\n\nCordialement,\nMilinda Mendy`;
+
+                    const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(selectedMessage.email || "")}&su=${encodeURIComponent(replySubject)}&body=${encodeURIComponent(replyBody)}`;
+                    const mailtoUrl = `mailto:${selectedMessage.email || ""}?subject=${encodeURIComponent(replySubject)}&body=${encodeURIComponent(replyBody)}`;
+
+                    const handleCopyEmail = () => {
+                      navigator.clipboard.writeText(selectedMessage.email || "");
+                      setCopiedEmail(true);
+                      setTimeout(() => setCopiedEmail(false), 2000);
+                    };
+
+                    return (
+                      <div style={{ paddingTop: "0.75rem", display: "flex", flexWrap: "wrap", gap: "10px", alignItems: "center" }}>
+                        <a
+                          href={gmailUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            padding: "12px 22px",
+                            borderRadius: "12px",
+                            background: "linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)",
+                            color: "#ffffff",
+                            fontSize: "0.85rem",
+                            fontWeight: 800,
+                            textDecoration: "none",
+                            boxShadow: "0 4px 16px rgba(56, 189, 248, 0.35)",
+                            transition: "all 0.2s ease",
+                          }}
+                        >
+                          <Mail size={16} />
+                          Répondre avec Gmail (Web)
+                        </a>
+
+                        <a
+                          href={mailtoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "8px",
+                            padding: "12px 18px",
+                            borderRadius: "12px",
+                            background: "rgba(255, 255, 255, 0.05)",
+                            border: "1px solid rgba(255, 255, 255, 0.12)",
+                            color: "#f1f5f9",
+                            fontSize: "0.85rem",
+                            fontWeight: 600,
+                            textDecoration: "none",
+                            transition: "all 0.2s ease",
+                          }}
+                          title="Ouvre votre application de messagerie configurée par défaut dans Windows"
+                        >
+                          <ExternalLink size={15} />
+                          App locale (Outlook / Mail)
+                        </a>
+
+                        <button
+                          type="button"
+                          onClick={handleCopyEmail}
+                          style={{
+                            display: "inline-flex",
+                            alignItems: "center",
+                            gap: "6px",
+                            padding: "12px 16px",
+                            borderRadius: "12px",
+                            background: copiedEmail ? "rgba(34, 197, 94, 0.15)" : "rgba(255, 255, 255, 0.03)",
+                            border: copiedEmail ? "1px solid #22c55e" : "1px solid rgba(255, 255, 255, 0.08)",
+                            color: copiedEmail ? "#4ade80" : "#94a3b8",
+                            fontSize: "0.82rem",
+                            fontWeight: 600,
+                            cursor: "pointer",
+                            transition: "all 0.2s ease",
+                          }}
+                          title="Copier l'adresse email de l'expéditeur"
+                        >
+                          {copiedEmail ? <CheckCheck size={15} /> : <Copy size={15} />}
+                          {copiedEmail ? "Email copié !" : "Copier email"}
+                        </button>
+                      </div>
+                    );
+                  })()}
                 </div>
               ) : (
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%", padding: "4rem 0", color: "#64748b", textAlign: "center", gap: "1rem" }}>
