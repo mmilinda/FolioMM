@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import ProjectCard from "../components/ProjectCard";
@@ -9,6 +9,10 @@ import { Layers, Sparkles } from "lucide-react";
 export default function Projects() {
   const { t } = useTranslation();
   const { projects } = useProjects();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   const ALL = t("projectsPage.all", "Tous");
 

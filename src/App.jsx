@@ -36,11 +36,13 @@ import SiteSettings from "./admin/SiteSettings";
 
 // Protection de route
 import ProtectedRoute from "./components/ProtectedRoute";
+import ScrollToTop from "./components/ScrollToTop";
 
 export default function App() {
   return (
     <SiteDataProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           {/* Layout Public */}
           <Route element={<MainLayout />}>
