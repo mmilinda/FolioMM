@@ -50,8 +50,11 @@ return [
              *
              */
 
-            // 'credentials' => env('FIREBASE_CREDENTIALS', env('GOOGLE_APPLICATION_CREDENTIALS')),
-            'credentials' => base_path(env('FIREBASE_CREDENTIALS', 'storage/app/firebase/service-account.json')),
+            'credentials' => env('FIREBASE_CREDENTIALS_JSON') 
+                ? json_decode(env('FIREBASE_CREDENTIALS_JSON'), true) 
+                : (file_exists(base_path(env('FIREBASE_CREDENTIALS', 'storage/app/firebase/service-account.json'))) 
+                    ? base_path(env('FIREBASE_CREDENTIALS', 'storage/app/firebase/service-account.json')) 
+                    : env('FIREBASE_CREDENTIALS')),
 
             /*
              * ------------------------------------------------------------------------
