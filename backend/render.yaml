@@ -18,6 +18,9 @@ services:
       - key: RUN_MIGRATIONS
         value: "true"
       - key: RUN_SEED
-        value: "true"
+        value: "false"
+      # Base persistante (Neon PostgreSQL) : DB_CONNECTION=pgsql et DB_URL à définir dans le Dashboard Render
+      - key: DB_SSLMODE
+        value: "require"
       - key: FIREBASE_PROJECT_ID
         value: "portfolio-e3d27"

@@ -1,16 +1,35 @@
 import { useState, useRef } from "react";
 import { useSiteData } from "../context/SiteDataContext";
-import { Briefcase, Plus, Trash2, Edit3, CheckCircle, Save, Calendar, GraduationCap, ArrowUp, ArrowDown, GripVertical } from "lucide-react";
+import {
+  Briefcase,
+  Plus,
+  Trash2,
+  Edit3,
+  CheckCircle,
+  AlertTriangle,
+  Save,
+  Calendar,
+  GraduationCap,
+  ArrowUp,
+  ArrowDown,
+  GripVertical,
+  Download,
+  Upload,
+  RotateCcw,
+  RefreshCw,
+} from "lucide-react";
 import SEO from "../components/SEO";
 import AutoTranslateButton from "../components/AutoTranslateButton";
 import { translateFields } from "../utils/translator";
 
 export default function TimelineManager() {
-  const { timeline, updateTimeline } = useSiteData();
-  const [saved, setSaved] = useState(false);
+  const { timeline, updateTimeline, restoreTimelineBackup } = useSiteData();
+  const [statusMsg, setStatusMsg] = useState(null);
+  const [isSyncing, setIsSyncing] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [draggedIndex, setDraggedIndex] = useState(null);
   const formRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const [form, setForm] = useState({
     year: "",
@@ -35,6 +54,82 @@ export default function TimelineManager() {
     }));
   };
 
+  const applyTimelineUpdate = async (newItems, actionLabel = "Modification") => {
+    setIsSyncing(true);
+    setStatusMsg({ type: "info", text: "Enregistrement en cours..." });
+
+    const res = await updateTimeline(newItems);
+    setIsSyncing(false);
+
+    if (res?.synced) {
+      setStatusMsg({
+        type: "success",
+        text: `${actionLabel} : enregistré et synchronisé avec le serveur !`,
+      });
+    } else {
+      setStatusMsg({
+        type: "warning",
+        text: `${actionLabel} : sauvegardé localement en sécurité (Serveur distant en attente : ${res?.error || "connexion impossible"}). Vos modifications ne seront pas perdues.`,
+      });
+    }
+
+    setTimeout(() => setStatusMsg(null), 6000);
+  };
+
+  const handleExportJson = () => {
+    try {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(timeline, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute(
+        "download",
+        `timeline-portfolio-backup-${new Date().toISOString().slice(0, 10)}.json`
+      );
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      setStatusMsg({ type: "success", text: "Sauvegarde JSON téléchargée avec succès !" });
+      setTimeout(() => setStatusMsg(null), 4000);
+    } catch (e) {
+      alert("Erreur export: " + e.message);
+    }
+  };
+
+  const handleImportJson = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async (event) => {
+      try {
+        const parsed = JSON.parse(event.target.result);
+        const list = Array.isArray(parsed) ? parsed : parsed.timeline || parsed.data;
+        if (Array.isArray(list) && list.length > 0) {
+          if (window.confirm(`Importer ${list.length} étape(s) et mettre à jour la timeline ?`)) {
+            await applyTimelineUpdate(list, `Import de ${list.length} étapes`);
+          }
+        } else {
+          alert("Le fichier JSON ne contient pas une liste valide d'étapes.");
+        }
+      } catch (err) {
+        alert("Erreur lecture JSON: " + err.message);
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
+
+  const handleRestoreBackup = async () => {
+    if (window.confirm("Restaurer la dernière sauvegarde locale de votre parcours ?")) {
+      const ok = restoreTimelineBackup();
+      if (ok) {
+        setStatusMsg({ type: "info", text: "Dernière sauvegarde locale restaurée avec succès !" });
+        setTimeout(() => setStatusMsg(null), 4000);
+      } else {
+        alert("Aucune sauvegarde locale disponible.");
+      }
+    }
+  };
+
   const handleEdit = (item) => {
     setEditingId(item.id);
     setForm({
@@ -57,23 +152,21 @@ export default function TimelineManager() {
     setForm({ year: "", title: "", titleEn: "", company: "", description: "", descriptionEn: "", tagsStr: "", type: "work" });
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = async (id) => {
     if (window.confirm("Supprimer cette étape du parcours ?")) {
       const updated = timeline.filter((t) => t.id !== id);
-      updateTimeline(updated);
-      triggerSuccess();
+      await applyTimelineUpdate(updated, "Étape supprimée");
     }
   };
 
-  const moveItem = (index, direction) => {
+  const moveItem = async (index, direction) => {
     const newIndex = index + direction;
     if (newIndex < 0 || newIndex >= timeline.length) return;
     const updated = [...timeline];
     const temp = updated[index];
     updated[index] = updated[newIndex];
     updated[newIndex] = temp;
-    updateTimeline(updated);
-    triggerSuccess();
+    await applyTimelineUpdate(updated, "Ordre réorganisé");
   };
 
   const handleDragStart = (e, index) => {
@@ -86,7 +179,7 @@ export default function TimelineManager() {
     e.dataTransfer.dropEffect = "move";
   };
 
-  const handleDrop = (e, targetIndex) => {
+  const handleDrop = async (e, targetIndex) => {
     e.preventDefault();
     if (draggedIndex === null || draggedIndex === targetIndex) {
       setDraggedIndex(null);
@@ -95,9 +188,8 @@ export default function TimelineManager() {
     const updated = [...timeline];
     const [moved] = updated.splice(draggedIndex, 1);
     updated.splice(targetIndex, 0, moved);
-    updateTimeline(updated);
     setDraggedIndex(null);
-    triggerSuccess();
+    await applyTimelineUpdate(updated, "Ordre mis à jour");
   };
 
   const handleSubmit = async (e) => {
@@ -137,7 +229,8 @@ export default function TimelineManager() {
             }
           : t
       );
-      updateTimeline(updated);
+      handleCancel();
+      await applyTimelineUpdate(updated, "Étape modifiée");
     } else {
       const newItem = {
         id: `time-${Date.now()}`,
@@ -150,16 +243,9 @@ export default function TimelineManager() {
         tags: tagsList,
         type: form.type,
       };
-      updateTimeline([newItem, ...timeline]);
+      handleCancel();
+      await applyTimelineUpdate([newItem, ...timeline], "Nouvelle étape ajoutée");
     }
-
-    handleCancel();
-    triggerSuccess();
-  };
-
-  const triggerSuccess = () => {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 3000);
   };
 
   const inputStyle = {
@@ -178,20 +264,132 @@ export default function TimelineManager() {
     <>
       <SEO title="Gestion du Parcours | Admin" noindex={true} />
       <div style={{ maxWidth: "900px", margin: "0 auto", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-        <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)" }}>
-          <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
-            <Briefcase color="#a855f7" size={26} />
-            Gestion de l'Expérience & Parcours (Timeline)
-          </h1>
-          <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
-            Gérez et réorganisez la frise chronologique de vos expériences. Déplacez les cartes à l'aide des flèches ▲/▼ ou par glisser-déposer.
-          </p>
+        <div style={{ paddingBottom: "1rem", borderBottom: "1px solid rgba(255, 255, 255, 0.08)", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "12px" }}>
+          <div>
+            <h1 style={{ fontSize: "1.6rem", fontWeight: 800, color: "#ffffff", margin: "0 0 0.35rem", display: "flex", alignItems: "center", gap: "10px" }}>
+              <Briefcase color="#a855f7" size={26} />
+              Gestion de l'Expérience & Parcours (Timeline)
+            </h1>
+            <p style={{ fontSize: "0.85rem", color: "#94a3b8", margin: 0 }}>
+              Gérez, traduisez et réorganisez la frise chronologique. Vos données sont doublement protégées (sauvegarde locale + serveur).
+            </p>
+          </div>
+
+          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+            <button
+              type="button"
+              onClick={handleExportJson}
+              title="Télécharger une copie de secours JSON sur votre ordinateur"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 12px",
+                borderRadius: "8px",
+                background: "rgba(59, 130, 246, 0.12)",
+                border: "1px solid rgba(59, 130, 246, 0.3)",
+                color: "#60a5fa",
+                fontSize: "0.8rem",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              <Download size={15} />
+              Exporter JSON
+            </button>
+
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              title="Restaurer à partir d'un fichier JSON exporté"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 12px",
+                borderRadius: "8px",
+                background: "rgba(168, 85, 247, 0.12)",
+                border: "1px solid rgba(168, 85, 247, 0.3)",
+                color: "#c084fc",
+                fontSize: "0.8rem",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              <Upload size={15} />
+              Importer JSON
+            </button>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".json"
+              style={{ display: "none" }}
+              onChange={handleImportJson}
+            />
+
+            <button
+              type="button"
+              onClick={handleRestoreBackup}
+              title="Restaurer la dernière sauvegarde automatique locale"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 12px",
+                borderRadius: "8px",
+                background: "rgba(255, 255, 255, 0.05)",
+                border: "1px solid rgba(255, 255, 255, 0.12)",
+                color: "#cbd5e1",
+                fontSize: "0.8rem",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              <RotateCcw size={14} />
+              Restaurer Backup Local
+            </button>
+          </div>
         </div>
 
-        {saved && (
-          <div style={{ padding: "0.85rem", borderRadius: "12px", background: "rgba(52, 211, 153, 0.12)", border: "1px solid rgba(52, 211, 153, 0.3)", color: "#34d399", fontSize: "0.88rem", fontWeight: 600, display: "flex", alignItems: "center", gap: "8px" }}>
-            <CheckCircle size={18} />
-            <span>Mise à jour de la frise chronologique enregistrée !</span>
+        {statusMsg && (
+          <div
+            style={{
+              padding: "0.85rem 1rem",
+              borderRadius: "12px",
+              background:
+                statusMsg.type === "success"
+                  ? "rgba(52, 211, 153, 0.12)"
+                  : statusMsg.type === "warning"
+                  ? "rgba(245, 158, 11, 0.15)"
+                  : "rgba(59, 130, 246, 0.12)",
+              border: `1px solid ${
+                statusMsg.type === "success"
+                  ? "rgba(52, 211, 153, 0.35)"
+                  : statusMsg.type === "warning"
+                  ? "rgba(245, 158, 11, 0.35)"
+                  : "rgba(59, 130, 246, 0.35)"
+              }`,
+              color:
+                statusMsg.type === "success"
+                  ? "#34d399"
+                  : statusMsg.type === "warning"
+                  ? "#fbbf24"
+                  : "#60a5fa",
+              fontSize: "0.88rem",
+              fontWeight: 600,
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+            }}
+          >
+            {statusMsg.type === "success" ? (
+              <CheckCircle size={18} />
+            ) : statusMsg.type === "warning" ? (
+              <AlertTriangle size={18} />
+            ) : (
+              <RefreshCw size={18} className="animate-spin" />
+            )}
+            <span>{statusMsg.text}</span>
           </div>
         )}
 

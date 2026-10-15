@@ -22,10 +22,12 @@ class TimelineController extends Controller
 
         foreach ($request->timeline as $index => $item) {
             Timeline::create([
-                'year' => $item['year'],
-                'title' => $item['title'],
-                'company' => $item['company'],
+                'year' => $item['year'] ?? '',
+                'title' => $item['title'] ?? '',
+                'title_en' => $item['title_en'] ?? $item['titleEn'] ?? $item['title'] ?? '',
+                'company' => $item['company'] ?? '',
                 'description' => $item['description'] ?? '',
+                'description_en' => $item['description_en'] ?? $item['descriptionEn'] ?? $item['description'] ?? '',
                 'tags' => $item['tags'] ?? [],
                 'type' => $item['type'] ?? 'work',
                 'order' => $index,

@@ -12,8 +12,10 @@ class Timeline extends Model
     protected $fillable = [
         'year',
         'title',
+        'title_en',
         'company',
         'description',
+        'description_en',
         'tags',
         'type',
         'order',

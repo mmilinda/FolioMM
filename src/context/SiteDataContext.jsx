@@ -418,13 +418,25 @@ export function SiteDataProvider({ children }) {
             id: tl.id,
             year: tl.year,
             title: tl.title,
+            titleEn: tl.title_en || tl.titleEn || tl.title,
             company: tl.company,
             description: tl.description,
+            descriptionEn: tl.description_en || tl.descriptionEn || tl.description,
             tags: tl.tags || [],
             type: tl.type || "work",
           }));
-          setTimelineState(tList);
-          localStorage.setItem("site_timeline", JSON.stringify(tList));
+
+          const hasPendingSync = localStorage.getItem("site_timeline_pending_sync") === "true";
+          const localStored = localStorage.getItem("site_timeline");
+
+          // Protection anti-écrasement : si l'utilisateur a des modifications locales en attente,
+          // on ne les écrase JAMAIS avec les données réinitialisées ou plus anciennes du serveur
+          if (hasPendingSync && localStored) {
+            console.info("🛡️ [Anti-Écrasement] Modifications locales du parcours conservées (en attente de synchronisation).");
+          } else {
+            setTimelineState(tList);
+            localStorage.setItem("site_timeline", JSON.stringify(tList));
+          }
         }
 
         if (impactRes.status === "fulfilled" && impactRes.value.data) {
@@ -572,13 +584,48 @@ export function SiteDataProvider({ children }) {
   const updateTimeline = async (newTimeline) => {
     setTimelineState(newTimeline);
     localStorage.setItem("site_timeline", JSON.stringify(newTimeline));
+    localStorage.setItem(
+      "site_timeline_backup",
+      JSON.stringify({
+        data: newTimeline,
+        updatedAt: new Date().toISOString(),
+      })
+    );
+    localStorage.setItem("site_timeline_pending_sync", "true");
     notifyUpdate();
 
     try {
-      await api.post("/admin/timeline/sync", { timeline: newTimeline });
+      const res = await api.post("/admin/timeline/sync", { timeline: newTimeline });
+      localStorage.removeItem("site_timeline_pending_sync");
+      localStorage.setItem("site_timeline_last_synced", new Date().toISOString());
+      return { success: true, synced: true, data: res.data };
     } catch (err) {
       console.warn("Erreur sync timeline API:", err);
+      return {
+        success: true,
+        synced: false,
+        error: err.response?.data?.message || err.message || "Impossible de joindre le serveur distant",
+      };
     }
+  };
+
+  const restoreTimelineBackup = () => {
+    try {
+      const backupRaw = localStorage.getItem("site_timeline_backup");
+      if (!backupRaw) return false;
+      const backup = JSON.parse(backupRaw);
+      const items = Array.isArray(backup) ? backup : backup.data;
+      if (Array.isArray(items) && items.length > 0) {
+        setTimelineState(items);
+        localStorage.setItem("site_timeline", JSON.stringify(items));
+        localStorage.setItem("site_timeline_pending_sync", "true");
+        notifyUpdate();
+        return true;
+      }
+    } catch (e) {
+      console.warn("Erreur restauration backup timeline:", e);
+    }
+    return false;
   };
 
   const updateImpact = async (newImpact) => {
@@ -618,6 +665,7 @@ export function SiteDataProvider({ children }) {
         updateSkills,
         timeline,
         updateTimeline,
+        restoreTimelineBackup,
         impact,
         updateImpact,
         sectionVisibility,

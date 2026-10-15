@@ -23,6 +23,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Protection : si la base est déjà initialisée (un admin existe), on ne touche à rien.
+        // Cela évite d'écraser les données modifiées depuis l'espace admin à chaque redéploiement.
+        // Pour forcer une réinitialisation complète : SEED_RESET=true php artisan db:seed --force
+        if (Admin::query()->exists() && !filter_var(env('SEED_RESET', false), FILTER_VALIDATE_BOOLEAN)) {
+            $this->command?->info('Base déjà initialisée : seed ignoré (données admin conservées).');
+            return;
+        }
+
         // 1. Seed Admin User
         Admin::query()->delete();
         Admin::create([
@@ -190,8 +198,10 @@ class DatabaseSeeder extends Seeder
             [
                 'year' => 'Janvier 2026 - Présent',
                 'title' => 'Développeuse d\'applications & solutions numériques',
+                'title_en' => 'Application & Digital Solutions Developer',
                 'company' => 'SamCorporate',
                 'description' => 'Développement de solutions numériques d\'entreprise, d\'applications web & mobiles et de plateformes intelligentes sur-mesure.',
+                'description_en' => 'Development of enterprise digital solutions, custom web & mobile applications, and intelligent platforms.',
                 'tags' => ['React', 'JavaScript', 'Tailwind CSS', 'Laravel API', 'Full Stack'],
                 'type' => 'work',
                 'order' => 1,
@@ -199,8 +209,10 @@ class DatabaseSeeder extends Seeder
             [
                 'year' => '2024 - 2025',
                 'title' => 'Développeuse Full Stack & Web Mobile',
+                'title_en' => 'Full Stack & Mobile Web Developer',
                 'company' => 'Défarsci',
                 'description' => 'Développement d\'applications web interactives : CV Vidéo et Location Appartement.',
+                'description_en' => 'Development of interactive web applications: Video Resume and Apartment Rental platforms.',
                 'tags' => ['Laravel', 'React', 'PHP', 'MySQL', 'JavaScript'],
                 'type' => 'work',
                 'order' => 2,
@@ -208,8 +220,10 @@ class DatabaseSeeder extends Seeder
             [
                 'year' => '2023',
                 'title' => 'Stagiaire Développeuse Web',
+                'title_en' => 'Web Developer Intern',
                 'company' => 'Défarsci',
                 'description' => 'Conception et intégration de sites vitrines et plateformes CMS : Site Zawiya.',
+                'description_en' => 'Design and integration of showcase websites and CMS platforms: Zawiya Website.',
                 'tags' => ['WordPress', 'Laravel', 'PHP', 'MySQL', 'CMS'],
                 'type' => 'work',
                 'order' => 3,
@@ -217,8 +231,10 @@ class DatabaseSeeder extends Seeder
             [
                 'year' => '2023',
                 'title' => 'Certification en Développement Web & Mobile',
+                'title_en' => 'Web & Mobile Development Certification',
                 'company' => 'ISCA (en partenariat avec le 3FPT)',
                 'description' => 'Formation certifiante et compétences pratiques en Développement Web & Mobile.',
+                'description_en' => 'Professional certification and hands-on skills in Web & Mobile Development.',
                 'tags' => ['Développement Web', 'Développement Mobile', 'Certification', '3FPT', 'ISCA'],
                 'type' => 'education',
                 'order' => 4,
