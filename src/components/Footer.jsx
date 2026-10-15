@@ -3,6 +3,7 @@ import { FaGithub, FaLinkedin } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useSiteData } from "../context/SiteDataContext";
+import InstallPWA from "./InstallPWA";
 
 export default function Footer() {
   const { t, i18n } = useTranslation();
@@ -99,6 +100,8 @@ export default function Footer() {
           <Lock size={11} className="text-cyan-400/70" />
           <span>Admin</span>
         </Link>
+        <span className="text-slate-700">•</span>
+        <InstallPWA variant="footer" />
       </div>
     </footer>
   );

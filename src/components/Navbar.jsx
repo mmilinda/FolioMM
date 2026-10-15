@@ -4,6 +4,7 @@ import { Menu, X, Globe, Sun, Moon } from "lucide-react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useSiteData } from "../context/SiteDataContext";
+import InstallPWA from "./InstallPWA";
 
 export default function Navbar() {
   const { i18n } = useTranslation();
@@ -152,6 +153,7 @@ export default function Navbar() {
               {link.name}
             </NavLink>
           ))}
+          <InstallPWA variant="mobile" />
         </motion.div>
       )}
     </motion.nav>
