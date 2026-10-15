@@ -463,9 +463,25 @@ export function SiteDataProvider({ children }) {
         }
 
         if (settingsRes.status === "fulfilled" && settingsRes.value.data?.sectionVisibility) {
-          const vis = { ...defaultSectionVisibility, ...settingsRes.value.data.sectionVisibility };
-          setSectionVisibilityState(vis);
-          localStorage.setItem("site_section_visibility", JSON.stringify(vis));
+          const serverVis = settingsRes.value.data.sectionVisibility;
+          let localVis = {};
+          try {
+            const raw = localStorage.getItem("site_section_visibility");
+            if (raw) localVis = JSON.parse(raw);
+          } catch (e) {}
+
+          const merged = { ...defaultSectionVisibility, ...serverVis };
+          // Protection anti-écrasement : si l'admin avait explicitement masqué une section,
+          // on préserve ce choix et on le synchronise vers le serveur
+          Object.keys(localVis).forEach((key) => {
+            if (localVis[key] === false && serverVis[key] !== false) {
+              merged[key] = false;
+              api.post("/admin/settings", { sectionVisibility: merged }).catch(() => {});
+            }
+          });
+
+          setSectionVisibilityState(merged);
+          localStorage.setItem("site_section_visibility", JSON.stringify(merged));
         }
       } catch (err) {
         console.warn("Utilisation des données locales de secours (Backend hors ligne):", err);
