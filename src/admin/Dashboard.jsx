@@ -33,7 +33,16 @@ import SEO from "../components/SEO";
 
 export default function Dashboard() {
   const { user } = useAuth();
-  const { services, skills, timeline, impact, sectionVisibility } = useSiteData();
+  const { services, skills, timeline, impact, sectionVisibility, updateSectionVisibility } = useSiteData();
+
+  const toggleSection = (sectionKey) => {
+    const isCurrentlyActive = sectionVisibility ? sectionVisibility[sectionKey] !== false : true;
+    const updated = {
+      ...(sectionVisibility || {}),
+      [sectionKey]: !isCurrentlyActive,
+    };
+    updateSectionVisibility(updated);
+  };
 
   // Pass true to include all projects & articles (visible & hidden)
   const { projects } = useProjects(true);
@@ -167,13 +176,14 @@ export default function Dashboard() {
   const recentMessages = messages.slice(0, 4);
 
   const sectionsList = [
-    { key: "hero", label: "Hero Banner" },
+    { key: "hero", label: "Hero / En-tête" },
+    { key: "stats", label: "Statistiques" },
     { key: "about", label: "À propos" },
     { key: "services", label: "Services" },
-    { key: "projects", label: "Projets" },
+    { key: "projects", label: "Projets Récents" },
     { key: "impact", label: "Impact & Avis" },
     { key: "timeline", label: "Parcours" },
-    { key: "contact", label: "Contact" },
+    { key: "booking", label: "Rendez-vous" },
   ];
 
   return (
@@ -728,24 +738,43 @@ export default function Dashboard() {
                 {sectionsList.map((sec) => {
                   const isVis = sectionVisibility ? sectionVisibility[sec.key] !== false : true;
                   return (
-                    <div
+                    <button
                       key={sec.key}
+                      type="button"
+                      onClick={() => toggleSection(sec.key)}
+                      title={isVis ? `Cliquer pour masquer la section « ${sec.label} »` : `Cliquer pour afficher la section « ${sec.label} »`}
                       style={{
                         padding: "8px 10px",
                         borderRadius: "10px",
-                        background: isVis ? "rgba(52, 211, 153, 0.08)" : "rgba(239, 68, 68, 0.08)",
-                        border: isVis ? "1px solid rgba(52, 211, 153, 0.2)" : "1px solid rgba(239, 68, 68, 0.2)",
+                        background: isVis ? "rgba(52, 211, 153, 0.1)" : "rgba(239, 68, 68, 0.1)",
+                        border: isVis ? "1px solid rgba(52, 211, 153, 0.3)" : "1px solid rgba(239, 68, 68, 0.3)",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "space-between",
                         fontSize: "0.75rem",
                         fontWeight: 600,
                         color: isVis ? "#34d399" : "#ef4444",
+                        cursor: "pointer",
+                        transition: "all 0.2s ease",
                       }}
                     >
-                      <span>{sec.label}</span>
-                      {isVis ? <Eye size={13} /> : <EyeOff size={13} />}
-                    </div>
+                      <span style={{ textAlign: "left" }}>{sec.label}</span>
+                      <span
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "4px",
+                          fontSize: "0.68rem",
+                          fontWeight: 700,
+                          padding: "2px 6px",
+                          borderRadius: "6px",
+                          background: isVis ? "rgba(52, 211, 153, 0.2)" : "rgba(239, 68, 68, 0.2)",
+                        }}
+                      >
+                        {isVis ? <Eye size={12} /> : <EyeOff size={12} />}
+                        <span>{isVis ? "Visible" : "Masqué"}</span>
+                      </span>
+                    </button>
                   );
                 })}
               </div>

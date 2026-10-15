@@ -96,12 +96,13 @@ export default function SiteSettings() {
   }
 
   function toggleSection(sectionKey) {
+    const isCurrentlyActive = sectionVisibility ? sectionVisibility[sectionKey] !== false : true;
     const updated = {
-      ...sectionVisibility,
-      [sectionKey]: !sectionVisibility[sectionKey],
+      ...(sectionVisibility || {}),
+      [sectionKey]: !isCurrentlyActive,
     };
     updateSectionVisibility(updated);
-    triggerSuccess();
+    triggerSuccess(!isCurrentlyActive ? "Section rendue visible !" : "Section masquée du site public !");
   }
 
   function submitProfile(e) {
