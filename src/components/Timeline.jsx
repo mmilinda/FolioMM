@@ -122,22 +122,22 @@ export default function Timeline() {
           {experiences.map((exp, i) => (
             <motion.div
               key={`${exp.year}-${i}`}
-              className="timeline-item relative flex items-start gap-6"
+              className="timeline-item relative flex items-start gap-3 sm:gap-6"
               initial={{ opacity: 0, y: 30 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: 0.2 + i * 0.15, duration: 0.7, ease: "easeOut" }}
             >
               {/* Dot on the line */}
               <div
-                className="timeline-dot shrink-0 w-10 h-10 rounded-full flex items-center justify-center border-2 z-10 bg-slate-950"
+                className="timeline-dot shrink-0 w-7 h-7 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border-2 z-10 bg-slate-950 mt-1"
                 style={{ borderColor: exp.color, boxShadow: `0 0 14px ${exp.color}44` }}
               >
-                <div className="w-3 h-3 rounded-full" style={{ background: exp.color }} />
+                <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full" style={{ background: exp.color }} />
               </div>
 
               {/* Card */}
               <motion.div
-                className="timeline-card flex-1 p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md transition-all hover:-translate-y-1 hover:border-slate-700"
+                className="timeline-card flex-1 p-4 sm:p-6 rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-md transition-all hover:-translate-y-1 hover:border-slate-700"
                 whileHover={{ y: -4 }}
               >
                 <div className="timeline-card-top flex flex-wrap items-center justify-between gap-2 mb-2">
