@@ -82,7 +82,8 @@ export default function Hero() {
 
   const projStat = exactProjectsCount;
   const expStat = siteStats?.find((s) => s.id === "stat-2" || s.label?.toLowerCase().includes("expéri"))?.value || "3+";
-  const solStat = siteStats?.find((s) => s.id === "stat-3" || s.label?.toLowerCase().includes("solution"))?.value || "3+";
+  const liveProdCount = projects?.filter((p) => p.status?.toLowerCase().includes("production")).length || 5;
+  const solStat = `${liveProdCount}+`;
 
   const stats = [
     { value: projStat, label: t("hero.stats.projects", "Projets") },

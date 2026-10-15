@@ -76,6 +76,8 @@ export default function Stats() {
   const { stats: siteStats } = useSiteData();
   const { projects } = useProjects();
   const exactProjectsCount = String(projects?.length || 15);
+  const liveProdCount = projects?.filter((p) => p.status?.toLowerCase().includes("production")).length || 5;
+  const exactProdCount = `${liveProdCount}+`;
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -85,16 +87,17 @@ export default function Stats() {
   const defaultStats = [
     { id: "stat-1", value: exactProjectsCount, label: t("hero.stats.projects", "Projets"), desc: isEn ? "Web, SaaS & Mobile Applications" : "Applications Web, SaaS & Mobile", color: "#38bdf8" },
     { id: "stat-2", value: "3+", label: t("hero.stats.experience", "Années d'expérience"), desc: isEn ? "In Full Stack Development (2022 - Present)" : "En développement Full Stack (2022 - Présent)", color: "#818cf8" },
-    { id: "stat-3", value: "5+", label: t("hero.stats.solutions", "Solutions de Production"), desc: isEn ? "SaaS & Enterprise Platforms" : "SaaS & plateformes d'entreprise", color: "#34d399" },
+    { id: "stat-3", value: exactProdCount, label: t("hero.stats.solutions", "Solutions de Production"), desc: isEn ? "SaaS & Enterprise Platforms" : "SaaS & plateformes d'entreprise", color: "#34d399" },
     { id: "stat-4", value: "100%", label: t("about.commitment", "Engagement"), desc: isEn ? "Agile delivery & Code quality" : "Livraison agile & Qualité de code", color: "#f472b6" },
   ];
 
   const displayStats = Array.isArray(siteStats) && siteStats.length > 0
     ? siteStats.map((st, i) => {
         const isProjectStat = st.id === "stat-1" || st.label?.toLowerCase().includes("projet");
+        const isProdStat = st.id === "stat-3" || st.label?.toLowerCase().includes("solution");
         return {
           ...st,
-          value: isProjectStat ? exactProjectsCount : st.value,
+          value: isProjectStat ? exactProjectsCount : isProdStat ? exactProdCount : st.value,
           color: colors[i % colors.length],
         };
       })

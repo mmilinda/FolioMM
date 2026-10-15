@@ -23,6 +23,11 @@ export default function EditProject() {
     titleEn: "",
     category: "",
     categoryEn: "",
+    status: "Production",
+    statusEn: "Production",
+    featured: false,
+    year: "2026",
+    client: "",
     description: "",
     descriptionEn: "",
     problem: "",
@@ -129,6 +134,11 @@ export default function EditProject() {
         titleEn: targetProject.titleEn || "",
         category: targetProject.category || "",
         categoryEn: targetProject.categoryEn || "",
+        status: targetProject.status || "Production",
+        statusEn: targetProject.statusEn || targetProject.status || "Production",
+        featured: !!targetProject.featured,
+        year: targetProject.year || "2026",
+        client: targetProject.client || "",
         description: targetProject.description || "",
         descriptionEn: targetProject.descriptionEn || "",
         problem: targetProject.problem || "",
@@ -228,6 +238,11 @@ export default function EditProject() {
       titleEn: finalTitleEn || form.title,
       category: form.category,
       categoryEn: finalCategoryEn || form.category,
+      status: form.status,
+      statusEn: form.statusEn || form.status,
+      featured: Boolean(form.featured),
+      year: form.year || "2026",
+      client: form.client || "",
       description: form.description,
       descriptionEn: finalDescriptionEn || form.description,
       problem: form.problem,
@@ -250,6 +265,11 @@ export default function EditProject() {
       data.append("titleEn", form.titleEn || form.title);
       data.append("category", form.category);
       data.append("categoryEn", form.categoryEn || form.category);
+      data.append("status", form.status);
+      data.append("status_en", form.statusEn || form.status);
+      data.append("featured", form.featured ? "1" : "0");
+      data.append("year", form.year || "2026");
+      data.append("client", form.client || "");
       data.append("description", form.description);
       data.append("descriptionEn", form.descriptionEn || form.description);
       data.append("problem", form.problem);
@@ -745,6 +765,67 @@ export default function EditProject() {
             <div>
               <label style={labelStyle}>Catégorie (EN - Optionnel)</label>
               <input name="categoryEn" style={inputStyle} value={form.categoryEn} onChange={handleChange} placeholder="ex: AI • Agriculture" />
+            </div>
+          </div>
+
+          {/* Statut, Année, Client & En vedette */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1.25rem", background: "rgba(15, 23, 42, 0.5)", padding: "1.2rem", borderRadius: "16px", border: "1px solid rgba(56, 189, 248, 0.25)" }}>
+            <div>
+              <label style={labelStyle}>⚡ Statut du Projet *</label>
+              <select
+                name="status"
+                style={{ ...inputStyle, cursor: "pointer", color: "#38bdf8", fontWeight: 700 }}
+                value={form.status}
+                onChange={handleChange}
+              >
+                <option value="Production" style={{ background: "#0f172a", color: "#34d399" }}>🟢 Production (Solution en production)</option>
+                <option value="Prototype" style={{ background: "#0f172a", color: "#38bdf8" }}>🔵 Prototype (R&D / POC)</option>
+                <option value="Stage Défarsci" style={{ background: "#0f172a", color: "#fb923c" }}>🟠 Stage Défarsci</option>
+                <option value="Stage" style={{ background: "#0f172a", color: "#fb923c" }}>🟠 Stage (Entreprise)</option>
+                <option value="Projet de Formation" style={{ background: "#0f172a", color: "#a855f7" }}>🟣 Projet de Formation</option>
+                <option value="Terminé" style={{ background: "#0f172a", color: "#e2e8f0" }}>⚪ Terminé</option>
+              </select>
+            </div>
+
+            <div>
+              <label style={labelStyle}>📅 Année</label>
+              <input
+                name="year"
+                style={inputStyle}
+                value={form.year}
+                onChange={handleChange}
+                placeholder="ex: 2026"
+              />
+            </div>
+
+            <div>
+              <label style={labelStyle}>🏢 Client / Contexte</label>
+              <input
+                name="client"
+                style={inputStyle}
+                value={form.client}
+                onChange={handleChange}
+                placeholder="ex: NC Collection, SamCorporate"
+              />
+            </div>
+
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <label style={{ ...labelStyle, display: "flex", alignItems: "center", gap: "6px" }}>
+                <Sparkles size={14} color="#38bdf8" />
+                <span>Mise en vedette</span>
+              </label>
+              <label style={{ display: "flex", alignItems: "center", gap: "10px", cursor: "pointer", padding: "10px 12px", background: form.featured ? "rgba(56, 189, 248, 0.15)" : "rgba(2, 6, 23, 0.6)", borderRadius: "10px", border: form.featured ? "1px solid #38bdf8" : "1px solid rgba(255,255,255,0.1)" }}>
+                <input
+                  type="checkbox"
+                  name="featured"
+                  checked={form.featured}
+                  onChange={(e) => setForm({ ...form, featured: e.target.checked })}
+                  style={{ width: "18px", height: "18px", cursor: "pointer" }}
+                />
+                <span style={{ fontSize: "0.82rem", fontWeight: 600, color: form.featured ? "#38bdf8" : "#94a3b8" }}>
+                  {form.featured ? "⭐ En vedette sur l'accueil" : "Masqué de l'accueil"}
+                </span>
+              </label>
             </div>
           </div>
 
