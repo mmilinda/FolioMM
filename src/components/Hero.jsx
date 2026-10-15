@@ -82,11 +82,12 @@ export default function Hero() {
 
   const projStat = exactProjectsCount;
   const expStat = siteStats?.find((s) => s.id === "stat-2" || s.label?.toLowerCase().includes("expéri"))?.value || "3+";
+  const solStat = siteStats?.find((s) => s.id === "stat-3" || s.label?.toLowerCase().includes("solution"))?.value || "3+";
 
   const stats = [
     { value: projStat, label: t("hero.stats.projects", "Projets") },
     { value: expStat, label: t("hero.stats.experience", "Années d'expérience") },
-    { value: profile?.uptimeRate || "99.9%", label: t("hero.stats.solutions", "Uptime & Fiabilité") },
+    { value: solStat, label: t("hero.stats.solutions", "Solutions de Production") },
   ];
 
   const activeRoles = Array.isArray(profile?.heroRoles) && profile.heroRoles.length > 0
