@@ -205,8 +205,10 @@ const defaultTimeline = [
     id: "time-0",
     year: "Janvier 2026 - Présent",
     title: "Développeuse d'applications & solutions numériques",
+    titleEn: "Application & Digital Solutions Developer",
     company: "SamCorporate",
-    description: "Développement de solutions numériques d'entreprise, d'applications web & mobiles et de plateformes intelligentes sur-mesure.",
+    description: "Développement de solutions numériques d'entreprise, d'applications web & mobiles et de plateformes intelligentes sur-mesure (AgriChain AI, Garagebi Assistance, Noregis SaaS, SecurityApp, BerMas Assurance, Sunu Champion).",
+    descriptionEn: "Engineering & deploying enterprise digital solutions, web & mobile applications, and smart platforms: AgriChain AI, Garagebi Assistance, Noregis SaaS, SecurityApp, BerMas Assurance & Sunu Champion.",
     tags: ["React", "JavaScript", "Tailwind CSS", "Laravel API", "Full Stack"],
     type: "work",
   },
@@ -214,8 +216,10 @@ const defaultTimeline = [
     id: "time-2",
     year: "2024 - 2025",
     title: "Développeuse Full Stack & Web Mobile",
+    titleEn: "Full Stack & Mobile Web Developer",
     company: "Défarsci",
-    description: "Développement d'applications web interactives : CV Vidéo et Location Appartement.",
+    description: "Développement d'applications web interactives pour l'insertion professionnelle (CV Vidéo) et la gestion immobilière (Location Appartement). Intégration d'API REST.",
+    descriptionEn: "Development of interactive web applications: CV Vidéo (video resumes for employment) and Location Appartement (real estate management system). REST API integration.",
     tags: ["Laravel", "React", "PHP", "MySQL", "JavaScript"],
     type: "work",
   },
@@ -223,8 +227,10 @@ const defaultTimeline = [
     id: "time-3",
     year: "2023",
     title: "Stagiaire Développeuse Web",
+    titleEn: "Web Developer Intern",
     company: "Défarsci",
-    description: "Conception et intégration de sites vitrines et plateformes CMS : Site Zawiya.",
+    description: "Conception et intégration de sites vitrines et plateformes CMS (Site Zawiya). Modélisation de bases de données relationnelles MySQL.",
+    descriptionEn: "Design and integration of showcase websites and CMS portals (Site Zawiya). Relational database modeling with MySQL.",
     tags: ["WordPress", "Laravel", "PHP", "MySQL", "CMS"],
     type: "work",
   },
@@ -232,9 +238,33 @@ const defaultTimeline = [
     id: "time-cert-isca",
     year: "2023",
     title: "Certification en Développement Web & Mobile",
+    titleEn: "Web & Mobile Development Certification",
     company: "ISCA (en partenariat avec le 3FPT)",
-    description: "Formation certifiante et compétences pratiques en Développement Web & Mobile.",
+    description: "Formation certifiante et compétences pratiques en Développement Web & Mobile dispensée à l'ISCA en partenariat avec le 3FPT.",
+    descriptionEn: "Professional Certification in Web & Mobile Development earned at ISCA in partnership with 3FPT.",
     tags: ["Développement Web", "Développement Mobile", "Certification", "3FPT", "ISCA"],
+    type: "education",
+  },
+  {
+    id: "time-4",
+    year: "2022",
+    title: "Stagiaire Intégratrice Web",
+    titleEn: "Web Integrator Intern",
+    company: "Bakeli & Webgram",
+    description: "Intégration web responsive et développement de blogs d'entreprise : Site Vitrine Bootstrap et GM Business Prayer (Blogger).",
+    descriptionEn: "Hands-on responsive web integration and corporate blog customization: Bootstrap Showcase Site and GM Business Prayer (Blogger).",
+    tags: ["Bootstrap 5", "HTML5", "CSS3", "JavaScript", "Blogger"],
+    type: "work",
+  },
+  {
+    id: "time-5",
+    year: "2019 - 2022",
+    title: "Licence Professionnelle en Informatique de Gestion",
+    titleEn: "Bachelor's Degree in Business Information Systems",
+    company: "UCAO (Université Catholique de l'Afrique de l'Ouest)",
+    description: "Formation supérieure spécialisée en génie logiciel, gestion de bases de données, développement web et projets académiques de formation (Guide Itinéraire avec jQuery Mobile & Google Maps API, et Voyage 2).",
+    descriptionEn: "Specialized higher education in software engineering, database administration, web development, and academic projects (Transit Itinerary Guide with jQuery Mobile/Google Maps API and Travel 2).",
+    tags: ["Informatique de Gestion", "Bases de Données", "Génie Logiciel", "Systèmes d'Information"],
     type: "education",
   },
 ];
@@ -429,10 +459,35 @@ export function SiteDataProvider({ children }) {
           const hasPendingSync = localStorage.getItem("site_timeline_pending_sync") === "true";
           const localStored = localStorage.getItem("site_timeline");
 
-          // Protection anti-écrasement : si l'utilisateur a des modifications locales en attente,
-          // on ne les écrase JAMAIS avec les données réinitialisées ou plus anciennes du serveur
           if (hasPendingSync && localStored) {
-            console.info("🛡️ [Anti-Écrasement] Modifications locales du parcours conservées (en attente de synchronisation).");
+            try {
+              const parsedLocal = JSON.parse(localStored);
+              // Si le serveur a plus d'éléments complets que le local incomplet (ex: 6 vs 4)
+              if (Array.isArray(parsedLocal) && tList.length > parsedLocal.length) {
+                console.info("🔄 [Mise à Niveau] Le serveur distant contient une version plus complète du parcours.");
+                setTimelineState(tList);
+                localStorage.setItem("site_timeline", JSON.stringify(tList));
+                localStorage.removeItem("site_timeline_pending_sync");
+              } else {
+                console.info("🛡️ [Anti-Écrasement] Modifications locales du parcours conservées.");
+                // Tenter une synchronisation vers le serveur si un jeton Admin valide est présent
+                const token = localStorage.getItem("token");
+                if (token && !token.startsWith("firebase-token-")) {
+                  api.post("/admin/timeline/sync", { timeline: parsedLocal })
+                    .then(() => {
+                      localStorage.removeItem("site_timeline_pending_sync");
+                      localStorage.setItem("site_timeline_last_synced", new Date().toISOString());
+                      console.info("✅ [Auto-Sync] Parcours synchronisé avec succès sur le serveur distant.");
+                    })
+                    .catch((err) => {
+                      console.warn("⚠️ [Auto-Sync] Échec sync arrière-plan:", err?.message);
+                    });
+                }
+              }
+            } catch {
+              setTimelineState(tList);
+              localStorage.setItem("site_timeline", JSON.stringify(tList));
+            }
           } else {
             setTimelineState(tList);
             localStorage.setItem("site_timeline", JSON.stringify(tList));
@@ -597,6 +652,26 @@ export function SiteDataProvider({ children }) {
     }
   };
 
+  const syncTimelineToServer = async (itemsToSync = timeline) => {
+    try {
+      const res = await api.post("/admin/timeline/sync", { timeline: itemsToSync });
+      localStorage.removeItem("site_timeline_pending_sync");
+      localStorage.setItem("site_timeline_last_synced", new Date().toISOString());
+      return { success: true, synced: true, data: res.data };
+    } catch (err) {
+      console.warn("Erreur sync timeline API:", err);
+      const isAuth = err.response?.status === 401;
+      return {
+        success: false,
+        synced: false,
+        isAuthError: isAuth,
+        error: isAuth
+          ? "Session d'administration expirée. Reconnectez-vous pour synchroniser avec la base de données distante."
+          : err.response?.data?.message || err.message || "Impossible de joindre le serveur distant",
+      };
+    }
+  };
+
   const updateTimeline = async (newTimeline) => {
     setTimelineState(newTimeline);
     localStorage.setItem("site_timeline", JSON.stringify(newTimeline));
@@ -610,17 +685,15 @@ export function SiteDataProvider({ children }) {
     localStorage.setItem("site_timeline_pending_sync", "true");
     notifyUpdate();
 
-    try {
-      const res = await api.post("/admin/timeline/sync", { timeline: newTimeline });
-      localStorage.removeItem("site_timeline_pending_sync");
-      localStorage.setItem("site_timeline_last_synced", new Date().toISOString());
-      return { success: true, synced: true, data: res.data };
-    } catch (err) {
-      console.warn("Erreur sync timeline API:", err);
+    const syncResult = await syncTimelineToServer(newTimeline);
+    if (syncResult.synced) {
+      return { success: true, synced: true, data: syncResult.data };
+    } else {
       return {
         success: true,
         synced: false,
-        error: err.response?.data?.message || err.message || "Impossible de joindre le serveur distant",
+        isAuthError: syncResult.isAuthError,
+        error: syncResult.error,
       };
     }
   };
@@ -681,6 +754,7 @@ export function SiteDataProvider({ children }) {
         updateSkills,
         timeline,
         updateTimeline,
+        syncTimelineToServer,
         restoreTimelineBackup,
         impact,
         updateImpact,

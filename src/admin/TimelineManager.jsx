@@ -23,11 +23,14 @@ import AutoTranslateButton from "../components/AutoTranslateButton";
 import { translateFields } from "../utils/translator";
 
 export default function TimelineManager() {
-  const { timeline, updateTimeline, restoreTimelineBackup } = useSiteData();
+  const { timeline, updateTimeline, syncTimelineToServer, restoreTimelineBackup } = useSiteData();
   const [statusMsg, setStatusMsg] = useState(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [draggedIndex, setDraggedIndex] = useState(null);
+  const [hasPendingSync, setHasPendingSync] = useState(
+    () => localStorage.getItem("site_timeline_pending_sync") === "true"
+  );
   const formRef = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -62,18 +65,42 @@ export default function TimelineManager() {
     setIsSyncing(false);
 
     if (res?.synced) {
+      setHasPendingSync(false);
       setStatusMsg({
         type: "success",
-        text: `${actionLabel} : enregistré et synchronisé avec le serveur !`,
+        text: `${actionLabel} : enregistré et synchronisé avec le serveur (visible par tous les visiteurs) !`,
       });
+      setTimeout(() => setStatusMsg(null), 6000);
     } else {
+      setHasPendingSync(true);
       setStatusMsg({
         type: "warning",
-        text: `${actionLabel} : sauvegardé localement en sécurité (Serveur distant en attente : ${res?.error || "connexion impossible"}). Vos modifications ne seront pas perdues.`,
+        text: `${actionLabel} : sauvegardé localement sur cet appareil (${res?.error || "Serveur distant en attente"}). Utilisez le bouton 'Synchroniser' ci-dessous pour publier en ligne.`,
       });
     }
+  };
 
-    setTimeout(() => setStatusMsg(null), 6000);
+  const handleForceSync = async () => {
+    setIsSyncing(true);
+    setStatusMsg({ type: "info", text: "Transmission des modifications vers la base de données Render..." });
+
+    const res = await syncTimelineToServer(timeline);
+    setIsSyncing(false);
+
+    if (res?.synced) {
+      setHasPendingSync(false);
+      setStatusMsg({
+        type: "success",
+        text: "✅ Parcours synchronisé avec succès ! Toutes les modifications sont maintenant visibles sur tous les appareils et par les visiteurs.",
+      });
+      setTimeout(() => setStatusMsg(null), 6000);
+    } else {
+      setHasPendingSync(true);
+      setStatusMsg({
+        type: "warning",
+        text: `Échec de synchronisation avec le serveur : ${res?.error || "Connexion refusée"}. ${res?.isAuthError ? "Veuillez vous reconnecter à l'espace Admin." : "Vérifiez votre connexion internet."}`,
+      });
+    }
   };
 
   const handleExportJson = () => {
@@ -390,6 +417,56 @@ export default function TimelineManager() {
               <RefreshCw size={18} className="animate-spin" />
             )}
             <span>{statusMsg.text}</span>
+          </div>
+        )}
+
+        {hasPendingSync && (
+          <div
+            style={{
+              padding: "1rem 1.25rem",
+              borderRadius: "14px",
+              background: "rgba(245, 158, 11, 0.12)",
+              border: "1px solid rgba(245, 158, 11, 0.4)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              gap: "12px",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", flex: 1, minWidth: "260px" }}>
+              <AlertTriangle color="#fbbf24" size={22} className="shrink-0" />
+              <div>
+                <p style={{ margin: 0, fontWeight: 700, fontSize: "0.9rem", color: "#fbbf24" }}>
+                  Modifications locales en attente de publication en ligne
+                </p>
+                <p style={{ margin: "2px 0 0", fontSize: "0.8rem", color: "#cbd5e1" }}>
+                  Vos modifications sont sauvegardées sur cet appareil mais n'ont pas encore été transmises au serveur distant. Les autres appareils et visiteurs ne les voient pas encore.
+                </p>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={handleForceSync}
+              disabled={isSyncing}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "8px",
+                padding: "8px 16px",
+                borderRadius: "8px",
+                background: "#f59e0b",
+                border: "none",
+                color: "#0f172a",
+                fontSize: "0.82rem",
+                fontWeight: 700,
+                cursor: isSyncing ? "wait" : "pointer",
+              }}
+            >
+              <RefreshCw size={15} className={isSyncing ? "animate-spin" : ""} />
+              {isSyncing ? "Synchronisation..." : "Synchroniser avec le serveur"}
+            </button>
           </div>
         )}
 

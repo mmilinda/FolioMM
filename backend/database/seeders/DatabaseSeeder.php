@@ -239,6 +239,28 @@ class DatabaseSeeder extends Seeder
                 'type' => 'education',
                 'order' => 4,
             ],
+            [
+                'year' => '2022',
+                'title' => 'Stagiaire Intégratrice Web',
+                'title_en' => 'Web Integrator Intern',
+                'company' => 'Bakeli & Webgram',
+                'description' => 'Intégration web responsive et développement de blogs d'entreprise : Site Vitrine Bootstrap et GM Business Prayer (Blogger).',
+                'description_en' => 'Hands-on responsive web integration and corporate blog customization: Bootstrap Showcase Site and GM Business Prayer (Blogger).',
+                'tags' => ['Bootstrap 5', 'HTML5', 'CSS3', 'JavaScript', 'Blogger'],
+                'type' => 'work',
+                'order' => 5,
+            ],
+            [
+                'year' => '2019 - 2022',
+                'title' => 'Licence Professionnelle en Informatique de Gestion',
+                'title_en' => 'Bachelor\'s Degree in Business Information Systems',
+                'company' => 'UCAO (Université Catholique de l\'Afrique de l\'Ouest)',
+                'description' => 'Formation supérieure spécialisée en génie logiciel, gestion de bases de données, développement web et projets académiques de formation (Guide Itinéraire avec jQuery Mobile & Google Maps API, et Voyage 2).',
+                'description_en' => 'Specialized higher education in software engineering, database administration, web development, and academic projects (Transit Itinerary Guide with jQuery Mobile/Google Maps API and Travel 2).',
+                'tags' => ['Informatique de Gestion', 'Bases de Données', 'Génie Logiciel', 'Systèmes d\'Information'],
+                'type' => 'education',
+                'order' => 6,
+            ],
         ];
         foreach ($timelineEntries as $tl) {
             Timeline::create($tl);
