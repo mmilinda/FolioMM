@@ -19,7 +19,7 @@ const resources = {
         availableForWork: "Disponible pour travailler",
         shippedBadge: "⚡ 10+ projets livrés",
         stats: {
-          projects: "Projets livrés",
+          projects: "Projets",
           experience: "Ans d'expérience",
           solutions: "Solutions de Production",
         },
@@ -167,7 +167,7 @@ const resources = {
         availableForWork: "Available for work",
         shippedBadge: "⚡ 10+ projects shipped",
         stats: {
-          projects: "Projects Delivered",
+          projects: "Projects",
           experience: "Years Experience",
           solutions: "Production Solutions",
         },

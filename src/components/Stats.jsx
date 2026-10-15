@@ -2,6 +2,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useSiteData } from "../context/SiteDataContext";
+import useProjects from "../hooks/useProjects";
 
 function AnimatedCounter({ rawValue, inView }) {
   // Parse numeric part and suffix if any (e.g., "14+" -> 14 and "+", "99.9%" -> "99.9%")
@@ -73,6 +74,8 @@ function formatStatLabel(label) {
 export default function Stats() {
   const { t, i18n } = useTranslation();
   const { stats: siteStats } = useSiteData();
+  const { projects } = useProjects();
+  const exactProjectsCount = String(projects?.length || 15);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
@@ -80,17 +83,21 @@ export default function Stats() {
   const colors = ["#38bdf8", "#818cf8", "#34d399", "#f472b6", "#fb923c"];
 
   const defaultStats = [
-    { value: "14+", label: t("hero.stats.projects", "Projets"), desc: isEn ? "Web, SaaS & Mobile Apps" : "Applications Web, SaaS & Mobile", color: "#38bdf8" },
-    { value: "3+", label: t("hero.stats.experience", "Années d'expérience"), desc: isEn ? "In Full Stack Development (2022 - Present)" : "En développement Full Stack (2022 - Présent)", color: "#818cf8" },
-    { value: "5+", label: t("hero.stats.solutions", "Solutions de Production"), desc: isEn ? "SaaS & Enterprise Digital Platforms" : "SaaS & plateformes d'entreprise", color: "#34d399" },
-    { value: "100%", label: t("about.commitment", "Engagement"), desc: isEn ? "Agile delivery & Code quality" : "Livraison agile & Qualité de code", color: "#f472b6" },
+    { id: "stat-1", value: exactProjectsCount, label: t("hero.stats.projects", "Projets"), desc: isEn ? "Web, SaaS & Mobile Applications" : "Applications Web, SaaS & Mobile", color: "#38bdf8" },
+    { id: "stat-2", value: "3+", label: t("hero.stats.experience", "Années d'expérience"), desc: isEn ? "In Full Stack Development (2022 - Present)" : "En développement Full Stack (2022 - Présent)", color: "#818cf8" },
+    { id: "stat-3", value: "3+", label: t("hero.stats.solutions", "Solutions de Production"), desc: isEn ? "SaaS & Enterprise Platforms" : "SaaS & plateformes d'entreprise", color: "#34d399" },
+    { id: "stat-4", value: "100%", label: t("about.commitment", "Engagement"), desc: isEn ? "Agile delivery & Code quality" : "Livraison agile & Qualité de code", color: "#f472b6" },
   ];
 
   const displayStats = Array.isArray(siteStats) && siteStats.length > 0
-    ? siteStats.map((st, i) => ({
-        ...st,
-        color: colors[i % colors.length],
-      }))
+    ? siteStats.map((st, i) => {
+        const isProjectStat = st.id === "stat-1" || st.label?.toLowerCase().includes("projet");
+        return {
+          ...st,
+          value: isProjectStat ? exactProjectsCount : st.value,
+          color: colors[i % colors.length],
+        };
+      })
     : defaultStats;
 
   return (

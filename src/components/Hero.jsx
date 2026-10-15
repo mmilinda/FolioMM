@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useSiteData } from "../context/SiteDataContext";
+import useProjects from "../hooks/useProjects";
 import DownloadCvButton from "./DownloadCvButton";
 
 const ROLES = [
@@ -66,6 +67,8 @@ function formatStatLabel(label) {
 export default function Hero() {
   const { t, i18n } = useTranslation();
   const { stats: siteStats, profile } = useSiteData();
+  const { projects } = useProjects();
+  const exactProjectsCount = String(projects?.length || 15);
   const isEn = i18n.language?.toLowerCase().startsWith("en");
 
   const socialLinks = [
@@ -77,11 +80,11 @@ export default function Hero() {
   const rawHeadline = isEn ? (profile?.headlineEn || profile?.headline || "") : (profile?.headline || "");
   const cleanHeadline = rawHeadline.replace(/\s*(?:ingénieure|engineer)\s*/gi, " ").trim();
 
-  const projStat = siteStats?.find((s) => s.id === "stat-1" || s.label?.toLowerCase().includes("projet"))?.value || "14+";
+  const projStat = exactProjectsCount;
   const expStat = siteStats?.find((s) => s.id === "stat-2" || s.label?.toLowerCase().includes("expéri"))?.value || "3+";
 
   const stats = [
-    { value: projStat, label: t("hero.stats.projects", "Projets Vitrine") },
+    { value: projStat, label: t("hero.stats.projects", "Projets") },
     { value: expStat, label: t("hero.stats.experience", "Années d'expérience") },
     { value: profile?.uptimeRate || "99.9%", label: t("hero.stats.solutions", "Uptime & Fiabilité") },
   ];

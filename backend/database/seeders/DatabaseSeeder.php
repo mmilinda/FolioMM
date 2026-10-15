@@ -269,9 +269,9 @@ class DatabaseSeeder extends Seeder
         // 7. Seed Stats
         Stat::query()->delete();
         $stats = [
-            ['stat_id' => 'stat-1', 'value' => '10+', 'label' => 'Projets', 'label_en' => 'Projects', 'desc' => 'Applications Web, SaaS & Mobile', 'desc_en' => 'Web, SaaS & Mobile Applications', 'order' => 1],
+            ['stat_id' => 'stat-1', 'value' => '15', 'label' => 'Projets', 'label_en' => 'Projects', 'desc' => 'Applications Web, SaaS & Mobile', 'desc_en' => 'Web, SaaS & Mobile Applications', 'order' => 1],
             ['stat_id' => 'stat-2', 'value' => '3+', 'label' => 'Années d\'Expérience', 'label_en' => 'Years Experience', 'desc' => 'En développement Full Stack (2022 - Présent)', 'desc_en' => 'In Full Stack Development (2022 - Present)', 'order' => 2],
-            ['stat_id' => 'stat-3', 'value' => '3+', 'label' => 'Solutions de Production', 'label_en' => 'Production Solutions', 'desc' => 'SaaS et plateformes numériques d\'entreprise', 'desc_en' => 'SaaS & Enterprise Digital Platforms', 'order' => 3],
+            ['stat_id' => 'stat-3', 'value' => '3+', 'label' => 'Solutions de Production', 'label_en' => 'Production Solutions', 'desc' => 'SaaS & plateformes d\'entreprise', 'desc_en' => 'SaaS & Enterprise Platforms', 'order' => 3],
             ['stat_id' => 'stat-4', 'value' => '100%', 'label' => 'Engagement', 'label_en' => 'Commitment', 'desc' => 'Livraison agile & Qualité de code', 'desc_en' => 'Agile delivery & Code quality', 'order' => 4],
         ];
         foreach ($stats as $st) {
