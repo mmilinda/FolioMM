@@ -3,7 +3,8 @@ import axios from "axios";
 // En production, ne jamais tomber sur 127.0.0.1 : Chrome afficherait une demande
 // d'autorisation "Accéder à d'autres applis et services sur cet appareil".
 const API_URL =
-  import.meta.env.VITE_API_URL || (import.meta.env.DEV ? "http://127.0.0.1:8000/api" : null);
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV ? "http://127.0.0.1:8000/api" : "https://foliomm.onrender.com/api");
 
 const api = axios.create({
   baseURL: API_URL || undefined,

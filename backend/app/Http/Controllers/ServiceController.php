@@ -40,24 +40,30 @@ class ServiceController extends Controller
         $servicesData = $request->input('services', $request->all());
 
         if (is_array($servicesData)) {
-            
-            Service::query()->delete();
+            try {
+                Service::query()->delete();
 
-            foreach ($servicesData as $index => $item) {
-                if (!is_array($item)) continue;
+                foreach ($servicesData as $index => $item) {
+                    if (!is_array($item)) continue;
 
-                Service::create([
-                    'title' => $item['title'] ?? '',
-                    'title_en' => $item['titleEn'] ?? $item['title_en'] ?? null,
-                    'desc' => $item['desc'] ?? '',
-                    'desc_en' => $item['descEn'] ?? $item['desc_en'] ?? null,
-                    'icon_name' => $item['iconName'] ?? $item['icon_name'] ?? 'Code2',
-                    'tags' => $item['tags'] ?? [],
-                    'glow' => $item['glow'] ?? '#38bdf8',
-                    'gradient' => $item['gradient'] ?? 'from-blue-500/20 to-cyan-500/20',
-                    'hidden' => $item['hidden'] ?? false,
-                    'order' => $index,
-                ]);
+                    Service::create([
+                        'title' => $item['title'] ?? '',
+                        'title_en' => $item['titleEn'] ?? $item['title_en'] ?? null,
+                        'desc' => $item['desc'] ?? '',
+                        'desc_en' => $item['descEn'] ?? $item['desc_en'] ?? null,
+                        'icon_name' => $item['iconName'] ?? $item['icon_name'] ?? 'Code2',
+                        'tags' => $item['tags'] ?? [],
+                        'glow' => $item['glow'] ?? '#38bdf8',
+                        'gradient' => $item['gradient'] ?? 'from-blue-500/20 to-cyan-500/20',
+                        'hidden' => (bool)($item['hidden'] ?? false),
+                        'order' => $index,
+                    ]);
+                }
+            } catch (\Throwable $e) {
+                return response()->json([
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getFile() . ':' . $e->getLine()
+                ], 500);
             }
         }
 
