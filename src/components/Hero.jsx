@@ -54,6 +54,21 @@ function TypewriterText({ words }) {
   );
 }
 
+function formatStatLabel(label) {
+  if (!label || typeof label !== "string") return label;
+  const lower = label.toLowerCase();
+  if (lower.includes("solution") && lower.includes("production")) {
+    const isPlural = lower.includes("solutions");
+    return (
+      <span className="inline-block leading-tight">
+        <span className="block sm:inline whitespace-nowrap">{isPlural ? "Solutions de " : "Solution de "}</span>
+        <span className="block sm:inline whitespace-nowrap">Production</span>
+      </span>
+    );
+  }
+  return label;
+}
+
 export default function Hero() {
   const { t, i18n } = useTranslation();
   const { stats: siteStats, profile } = useSiteData();
@@ -240,7 +255,7 @@ export default function Hero() {
                 whileHover={{ y: -4, scale: 1.03 }}
               >
                 <span className="hero-stat-value">{s.value}</span>
-                <span className="hero-stat-label">{s.label}</span>
+                <span className="hero-stat-label">{formatStatLabel(s.label)}</span>
               </motion.div>
             ))}
           </div>

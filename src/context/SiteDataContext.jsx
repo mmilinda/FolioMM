@@ -96,7 +96,7 @@ const defaultProfile = {
 const defaultStats = [
   { id: "stat-1", value: "10+", label: "Projets", labelEn: "Projects", desc: "Applications Web, SaaS & Mobile", descEn: "Web, SaaS & Mobile Applications" },
   { id: "stat-2", value: "3+", label: "Années d'Expérience", labelEn: "Years Experience", desc: "En développement Full Stack (2022 - Présent)", descEn: "In Full Stack Development (2022 - Present)" },
-  { id: "stat-3", value: "3+", label: "Solutions de Production", labelEn: "Production Solutions", desc: "SaaS et plateformes numériques d'entreprise", descEn: "SaaS & Enterprise Digital Platforms" },
+  { id: "stat-3", value: "3+", label: "Solutions de Production", labelEn: "Production Solutions", desc: "SaaS & plateformes d'entreprise", descEn: "SaaS & Enterprise Platforms" },
   { id: "stat-4", value: "100%", label: "Engagement", labelEn: "Commitment", desc: "Livraison agile & Qualité de code", descEn: "Agile delivery & Code quality" },
 ];
 

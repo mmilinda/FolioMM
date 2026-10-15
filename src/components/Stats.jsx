@@ -61,6 +61,21 @@ function getLocalizedStat(stat, isEn) {
   return { label: stat.label, desc: stat.desc };
 }
 
+function formatStatLabel(label) {
+  if (!label || typeof label !== "string") return label;
+  const lower = label.toLowerCase();
+  if (lower.includes("solution") && lower.includes("production")) {
+    const isPlural = lower.includes("solutions");
+    return (
+      <span className="inline-block leading-tight">
+        <span className="block sm:inline whitespace-nowrap">{isPlural ? "Solutions de " : "Solution de "}</span>
+        <span className="block sm:inline whitespace-nowrap">Production</span>
+      </span>
+    );
+  }
+  return label;
+}
+
 export default function Stats() {
   const { t, i18n } = useTranslation();
   const { stats: siteStats } = useSiteData();
@@ -73,7 +88,7 @@ export default function Stats() {
   const defaultStats = [
     { value: "14+", label: t("hero.stats.projects", "Projets"), desc: isEn ? "Web, SaaS & Mobile Apps" : "Applications Web, SaaS & Mobile", color: "#38bdf8" },
     { value: "3+", label: t("hero.stats.experience", "Années d'expérience"), desc: isEn ? "In Full Stack Development (2022 - Present)" : "En développement Full Stack (2022 - Présent)", color: "#818cf8" },
-    { value: "5+", label: t("hero.stats.solutions", "Solutions de Production"), desc: isEn ? "SaaS & Enterprise Digital Platforms" : "SaaS et plateformes numériques d'entreprise", color: "#34d399" },
+    { value: "5+", label: t("hero.stats.solutions", "Solutions de Production"), desc: isEn ? "SaaS & Enterprise Digital Platforms" : "SaaS & plateformes d'entreprise", color: "#34d399" },
     { value: "100%", label: t("about.commitment", "Engagement"), desc: isEn ? "Agile delivery & Code quality" : "Livraison agile & Qualité de code", color: "#f472b6" },
   ];
 
@@ -102,9 +117,9 @@ export default function Stats() {
               <div className="stat-value" style={{ color: stat.color }}>
                 <AnimatedCounter rawValue={stat.value} inView={inView} />
               </div>
-              <div className="stat-label">{label}</div>
+              <div className="stat-label">{formatStatLabel(label)}</div>
               {desc && (
-                <div style={{ fontSize: "0.75rem", color: "#94a3b8", marginTop: "4px" }}>
+                <div className="stat-desc">
                   {desc}
                 </div>
               )}
