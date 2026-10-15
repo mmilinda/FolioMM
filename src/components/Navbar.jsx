@@ -47,13 +47,20 @@ export default function Navbar() {
       transition={{ duration: 0.5 }}
       className="fixed top-0 left-0 w-full z-50 glass"
     >
-      <div className="container-custom flex items-center justify-between py-4">
+      <div className="w-full max-w-7xl mx-auto px-3.5 sm:px-6 flex items-center justify-between py-2.5 sm:py-4">
         {/* Logo */}
-        <NavLink to="/" className="flex items-center gap-3 text-xl font-bold tracking-wider no-underline text-inherit group">
-          <div className="w-9 h-9 rounded-full overflow-hidden border border-cyan-400/40 p-0.5 bg-cyan-400/10 group-hover:scale-105 transition-transform flex-shrink-0">
-            <img src={profile?.avatar || profile?.photo || "/logoMM.jpg"} alt={profile?.name || "Milinda Mendy"} className="w-full h-full object-cover rounded-full" />
+        <NavLink 
+          to="/" 
+          className="flex items-center gap-2 sm:gap-3 text-base sm:text-xl font-bold tracking-tight sm:tracking-wider no-underline text-inherit group shrink-0 min-w-0"
+        >
+          <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden border border-cyan-400/40 p-0.5 bg-cyan-400/10 group-hover:scale-105 transition-transform shrink-0">
+            <img 
+              src={profile?.avatar || profile?.photo || "/logoMM.jpg"} 
+              alt={profile?.name || "Milinda Mendy"} 
+              className="w-full h-full object-cover rounded-full" 
+            />
           </div>
-          <span>
+          <span className="whitespace-nowrap">
             <span className="gradient-text">MILINDA</span>_MENDY
           </span>
         </NavLink>
@@ -101,13 +108,14 @@ export default function Navbar() {
         </div>
 
         {/* Mobile controls */}
-        <div className="flex md:hidden items-center gap-3">
+        <div className="flex md:hidden items-center gap-2 shrink-0">
           {/* Language button mobile */}
           <button
             onClick={toggleLanguage}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-cyan-400/30 bg-cyan-400/10 text-xs font-semibold"
+            title={isFr ? "Switch to English" : "Passer en Français"}
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-cyan-400/30 bg-cyan-400/10 text-xs font-semibold cursor-pointer active:scale-95 transition"
           >
-            <Globe size={13} className="text-cyan-400" />
+            <Globe size={13} className="text-cyan-400 shrink-0" />
             <span className={isFr ? "text-cyan-400 font-bold" : "text-slate-400"}>FR</span>
             <span className="text-cyan-400/40 font-light">|</span>
             <span className={!isFr ? "text-cyan-400 font-bold" : "text-slate-400"}>EN</span>
@@ -116,7 +124,9 @@ export default function Navbar() {
           {/* Theme button mobile */}
           <button
             onClick={toggleTheme}
-            className="p-1.5 rounded-full border border-white/10 text-gray-200"
+            title={theme === "dark" ? "Mode clair" : "Mode sombre"}
+            aria-label="Toggle theme"
+            className="p-1.5 rounded-full border border-white/10 bg-white/5 text-gray-200 hover:text-cyan-400 hover:border-cyan-400/40 cursor-pointer active:scale-95 transition flex items-center justify-center shrink-0"
           >
             {theme === "dark" ? <Sun size={15} className="text-amber-400" /> : <Moon size={15} className="text-purple-400" />}
           </button>
@@ -124,10 +134,10 @@ export default function Navbar() {
           {/* Hamburger toggle */}
           <button
             onClick={() => setOpen(!open)}
-            className="p-1 text-gray-300 hover:text-white"
+            className="p-2 rounded-lg border border-white/10 bg-white/5 text-gray-200 hover:text-white hover:bg-white/10 active:scale-95 transition cursor-pointer flex items-center justify-center shrink-0 min-w-[38px] min-h-[38px]"
             aria-label="Toggle menu"
           >
-            {open ? <X size={22} /> : <Menu size={22} />}
+            {open ? <X size={20} className="text-cyan-400" /> : <Menu size={20} />}
           </button>
         </div>
       </div>
