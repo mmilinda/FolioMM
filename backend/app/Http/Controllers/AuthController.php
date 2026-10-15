@@ -15,17 +15,23 @@ class AuthController extends Controller
 {
 
 
-public function login(Request $request)
-{
+    public function login(Request $request)
+    {
+        // Si la base Neon est fraîchement migrée et vide, initialiser le premier admin et le seed de base
+        if (Admin::count() === 0 && $request->email === 'mmilinda00@gmail.com') {
+            Admin::create([
+                'name' => 'Milinda MENDY',
+                'email' => 'mmilinda00@gmail.com',
+                'password' => Hash::make('admin123'),
+            ]);
+            try {
+                \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+            } catch (\Throwable $e) {
+                // Seed déjà amorcé ou partiellement exécuté
+            }
+        }
 
-
-$admin=Admin::where(
-
-'email',
-
-$request->email
-
-)->first();
+        $admin = Admin::where('email', $request->email)->first();
 
 
 
