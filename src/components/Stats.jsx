@@ -65,13 +65,7 @@ function formatStatLabel(label) {
   if (!label || typeof label !== "string") return label;
   const lower = label.toLowerCase();
   if (lower.includes("solution") && lower.includes("production")) {
-    const isPlural = lower.includes("solutions");
-    return (
-      <span className="inline-block leading-tight">
-        <span className="block sm:inline whitespace-nowrap">{isPlural ? "Solutions de " : "Solution de "}</span>
-        <span className="block sm:inline whitespace-nowrap">Production</span>
-      </span>
-    );
+    return <span className="whitespace-nowrap">{label}</span>;
   }
   return label;
 }
