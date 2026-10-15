@@ -85,7 +85,7 @@ export default function Stats() {
   const defaultStats = [
     { id: "stat-1", value: exactProjectsCount, label: t("hero.stats.projects", "Projets"), desc: isEn ? "Web, SaaS & Mobile Applications" : "Applications Web, SaaS & Mobile", color: "#38bdf8" },
     { id: "stat-2", value: "3+", label: t("hero.stats.experience", "Années d'expérience"), desc: isEn ? "In Full Stack Development (2022 - Present)" : "En développement Full Stack (2022 - Présent)", color: "#818cf8" },
-    { id: "stat-3", value: "3+", label: t("hero.stats.solutions", "Solutions de Production"), desc: isEn ? "SaaS & Enterprise Platforms" : "SaaS & plateformes d'entreprise", color: "#34d399" },
+    { id: "stat-3", value: "5+", label: t("hero.stats.solutions", "Solutions de Production"), desc: isEn ? "SaaS & Enterprise Platforms" : "SaaS & plateformes d'entreprise", color: "#34d399" },
     { id: "stat-4", value: "100%", label: t("about.commitment", "Engagement"), desc: isEn ? "Agile delivery & Code quality" : "Livraison agile & Qualité de code", color: "#f472b6" },
   ];
 
