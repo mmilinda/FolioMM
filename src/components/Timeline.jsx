@@ -67,6 +67,17 @@ export default function Timeline() {
       tags: ["Bootstrap 5", "HTML5", "CSS3", "JavaScript", "Blogger"],
     },
     {
+      year: "2022",
+      role: isEn ? "Bachelor's Degree in Multimedia, Computer Science & Communication" : "Licence en Multimédia Informatique et Communication",
+      company: "UNCHK (Université Numérique Cheikh Hamidane Kane)",
+      type: isEn ? "Education" : "Diplôme / Formation",
+      color: "#ec4899",
+      desc: isEn
+        ? "University degree focused on multimedia technologies, web & mobile development, digital communication, and computer systems."
+        : "Formation universitaire axée sur les technologies multimédias, le développement web & mobile, la communication digitale et les systèmes informatiques.",
+      tags: ["Multimédia", "Informatique", "Communication", "Développement Web", "UNCHK"],
+    },
+    {
       year: "2019 - 2022",
       role: isEn ? "Bachelor's Degree in Business Information Systems" : "Licence Professionnelle en Informatique de Gestion",
       company: "UCAO (Université Catholique de l'Afrique de l'Ouest)",

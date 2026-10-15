@@ -251,6 +251,17 @@ class DatabaseSeeder extends Seeder
                 'order' => 5,
             ],
             [
+                'year' => '2022',
+                'title' => 'Licence en Multimédia Informatique et Communication',
+                'title_en' => 'Bachelor\'s Degree in Multimedia, Computer Science & Communication',
+                'company' => 'UNCHK (Université Numérique Cheikh Hamidane Kane)',
+                'description' => 'Formation universitaire axée sur les technologies multimédias, le développement web & mobile, la communication digitale et les systèmes informatiques.',
+                'description_en' => 'University degree focused on multimedia technologies, web & mobile development, digital communication, and computer systems.',
+                'tags' => ['Multimédia', 'Informatique', 'Communication', 'Développement Web', 'UNCHK'],
+                'type' => 'education',
+                'order' => 6,
+            ],
+            [
                 'year' => '2019 - 2022',
                 'title' => 'Licence Professionnelle en Informatique de Gestion',
                 'title_en' => 'Bachelor\'s Degree in Business Information Systems',
@@ -259,7 +270,7 @@ class DatabaseSeeder extends Seeder
                 'description_en' => 'Specialized higher education in software engineering, database administration, web development, and academic projects (Transit Itinerary Guide with jQuery Mobile/Google Maps API and Travel 2).',
                 'tags' => ['Informatique de Gestion', 'Bases de Données', 'Génie Logiciel', 'Systèmes d\'Information'],
                 'type' => 'education',
-                'order' => 6,
+                'order' => 7,
             ],
         ];
         foreach ($timelineEntries as $tl) {

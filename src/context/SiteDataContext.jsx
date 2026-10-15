@@ -257,6 +257,17 @@ const defaultTimeline = [
     type: "work",
   },
   {
+    id: "time-unchk",
+    year: "2022",
+    title: "Licence en Multimédia Informatique et Communication",
+    titleEn: "Bachelor's Degree in Multimedia, Computer Science & Communication",
+    company: "UNCHK (Université Numérique Cheikh Hamidane Kane)",
+    description: "Formation universitaire axée sur les technologies multimédias, le développement web & mobile, la communication digitale et les systèmes informatiques.",
+    descriptionEn: "University degree focused on multimedia technologies, web & mobile development, digital communication, and computer systems.",
+    tags: ["Multimédia", "Informatique", "Communication", "Développement Web", "UNCHK"],
+    type: "education",
+  },
+  {
     id: "time-5",
     year: "2019 - 2022",
     title: "Licence Professionnelle en Informatique de Gestion",
