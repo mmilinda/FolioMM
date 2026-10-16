@@ -202,13 +202,13 @@ const defaultSkills = [
 
 const defaultTimeline = [
   {
-    id: "time-0",
+    id: "time-1",
     year: "Janvier 2026 - Présent",
     title: "Développeuse d'applications & solutions numériques",
     titleEn: "Application & Digital Solutions Developer",
     company: "SamCorporate",
-    description: "Développement de solutions numériques d'entreprise, d'applications web & mobiles et de plateformes intelligentes sur-mesure (AgriChain AI, Garagebi Assistance, Noregis SaaS, SecurityApp, BerMas Assurance, Sunu Champion).",
-    descriptionEn: "Engineering & deploying enterprise digital solutions, web & mobile applications, and smart platforms: AgriChain AI, Garagebi Assistance, Noregis SaaS, SecurityApp, BerMas Assurance & Sunu Champion.",
+    description: "Développement de solutions numériques d'entreprise, d'applications web & mobiles et de plateformes intelligentes sur-mesure : AgriChain AI (AgriTech & Blockchain), Garagebi Assistance (Assistance automobile), Noregis SaaS (OCR & Scan d'Identité), SecurityApp (Gestion de Sécurité), BerMas Assurance et Sunu Champion.",
+    descriptionEn: "Engineering & deploying enterprise digital solutions, web & mobile applications, and smart platforms: AgriChain AI (AgriTech & Blockchain), Garagebi Assistance (Automotive Roadside), Noregis SaaS (OCR Identity Scanner), SecurityApp (Security Patrol Management), BerMas Assurance & Sunu Champion.",
     tags: ["React", "JavaScript", "Tailwind CSS", "Laravel API", "Full Stack"],
     type: "work",
   },
@@ -218,8 +218,8 @@ const defaultTimeline = [
     title: "Développeuse Full Stack & Web Mobile",
     titleEn: "Full Stack & Mobile Web Developer",
     company: "Défarsci",
-    description: "Développement d'applications web interactives pour l'insertion professionnelle (CV Vidéo) et la gestion immobilière (Location Appartement). Intégration d'API REST.",
-    descriptionEn: "Development of interactive web applications: CV Vidéo (video resumes for employment) and Location Appartement (real estate management system). REST API integration.",
+    description: "Développement d'applications web interactives : CV Vidéo (plateforme de création de CV vidéo pour l'insertion professionnelle) et Location Appartement (gestion d'annonces immobilières).",
+    descriptionEn: "Development of interactive web applications: CV Vidéo (video resumes for employment) and Location Appartement (real estate listing management system).",
     tags: ["Laravel", "React", "PHP", "MySQL", "JavaScript"],
     type: "work",
   },
@@ -229,8 +229,8 @@ const defaultTimeline = [
     title: "Stagiaire Développeuse Web",
     titleEn: "Web Developer Intern",
     company: "Défarsci",
-    description: "Conception et intégration de sites vitrines et plateformes CMS (Site Zawiya). Modélisation de bases de données relationnelles MySQL.",
-    descriptionEn: "Design and integration of showcase websites and CMS portals (Site Zawiya). Relational database modeling with MySQL.",
+    description: "Conception et intégration de sites vitrines et plateformes CMS : Site Zawiya (portail développé avec le CMS WordPress) et modélisation de bases de données relationnelles MySQL.",
+    descriptionEn: "Design & integration of corporate showcase portals: Site Zawiya (WordPress CMS platform) and real estate database modeling.",
     tags: ["WordPress", "Laravel", "PHP", "MySQL", "CMS"],
     type: "work",
   },
@@ -240,8 +240,8 @@ const defaultTimeline = [
     title: "Certification en Développement Web & Mobile",
     titleEn: "Web & Mobile Development Certification",
     company: "ISCA (en partenariat avec le 3FPT)",
-    description: "Formation certifiante et compétences pratiques en Développement Web & Mobile dispensée à l'ISCA en partenariat avec le 3FPT.",
-    descriptionEn: "Professional Certification in Web & Mobile Development earned at ISCA in partnership with 3FPT.",
+    description: "Formation certifiante et compétences pratiques en Développement Web & Mobile dispensée à l'ISCA en partenariat avec le 3FPT (Fonds de Financement de la Formation Professionnelle et Technique).",
+    descriptionEn: "Professional Certification in Web & Mobile Development earned at ISCA in partnership with the 3FPT (Professional and Technical Training Financing Fund).",
     tags: ["Développement Web", "Développement Mobile", "Certification", "3FPT", "ISCA"],
     type: "education",
   },
@@ -251,21 +251,10 @@ const defaultTimeline = [
     title: "Stagiaire Intégratrice Web",
     titleEn: "Web Integrator Intern",
     company: "Bakeli & Webgram",
-    description: "Intégration web responsive et développement de blogs d'entreprise : Site Vitrine Bootstrap et GM Business Prayer (Blogger).",
-    descriptionEn: "Hands-on responsive web integration and corporate blog customization: Bootstrap Showcase Site and GM Business Prayer (Blogger).",
+    description: "Intégration web responsive et développement de blogs d'entreprise : Site Vitrine Bootstrap et GM Business Prayer (blog d'entreprise personnalisé sur Blogger).",
+    descriptionEn: "Responsive web integration and customized corporate blogging: Site Vitrine Bootstrap, GM Business Prayer (corporate Blogger blog).",
     tags: ["Bootstrap 5", "HTML5", "CSS3", "JavaScript", "Blogger"],
     type: "work",
-  },
-  {
-    id: "time-unchk",
-    year: "2022",
-    title: "Licence en Multimédia Informatique et Communication",
-    titleEn: "Bachelor's Degree in Multimedia, Computer Science & Communication",
-    company: "UNCHK (Université Numérique Cheikh Hamidane Kane)",
-    description: "Formation universitaire axée sur les technologies multimédias, le développement web & mobile, la communication digitale et les systèmes informatiques.",
-    descriptionEn: "University degree focused on multimedia technologies, web & mobile development, digital communication, and computer systems.",
-    tags: ["Multimédia", "Informatique", "Communication", "Développement Web", "UNCHK"],
-    type: "education",
   },
   {
     id: "time-5",
@@ -273,8 +262,8 @@ const defaultTimeline = [
     title: "Licence Professionnelle en Informatique de Gestion",
     titleEn: "Bachelor's Degree in Business Information Systems",
     company: "UCAO (Université Catholique de l'Afrique de l'Ouest)",
-    description: "Formation supérieure spécialisée en génie logiciel, gestion de bases de données, développement web et projets académiques de formation (Guide Itinéraire avec jQuery Mobile & Google Maps API, et Voyage 2).",
-    descriptionEn: "Specialized higher education in software engineering, database administration, web development, and academic projects (Transit Itinerary Guide with jQuery Mobile/Google Maps API and Travel 2).",
+    description: "Formation supérieure spécialisée en génie logiciel, bases de données, développement web et projets académiques de formation (Guide Itinéraire avec jQuery Mobile/Google Maps API et Voyage 2).",
+    descriptionEn: "Specialized higher education in software engineering, database administration, web development, and academic projects (Guide Itinéraire transport app with jQuery Mobile/Google Maps API and Voyage 2).",
     tags: ["Informatique de Gestion", "Bases de Données", "Génie Logiciel", "Systèmes d'Information"],
     type: "education",
   },
@@ -473,27 +462,19 @@ export function SiteDataProvider({ children }) {
           if (hasPendingSync && localStored) {
             try {
               const parsedLocal = JSON.parse(localStored);
-              // Si le serveur a plus d'éléments complets que le local incomplet (ex: 6 vs 4)
-              if (Array.isArray(parsedLocal) && tList.length > parsedLocal.length) {
-                console.info("🔄 [Mise à Niveau] Le serveur distant contient une version plus complète du parcours.");
-                setTimelineState(tList);
-                localStorage.setItem("site_timeline", JSON.stringify(tList));
-                localStorage.removeItem("site_timeline_pending_sync");
-              } else {
-                console.info("🛡️ [Anti-Écrasement] Modifications locales du parcours conservées.");
-                // Tenter une synchronisation vers le serveur si un jeton Admin valide est présent
-                const token = localStorage.getItem("token");
-                if (token && !token.startsWith("firebase-token-")) {
-                  api.post("/admin/timeline/sync", { timeline: parsedLocal })
-                    .then(() => {
-                      localStorage.removeItem("site_timeline_pending_sync");
-                      localStorage.setItem("site_timeline_last_synced", new Date().toISOString());
-                      console.info("✅ [Auto-Sync] Parcours synchronisé avec succès sur le serveur distant.");
-                    })
-                    .catch((err) => {
-                      console.warn("⚠️ [Auto-Sync] Échec sync arrière-plan:", err?.message);
-                    });
-                }
+              console.info("🛡️ [Anti-Écrasement] Modifications locales du parcours conservées.");
+              // Tenter une synchronisation vers le serveur si un jeton Admin valide est présent
+              const token = localStorage.getItem("token");
+              if (token && !token.startsWith("firebase-token-")) {
+                api.post("/admin/timeline/sync", { timeline: parsedLocal })
+                  .then(() => {
+                    localStorage.removeItem("site_timeline_pending_sync");
+                    localStorage.setItem("site_timeline_last_synced", new Date().toISOString());
+                    console.info("✅ [Auto-Sync] Parcours synchronisé avec succès sur le serveur distant.");
+                  })
+                  .catch((err) => {
+                    console.warn("⚠️ [Auto-Sync] Échec sync arrière-plan:", err?.message);
+                  });
               }
             } catch {
               setTimelineState(tList);
