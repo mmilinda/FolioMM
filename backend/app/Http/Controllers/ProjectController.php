@@ -11,11 +11,13 @@ class ProjectController extends Controller
 {
     public function index()
     {
-        $this->ensureSchemaSafety();
-
-        // Auto-seed si la table est vide pour que l'API ne retourne jamais un tableau vide
-        if (Project::query()->count() === 0) {
-            $this->seedDefaultProjects();
+        try {
+            // Auto-seed si la table est vide pour que l'API ne retourne jamais un tableau vide
+            if (Project::query()->count() === 0) {
+                $this->seedDefaultProjects();
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning("Auto-seed error: " . $e->getMessage());
         }
 
         return response()->json(Project::orderBy('order', 'asc')->get());
@@ -23,15 +25,12 @@ class ProjectController extends Controller
 
     public function show($idOrSlug)
     {
-        $this->ensureSchemaSafety();
         $project = Project::where('slug', $idOrSlug)->orWhere('id', $idOrSlug)->firstOrFail();
         return response()->json($project);
     }
 
     public function store(Request $request)
     {
-        $this->ensureSchemaSafety();
-
         $request->validate([
             'title' => 'required|string|max:255',
             'category' => 'nullable|string',
@@ -57,8 +56,6 @@ class ProjectController extends Controller
 
     public function update(Request $request, $id)
     {
-        $this->ensureSchemaSafety();
-
         // Recherche par ID ou par slug
         $project = Project::where('id', $id)->orWhere('slug', $id)->first();
         
@@ -79,8 +76,6 @@ class ProjectController extends Controller
 
     public function destroy($id)
     {
-        $this->ensureSchemaSafety();
-
         $project = Project::where('id', $id)->orWhere('slug', $id)->first();
         if ($project) {
             $project->delete();
@@ -93,8 +88,6 @@ class ProjectController extends Controller
 
     public function sync(Request $request)
     {
-        $this->ensureSchemaSafety();
-
         $request->validate([
             'projects' => 'required|array',
         ]);
@@ -162,26 +155,6 @@ class ProjectController extends Controller
         }
 
         return response()->json(Project::orderBy('order', 'asc')->get());
-    }
-
-    private function ensureSchemaSafety(): void
-    {
-        static $checked = false;
-        if ($checked) return;
-        $checked = true;
-
-        try {
-            $driver = DB::connection()->getDriverName();
-            if ($driver === 'pgsql') {
-                DB::statement('ALTER TABLE projects ALTER COLUMN image TYPE text');
-                DB::statement('ALTER TABLE projects ALTER COLUMN fallback_image TYPE text');
-                DB::statement('ALTER TABLE projects ALTER COLUMN architecture_diagram TYPE text');
-            } elseif ($driver === 'mysql') {
-                DB::statement('ALTER TABLE projects MODIFY image LONGTEXT NULL');
-                DB::statement('ALTER TABLE projects MODIFY fallback_image LONGTEXT NULL');
-                DB::statement('ALTER TABLE projects MODIFY architecture_diagram LONGTEXT NULL');
-            }
-        } catch (\Throwable $e) {}
     }
 
     private function formatProjectData(Request $request, ?Project $existing = null): array
@@ -685,7 +658,9 @@ class ProjectController extends Controller
         ];
 
         foreach ($defaultProjects as $p) {
-            Project::create($p);
+            try {
+                Project::create($p);
+            } catch (\Throwable $e) {}
         }
     }
 }
