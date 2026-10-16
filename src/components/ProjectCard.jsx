@@ -27,7 +27,10 @@ export default function ProjectCard({ project: rawProject }) {
       className="group project-card"
     >
       {/* ── Image ───────────────────────────────── */}
-      <div style={{ position: "relative", height: "200px", overflow: "hidden", flexShrink: 0 }}>
+      <div
+        className="project-card-image-wrap"
+        style={{ position: "relative", height: "200px", overflow: "hidden", flexShrink: 0 }}
+      >
         <img
           src={project.image}
           onError={(e) => {
@@ -39,6 +42,7 @@ export default function ProjectCard({ project: rawProject }) {
             width: "100%",
             height: "100%",
             objectFit: "cover",
+            objectPosition: "top center",
             transition: "transform 0.6s ease",
           }}
           className="project-card-img"
@@ -47,7 +51,7 @@ export default function ProjectCard({ project: rawProject }) {
         {/* Gradient overlay */}
         <div style={{
           position: "absolute", inset: 0,
-          background: "linear-gradient(to top, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.2) 50%, transparent 100%)",
+          background: "linear-gradient(to top, rgba(2,6,23,0.75) 0%, rgba(2,6,23,0.15) 50%, transparent 100%)",
         }} />
 
         {/* Category badge */}
@@ -117,7 +121,10 @@ export default function ProjectCard({ project: rawProject }) {
       </div>
 
       {/* ── Content ─────────────────────────────── */}
-      <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", flex: 1 }}>
+      <div
+        className="project-card-content"
+        style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: "1rem", flex: 1 }}
+      >
 
         {/* Title + link arrow */}
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "12px" }}>

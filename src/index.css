@@ -370,6 +370,11 @@ body {
     font-size: 0.52rem;
     min-height: 2.2em;
   }
+  .project-card-image-wrap,
+  .project-card > div[style*="height: 200px"],
+  .project-card > div[style*="height: 180px"] {
+    height: 155px !important;
+  }
 }
 
 /* Badge */
@@ -1785,42 +1790,49 @@ body {
     margin-bottom: 0.35rem !important;
   }
 
-  /* 5. SECTION RÉALISATIONS: Visible 112px project card images */
+  /* 5. SECTION RÉALISATIONS: Project card images increased for clear visibility on mobile */
   .projects-grid {
-    gap: 6px !important;
+    gap: 1rem !important;
   }
 
   .project-card {
-    max-width: 270px !important;
+    max-width: 440px !important;
     margin-left: auto !important;
     margin-right: auto !important;
     width: 100% !important;
   }
 
-  .project-card-img {
-    height: 112px !important;
-  }
-
+  .project-card-image-wrap,
   .project-card > div[style*="height: 200px"],
   .project-card > div[style*="height: 125px"],
-  .project-card > div[style*="height: 100px"] {
-    height: 85px !important;
+  .project-card > div[style*="height: 100px"],
+  .project-card > div[style*="height: 85px"] {
+    height: 180px !important;
   }
 
+  .project-card-img {
+    height: 100% !important;
+    width: 100% !important;
+    object-fit: cover !important;
+    object-position: top center !important;
+  }
+
+  .project-card-content,
   .project-card > div[style*="padding: 1.5rem"],
   .project-card > div[style*="padding: 0.85rem"],
   .project-card > div[style*="padding: 0.65rem"] {
-    padding: 0.5rem !important;
+    padding: 0.85rem 1rem !important;
+    gap: 0.65rem !important;
   }
 
   .project-card h3 {
-    font-size: 0.8rem !important;
-    margin-bottom: 0.15rem !important;
+    font-size: 0.95rem !important;
+    margin-bottom: 0.2rem !important;
   }
 
   .project-card p {
-    font-size: 0.68rem !important;
-    line-height: 1.2 !important;
+    font-size: 0.78rem !important;
+    line-height: 1.35 !important;
     margin-bottom: 0.25rem !important;
     display: -webkit-box !important;
     -webkit-line-clamp: 2 !important;
@@ -1829,17 +1841,22 @@ body {
   }
 
   .featured-banner {
-    padding: 0.5rem !important;
-    margin-bottom: 0.75rem !important;
-    border-radius: 10px !important;
+    padding: 0.75rem !important;
+    margin-bottom: 1rem !important;
+    border-radius: 12px !important;
   }
 
   .featured-grid {
-    gap: 0.4rem !important;
+    gap: 0.65rem !important;
+  }
+
+  .featured-item {
+    aspect-ratio: 16/9 !important;
   }
 
   .featured-item-img {
-    height: 85px !important;
+    height: 140px !important;
+    object-fit: cover !important;
   }
 
   /* 6. SECTION PARCOURS (Timeline) ULTRA SHRUNK */
