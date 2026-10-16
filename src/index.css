@@ -320,17 +320,55 @@ body {
     justify-content: center;
   }
   .hero-stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 6px;
+    width: 100%;
   }
   .hero-stat-card {
-    padding: 0.55rem 0.35rem;
+    padding: 0.6rem 0.25rem;
+    min-height: 76px;
+    border-radius: 12px;
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
   }
   .hero-stat-value {
-    font-size: 1.15rem;
+    font-size: 1.22rem;
+    line-height: 1.1;
+    margin-bottom: 2px;
   }
   .hero-stat-label {
-    font-size: clamp(0.55rem, 2.1vw, 0.68rem);
-    line-height: 1.25;
+    font-size: clamp(0.56rem, 2.1vw, 0.68rem);
+    line-height: 1.15;
+    min-height: 2.3em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-stats {
+    gap: 4px;
+  }
+  .hero-stat-card {
+    padding: 0.45rem 0.15rem;
+    min-height: 68px;
+  }
+  .hero-stat-value {
+    font-size: 1.05rem;
+  }
+  .hero-stat-label {
+    font-size: 0.52rem;
+    min-height: 2.2em;
   }
 }
 
@@ -600,7 +638,7 @@ body {
 /* Stats row */
 .hero-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   width: 100%;
 }
@@ -609,12 +647,18 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem;
+  justify-content: center;
+  text-align: center;
+  padding: 0.9rem 0.6rem;
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border);
-  transition: border-color 0.2s, background 0.2s;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
   cursor: default;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  box-sizing: border-box;
 }
 .hero-stat-card:hover {
   border-color: rgba(56, 189, 248, 0.3);
@@ -624,17 +668,39 @@ body {
 .hero-stat-value {
   font-size: 1.6rem;
   font-weight: 900;
+  line-height: 1.1;
   background: linear-gradient(135deg, #38bdf8, #818cf8);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  margin-bottom: 4px;
 }
 
 .hero-stat-label {
-  font-size: 0.7rem;
+  font-size: 0.72rem;
   color: var(--text-muted);
   text-align: center;
   margin-top: 2px;
+  width: 100%;
+  min-height: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1.2;
+}
+
+.hero-stat-multiline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  line-height: 1.18;
+}
+
+.hero-stat-line {
+  display: block;
+  white-space: nowrap;
 }
 
 /* Scroll hint */

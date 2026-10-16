@@ -58,10 +58,58 @@ function TypewriterText({ words }) {
 function formatStatLabel(label) {
   if (!label || typeof label !== "string") return label;
   const lower = label.toLowerCase();
+
   if (lower.includes("solution") && lower.includes("production")) {
-    return <span className="whitespace-nowrap">{label}</span>;
+    const isPlural = lower.includes("solutions");
+    return (
+      <span className="hero-stat-multiline">
+        <span className="hero-stat-line">{isPlural ? "Solutions de" : "Solution de"}</span>
+        <span className="hero-stat-line">Production</span>
+      </span>
+    );
   }
-  return label;
+
+  if (lower.includes("production") && lower.includes("solution")) {
+    return (
+      <span className="hero-stat-multiline">
+        <span className="hero-stat-line">Production</span>
+        <span className="hero-stat-line">Solutions</span>
+      </span>
+    );
+  }
+
+  if (lower.includes("ans") && lower.includes("expéri")) {
+    return (
+      <span className="hero-stat-multiline">
+        <span className="hero-stat-line">Ans</span>
+        <span className="hero-stat-line">d'expérience</span>
+      </span>
+    );
+  }
+
+  if (lower.includes("anné") && lower.includes("expéri")) {
+    return (
+      <span className="hero-stat-multiline">
+        <span className="hero-stat-line">Années</span>
+        <span className="hero-stat-line">d'expérience</span>
+      </span>
+    );
+  }
+
+  if (lower.includes("year") && lower.includes("experi")) {
+    return (
+      <span className="hero-stat-multiline">
+        <span className="hero-stat-line">Years</span>
+        <span className="hero-stat-line">Experience</span>
+      </span>
+    );
+  }
+
+  return (
+    <span className="hero-stat-multiline">
+      <span className="hero-stat-line">{label}</span>
+    </span>
+  );
 }
 
 export default function Hero() {
