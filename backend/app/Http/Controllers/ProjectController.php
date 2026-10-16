@@ -96,75 +96,84 @@ class ProjectController extends Controller
 
     public function sync(Request $request)
     {
-        $this->ensureTableExists();
+        try {
+            $this->ensureTableExists();
 
-        $request->validate([
-            'projects' => 'required|array',
-        ]);
+            $request->validate([
+                'projects' => 'required|array',
+            ]);
 
-        $incoming = $request->input('projects');
+            $incoming = $request->input('projects');
 
-        foreach ($incoming as $index => $item) {
-            $slug = $item['slug'] ?? (!empty($item['title']) ? Str::slug($item['title']) : null);
-            $id = $item['id'] ?? null;
+            foreach ($incoming as $index => $item) {
+                $slug = $item['slug'] ?? (!empty($item['title']) ? Str::slug($item['title']) : null);
+                $id = $item['id'] ?? null;
 
-            $project = null;
-            if ($id && is_numeric($id)) {
-                $project = Project::find($id);
+                $project = null;
+                if ($id && is_numeric($id)) {
+                    $project = Project::find($id);
+                }
+                if (!$project && $slug) {
+                    $project = Project::where('slug', $slug)->first();
+                }
+
+                $data = [
+                    'title' => $item['title'] ?? ($project?->title ?? 'Sans titre'),
+                    'title_en' => $item['title_en'] ?? $item['titleEn'] ?? $item['title'] ?? ($project?->title_en ?? ''),
+                    'slug' => $slug ?? ($project?->slug ?? ('project-' . ($index + 1))),
+                    'category' => $item['category'] ?? ($project?->category ?? 'Full Stack'),
+                    'category_en' => $item['category_en'] ?? $item['categoryEn'] ?? $item['category'] ?? ($project?->category_en ?? ''),
+                    'year' => $item['year'] ?? ($project?->year ?? '2026'),
+                    'status' => $item['status'] ?? ($project?->status ?? 'Production'),
+                    'status_en' => $item['status_en'] ?? $item['statusEn'] ?? ($project?->status_en ?? 'Production'),
+                    'client' => $item['client'] ?? ($project?->client ?? ''),
+                    'client_en' => $item['client_en'] ?? $item['clientEn'] ?? ($project?->client_en ?? ''),
+                    'role' => $item['role'] ?? ($project?->role ?? ''),
+                    'role_en' => $item['role_en'] ?? $item['roleEn'] ?? ($project?->role_en ?? ''),
+                    'description' => $item['description'] ?? ($project?->description ?? ''),
+                    'description_en' => $item['description_en'] ?? $item['descriptionEn'] ?? ($project?->description_en ?? ''),
+                    'problem' => $item['problem'] ?? ($project?->problem ?? ''),
+                    'problem_en' => $item['problem_en'] ?? $item['problemEn'] ?? ($project?->problem_en ?? ''),
+                    'solution' => $item['solution'] ?? ($project?->solution ?? ''),
+                    'solution_en' => $item['solution_en'] ?? $item['solutionEn'] ?? ($project?->solution_en ?? ''),
+                    'impact' => $item['impact'] ?? ($project?->impact ?? ''),
+                    'impact_en' => $item['impact_en'] ?? $item['impactEn'] ?? ($project?->impact_en ?? ''),
+                    'demo' => $item['demo'] ?? ($project?->demo ?? ''),
+                    'github' => $item['github'] ?? ($project?->github ?? ''),
+                    'featured' => filter_var($item['featured'] ?? false, FILTER_VALIDATE_BOOLEAN),
+                    'hidden' => filter_var($item['hidden'] ?? false, FILTER_VALIDATE_BOOLEAN),
+                    'is_private' => filter_var($item['is_private'] ?? $item['isPrivate'] ?? false, FILTER_VALIDATE_BOOLEAN),
+                    'order' => isset($item['order']) ? (int)$item['order'] : $index,
+                ];
+
+                if (!empty($item['image'])) {
+                    $data['image'] = $item['image'];
+                }
+                if (!empty($item['fallback_image']) || !empty($item['fallbackImage'])) {
+                    $data['fallback_image'] = $item['fallback_image'] ?? $item['fallbackImage'];
+                }
+                if (isset($item['technologies'])) {
+                    $data['technologies'] = is_array($item['technologies']) 
+                        ? $item['technologies'] 
+                        : array_filter(array_map('trim', explode(',', (string)$item['technologies'])));
+                }
+
+                if ($project) {
+                    $project->update($data);
+                } else {
+                    Project::create($data);
+                }
             }
-            if (!$project && $slug) {
-                $project = Project::where('slug', $slug)->first();
-            }
 
-            $data = [
-                'title' => $item['title'] ?? ($project?->title ?? 'Sans titre'),
-                'title_en' => $item['title_en'] ?? $item['titleEn'] ?? $item['title'] ?? ($project?->title_en ?? ''),
-                'slug' => $slug ?? ($project?->slug ?? ('project-' . ($index + 1))),
-                'category' => $item['category'] ?? ($project?->category ?? 'Full Stack'),
-                'category_en' => $item['category_en'] ?? $item['categoryEn'] ?? $item['category'] ?? ($project?->category_en ?? ''),
-                'year' => $item['year'] ?? ($project?->year ?? '2026'),
-                'status' => $item['status'] ?? ($project?->status ?? 'Production'),
-                'status_en' => $item['status_en'] ?? $item['statusEn'] ?? ($project?->status_en ?? 'Production'),
-                'client' => $item['client'] ?? ($project?->client ?? ''),
-                'client_en' => $item['client_en'] ?? $item['clientEn'] ?? ($project?->client_en ?? ''),
-                'role' => $item['role'] ?? ($project?->role ?? ''),
-                'role_en' => $item['role_en'] ?? $item['roleEn'] ?? ($project?->role_en ?? ''),
-                'description' => $item['description'] ?? ($project?->description ?? ''),
-                'description_en' => $item['description_en'] ?? $item['descriptionEn'] ?? ($project?->description_en ?? ''),
-                'problem' => $item['problem'] ?? ($project?->problem ?? ''),
-                'problem_en' => $item['problem_en'] ?? $item['problemEn'] ?? ($project?->problem_en ?? ''),
-                'solution' => $item['solution'] ?? ($project?->solution ?? ''),
-                'solution_en' => $item['solution_en'] ?? $item['solutionEn'] ?? ($project?->solution_en ?? ''),
-                'impact' => $item['impact'] ?? ($project?->impact ?? ''),
-                'impact_en' => $item['impact_en'] ?? $item['impactEn'] ?? ($project?->impact_en ?? ''),
-                'demo' => $item['demo'] ?? ($project?->demo ?? ''),
-                'github' => $item['github'] ?? ($project?->github ?? ''),
-                'featured' => filter_var($item['featured'] ?? false, FILTER_VALIDATE_BOOLEAN),
-                'hidden' => filter_var($item['hidden'] ?? false, FILTER_VALIDATE_BOOLEAN),
-                'is_private' => filter_var($item['is_private'] ?? $item['isPrivate'] ?? false, FILTER_VALIDATE_BOOLEAN),
-                'order' => isset($item['order']) ? (int)$item['order'] : $index,
-            ];
-
-            if (!empty($item['image'])) {
-                $data['image'] = $item['image'];
-            }
-            if (!empty($item['fallback_image']) || !empty($item['fallbackImage'])) {
-                $data['fallback_image'] = $item['fallback_image'] ?? $item['fallbackImage'];
-            }
-            if (isset($item['technologies'])) {
-                $data['technologies'] = is_array($item['technologies']) 
-                    ? $item['technologies'] 
-                    : array_filter(array_map('trim', explode(',', (string)$item['technologies'])));
-            }
-
-            if ($project) {
-                $project->update($data);
-            } else {
-                Project::create($data);
-            }
+            return response()->json(Project::orderBy('order', 'asc')->get());
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::error("Project sync error: " . $e->getMessage());
+            return response()->json([
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ], 500);
         }
-
-        return response()->json(Project::orderBy('order', 'asc')->get());
     }
 
     private function ensureTableExists(): void
