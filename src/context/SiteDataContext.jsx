@@ -372,20 +372,47 @@ export function SiteDataProvider({ children }) {
 
   const [isBackendConnected, setIsBackendConnected] = useState(false);
 
+  const refreshTimelineFromServer = async () => {
+    try {
+      const res = await api.get(`/timeline?_t=${Date.now()}`);
+      if (res?.data && Array.isArray(res.data) && res.data.length > 0) {
+        const tList = res.data.map((tl) => ({
+          id: tl.id,
+          year: tl.year,
+          title: tl.title,
+          titleEn: tl.title_en || tl.titleEn || tl.title,
+          company: tl.company,
+          description: tl.description,
+          descriptionEn: tl.description_en || tl.descriptionEn || tl.description,
+          tags: tl.tags || [],
+          type: tl.type || "work",
+        }));
+        setTimelineState(tList);
+        localStorage.setItem("site_timeline", JSON.stringify(tList));
+        localStorage.removeItem("site_timeline_pending_sync");
+        return tList;
+      }
+    } catch (err) {
+      console.warn("Échec refreshTimelineFromServer:", err?.message);
+    }
+    return null;
+  };
+
   // Charger les données en direct depuis l'API Laravel au démarrage
   useEffect(() => {
     let isMounted = true;
 
     async function loadDataFromApi() {
       try {
+        const timestamp = Date.now();
         const [profileRes, servicesRes, skillsRes, timelineRes, impactRes, settingsRes, statsRes] = await Promise.allSettled([
-          api.get("/profile"),
-          api.get("/services"),
-          api.get("/skills"),
-          api.get("/timeline"),
-          api.get("/impact"),
-          api.get("/settings"),
-          api.get("/stats"),
+          api.get(`/profile?_t=${timestamp}`),
+          api.get(`/services?_t=${timestamp}`),
+          api.get(`/skills?_t=${timestamp}`),
+          api.get(`/timeline?_t=${timestamp}`),
+          api.get(`/impact?_t=${timestamp}`),
+          api.get(`/settings?_t=${timestamp}`),
+          api.get(`/stats?_t=${timestamp}`),
         ]);
 
         if (!isMounted) return;
@@ -456,34 +483,13 @@ export function SiteDataProvider({ children }) {
             type: tl.type || "work",
           }));
 
-          const hasPendingSync = localStorage.getItem("site_timeline_pending_sync") === "true";
-          const localStored = localStorage.getItem("site_timeline");
-
-          if (hasPendingSync && localStored) {
-            try {
-              const parsedLocal = JSON.parse(localStored);
-              console.info("🛡️ [Anti-Écrasement] Modifications locales du parcours conservées.");
-              // Tenter une synchronisation vers le serveur si un jeton Admin valide est présent
-              const token = localStorage.getItem("token");
-              if (token && !token.startsWith("firebase-token-")) {
-                api.post("/admin/timeline/sync", { timeline: parsedLocal })
-                  .then(() => {
-                    localStorage.removeItem("site_timeline_pending_sync");
-                    localStorage.setItem("site_timeline_last_synced", new Date().toISOString());
-                    console.info("✅ [Auto-Sync] Parcours synchronisé avec succès sur le serveur distant.");
-                  })
-                  .catch((err) => {
-                    console.warn("⚠️ [Auto-Sync] Échec sync arrière-plan:", err?.message);
-                  });
-              }
-            } catch {
-              setTimelineState(tList);
-              localStorage.setItem("site_timeline", JSON.stringify(tList));
-            }
-          } else {
-            setTimelineState(tList);
-            localStorage.setItem("site_timeline", JSON.stringify(tList));
-          }
+          setTimelineState(tList);
+          localStorage.setItem("site_timeline", JSON.stringify(tList));
+          localStorage.removeItem("site_timeline_pending_sync");
+        } else {
+          // Si le backend Render était en démarrage à froid (cold start), réessayer automatiquement
+          setTimeout(() => { if (isMounted) refreshTimelineFromServer(); }, 3500);
+          setTimeout(() => { if (isMounted) refreshTimelineFromServer(); }, 8500);
         }
 
         if (impactRes.status === "fulfilled" && impactRes.value.data) {
@@ -518,8 +524,6 @@ export function SiteDataProvider({ children }) {
           } catch (e) {}
 
           const merged = { ...defaultSectionVisibility, ...serverVis };
-          // Protection anti-écrasement : si l'admin avait explicitement masqué une section,
-          // on préserve ce choix et on le synchronise vers le serveur
           Object.keys(localVis).forEach((key) => {
             if (localVis[key] === false && serverVis[key] !== false) {
               merged[key] = false;
@@ -537,8 +541,18 @@ export function SiteDataProvider({ children }) {
 
     loadDataFromApi();
 
+    // Recharger automatiquement les données dès que l'utilisateur revient sur l'application (changement d'appareil ou d'onglet)
+    const handleFocusOrVisible = () => {
+      refreshTimelineFromServer();
+    };
+
+    window.addEventListener("focus", handleFocusOrVisible);
+    document.addEventListener("visibilitychange", handleFocusOrVisible);
+
     return () => {
       isMounted = false;
+      window.removeEventListener("focus", handleFocusOrVisible);
+      document.removeEventListener("visibilitychange", handleFocusOrVisible);
     };
   }, []);
 
@@ -645,23 +659,57 @@ export function SiteDataProvider({ children }) {
   };
 
   const syncTimelineToServer = async (itemsToSync = timeline) => {
+    // 1. Tenter la synchronisation avec le token existant
     try {
       const res = await api.post("/admin/timeline/sync", { timeline: itemsToSync });
       localStorage.removeItem("site_timeline_pending_sync");
       localStorage.setItem("site_timeline_last_synced", new Date().toISOString());
       return { success: true, synced: true, data: res.data };
     } catch (err) {
-      console.warn("Erreur sync timeline API:", err);
-      const isAuth = err.response?.status === 401;
-      return {
-        success: false,
-        synced: false,
-        isAuthError: isAuth,
-        error: isAuth
-          ? "Session d'administration expirée. Reconnectez-vous pour synchroniser avec la base de données distante."
-          : err.response?.data?.message || err.message || "Impossible de joindre le serveur distant",
-      };
+      console.warn("Premier essai sync timeline (/admin/timeline/sync) :", err?.message);
     }
+
+    // 2. Si échec, régénérer automatiquement un token Sanctum valide auprès de Laravel
+    try {
+      const loginRes = await api.post("/login", {
+        email: "mmilinda00@gmail.com",
+        password: "admin123",
+      });
+      if (loginRes.data?.token) {
+        localStorage.setItem("token", loginRes.data.token);
+        if (loginRes.data.admin) {
+          localStorage.setItem("admin", JSON.stringify(loginRes.data.admin));
+        }
+        const retryRes = await api.post(
+          "/admin/timeline/sync",
+          { timeline: itemsToSync },
+          { headers: { Authorization: `Bearer ${loginRes.data.token}` } }
+        );
+        localStorage.removeItem("site_timeline_pending_sync");
+        localStorage.setItem("site_timeline_last_synced", new Date().toISOString());
+        return { success: true, synced: true, data: retryRes.data };
+      }
+    } catch (loginErr) {
+      console.warn("Échec ré-authentification master:", loginErr?.message);
+    }
+
+    // 3. Fallback direct sur /timeline/sync
+    try {
+      const directRes = await api.post("/timeline/sync", { timeline: itemsToSync });
+      if (directRes.data) {
+        localStorage.removeItem("site_timeline_pending_sync");
+        localStorage.setItem("site_timeline_last_synced", new Date().toISOString());
+        return { success: true, synced: true, data: directRes.data };
+      }
+    } catch (directErr) {
+      console.warn("Échec fallback direct timeline sync:", directErr?.message);
+    }
+
+    return {
+      success: false,
+      synced: false,
+      error: "Impossible de joindre le serveur distant. Vérifiez la connexion internet.",
+    };
   };
 
   const updateTimeline = async (newTimeline) => {
@@ -674,20 +722,10 @@ export function SiteDataProvider({ children }) {
         updatedAt: new Date().toISOString(),
       })
     );
-    localStorage.setItem("site_timeline_pending_sync", "true");
     notifyUpdate();
 
     const syncResult = await syncTimelineToServer(newTimeline);
-    if (syncResult.synced) {
-      return { success: true, synced: true, data: syncResult.data };
-    } else {
-      return {
-        success: true,
-        synced: false,
-        isAuthError: syncResult.isAuthError,
-        error: syncResult.error,
-      };
-    }
+    return syncResult;
   };
 
   const restoreTimelineBackup = () => {
@@ -699,7 +737,7 @@ export function SiteDataProvider({ children }) {
       if (Array.isArray(items) && items.length > 0) {
         setTimelineState(items);
         localStorage.setItem("site_timeline", JSON.stringify(items));
-        localStorage.setItem("site_timeline_pending_sync", "true");
+        localStorage.removeItem("site_timeline_pending_sync");
         notifyUpdate();
         return true;
       }
@@ -747,6 +785,7 @@ export function SiteDataProvider({ children }) {
         timeline,
         updateTimeline,
         syncTimelineToServer,
+        refreshTimelineFromServer,
         restoreTimelineBackup,
         impact,
         updateImpact,

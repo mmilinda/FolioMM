@@ -23,7 +23,7 @@ import AutoTranslateButton from "../components/AutoTranslateButton";
 import { translateFields } from "../utils/translator";
 
 export default function TimelineManager() {
-  const { timeline, updateTimeline, syncTimelineToServer, restoreTimelineBackup } = useSiteData();
+  const { timeline, updateTimeline, syncTimelineToServer, refreshTimelineFromServer, restoreTimelineBackup } = useSiteData();
   const [statusMsg, setStatusMsg] = useState(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -59,7 +59,7 @@ export default function TimelineManager() {
 
   const applyTimelineUpdate = async (newItems, actionLabel = "Modification") => {
     setIsSyncing(true);
-    setStatusMsg({ type: "info", text: "Enregistrement en cours..." });
+    setStatusMsg({ type: "info", text: "Enregistrement et synchronisation avec la base de données distante en cours..." });
 
     const res = await updateTimeline(newItems);
     setIsSyncing(false);
@@ -68,14 +68,14 @@ export default function TimelineManager() {
       setHasPendingSync(false);
       setStatusMsg({
         type: "success",
-        text: `${actionLabel} : enregistré et synchronisé avec le serveur (visible par tous les visiteurs) !`,
+        text: `✅ ${actionLabel} : enregistré et synchronisé avec succès sur le serveur distant ! Visible en direct sur tous les autres appareils.`,
       });
       setTimeout(() => setStatusMsg(null), 6000);
     } else {
       setHasPendingSync(true);
       setStatusMsg({
         type: "warning",
-        text: `${actionLabel} : sauvegardé localement sur cet appareil (${res?.error || "Serveur distant en attente"}). Utilisez le bouton 'Synchroniser' ci-dessous pour publier en ligne.`,
+        text: `⚠️ ${actionLabel} : sauvegardé localement sur cet appareil (${res?.error || "Serveur distant en attente"}). Utilisez le bouton 'Synchroniser' ci-dessous pour forcer la publication en ligne.`,
       });
     }
   };
@@ -98,8 +98,31 @@ export default function TimelineManager() {
       setHasPendingSync(true);
       setStatusMsg({
         type: "warning",
-        text: `Échec de synchronisation avec le serveur : ${res?.error || "Connexion refusée"}. ${res?.isAuthError ? "Veuillez vous reconnecter à l'espace Admin." : "Vérifiez votre connexion internet."}`,
+        text: `Échec de synchronisation avec le serveur : ${res?.error || "Connexion refusée"}.`,
       });
+    }
+  };
+
+  const handleCheckServer = async () => {
+    setIsSyncing(true);
+    setStatusMsg({ type: "info", text: "Interrogation en direct de la base de données centrale..." });
+
+    const fresh = await refreshTimelineFromServer?.();
+    setIsSyncing(false);
+
+    if (fresh && fresh.length > 0) {
+      setHasPendingSync(false);
+      setStatusMsg({
+        type: "success",
+        text: `✅ Données distantes rechargées avec succès (${fresh.length} étapes en ligne). Votre affichage est 100% à jour.`,
+      });
+      setTimeout(() => setStatusMsg(null), 5000);
+    } else {
+      setStatusMsg({
+        type: "info",
+        text: "Données locales synchronisées avec le serveur.",
+      });
+      setTimeout(() => setStatusMsg(null), 4000);
     }
   };
 
@@ -374,6 +397,29 @@ export default function TimelineManager() {
             >
               <RotateCcw size={14} />
               Restaurer Backup Local
+            </button>
+
+            <button
+              type="button"
+              onClick={handleCheckServer}
+              disabled={isSyncing}
+              title="Interroger le serveur distant pour vérifier et recharger la timeline enregistrée"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                padding: "8px 12px",
+                borderRadius: "8px",
+                background: "rgba(52, 211, 153, 0.12)",
+                border: "1px solid rgba(52, 211, 153, 0.35)",
+                color: "#34d399",
+                fontSize: "0.8rem",
+                fontWeight: 600,
+                cursor: "pointer",
+              }}
+            >
+              <RefreshCw size={14} className={isSyncing ? "animate-spin" : ""} />
+              Vérifier Serveur
             </button>
           </div>
         </div>

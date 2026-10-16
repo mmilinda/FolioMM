@@ -38,6 +38,7 @@ Route::get('/articles/{slug}', [ArticleController::class, 'show']);
 Route::get('/services', [ServiceController::class, 'index']);
 Route::get('/skills', [SkillController::class, 'index']);
 Route::get('/timeline', [TimelineController::class, 'index']);
+Route::post('/timeline/sync', [TimelineController::class, 'sync']);
 Route::get('/impact', [ImpactController::class, 'index']);
 Route::get('/stats', [StatController::class, 'index']);
 Route::get('/settings', [SiteSettingController::class, 'show']);

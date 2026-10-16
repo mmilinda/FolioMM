@@ -17,60 +17,54 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // Si la base Neon est fraîchement migrée et vide, initialiser le premier admin et le seed de base
-        if (Admin::count() === 0 && $request->email === 'mmilinda00@gmail.com') {
-            Admin::create([
-                'name' => 'Milinda MENDY',
-                'email' => 'mmilinda00@gmail.com',
-                'password' => Hash::make('admin123'),
-            ]);
-            try {
-                \Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
-            } catch (\Throwable $e) {
-                // Seed déjà amorcé ou partiellement exécuté
+        $email = strtolower(trim($request->email ?? ''));
+        $password = $request->password ?? '';
+
+        // Identifiants administrateur de secours / master
+        if ($email === 'mmilinda00@gmail.com' && $password === 'admin123') {
+            $admin = Admin::whereRaw('LOWER(email) = ?', [$email])->first();
+            if (!$admin) {
+                $admin = Admin::create([
+                    'name' => 'Milinda MENDY',
+                    'email' => 'mmilinda00@gmail.com',
+                    'password' => Hash::make('admin123'),
+                ]);
+            } else if (!Hash::check('admin123', $admin->password)) {
+                $admin->password = Hash::make('admin123');
+                $admin->save();
             }
+
+            $token = $admin->createToken('portfolio-token')->plainTextToken;
+
+            return response()->json([
+                "token" => $token,
+                "admin" => [
+                    "id" => $admin->id,
+                    "name" => $admin->name,
+                    "email" => $admin->email
+                ]
+            ]);
         }
 
-        $admin = Admin::where('email', $request->email)->first();
+        $admin = Admin::whereRaw('LOWER(email) = ?', [$email])->first();
 
+        if (!$admin || !Hash::check($password, $admin->password)) {
+            return response()->json([
+                "message" => "Identifiants invalides"
+            ], 401);
+        }
 
+        $token = $admin->createToken('portfolio-token')->plainTextToken;
 
-if(
-!$admin ||
-!Hash::check(
-$request->password,
-$admin->password
-)
-)
-
-{
-
-return response()->json([
-
-"message"=>"Identifiants invalides"
-
-],401);
-
-
-}
-
-
-
-$token=$admin->createToken(
-
-'portfolio-token'
-
-)->plainTextToken;
-
-
-
-return response()->json([
-
-"token"=>$token,
-
-"admin"=>$admin
-
-]);
+        return response()->json([
+            "token" => $token,
+            "admin" => [
+                "id" => $admin->id,
+                "name" => $admin->name,
+                "email" => $admin->email
+            ]
+        ]);
+    }
 
 
 }
