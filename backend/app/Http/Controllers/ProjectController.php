@@ -140,9 +140,9 @@ class ProjectController extends Controller
                     'impact_en' => $item['impact_en'] ?? $item['impactEn'] ?? ($project?->impact_en ?? ''),
                     'demo' => $item['demo'] ?? ($project?->demo ?? ''),
                     'github' => $item['github'] ?? ($project?->github ?? ''),
-                    'featured' => filter_var($item['featured'] ?? false, FILTER_VALIDATE_BOOLEAN),
-                    'hidden' => filter_var($item['hidden'] ?? false, FILTER_VALIDATE_BOOLEAN),
-                    'is_private' => filter_var($item['is_private'] ?? $item['isPrivate'] ?? false, FILTER_VALIDATE_BOOLEAN),
+                    'featured' => filter_var($item['featured'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
+                    'hidden' => filter_var($item['hidden'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
+                    'is_private' => filter_var($item['is_private'] ?? $item['isPrivate'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
                     'order' => isset($item['order']) ? (int)$item['order'] : $index,
                 ];
 
@@ -208,9 +208,9 @@ class ProjectController extends Controller
                     $table->text('architecture_diagram')->nullable();
                     $table->string('demo')->nullable();
                     $table->string('github')->nullable();
-                    $table->boolean('featured')->default(false);
-                    $table->boolean('hidden')->default(false);
-                    $table->boolean('is_private')->default(false);
+                    $table->smallInteger('featured')->default(0);
+                    $table->smallInteger('hidden')->default(0);
+                    $table->smallInteger('is_private')->default(0);
                     $table->integer('order')->default(0);
                     $table->json('technologies')->nullable();
                     $table->json('highlights')->nullable();
@@ -218,6 +218,19 @@ class ProjectController extends Controller
                     $table->json('architecture_details')->nullable();
                     $table->timestamps();
                 });
+            } else if (DB::getDriverName() === 'pgsql') {
+                try {
+                    DB::statement('ALTER TABLE projects ALTER COLUMN featured TYPE smallint USING (CASE WHEN featured::text IN (\'true\', \'t\', \'1\') THEN 1 ELSE 0 END)');
+                    DB::statement('ALTER TABLE projects ALTER COLUMN featured SET DEFAULT 0');
+                } catch (\Throwable $e) {}
+                try {
+                    DB::statement('ALTER TABLE projects ALTER COLUMN hidden TYPE smallint USING (CASE WHEN hidden::text IN (\'true\', \'t\', \'1\') THEN 1 ELSE 0 END)');
+                    DB::statement('ALTER TABLE projects ALTER COLUMN hidden SET DEFAULT 0');
+                } catch (\Throwable $e) {}
+                try {
+                    DB::statement('ALTER TABLE projects ALTER COLUMN is_private TYPE smallint USING (CASE WHEN is_private::text IN (\'true\', \'t\', \'1\') THEN 1 ELSE 0 END)');
+                    DB::statement('ALTER TABLE projects ALTER COLUMN is_private SET DEFAULT 0');
+                } catch (\Throwable $e) {}
             }
         } catch (\Throwable $e) {
             \Illuminate\Support\Facades\Log::warning("ensureTableExists: " . $e->getMessage());
@@ -279,6 +292,17 @@ class ProjectController extends Controller
         if (isset($data['technologies']) && is_string($data['technologies'])) {
             $decoded = json_decode($data['technologies'], true);
             $data['technologies'] = is_array($decoded) ? $decoded : array_filter(array_map('trim', explode(',', $data['technologies'])));
+        }
+
+        // Normalisation des booléens pour PostgreSQL Neon (compatibilité ATTR_EMULATE_PREPARES)
+        if (isset($data['featured'])) {
+            $data['featured'] = filter_var($data['featured'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+        }
+        if (isset($data['hidden'])) {
+            $data['hidden'] = filter_var($data['hidden'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+        }
+        if (isset($data['is_private'])) {
+            $data['is_private'] = filter_var($data['is_private'], FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
         }
 
         return $data;
@@ -726,6 +750,9 @@ class ProjectController extends Controller
 
         foreach ($defaultProjects as $p) {
             try {
+                $p['featured'] = !empty($p['featured']) ? 1 : 0;
+                $p['hidden'] = !empty($p['hidden']) ? 1 : 0;
+                $p['is_private'] = !empty($p['is_private']) ? 1 : 0;
                 Project::create($p);
             } catch (\Throwable $e) {}
         }

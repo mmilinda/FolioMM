@@ -55,7 +55,7 @@ class ServiceController extends Controller
                         'tags' => $item['tags'] ?? [],
                         'glow' => $item['glow'] ?? '#38bdf8',
                         'gradient' => $item['gradient'] ?? 'from-blue-500/20 to-cyan-500/20',
-                        'hidden' => (bool)($item['hidden'] ?? false),
+                        'hidden' => filter_var($item['hidden'] ?? false, FILTER_VALIDATE_BOOLEAN) ? 1 : 0,
                         'order' => $index,
                     ]);
                 }
