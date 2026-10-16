@@ -6,11 +6,15 @@ use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 
 class ProjectController extends Controller
 {
     public function index()
     {
+        $this->ensureTableExists();
+
         try {
             // Auto-seed si la table est vide pour que l'API ne retourne jamais un tableau vide
             if (Project::query()->count() === 0) {
@@ -25,12 +29,14 @@ class ProjectController extends Controller
 
     public function show($idOrSlug)
     {
+        $this->ensureTableExists();
         $project = Project::where('slug', $idOrSlug)->orWhere('id', $idOrSlug)->firstOrFail();
         return response()->json($project);
     }
 
     public function store(Request $request)
     {
+        $this->ensureTableExists();
         $request->validate([
             'title' => 'required|string|max:255',
             'category' => 'nullable|string',
@@ -56,6 +62,7 @@ class ProjectController extends Controller
 
     public function update(Request $request, $id)
     {
+        $this->ensureTableExists();
         // Recherche par ID ou par slug
         $project = Project::where('id', $id)->orWhere('slug', $id)->first();
         
@@ -76,6 +83,7 @@ class ProjectController extends Controller
 
     public function destroy($id)
     {
+        $this->ensureTableExists();
         $project = Project::where('id', $id)->orWhere('slug', $id)->first();
         if ($project) {
             $project->delete();
@@ -88,6 +96,8 @@ class ProjectController extends Controller
 
     public function sync(Request $request)
     {
+        $this->ensureTableExists();
+
         $request->validate([
             'projects' => 'required|array',
         ]);
@@ -155,6 +165,54 @@ class ProjectController extends Controller
         }
 
         return response()->json(Project::orderBy('order', 'asc')->get());
+    }
+
+    private function ensureTableExists(): void
+    {
+        try {
+            if (!Schema::hasTable('projects')) {
+                Schema::create('projects', function (Blueprint $table) {
+                    $table->id();
+                    $table->string('slug')->unique()->nullable();
+                    $table->string('title');
+                    $table->string('title_en')->nullable();
+                    $table->string('category')->default('Full Stack');
+                    $table->string('category_en')->nullable();
+                    $table->string('year')->nullable()->default('2026');
+                    $table->string('status')->nullable()->default('Production');
+                    $table->string('status_en')->nullable()->default('Production');
+                    $table->string('client')->nullable();
+                    $table->string('client_en')->nullable();
+                    $table->string('role')->nullable();
+                    $table->string('role_en')->nullable();
+                    $table->text('description')->nullable();
+                    $table->text('description_en')->nullable();
+                    $table->text('full_desc')->nullable();
+                    $table->text('problem')->nullable();
+                    $table->text('problem_en')->nullable();
+                    $table->text('solution')->nullable();
+                    $table->text('solution_en')->nullable();
+                    $table->text('impact')->nullable();
+                    $table->text('impact_en')->nullable();
+                    $table->text('image')->nullable();
+                    $table->text('fallback_image')->nullable();
+                    $table->text('architecture_diagram')->nullable();
+                    $table->string('demo')->nullable();
+                    $table->string('github')->nullable();
+                    $table->boolean('featured')->default(false);
+                    $table->boolean('hidden')->default(false);
+                    $table->boolean('is_private')->default(false);
+                    $table->integer('order')->default(0);
+                    $table->json('technologies')->nullable();
+                    $table->json('highlights')->nullable();
+                    $table->json('metrics')->nullable();
+                    $table->json('architecture_details')->nullable();
+                    $table->timestamps();
+                });
+            }
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning("ensureTableExists: " . $e->getMessage());
+        }
     }
 
     private function formatProjectData(Request $request, ?Project $existing = null): array
