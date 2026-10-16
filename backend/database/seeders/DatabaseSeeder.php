@@ -240,7 +240,7 @@ class DatabaseSeeder extends Seeder
                 'title' => 'Stagiaire Intégratrice Web',
                 'title_en' => 'Web Integrator Intern',
                 'company' => 'Bakeli & Webgram',
-                'description' => 'Intégration web responsive et développement de blogs d'entreprise : Site Vitrine Bootstrap et GM Business Prayer (Blogger).',
+                'description' => 'Intégration web responsive et développement de blogs d\'entreprise : Site Vitrine Bootstrap et GM Business Prayer (Blogger).',
                 'description_en' => 'Hands-on responsive web integration and corporate blog customization: Bootstrap Showcase Site and GM Business Prayer (Blogger).',
                 'tags' => ['Bootstrap 5', 'HTML5', 'CSS3', 'JavaScript', 'Blogger'],
                 'type' => 'work',

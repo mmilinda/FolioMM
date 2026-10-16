@@ -171,7 +171,7 @@ class ProjectController extends Controller
         $checked = true;
 
         try {
-            $driver = DB::getDriverName();
+            $driver = DB::connection()->getDriverName();
             if ($driver === 'pgsql') {
                 DB::statement('ALTER TABLE projects ALTER COLUMN image TYPE text');
                 DB::statement('ALTER TABLE projects ALTER COLUMN fallback_image TYPE text');
