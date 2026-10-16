@@ -8,6 +8,7 @@ import api from "../services/api";
 import AutoTranslateButton from "../components/AutoTranslateButton";
 import { translateFields } from "../utils/translator";
 import { analyzeGitHubProject, getActiveGitHubToken } from "../utils/githubAnalyzer";
+import { syncProjectsToServer } from "../services/projectSync";
 
 export default function EditProject() {
   const { id } = useParams();
@@ -43,6 +44,8 @@ export default function EditProject() {
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState("");
   const [saved, setSaved] = useState(false);
+  const [syncFeedback, setSyncFeedback] = useState(null);
+  const [isSaving, setIsSaving] = useState(false);
 
   // État de l'analyse IA via Git
   const [analyzingGit, setAnalyzingGit] = useState(false);
@@ -254,11 +257,56 @@ export default function EditProject() {
       impactEn: finalImpactEn || form.impact,
       demo: form.demo,
       github: form.github,
-      image: imagePreview,
+      image: imagePreview || targetProject.image,
     };
 
+    setIsSaving(true);
+    setSyncFeedback({
+      type: "info",
+      text: "Enregistrement local et synchronisation vers la base de données distante Render...",
+    });
+
+    // 1. Sauvegarde locale immédiate (pour affichage instantané)
     try {
-      // API call to Laravel backend
+      const editedMap = JSON.parse(localStorage.getItem("edited_projects") || "{}");
+      const key = String(targetProject.id);
+      editedMap[key] = { ...(editedMap[key] || {}), ...updatedData };
+      if (targetProject.slug) editedMap[targetProject.slug] = editedMap[key];
+      localStorage.setItem("edited_projects", JSON.stringify(editedMap));
+
+      const custom = JSON.parse(localStorage.getItem("custom_projects") || "[]");
+      const updatedCustom = custom.map((p) =>
+        String(p.id) === String(targetProject.id) || p.slug === targetProject.slug
+          ? { ...p, ...updatedData }
+          : p
+      );
+      localStorage.setItem("custom_projects", JSON.stringify(updatedCustom));
+
+      window.dispatchEvent(new CustomEvent("projects_updated"));
+    } catch (err) {
+      console.error("Project local storage error:", err);
+    }
+
+    // 2. Synchronisation complète avec le serveur distant (Render / PostgreSQL)
+    try {
+      const syncRes = await syncProjectsToServer();
+      if (syncRes?.synced) {
+        setSyncFeedback({
+          type: "success",
+          text: "✅ Projet modifié et synchronisé avec succès sur le serveur distant ! Visible en direct sur tous les autres appareils.",
+        });
+      } else {
+        setSyncFeedback({
+          type: "warning",
+          text: `⚠️ Sauvegardé localement sur cet appareil (${syncRes?.error || "Serveur en cours de synchronisation"}).`,
+        });
+      }
+    } catch (syncErr) {
+      console.warn("Erreur synchronisation serveur:", syncErr);
+    }
+
+    // 3. Appel de mise à jour directe (supporte image file et base64)
+    try {
       const data = new FormData();
       data.append("_method", "PUT");
       data.append("title", form.title);
@@ -280,37 +328,20 @@ export default function EditProject() {
       data.append("impactEn", form.impactEn || form.impact);
       data.append("demo", form.demo);
       data.append("github", form.github);
+      if (imagePreview) data.append("image", imagePreview);
       techArray.forEach((t) => data.append("technologies[]", t));
       if (imageFile) data.append("image_file", imageFile);
 
-      await api.post(`/projects/${targetProject.id}`, data);
+      await api.post(`/projects/${targetProject.slug || targetProject.id}`, data, { timeout: 15000 });
     } catch (apiErr) {
-      console.warn("Mise à jour locale fallback:", apiErr);
+      console.warn("Mise à jour directe fallback:", apiErr);
     }
 
-    try {
-      const editedMap = JSON.parse(localStorage.getItem("edited_projects") || "{}");
-      const key = String(targetProject.id);
-      editedMap[key] = { ...(editedMap[key] || {}), ...updatedData };
-      if (targetProject.slug) editedMap[targetProject.slug] = editedMap[key];
-      localStorage.setItem("edited_projects", JSON.stringify(editedMap));
-
-      const custom = JSON.parse(localStorage.getItem("custom_projects") || "[]");
-      const updatedCustom = custom.map((p) =>
-        String(p.id) === String(targetProject.id) || p.slug === targetProject.slug
-          ? { ...p, ...updatedData }
-          : p
-      );
-      localStorage.setItem("custom_projects", JSON.stringify(updatedCustom));
-
-      window.dispatchEvent(new CustomEvent("projects_updated"));
-      setSaved(true);
-      setTimeout(() => {
-        navigate("/admin/projects");
-      }, 1200);
-    } catch (err) {
-      console.error("Project edit error:", err);
-    }
+    setIsSaving(false);
+    setSaved(true);
+    setTimeout(() => {
+      navigate("/admin/projects");
+    }, 1500);
   }
 
   const inputStyle = {
@@ -726,23 +757,41 @@ export default function EditProject() {
             boxShadow: "0 20px 50px rgba(0, 0, 0, 0.6)",
           }}
         >
-          {saved && (
+          {syncFeedback && (
             <div
               style={{
-                padding: "0.85rem 1.1rem",
-                borderRadius: "12px",
-                background: "rgba(52, 211, 153, 0.12)",
-                border: "1px solid rgba(52, 211, 153, 0.3)",
-                color: "#34d399",
+                padding: "0.9rem 1.2rem",
+                borderRadius: "14px",
+                background:
+                  syncFeedback.type === "success"
+                    ? "rgba(16, 185, 129, 0.15)"
+                    : syncFeedback.type === "warning"
+                    ? "rgba(245, 158, 11, 0.15)"
+                    : "rgba(56, 189, 248, 0.15)",
+                border: `1px solid ${
+                  syncFeedback.type === "success"
+                    ? "rgba(16, 185, 129, 0.4)"
+                    : syncFeedback.type === "warning"
+                    ? "rgba(245, 158, 11, 0.4)"
+                    : "rgba(56, 189, 248, 0.4)"
+                }`,
+                color:
+                  syncFeedback.type === "success"
+                    ? "#34d399"
+                    : syncFeedback.type === "warning"
+                    ? "#fbbf24"
+                    : "#38bdf8",
                 fontSize: "0.88rem",
                 fontWeight: 600,
                 display: "flex",
                 alignItems: "center",
-                gap: "8px",
+                gap: "10px",
               }}
             >
-              <CheckCircle size={18} />
-              <span>Projet mis à jour avec succès dans Laravel & Local ! Redirection...</span>
+              {syncFeedback.type === "success" && <CheckCircle size={18} />}
+              {syncFeedback.type === "warning" && <AlertCircle size={18} />}
+              {syncFeedback.type === "info" && <Loader2 size={18} className="animate-spin" />}
+              <span>{syncFeedback.text}</span>
             </div>
           )}
 

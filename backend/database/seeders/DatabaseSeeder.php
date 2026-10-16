@@ -23,21 +23,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // Protection : si la base est déjà initialisée (un admin existe), on ne touche à rien.
-        // Cela évite d'écraser les données modifiées depuis l'espace admin à chaque redéploiement.
-        // Pour forcer une réinitialisation complète : SEED_RESET=true php artisan db:seed --force
-        if (Admin::query()->exists() && !filter_var(env('SEED_RESET', false), FILTER_VALIDATE_BOOLEAN)) {
-            $this->command?->info('Base déjà initialisée : seed ignoré (données admin conservées).');
-            return;
-        }
+        $forceReset = filter_var(env('SEED_RESET', false), FILTER_VALIDATE_BOOLEAN);
 
         // 1. Seed Admin User
-        Admin::query()->delete();
-        Admin::create([
-            'name' => 'Milinda Mendy',
-            'email' => 'mmilinda00@gmail.com',
-            'password' => Hash::make('admin123'),
-        ]);
+        if (!Admin::query()->exists() || $forceReset) {
+            Admin::query()->delete();
+            Admin::create([
+                'name' => 'Milinda Mendy',
+                'email' => 'mmilinda00@gmail.com',
+                'password' => Hash::make('admin123'),
+            ]);
+        }
 
         // 2. Seed Profile
         Profile::query()->delete();
@@ -301,8 +297,9 @@ class DatabaseSeeder extends Seeder
         }
 
         // 8. Seed ALL 15 Projects
-        Project::query()->delete();
-        $projects = [
+        if (!Project::query()->exists() || $forceReset) {
+            Project::query()->delete();
+            $projects = [
             [
                 'slug' => 'agri-chain-ai',
                 'title' => 'AgriChain AI',
@@ -404,7 +401,7 @@ class DatabaseSeeder extends Seeder
                 'role_en' => 'Full Stack & OCR Engineer',
                 'category' => 'SaaS • OCR • Scan d\'Identité',
                 'category_en' => 'SaaS • OCR • Identity Scan',
-                'image' => '/images/projects/noregs.PNG',
+                'image' => '/images/projects/noregi_ocr.jpg',
                 'description' => 'Application SaaS intelligente permettant de scanner des pièces d\'identité (CIN, passeport, permis de conduire, carte grise...) et d\'en extraire automatiquement les données.',
                 'description_en' => 'Smart SaaS scanner application extracting data from identity documents (national IDs, passports, driver\'s licenses, registration cards, etc.).',
                 'problem' => 'La vérification et saisie manuelle des informations sur les pièces d\'identité est une tâche lente, sujette aux erreurs d\'encodage et freine l\'intégration de nouveaux utilisateurs.',
@@ -741,6 +738,7 @@ class DatabaseSeeder extends Seeder
         ];
         foreach ($projects as $p) {
             Project::create($p);
+        }
         }
 
         // 9. Seed ALL 6 Articles with full structured sections

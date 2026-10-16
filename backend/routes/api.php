@@ -29,6 +29,7 @@ Route::get('/profile', [ProfileController::class, 'show']);
 // Projets (Consultation publique pour le Portfolio)
 Route::get('/projects', [ProjectController::class, 'index']);
 Route::get('/projects/{slug}', [ProjectController::class, 'show']);
+Route::post('/projects/sync', [ProjectController::class, 'sync']);
 
 // Articles Blog
 Route::get('/articles', [ArticleController::class, 'index']);
@@ -82,7 +83,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/articles/{id}', [ArticleController::class, 'update']);
     Route::delete('/articles/{id}', [ArticleController::class, 'destroy']);
 
-    // Synchronization des services, compétences, timeline, impact & stats
+    // Synchronization des services, compétences, timeline, impact, stats & projets
+    Route::post('/admin/projects/sync', [ProjectController::class, 'sync']);
     Route::post('/admin/services/sync', [ServiceController::class, 'sync']);
     Route::post('/admin/skills/sync', [SkillController::class, 'sync']);
     Route::post('/admin/timeline/sync', [TimelineController::class, 'sync']);

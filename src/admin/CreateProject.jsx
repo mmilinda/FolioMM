@@ -8,6 +8,7 @@ import { db, collection, addDoc } from "../firebase";
 import AutoTranslateButton from "../components/AutoTranslateButton";
 import { translateFields } from "../utils/translator";
 import { analyzeGitHubProject, getActiveGitHubToken } from "../utils/githubAnalyzer";
+import { syncProjectsToServer } from "../services/projectSync";
 
 function slugify(text) {
   return text
@@ -264,11 +265,11 @@ export default function CreateProject() {
 
       await api.post("/projects", formData, {
         headers: { "Content-Type": "multipart/form-data" },
-        timeout: 2500,
+        timeout: 15000,
       });
-      console.log("✅ Enregistré dans la base de données Laravel / MySQL");
+      console.log("✅ Enregistré dans la base de données Laravel / PostgreSQL");
     } catch (err) {
-      console.warn("API Laravel non disponible, passage à la base Firebase / Firestore");
+      console.warn("API Laravel direct write fallback:", err?.message);
     }
 
     // 2. Save to Firebase Firestore Database
@@ -281,11 +282,15 @@ export default function CreateProject() {
       console.warn("Erreur d'écriture Firebase (Mode hors-ligne ou clés en cours de config)");
     }
 
-    // 3. Sync local state fallback
+    // 3. Sync local state fallback & broadcast to server
     try {
       const existing = JSON.parse(localStorage.getItem("custom_projects") || "[]");
-      localStorage.setItem("custom_projects", JSON.stringify([newProject, ...existing]));
+      const updatedCustom = [newProject, ...existing];
+      localStorage.setItem("custom_projects", JSON.stringify(updatedCustom));
       window.dispatchEvent(new CustomEvent("projects_updated"));
+
+      // Synchronisation immédiate vers la base distante
+      syncProjectsToServer().catch(() => {});
     } catch (err) {
       console.error("Local storage error:", err);
     }
