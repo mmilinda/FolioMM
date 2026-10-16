@@ -220,14 +220,17 @@ class ProjectController extends Controller
                 });
             } else if (DB::getDriverName() === 'pgsql') {
                 try {
+                    DB::statement('ALTER TABLE projects ALTER COLUMN featured DROP DEFAULT');
                     DB::statement('ALTER TABLE projects ALTER COLUMN featured TYPE smallint USING (CASE WHEN featured::text IN (\'true\', \'t\', \'1\') THEN 1 ELSE 0 END)');
                     DB::statement('ALTER TABLE projects ALTER COLUMN featured SET DEFAULT 0');
                 } catch (\Throwable $e) {}
                 try {
+                    DB::statement('ALTER TABLE projects ALTER COLUMN hidden DROP DEFAULT');
                     DB::statement('ALTER TABLE projects ALTER COLUMN hidden TYPE smallint USING (CASE WHEN hidden::text IN (\'true\', \'t\', \'1\') THEN 1 ELSE 0 END)');
                     DB::statement('ALTER TABLE projects ALTER COLUMN hidden SET DEFAULT 0');
                 } catch (\Throwable $e) {}
                 try {
+                    DB::statement('ALTER TABLE projects ALTER COLUMN is_private DROP DEFAULT');
                     DB::statement('ALTER TABLE projects ALTER COLUMN is_private TYPE smallint USING (CASE WHEN is_private::text IN (\'true\', \'t\', \'1\') THEN 1 ELSE 0 END)');
                     DB::statement('ALTER TABLE projects ALTER COLUMN is_private SET DEFAULT 0');
                 } catch (\Throwable $e) {}
