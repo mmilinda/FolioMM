@@ -38,13 +38,17 @@ import AdminProfile from "./admin/AdminProfile";
 // Protection de route
 import ProtectedRoute from "./components/ProtectedRoute";
 import ScrollToTop from "./components/ScrollToTop";
+import { ProjectPreviewProvider } from "./context/ProjectPreviewContext";
+import ProjectPreviewModal from "./components/ProjectPreviewModal";
 
 export default function App() {
   return (
     <SiteDataProvider>
-      <BrowserRouter>
-        <ScrollToTop />
-        <Routes>
+      <ProjectPreviewProvider>
+        <BrowserRouter>
+          <ScrollToTop />
+          <ProjectPreviewModal />
+          <Routes>
           {/* Layout Public */}
           <Route element={<MainLayout />}>
             <Route path="/" element={<Home />} />
@@ -85,6 +89,7 @@ export default function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      </ProjectPreviewProvider>
     </SiteDataProvider>
   );
 }

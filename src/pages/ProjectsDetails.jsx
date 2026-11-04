@@ -6,11 +6,13 @@ import { useTranslation } from "react-i18next";
 import useProjects from "../hooks/useProjects";
 import { getLocalizedProject } from "../data/projects";
 import SEO from "../components/SEO";
+import { useProjectPreview } from "../context/ProjectPreviewContext";
 
 export default function ProjectDetails() {
   const { id } = useParams();
   const { projects } = useProjects();
   const { t, i18n } = useTranslation();
+  const { openPreview } = useProjectPreview();
 
   const rawProject = projects.find(
     (p) => p.slug === id || String(p.id) === String(id)
@@ -197,10 +199,20 @@ export default function ProjectDetails() {
             {/* CTAs */}
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               {project.demo && project.demo !== "#" && (
-                <a href={project.demo} target="_blank" rel="noopener noreferrer" className="hero-btn-primary" style={{ justifyContent: "center" }}>
+                <button
+                  type="button"
+                  onClick={() => openPreview(rawProject || project)}
+                  className="hero-btn-primary"
+                  style={{
+                    justifyContent: "center",
+                    cursor: "pointer",
+                    width: "100%",
+                    border: "none",
+                  }}
+                >
                   <ExternalLink size={16} />
                   {t("projectCard.demo", "Voir la démo")}
-                </a>
+                </button>
               )}
               {project.isPrivate || !project.github ? (
                 <div

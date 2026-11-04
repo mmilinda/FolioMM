@@ -4,9 +4,11 @@ import { Link } from "react-router-dom";
 import { FaGithub } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { getLocalizedProject } from "../data/projects";
+import { useProjectPreview } from "../context/ProjectPreviewContext";
 
 export default function ProjectCard({ project: rawProject }) {
   const { t, i18n } = useTranslation();
+  const { openPreview } = useProjectPreview();
   const project = getLocalizedProject(rawProject, i18n.language);
 
   return (
@@ -235,10 +237,9 @@ export default function ProjectCard({ project: rawProject }) {
         {/* Action buttons */}
         <div style={{ display: "flex", gap: "8px" }}>
           {project.demo && project.demo !== "#" ? (
-            <a
-              href={project.demo}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
+              onClick={() => openPreview(rawProject || project)}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -251,15 +252,22 @@ export default function ProjectCard({ project: rawProject }) {
                 color: "#020617",
                 fontSize: "0.8rem",
                 fontWeight: 700,
-                textDecoration: "none",
+                border: "none",
+                cursor: "pointer",
                 transition: "opacity 0.2s, transform 0.2s",
               }}
-              onMouseEnter={(e) => e.currentTarget.style.opacity = "0.9"}
-              onMouseLeave={(e) => e.currentTarget.style.opacity = "1"}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.opacity = "0.9";
+                e.currentTarget.style.transform = "translateY(-1px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = "1";
+                e.currentTarget.style.transform = "translateY(0)";
+              }}
             >
               <ExternalLink size={13} />
               {t("projectCard.demo", "Démo")}
-            </a>
+            </button>
           ) : (
             <Link
               to={`/projects/${project.slug || project.id}`}

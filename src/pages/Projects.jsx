@@ -5,10 +5,12 @@ import ProjectCard from "../components/ProjectCard";
 import useProjects from "../hooks/useProjects";
 import SEO from "../components/SEO";
 import { Layers, Sparkles } from "lucide-react";
+import { useProjectPreview } from "../context/ProjectPreviewContext";
 
 export default function Projects() {
   const { t } = useTranslation();
   const { projects } = useProjects();
+  const { openPreview } = useProjectPreview();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -101,12 +103,17 @@ export default function Projects() {
             </div>
             <div className="featured-grid">
               {featured.slice(0, 3).map((project, i) => (
-                <motion.a
+                <motion.div
                   key={project.id}
-                  href={project.demo !== "#" ? project.demo : undefined}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  onClick={() => {
+                    if (project.demo && project.demo !== "#") {
+                      openPreview(project);
+                    }
+                  }}
+                  role="button"
+                  tabIndex={0}
                   className="featured-item"
+                  style={{ cursor: project.demo && project.demo !== "#" ? "pointer" : "default" }}
                   initial={{ opacity: 0, scale: 0.96 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.15 + i * 0.1 }}
@@ -127,7 +134,7 @@ export default function Projects() {
                       ))}
                     </div>
                   </div>
-                </motion.a>
+                </motion.div>
               ))}
             </div>
           </motion.div>
